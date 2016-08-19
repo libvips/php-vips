@@ -112,6 +112,31 @@ PHP_FUNCTION(vips_image_write_to_file)
 }
 /* }}} */
 
+/* {{{ proto resource vips_invert(resource image)
+   Photographic negative */
+PHP_FUNCTION(vips_invert)
+{
+	zval *IM;
+	VipsImage *image;
+	VipsImage *out;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "r", &IM) == FAILURE) {
+		return;
+	}
+
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "VipsImage", le_vips)) == NULL) {
+		RETURN_FALSE;
+	}
+
+	if (vips_invert(image, &out, NULL)) {
+		error_vips();
+		RETURN_FALSE;
+	}
+
+	RETVAL_RES(zend_register_resource(out, le_vips));
+}
+/* }}} */
+
 /* {{{ php_vips_init_globals
  */
 /* Uncomment this function if you have INI entries
@@ -211,6 +236,10 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_image_write_to_file, 0)
 	ZEND_ARG_INFO(0, filename)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_invert, 0)
+	ZEND_ARG_INFO(0, image)
+ZEND_END_ARG_INFO()
+
 /* {{{ vips_functions[]
  *
  * Every user visible function must have an entry in vips_functions[].
@@ -219,6 +248,7 @@ const zend_function_entry vips_functions[] = {
 	PHP_FE(confirm_vips_compiled,	NULL)		/* For testing, remove later. */
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
+	PHP_FE(vips_invert, arginfo_vips_invert)
 
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };
