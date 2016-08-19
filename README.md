@@ -2,8 +2,18 @@
 
 This is an experimental php binding for libvips, just to see what it's like.
 
-It currently only adds `vips_image_new_from_file()` and
-`vips_image_write_to_file()`, but it does seem to work. 
+It currently only adds `vips_image_new_from_file()`, 
+`vips_image_write_to_file()`, and the single operation `vips_invert()`, but it 
+does seem to work. 
+
+```php
+<?php
+	dl('vips.' . PHP_SHLIB_SUFFIX);
+	$x = vips_image_new_from_file($argv[1]);
+	$x = vips_invert($x);
+	vips_image_write_to_file($x, $argv[2]);
+?>
+```
 
 ### Preparation
 
@@ -80,6 +90,7 @@ Or this example:
 <?php
 	dl('vips.' . PHP_SHLIB_SUFFIX);
 	$x = vips_image_new_from_file($argv[1]);
+	$x = vips_invert($x);
 	vips_image_write_to_file($x, $argv[2]);
 ?>
 ```
