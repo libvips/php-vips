@@ -91,3 +91,13 @@ $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
 See `examples/`.
+
+### TODO
+
+* look into varargs or keyword args for php modules ... we need to be able to
+  support `vips_image_new_from_file($filename, access = "sequential");`
+
+* add the functions we need for vips introspection
+
+* make a wrapper over this thing in php which gives it a nice API, including
+  exceptions, overloads, and so on
