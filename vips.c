@@ -8,6 +8,8 @@
 #include "ext/standard/info.h"
 #include "php_vips.h"
 
+#include <vips/vips.h>
+
 /* If you declare any globals in php_vips.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(vips)
 */
@@ -53,6 +55,62 @@ PHP_FUNCTION(confirm_vips_compiled)
    follow this convention for the convenience of others editing your code.
 */
 
+/* Output the vips error buffer as a docref.
+ */
+static void
+error_vips( void )
+{
+	php_error_docref(NULL, E_WARNING, "%s", vips_error_buffer());
+	vips_error_clear();
+}
+
+/* {{{ proto resource vips_image_new_from_file(string filename)
+   Open an image from a filename */
+PHP_FUNCTION(vips_image_new_from_file)
+{
+	char *filename;
+	size_t filename_len;
+	VipsImage *image;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p", &filename, &filename_len) == FAILURE) {
+		return;
+	}
+
+	if (!(image = vips_image_new_from_file(filename, NULL))) {
+		error_vips();
+		RETURN_FALSE;
+	}
+
+	RETVAL_RES(zend_register_resource(image, le_vips));
+
+}
+/* }}} */
+
+/* {{{ proto bool vips_image_write_to_file(resource image, string filename)
+   Write an image to a filename */
+PHP_FUNCTION(vips_image_write_to_file)
+{
+	zval *IM;
+	char *filename;
+	size_t filename_len;
+	VipsImage *image;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "rp", &IM, &filename, &filename_len) == FAILURE) {
+		return;
+	}
+
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "VipsImage", le_vips)) == NULL) {
+		RETURN_FALSE;
+	}
+
+	if (vips_image_write_to_file(image, filename, NULL)) {
+		error_vips();
+		RETURN_FALSE;
+	}
+
+	RETURN_TRUE;
+}
+/* }}} */
 
 /* {{{ php_vips_init_globals
  */
@@ -65,6 +123,14 @@ static void php_vips_init_globals(zend_vips_globals *vips_globals)
 */
 /* }}} */
 
+/* {{{ php_free_vips_object
+ *  */
+static void php_free_vips_object(zend_resource *rsrc)
+{
+	g_object_unref((GObject *) rsrc->ptr);
+}
+/* }}} */
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(vips)
@@ -72,6 +138,17 @@ PHP_MINIT_FUNCTION(vips)
 	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
+
+	/* We're supposed to use the filename of something we think is in
+	 * $VIPSHOME/bin, but we don't have that. Use a nonsense name and
+	 * vips_init() will fall back to other techniques for finding data
+	 * files.
+	 */
+	if( VIPS_INIT( "banana" ) )
+		return FAILURE;
+
+	le_vips = zend_register_list_destructors_ex(php_free_vips_object, NULL, "vips", module_number);
+
 	return SUCCESS;
 }
 /* }}} */
@@ -83,6 +160,9 @@ PHP_MSHUTDOWN_FUNCTION(vips)
 	/* uncomment this line if you have INI entries
 	UNREGISTER_INI_ENTRIES();
 	*/
+
+	vips_shutdown();
+
 	return SUCCESS;
 }
 /* }}} */
@@ -122,12 +202,24 @@ PHP_MINFO_FUNCTION(vips)
 }
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_new_from_file, 0)
+	ZEND_ARG_INFO(0, filename)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_write_to_file, 0)
+	ZEND_ARG_INFO(0, image)
+	ZEND_ARG_INFO(0, filename)
+ZEND_END_ARG_INFO()
+
 /* {{{ vips_functions[]
  *
  * Every user visible function must have an entry in vips_functions[].
  */
 const zend_function_entry vips_functions[] = {
 	PHP_FE(confirm_vips_compiled,	NULL)		/* For testing, remove later. */
+	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
+	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
+
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };
 /* }}} */

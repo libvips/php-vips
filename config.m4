@@ -25,10 +25,17 @@ if test x"$PHP_VIPS" != x"no"; then
   VIPS_INCS=`pkg-config vips --cflags-only-I`
   VIPS_LIBS=`pkg-config vips --libs`
 
-  PHP_EVAL_INCLINE($VIPS_INCS)
-  PHP_EVAL_LIBLINE($VIPS_LIBS, VIPS_SHARED_LIBADD)
+  PHP_CHECK_LIBRARY(vips, vips_init,
+  [
+    PHP_EVAL_INCLINE($VIPS_INCS)
+    PHP_EVAL_LIBLINE($VIPS_LIBS, VIPS_SHARED_LIBADD)
+  ],[
+    AC_MSG_ERROR([libvips not found.  Check config.log for more information.])
+  ],[$VIPS_LIBS]
+  )
 
   AC_DEFINE(HAVE_VIPS, 1, [Whether you have vips])
   PHP_NEW_EXTENSION(vips, vips.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 $VIPS_CFLAGS)
+  PHP_SUBST(VIPS_SHARED_LIBADD)
 fi
 
