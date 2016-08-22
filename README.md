@@ -118,7 +118,7 @@ See `examples/`.
 
 * add `vips_call` to call any vips operation
 
-  not quite done, try `examples/vips_call.php`
+  still need to do optional output args, more boxed types
 
 * make a wrapper over this thing in php which gives it a nice API, including
   exceptions, overloads, and so on

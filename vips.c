@@ -1,6 +1,6 @@
 /* Uncomment for some logging.
- */
 #define VIPS_DEBUG
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@ ZEND_DECLARE_MODULE_GLOBALS(vips)
 */
 
 /* True global resources - no need for thread safety here */
-static int le_vips;
+static int le_gobject;
 
 /* {{{ PHP_INI
  */
@@ -130,7 +130,7 @@ vips_php_call_new(const char *operation_name,
 /* Set a gvalue from a php value. pspec indicates the kind of thing the operation is expecting.
  */
 static int
-vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *gvalue)
+vips_php_zval_to_gval(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *gvalue)
 {
 	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
 
@@ -147,7 +147,7 @@ vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *g
 		VipsImage *image;
 
 		if (Z_TYPE_P(zvalue) != IS_RESOURCE ||
-			(image = (VipsImage *)zend_fetch_resource(Z_RES_P(zvalue), "VipsImage", le_vips)) == NULL) {
+			(image = (VipsImage *)zend_fetch_resource(Z_RES_P(zvalue), "GObject", le_gobject)) == NULL) {
 			php_error_docref(NULL, E_WARNING, "not a VipsImage");
 			return -1;
 		}
@@ -197,6 +197,35 @@ vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *g
 	return 0;
 }
 
+static int
+vips_php_set_value(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue)
+{
+	const char *name = g_param_spec_get_name(pspec);
+	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+	GValue gvalue = { 0 };
+
+	g_value_init(&gvalue, pspec_type);
+	if (vips_php_zval_to_gval(call, pspec, zvalue, &gvalue)) {
+		g_value_unset(&gvalue);
+		return -1;
+	}
+
+#ifdef VIPS_DEBUG
+{
+	char *str_value;
+
+	str_value = g_strdup_value_contents(&gvalue);
+	VIPS_DEBUG_MSG("    %s.%s = %s\n", call->operation_name, name, str_value);
+	g_free(str_value);
+}
+#endif/*VIPS_DEBUG*/
+
+	g_object_set_property(G_OBJECT(call->operation), name, &gvalue);
+	g_value_unset(&gvalue);
+
+	return 0;
+}
+
 static void *
 vips_php_set_required_input(VipsObject *object, 
 	GParamSpec *pspec, VipsArgumentClass *argument_class, VipsArgumentInstance *argument_instance, 
@@ -209,28 +238,9 @@ vips_php_set_required_input(VipsObject *object,
 		(argument_class->flags & VIPS_ARGUMENT_INPUT) &&
 		!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
 		!argument_instance->assigned) {
-		if (call->args_required < call->argc) {
-			const char *name = g_param_spec_get_name(pspec);
-			GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
-			int i = call->args_required;
-			GValue gvalue = { 0 };
-
-			g_value_init(&gvalue, pspec_type);
-			if (vips_php_to_gvalue(call, pspec, &call->argv[i], &gvalue))
-				return call;
-
-#ifdef VIPS_DEBUG
-{
-			char *str_value;
-
-			str_value = g_strdup_value_contents(&gvalue);
-			VIPS_DEBUG_MSG("   %s.%s = %s\n", call->operation_name, name, str_value);
-			g_free(str_value);
-}
-#endif/*VIPS_DEBUG*/
-
-			g_object_set_property(G_OBJECT(call->operation), name, &gvalue);
-			g_value_unset(&gvalue);
+		if (call->args_required < call->argc &&
+			vips_php_set_value(call, pspec, &call->argv[call->args_required])) {
+			return call;
 		}
 
 		call->args_required += 1;
@@ -242,7 +252,7 @@ vips_php_set_required_input(VipsObject *object,
 /* Set a php zval from a gvalue. pspec indicates the kind of thing the operation is offering.
  */
 static int
-vips_php_to_zval(VipsPhpCall *call, GParamSpec *pspec, GValue *gvalue, zval *zvalue)
+vips_php_gval_to_zval(VipsPhpCall *call, GParamSpec *pspec, GValue *gvalue, zval *zvalue)
 {
 	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
 
@@ -252,57 +262,42 @@ vips_php_to_zval(VipsPhpCall *call, GParamSpec *pspec, GValue *gvalue, zval *zva
 	if (G_IS_PARAM_SPEC_STRING(pspec)) {
 		/* These are GStrings, vips refstrings are handled by boxed, see below.
 		 */
+		const char *str = g_value_get_string(gvalue);
+		zend_string *string = zend_string_init(str, strlen(str), 0);
 
+		ZVAL_STR(zvalue, string);
 	}
 	else if (G_IS_PARAM_SPEC_OBJECT(pspec)) {
-		VipsImage *image;
+		GObject *gobject;
+		zend_resource *resource;
 
-		if (Z_TYPE_P(zvalue) != IS_RESOURCE ||
-			(image = (VipsImage *)zend_fetch_resource(Z_RES_P(zvalue), "VipsImage", le_vips)) == NULL) {
-			php_error_docref(NULL, E_WARNING, "not a VipsImage");
-			return -1;
-		}
-
-		g_value_set_object(gvalue, image);
+		gobject = g_value_get_object(gvalue);
+		resource = zend_register_resource(gobject, le_gobject);
+		ZVAL_RES(zvalue, resource);
 	}
 	else if (G_IS_PARAM_SPEC_INT(pspec)) {
-		convert_to_long_ex(zvalue);
-		g_value_init(gvalue, pspec_type);
-		g_value_set_int(gvalue, Z_LVAL_P(zvalue));
+		ZVAL_LONG(zvalue, g_value_get_int(gvalue));
 	}
 	else if (G_IS_PARAM_SPEC_UINT64(pspec)) {
-		convert_to_long_ex(zvalue);
-		g_value_init(gvalue, pspec_type);
-		g_value_set_uint64(gvalue, Z_LVAL_P(zvalue));
+		ZVAL_LONG(zvalue, g_value_get_uint64(gvalue));
 	}
 	else if (G_IS_PARAM_SPEC_BOOLEAN(pspec)) {
-		convert_to_boolean(zvalue);
-		g_value_init(gvalue, pspec_type);
-		g_value_set_boolean(gvalue, Z_LVAL_P(zvalue));
+		ZVAL_LONG(zvalue, g_value_get_boolean(gvalue));
 	}
 	else if (G_IS_PARAM_SPEC_ENUM(pspec)) {
-		int enum_value;
+		int enum_value = g_value_get_enum(gvalue);
+		const char *nick = vips_enum_nick(pspec_type, enum_value);
+		zend_string *string = zend_string_init(nick, strlen(nick), 1);
 
-		convert_to_string_ex(zvalue);
-		if ((enum_value = vips_enum_from_nick("enum", pspec_type, Z_STRVAL_P(zvalue))) < 0 ) {
-			error_vips();
-			return -1;
-		}
-		g_value_init(gvalue, pspec_type);
-		g_value_set_enum(gvalue, enum_value);
+		ZVAL_STR(zvalue, string);
 	}
 	else if (G_IS_PARAM_SPEC_FLAGS(pspec)) {
-		convert_to_long_ex(zvalue);
-		g_value_init(gvalue, pspec_type);
-		g_value_set_flags(gvalue, Z_LVAL_P(zvalue));
+		ZVAL_LONG(zvalue, g_value_get_flags(gvalue));
 	}
 	else if (G_IS_PARAM_SPEC_DOUBLE(pspec)) {
-		convert_to_double_ex(zvalue);
-		g_value_init(gvalue, pspec_type);
-		g_value_set_double(gvalue, Z_DVAL_P(zvalue));
+		ZVAL_DOUBLE(zvalue, g_value_get_double(gvalue));
 	}
-	else {
-		/* Need to add at least G_IS_PARAM_SPEC_BOXED(pspec) I guess.
+	else { /* Need to add at least G_IS_PARAM_SPEC_BOXED(pspec) I guess.
 		 */
 
 		g_warning( "%s: .%s unimplemented property type %s",
@@ -328,24 +323,23 @@ vips_php_write_required_output(VipsObject *object,
 		const char *name = g_param_spec_get_name(pspec);
 		GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
 		GValue gvalue = { 0 }; 
-		zval *v;
+		zval zvalue;
 
 		g_value_init(&gvalue, pspec_type);
 		g_object_get_property(G_OBJECT(call->operation), name, &gvalue);
-		v = NULL;
-		if (vips_php_to_zval(call, pspec, &gvalue, &v)) {
+		if (vips_php_gval_to_zval(call, pspec, &gvalue, &zvalue)) {
 			g_value_unset(&gvalue);
 			return call;
 		}
-		add_assoc_zval(return_value, name, v);
+		add_assoc_zval(return_value, name, &zvalue);
 
 #ifdef VIPS_DEBUG
 {
-			char *str_value;
+		char *str_value;
 
-			str_value = g_strdup_value_contents(&gvalue);
-			VIPS_DEBUG_MSG("   %s.%s = %s\n", call->operation_name, name, str_value);
-			g_free(str_value);
+		str_value = g_strdup_value_contents(&gvalue);
+		VIPS_DEBUG_MSG("    %s.%s = %s\n", call->operation_name, name, str_value);
+		g_free(str_value);
 }
 #endif/*VIPS_DEBUG*/
 
@@ -356,7 +350,7 @@ vips_php_write_required_output(VipsObject *object,
 }
 
 /* Call any vips operation, with the arguments coming from an array of zval. argv can have an extra final 
- * arg, which is an associative array of extra optional arguments. 
+ * arg, which is an associative array of optional arguments. 
  */
 static int
 vips_php_call_array(const char *operation_name, const char *option_string, int argc, zval *argv, zval *return_value)
@@ -419,14 +413,30 @@ vips_php_call_array(const char *operation_name, const char *option_string, int a
 		zval *value;
 
 		ZEND_HASH_FOREACH_STR_KEY_VAL(Z_ARRVAL_P(call->options), key, value) {
+			char *name;
+			GParamSpec *pspec;
+			VipsArgumentClass *argument_class;
+			VipsArgumentInstance *argument_instance;
+			GValue gvalue = { 0 };
+
 			if (key == NULL) {
 				continue;
 			}
 
-			/* We need to spot optional output args and add to args_output as well.
-			 */
+			name = ZSTR_VAL(key);
+			if (vips_object_get_argument(VIPS_OBJECT(call->operation), name,
+				&pspec, &argument_class, &argument_instance)) {
+				error_vips();
+				vips_object_unref_outputs(VIPS_OBJECT(call->operation));
+				vips_php_call_free(call);
+				return -1;
+			}
 
-			if (strcmp("xxx", ZSTR_VAL(key)) == 0) {
+			if (vips_php_set_value(call, pspec, value)) {
+				error_vips();
+				vips_object_unref_outputs(VIPS_OBJECT(call->operation));
+				vips_php_call_free(call);
+				return -1;
 			}
 		} ZEND_HASH_FOREACH_END();
 	}
@@ -500,15 +510,6 @@ PHP_FUNCTION(vips_php_call)
 		return;
 	}
 
-	/*
-	array_init(return_value);
-
-	for(i = 1; i < argc; i++) {
-		zval_add_ref(argv[i]);
-		add_index_zval(return_value, i, *argv[i]);
-	}
-	 */
-
 	efree(argv);
 
 }
@@ -522,6 +523,7 @@ PHP_FUNCTION(vips_image_new_from_file)
 	size_t filename_len;
 	zval *options = NULL;
 	VipsImage *image;
+	zend_resource *resource;
 
 	VIPS_DEBUG_MSG("vips_image_new_from_file:\n");
 
@@ -541,7 +543,9 @@ PHP_FUNCTION(vips_image_new_from_file)
 
 	VIPS_DEBUG_MSG("vips_image_new_from_file: image = %p\n", image);
 
-	RETVAL_RES(zend_register_resource(image, le_vips));
+	resource = zend_register_resource(image, le_gobject);
+
+	RETVAL_RES(resource);
 
 }
 /* }}} */
@@ -560,7 +564,7 @@ PHP_FUNCTION(vips_image_write_to_file)
 		return;
 	}
 
-	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "VipsImage", le_vips)) == NULL) {
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "GObject", le_gobject)) == NULL) {
 		RETURN_FALSE;
 	}
 
@@ -581,12 +585,13 @@ PHP_FUNCTION(vips_invert)
 	zval *options = NULL;
 	VipsImage *image;
 	VipsImage *out;
+	zend_resource *resource;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "r|a", &IM, &options) == FAILURE) {
 		return;
 	}
 
-	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "VipsImage", le_vips)) == NULL) {
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "GObject", le_gobject)) == NULL) {
 		RETURN_FALSE;
 	}
 
@@ -595,7 +600,9 @@ PHP_FUNCTION(vips_invert)
 		RETURN_FALSE;
 	}
 
-	RETVAL_RES(zend_register_resource(out, le_vips));
+	resource = zend_register_resource(out, le_gobject);
+
+	RETVAL_RES(resource);
 }
 /* }}} */
 
@@ -612,9 +619,9 @@ static void php_vips_init_globals(zend_vips_globals *vips_globals)
 
 /* {{{ php_free_vips_object
  *  */
-static void php_free_vips_object(zend_resource *rsrc)
+static void php_free_gobject(zend_resource *rsrc)
 {
-	VIPS_DEBUG_MSG("php_free_vips_object: %p\n", rsrc->ptr);
+	VIPS_DEBUG_MSG("php_free_gobject: %p\n", rsrc->ptr);
 
 	g_object_unref((GObject *) rsrc->ptr);
 }
@@ -636,7 +643,7 @@ PHP_MINIT_FUNCTION(vips)
 	if( VIPS_INIT( "banana" ) )
 		return FAILURE;
 
-	le_vips = zend_register_list_destructors_ex(php_free_vips_object, NULL, "vips", module_number);
+	le_gobject = zend_register_list_destructors_ex(php_free_gobject, NULL, "GObject", module_number);
 
 	return SUCCESS;
 }
