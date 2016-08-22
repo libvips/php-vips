@@ -79,7 +79,6 @@ typedef struct _VipsPhpCall {
 	const char *option_string;
 	int argc;
 	zval *argv;
-	zval **out;
 
 	/* The operation we are calling.
 	 */
@@ -106,7 +105,7 @@ vips_php_call_free(VipsPhpCall *call)
 
 static VipsPhpCall *
 vips_php_call_new(const char *operation_name,
-	const char *option_string, int argc, zval *argv, zval **out)
+	const char *option_string, int argc, zval *argv)
 {
 	VipsPhpCall *call;
 
@@ -118,7 +117,6 @@ vips_php_call_new(const char *operation_name,
 	call->option_string = option_string;
 	call->argc = argc;
 	call->argv = argv;
-	call->out = out;
 
 	if (!(call->operation = vips_operation_new(operation_name))) {
 		vips_php_call_free(call);
@@ -140,10 +138,9 @@ vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *g
 	 * types and are hence not compile-time constants, argh.
 	 */
 	if (G_IS_PARAM_SPEC_STRING(pspec)) {
-		/* These are GStrings, vips refstrings are handled by boxed, below.
+		/* These are GStrings, vips refstrings are handled by boxed, see below.
 		 */
 		convert_to_string_ex(zvalue);
-		g_value_init(gvalue, pspec_type);
 		g_value_set_string(gvalue, Z_STRVAL_P(zvalue));
 	}
 	else if (G_IS_PARAM_SPEC_OBJECT(pspec)) {
@@ -155,7 +152,117 @@ vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *g
 			return -1;
 		}
 
-		g_value_init(gvalue, pspec_type);
+		g_value_set_object(gvalue, image);
+	}
+	else if (G_IS_PARAM_SPEC_INT(pspec)) {
+		convert_to_long_ex(zvalue);
+		g_value_set_int(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_UINT64(pspec)) {
+		convert_to_long_ex(zvalue);
+		g_value_set_uint64(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_BOOLEAN(pspec)) {
+		convert_to_boolean(zvalue);
+		g_value_set_boolean(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_ENUM(pspec)) {
+		int enum_value;
+
+		convert_to_string_ex(zvalue);
+		if ((enum_value = vips_enum_from_nick("enum", pspec_type, Z_STRVAL_P(zvalue))) < 0 ) {
+			error_vips();
+			return -1;
+		}
+		g_value_set_enum(gvalue, enum_value);
+	}
+	else if (G_IS_PARAM_SPEC_FLAGS(pspec)) {
+		convert_to_long_ex(zvalue);
+		g_value_set_flags(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_DOUBLE(pspec)) {
+		convert_to_double_ex(zvalue);
+		g_value_set_double(gvalue, Z_DVAL_P(zvalue));
+	}
+	else {
+		/* Need to add at least G_IS_PARAM_SPEC_BOXED(pspec) I guess.
+		 */
+
+		g_warning( "%s: .%s unimplemented property type %s",
+			G_STRLOC,
+			g_param_spec_get_name(pspec),
+			g_type_name(pspec_type) );
+	}
+
+	return 0;
+}
+
+static void *
+vips_php_set_required_input(VipsObject *object, 
+	GParamSpec *pspec, VipsArgumentClass *argument_class, VipsArgumentInstance *argument_instance, 
+	void *a, void *b)
+{
+	VipsPhpCall *call = (VipsPhpCall *) a;
+
+	if ((argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
+		(argument_class->flags & VIPS_ARGUMENT_CONSTRUCT) &&
+		(argument_class->flags & VIPS_ARGUMENT_INPUT) &&
+		!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
+		!argument_instance->assigned) {
+		if (call->args_required < call->argc) {
+			const char *name = g_param_spec_get_name(pspec);
+			GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+			int i = call->args_required;
+			GValue gvalue = { 0 };
+
+			g_value_init(&gvalue, pspec_type);
+			if (vips_php_to_gvalue(call, pspec, &call->argv[i], &gvalue))
+				return call;
+
+#ifdef VIPS_DEBUG
+{
+			char *str_value;
+
+			str_value = g_strdup_value_contents(&gvalue);
+			VIPS_DEBUG_MSG("   %s.%s = %s\n", call->operation_name, name, str_value);
+			g_free(str_value);
+}
+#endif/*VIPS_DEBUG*/
+
+			g_object_set_property(G_OBJECT(call->operation), name, &gvalue);
+			g_value_unset(&gvalue);
+		}
+
+		call->args_required += 1;
+	}
+
+	return NULL;
+}
+
+/* Set a php zval from a gvalue. pspec indicates the kind of thing the operation is offering.
+ */
+static int
+vips_php_to_zval(VipsPhpCall *call, GParamSpec *pspec, GValue *gvalue, zval *zvalue)
+{
+	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+
+	/* We can't use a switch since some param specs don't have fundamental
+	 * types and are hence not compile-time constants, argh.
+	 */
+	if (G_IS_PARAM_SPEC_STRING(pspec)) {
+		/* These are GStrings, vips refstrings are handled by boxed, see below.
+		 */
+
+	}
+	else if (G_IS_PARAM_SPEC_OBJECT(pspec)) {
+		VipsImage *image;
+
+		if (Z_TYPE_P(zvalue) != IS_RESOURCE ||
+			(image = (VipsImage *)zend_fetch_resource(Z_RES_P(zvalue), "VipsImage", le_vips)) == NULL) {
+			php_error_docref(NULL, E_WARNING, "not a VipsImage");
+			return -1;
+		}
+
 		g_value_set_object(gvalue, image);
 	}
 	else if (G_IS_PARAM_SPEC_INT(pspec)) {
@@ -208,24 +315,29 @@ vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *g
 }
 
 static void *
-vips_php_set_required_input(VipsObject *object, 
+vips_php_write_required_output(VipsObject *object, 
 	GParamSpec *pspec, VipsArgumentClass *argument_class, VipsArgumentInstance *argument_instance, 
 	void *a, void *b)
 {
 	VipsPhpCall *call = (VipsPhpCall *) a;
+	zval *return_value = (zval *) b;
 
 	if ((argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
-		(argument_class->flags & VIPS_ARGUMENT_CONSTRUCT) &&
-		(argument_class->flags & VIPS_ARGUMENT_INPUT) &&
-		!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
-		!argument_instance->assigned) {
-		if (call->args_required < call->argc) {
-			const char *name = g_param_spec_get_name(pspec);
-			int i = call->args_required;
-			GValue gvalue = { 0 };
+		(argument_class->flags & VIPS_ARGUMENT_OUTPUT) &&
+		!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED)) { 
+		const char *name = g_param_spec_get_name(pspec);
+		GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+		GValue gvalue = { 0 }; 
+		zval *v;
 
-			if (vips_php_to_gvalue(call, pspec, &call->argv[i], &gvalue))
-				return call;
+		g_value_init(&gvalue, pspec_type);
+		g_object_get_property(G_OBJECT(call->operation), name, &gvalue);
+		v = NULL;
+		if (vips_php_to_zval(call, pspec, &gvalue, &v)) {
+			g_value_unset(&gvalue);
+			return call;
+		}
+		add_assoc_zval(return_value, name, v);
 
 #ifdef VIPS_DEBUG
 {
@@ -237,10 +349,7 @@ vips_php_set_required_input(VipsObject *object,
 }
 #endif/*VIPS_DEBUG*/
 
-			g_object_set_property(G_OBJECT(call->operation), name, &gvalue);
-		}
-
-		call->args_required += 1;
+		g_value_unset(&gvalue);
 	}
 
 	return NULL;
@@ -250,13 +359,13 @@ vips_php_set_required_input(VipsObject *object,
  * arg, which is an associative array of extra optional arguments. 
  */
 static int
-vips_php_call_array(const char *operation_name, const char *option_string, int argc, zval *argv, zval **out)
+vips_php_call_array(const char *operation_name, const char *option_string, int argc, zval *argv, zval *return_value)
 {
 	VipsPhpCall *call;
 
 	VIPS_DEBUG_MSG("vips_php_call_array:\n");
 
-	if (!(call = vips_php_call_new(operation_name, option_string, argc, argv, out))) {
+	if (!(call = vips_php_call_new(operation_name, option_string, argc, argv))) {
 		return -1;
 	}
 
@@ -314,6 +423,9 @@ vips_php_call_array(const char *operation_name, const char *option_string, int a
 				continue;
 			}
 
+			/* We need to spot optional output args and add to args_output as well.
+			 */
+
 			if (strcmp("xxx", ZSTR_VAL(key)) == 0) {
 			}
 		} ZEND_HASH_FOREACH_END();
@@ -332,10 +444,13 @@ vips_php_call_array(const char *operation_name, const char *option_string, int a
 	/* Walk args again, writing output.
 	 */
 	VIPS_DEBUG_MSG("vips_php_call_array: writing required output ...\n");
-	/*
-	if (vips_argument_map(VIPS_OBJECT(call->operation), vips_php_write_required_output, call, NULL)) {
+	array_init(return_value);
+	if (vips_argument_map(VIPS_OBJECT(call->operation), vips_php_write_required_output, call, return_value)) {
+		error_vips();
+		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
+		vips_php_call_free(call);
+		return -1;
 	}
-	 */
 	VIPS_DEBUG_MSG("vips_php_call_array: writing optional output ...\n");
 	if(call->options) {
 		/* Loop over options writing optional output.
@@ -380,7 +495,7 @@ PHP_FUNCTION(vips_php_call)
 	}
 
 	result = NULL;
-	if (vips_php_call_array(operation_name, "", argc - 1, argv + 1, &result)) {
+	if (vips_php_call_array(operation_name, "", argc - 1, argv + 1, return_value)) {
 		efree(argv);
 		return;
 	}
@@ -396,7 +511,6 @@ PHP_FUNCTION(vips_php_call)
 
 	efree(argv);
 
-	RETURN_ZVAL(result, 1, 0);
 }
 /* }}} */
 
