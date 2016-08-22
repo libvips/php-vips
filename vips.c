@@ -249,6 +249,46 @@ vips_php_set_required_input(VipsObject *object,
 	return NULL;
 }
 
+/* Set all optional arguments.
+ */
+static int
+vips_php_set_optional_input(VipsPhpCall *call, zval *options)
+{
+	zend_string *key;
+	zval *value;
+
+	VIPS_DEBUG_MSG("vips_php_set_optional_input:\n");
+
+	ZEND_HASH_FOREACH_STR_KEY_VAL(Z_ARRVAL_P(call->options), key, value) {
+		char *name;
+		GParamSpec *pspec;
+		VipsArgumentClass *argument_class;
+		VipsArgumentInstance *argument_instance;
+		GValue gvalue = { 0 };
+
+		if (key == NULL) {
+			continue;
+		}
+
+		name = ZSTR_VAL(key);
+		if (vips_object_get_argument(VIPS_OBJECT(call->operation), name,
+			&pspec, &argument_class, &argument_instance)) {
+			error_vips();
+			return -1;
+		}
+
+		if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
+			(argument_class->flags & VIPS_ARGUMENT_INPUT) &&
+			!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
+			vips_php_set_value(call, pspec, value)) {
+			error_vips();
+			return -1;
+		}
+	} ZEND_HASH_FOREACH_END();
+
+	return 0;
+}
+
 /* Set a php zval from a gvalue. pspec indicates the kind of thing the operation is offering.
  */
 static int
@@ -309,8 +349,37 @@ vips_php_gval_to_zval(VipsPhpCall *call, GParamSpec *pspec, GValue *gvalue, zval
 	return 0;
 }
 
+static int
+vips_php_get_value(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue)
+{
+	const char *name = g_param_spec_get_name(pspec);
+	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+	GValue gvalue = { 0 }; 
+
+	g_value_init(&gvalue, pspec_type);
+	g_object_get_property(G_OBJECT(call->operation), name, &gvalue);
+	if (vips_php_gval_to_zval(call, pspec, &gvalue, zvalue)) {
+		g_value_unset(&gvalue);
+		return -1;
+	}
+
+#ifdef VIPS_DEBUG
+{
+	char *str_value;
+
+	str_value = g_strdup_value_contents(&gvalue);
+	VIPS_DEBUG_MSG("    %s.%s = %s\n", call->operation_name, name, str_value);
+	g_free(str_value);
+}
+#endif/*VIPS_DEBUG*/
+
+	g_value_unset(&gvalue);
+
+	return 0;
+}
+
 static void *
-vips_php_write_required_output(VipsObject *object, 
+vips_php_get_required_output(VipsObject *object, 
 	GParamSpec *pspec, VipsArgumentClass *argument_class, VipsArgumentInstance *argument_instance, 
 	void *a, void *b)
 {
@@ -321,32 +390,55 @@ vips_php_write_required_output(VipsObject *object,
 		(argument_class->flags & VIPS_ARGUMENT_OUTPUT) &&
 		!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED)) { 
 		const char *name = g_param_spec_get_name(pspec);
-		GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
-		GValue gvalue = { 0 }; 
 		zval zvalue;
 
-		g_value_init(&gvalue, pspec_type);
-		g_object_get_property(G_OBJECT(call->operation), name, &gvalue);
-		if (vips_php_gval_to_zval(call, pspec, &gvalue, &zvalue)) {
-			g_value_unset(&gvalue);
+		if (vips_php_get_value(call, pspec, &zvalue)) {
 			return call;
 		}
 		add_assoc_zval(return_value, name, &zvalue);
-
-#ifdef VIPS_DEBUG
-{
-		char *str_value;
-
-		str_value = g_strdup_value_contents(&gvalue);
-		VIPS_DEBUG_MSG("    %s.%s = %s\n", call->operation_name, name, str_value);
-		g_free(str_value);
-}
-#endif/*VIPS_DEBUG*/
-
-		g_value_unset(&gvalue);
 	}
 
 	return NULL;
+}
+
+static int
+vips_php_get_optional_output(VipsPhpCall *call, zval *options, zval *return_value)
+{
+	zend_string *key;
+	zval *value;
+
+	VIPS_DEBUG_MSG("vips_php_set_optional_input:\n");
+
+	ZEND_HASH_FOREACH_STR_KEY_VAL(Z_ARRVAL_P(call->options), key, value) {
+		char *name;
+		GParamSpec *pspec;
+		VipsArgumentClass *argument_class;
+		VipsArgumentInstance *argument_instance;
+		zval zvalue;
+
+		if (key == NULL) {
+			continue;
+		}
+
+		name = ZSTR_VAL(key);
+		if (vips_object_get_argument(VIPS_OBJECT(call->operation), name,
+			&pspec, &argument_class, &argument_instance)) {
+			error_vips();
+			return -1;
+		}
+
+		if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
+			(argument_class->flags & VIPS_ARGUMENT_INPUT) &&
+			!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
+			vips_php_get_value(call, pspec, &zvalue)) {
+			error_vips();
+			return -1;
+		}
+
+		add_assoc_zval(return_value, name, &zvalue);
+	} ZEND_HASH_FOREACH_END();
+
+	return 0;
 }
 
 /* Call any vips operation, with the arguments coming from an array of zval. argv can have an extra final 
@@ -367,7 +459,7 @@ vips_php_call_array(const char *operation_name, const char *option_string, int a
 	 * override things we set deliberately.
 	 */
 	VIPS_DEBUG_MSG("vips_php_call_array: setting args from option_string ...\n");
-	if( option_string &&
+	if (option_string &&
 		vips_object_set_from_string(VIPS_OBJECT(call->operation), option_string)) {
 		error_vips();
 		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
@@ -408,63 +500,42 @@ vips_php_call_array(const char *operation_name, const char *option_string, int a
 	/* Set all optional arguments.
 	 */
 	VIPS_DEBUG_MSG("vips_php_call_array: setting optional input args ...\n");
-	if (call->options) {
-		zend_string *key;
-		zval *value;
-
-		ZEND_HASH_FOREACH_STR_KEY_VAL(Z_ARRVAL_P(call->options), key, value) {
-			char *name;
-			GParamSpec *pspec;
-			VipsArgumentClass *argument_class;
-			VipsArgumentInstance *argument_instance;
-			GValue gvalue = { 0 };
-
-			if (key == NULL) {
-				continue;
-			}
-
-			name = ZSTR_VAL(key);
-			if (vips_object_get_argument(VIPS_OBJECT(call->operation), name,
-				&pspec, &argument_class, &argument_instance)) {
-				error_vips();
-				vips_object_unref_outputs(VIPS_OBJECT(call->operation));
-				vips_php_call_free(call);
-				return -1;
-			}
-
-			if (vips_php_set_value(call, pspec, value)) {
-				error_vips();
-				vips_object_unref_outputs(VIPS_OBJECT(call->operation));
-				vips_php_call_free(call);
-				return -1;
-			}
-		} ZEND_HASH_FOREACH_END();
+	if (call->options &&
+		vips_php_set_optional_input(call, call->options)) {
+		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
+		vips_php_call_free(call);
+		return -1;
 	}
 
 	/* Look up in cache and build.
 	 */
 	VIPS_DEBUG_MSG("vips_php_call_array: building ...\n");
-	if( vips_cache_operation_buildp(&call->operation)) {
+	if (vips_cache_operation_buildp(&call->operation)) {
 		error_vips();
 		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
 		vips_php_call_free(call);
 		return -1;
 	}
 
-	/* Walk args again, writing output.
+	/* Walk args again, getting required output.
 	 */
-	VIPS_DEBUG_MSG("vips_php_call_array: writing required output ...\n");
+	VIPS_DEBUG_MSG("vips_php_call_array: getting required output ...\n");
 	array_init(return_value);
-	if (vips_argument_map(VIPS_OBJECT(call->operation), vips_php_write_required_output, call, return_value)) {
+	if (vips_argument_map(VIPS_OBJECT(call->operation), vips_php_get_required_output, call, return_value)) {
 		error_vips();
 		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
 		vips_php_call_free(call);
 		return -1;
 	}
-	VIPS_DEBUG_MSG("vips_php_call_array: writing optional output ...\n");
-	if(call->options) {
-		/* Loop over options writing optional output.
-		 */
+
+	/* And optional output.
+	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: getting optional output ...\n");
+	if (call->options &&
+		vips_php_get_optional_output(call, call->options, return_value)) {
+		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
+		vips_php_call_free(call);
+		return -1;
 	}
 
 	vips_php_call_free(call);
@@ -499,7 +570,7 @@ PHP_FUNCTION(vips_php_call)
 		WRONG_PARAM_COUNT;
 	}
 
-	if(zend_parse_parameter(0, 0, &argv[0], "s", &operation_name, &operation_name_len) == FAILURE) {
+	if (zend_parse_parameter(0, 0, &argv[0], "s", &operation_name, &operation_name_len) == FAILURE) {
 		efree(argv);
 		return;
 	}
@@ -640,7 +711,7 @@ PHP_MINIT_FUNCTION(vips)
 	 * vips_init() will fall back to other techniques for finding data
 	 * files.
 	 */
-	if( VIPS_INIT( "banana" ) )
+	if (VIPS_INIT("banana"))
 		return FAILURE;
 
 	le_gobject = zend_register_list_destructors_ex(php_free_gobject, NULL, "GObject", module_number);
