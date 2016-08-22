@@ -1,3 +1,6 @@
+/* Uncomment for some logging.
+ */
+#define VIPS_DEBUG
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +12,7 @@
 #include "php_vips.h"
 
 #include <vips/vips.h>
+#include <vips/debug.h>
 
 /* If you declare any globals in php_vips.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(vips)
@@ -60,6 +64,8 @@ PHP_FUNCTION(confirm_vips_compiled)
 static void
 error_vips( void )
 {
+	VIPS_DEBUG_MSG("error_vips: %s\n", vips_error_buffer());
+
 	php_error_docref(NULL, E_WARNING, "%s", vips_error_buffer());
 	vips_error_clear();
 }
@@ -92,6 +98,8 @@ typedef struct _VipsPhpCall {
 static void
 vips_php_call_free(VipsPhpCall *call)
 {
+	VIPS_DEBUG_MSG("vips_php_call_free:\n");
+
 	VIPS_UNREF(call->operation);
 	g_free(call);
 }
@@ -101,6 +109,9 @@ vips_php_call_new(const char *operation_name,
 	const char *option_string, int argc, zval *argv, zval **out)
 {
 	VipsPhpCall *call;
+
+	VIPS_DEBUG_MSG("vips_php_call_new: %s\n", operation_name );
+	VIPS_DEBUG_MSG("    option_string = \"%s\", argc = %d\n", option_string, argc);
 
 	call = g_new0( VipsPhpCall, 1 );
 	call->operation_name = operation_name;
@@ -121,8 +132,79 @@ vips_php_call_new(const char *operation_name,
 /* Set a gvalue from a php value. pspec indicates the kind of thing the operation is expecting.
  */
 static int
-vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *value, GValue *gvalue)
+vips_php_to_gvalue(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *gvalue)
 {
+	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+
+	/* We can't use a switch since some param specs don't have fundamental
+	 * types and are hence not compile-time constants, argh.
+	 */
+	if (G_IS_PARAM_SPEC_STRING(pspec)) {
+		/* These are GStrings, vips refstrings are handled by boxed, below.
+		 */
+		convert_to_string_ex(zvalue);
+		g_value_init(gvalue, pspec_type);
+		g_value_set_string(gvalue, Z_STRVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_OBJECT(pspec)) {
+		VipsImage *image;
+
+		if (Z_TYPE_P(zvalue) != IS_RESOURCE ||
+			(image = (VipsImage *)zend_fetch_resource(Z_RES_P(zvalue), "VipsImage", le_vips)) == NULL) {
+			php_error_docref(NULL, E_WARNING, "not a VipsImage");
+			return -1;
+		}
+
+		g_value_init(gvalue, pspec_type);
+		g_value_set_object(gvalue, image);
+	}
+	else if (G_IS_PARAM_SPEC_INT(pspec)) {
+		convert_to_long_ex(zvalue);
+		g_value_init(gvalue, pspec_type);
+		g_value_set_int(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_UINT64(pspec)) {
+		convert_to_long_ex(zvalue);
+		g_value_init(gvalue, pspec_type);
+		g_value_set_uint64(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_BOOLEAN(pspec)) {
+		convert_to_boolean(zvalue);
+		g_value_init(gvalue, pspec_type);
+		g_value_set_boolean(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_ENUM(pspec)) {
+		int enum_value;
+
+		convert_to_string_ex(zvalue);
+		if ((enum_value = vips_enum_from_nick("enum", pspec_type, Z_STRVAL_P(zvalue))) < 0 ) {
+			error_vips();
+			return -1;
+		}
+		g_value_init(gvalue, pspec_type);
+		g_value_set_enum(gvalue, enum_value);
+	}
+	else if (G_IS_PARAM_SPEC_FLAGS(pspec)) {
+		convert_to_long_ex(zvalue);
+		g_value_init(gvalue, pspec_type);
+		g_value_set_flags(gvalue, Z_LVAL_P(zvalue));
+	}
+	else if (G_IS_PARAM_SPEC_DOUBLE(pspec)) {
+		convert_to_double_ex(zvalue);
+		g_value_init(gvalue, pspec_type);
+		g_value_set_double(gvalue, Z_DVAL_P(zvalue));
+	}
+	else {
+		/* Need to add at least G_IS_PARAM_SPEC_BOXED(pspec) I guess.
+		 */
+
+		g_warning( "%s: .%s unimplemented property type %s",
+			G_STRLOC,
+			g_param_spec_get_name(pspec),
+			g_type_name(pspec_type) );
+	}
+
+	return 0;
 }
 
 static void *
@@ -142,8 +224,19 @@ vips_php_set_required_input(VipsObject *object,
 			int i = call->args_required;
 			GValue gvalue = { 0 };
 
-			if(vips_php_to_gvalue(call, pspec, &call->argv[i], &gvalue))
+			if (vips_php_to_gvalue(call, pspec, &call->argv[i], &gvalue))
 				return call;
+
+#ifdef VIPS_DEBUG
+{
+			char *str_value;
+
+			str_value = g_strdup_value_contents(&gvalue);
+			VIPS_DEBUG_MSG("   %s.%s = %s\n", call->operation_name, name, str_value);
+			g_free(str_value);
+}
+#endif/*VIPS_DEBUG*/
+
 			g_object_set_property(G_OBJECT(call->operation), name, &gvalue);
 		}
 
@@ -157,9 +250,11 @@ vips_php_set_required_input(VipsObject *object,
  * arg, which is an associative array of extra optional arguments. 
  */
 static int
-vips_php_call(const char *operation_name, const char *option_string, int argc, zval *argv, zval **out)
+vips_php_call_array(const char *operation_name, const char *option_string, int argc, zval *argv, zval **out)
 {
 	VipsPhpCall *call;
+
+	VIPS_DEBUG_MSG("vips_php_call_array:\n");
 
 	if (!(call = vips_php_call_new(operation_name, option_string, argc, argv, out))) {
 		return -1;
@@ -168,6 +263,7 @@ vips_php_call(const char *operation_name, const char *option_string, int argc, z
 	/* Set str options before vargs options, so the user can't
 	 * override things we set deliberately.
 	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: setting args from option_string ...\n");
 	if( option_string &&
 		vips_object_set_from_string(VIPS_OBJECT(call->operation), option_string)) {
 		error_vips();
@@ -178,6 +274,7 @@ vips_php_call(const char *operation_name, const char *option_string, int argc, z
 
 	/* Set all required input args from argv.
 	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: setting required input args ...\n");
 	if (vips_argument_map(VIPS_OBJECT(call->operation), vips_php_set_required_input, call, NULL)) {
 		error_vips();
 		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
@@ -187,6 +284,7 @@ vips_php_call(const char *operation_name, const char *option_string, int argc, z
 
 	/* args_required must match argc, or we allow one extra final arg for options.
 	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: testing argc ...\n");
 	if (call->argc == call->args_required + 1) {
 		/* Make sure it really is an array.
 		 */
@@ -206,6 +304,7 @@ vips_php_call(const char *operation_name, const char *option_string, int argc, z
 
 	/* Set all optional arguments.
 	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: setting optional input args ...\n");
 	if (call->options) {
 		zend_string *key;
 		zval *value;
@@ -222,6 +321,7 @@ vips_php_call(const char *operation_name, const char *option_string, int argc, z
 
 	/* Look up in cache and build.
 	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: building ...\n");
 	if( vips_cache_operation_buildp(&call->operation)) {
 		error_vips();
 		vips_object_unref_outputs(VIPS_OBJECT(call->operation));
@@ -231,10 +331,12 @@ vips_php_call(const char *operation_name, const char *option_string, int argc, z
 
 	/* Walk args again, writing output.
 	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: writing required output ...\n");
 	/*
 	if (vips_argument_map(VIPS_OBJECT(call->operation), vips_php_write_required_output, call, NULL)) {
 	}
 	 */
+	VIPS_DEBUG_MSG("vips_php_call_array: writing optional output ...\n");
 	if(call->options) {
 		/* Loop over options writing optional output.
 		 */
@@ -242,23 +344,26 @@ vips_php_call(const char *operation_name, const char *option_string, int argc, z
 
 	vips_php_call_free(call);
 
+	VIPS_DEBUG_MSG("vips_php_call_array: done!\n");
+
 	return 0;
 }
 
-/* Call any vips operation, with the args coming from php and the result going back to php. Ignore the
- * first @skip arguments from php. 
- */
-static void
-call_vips(INTERNAL_FUNCTION_PARAMETERS, const char *operation_name, int skip)
+/* {{{ proto value vips_php_call(string operation_name [, more])
+   Call any vips operation */
+PHP_FUNCTION(vips_php_call)
 {
 	int argc;
 	zval *argv;
+	char *operation_name;
+	size_t operation_name_len;
 	zval *result;
-	int i;
+
+	VIPS_DEBUG_MSG("vips_php_call:\n");
 
 	argc = ZEND_NUM_ARGS();
 
-	if (argc < 2) {
+	if (argc < 1) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -269,8 +374,13 @@ call_vips(INTERNAL_FUNCTION_PARAMETERS, const char *operation_name, int skip)
 		WRONG_PARAM_COUNT;
 	}
 
+	if(zend_parse_parameter(0, 0, &argv[0], "s", &operation_name, &operation_name_len) == FAILURE) {
+		efree(argv);
+		return;
+	}
+
 	result = NULL;
-	if (vips_php_call(operation_name, "", argc - skip, argv + skip, &result)) {
+	if (vips_php_call_array(operation_name, "", argc - 1, argv + 1, &result)) {
 		efree(argv);
 		return;
 	}
@@ -288,6 +398,7 @@ call_vips(INTERNAL_FUNCTION_PARAMETERS, const char *operation_name, int skip)
 
 	RETURN_ZVAL(result, 1, 0);
 }
+/* }}} */
 
 /* {{{ proto resource vips_image_new_from_file(string filename [, array options])
    Open an image from a filename */
@@ -298,9 +409,12 @@ PHP_FUNCTION(vips_image_new_from_file)
 	zval *options = NULL;
 	VipsImage *image;
 
+	VIPS_DEBUG_MSG("vips_image_new_from_file:\n");
+
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|a", &filename, &filename_len, &options) == FAILURE) {
 		return;
 	}
+	VIPS_DEBUG_MSG("vips_image_new_from_file: filename = %s\n", filename);
 
 	/*
 	call_vips(INTERNAL_FUNCTION_PARAM_PASSTHRU, 
@@ -310,6 +424,8 @@ PHP_FUNCTION(vips_image_new_from_file)
 		error_vips();
 		RETURN_FALSE;
 	}
+
+	VIPS_DEBUG_MSG("vips_image_new_from_file: image = %p\n", image);
 
 	RETVAL_RES(zend_register_resource(image, le_vips));
 
@@ -348,8 +464,8 @@ PHP_FUNCTION(vips_image_write_to_file)
 PHP_FUNCTION(vips_invert)
 {
 	zval *IM;
-	VipsImage *image;
 	zval *options = NULL;
+	VipsImage *image;
 	VipsImage *out;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "r|a", &IM, &options) == FAILURE) {
@@ -384,6 +500,8 @@ static void php_vips_init_globals(zend_vips_globals *vips_globals)
  *  */
 static void php_free_vips_object(zend_resource *rsrc)
 {
+	VIPS_DEBUG_MSG("php_free_vips_object: %p\n", rsrc->ptr);
+
 	g_object_unref((GObject *) rsrc->ptr);
 }
 /* }}} */
@@ -475,6 +593,10 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_invert, 0)
 	ZEND_ARG_INFO(0, options)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_php_call, 0)
+	ZEND_ARG_INFO(0, operation_name)
+ZEND_END_ARG_INFO()
+
 /* {{{ vips_functions[]
  *
  * Every user visible function must have an entry in vips_functions[].
@@ -484,6 +606,7 @@ const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
 	PHP_FE(vips_invert, arginfo_vips_invert)
+	PHP_FE(vips_php_call, arginfo_vips_php_call)
 
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };

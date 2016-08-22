@@ -56,7 +56,18 @@ Run:
 $ make
 ```
 
-To build the module to the `modules/` directory in this repository. Test with:
+To build the module to the `modules/` directory in this repository. 
+
+Don't post php-vips test results to php.net! Stop this with:
+
+
+```
+$ export NO_INTERACTION=1
+```
+
+
+Test with:
+
 
 ```
 $ make test
@@ -105,17 +116,9 @@ See `examples/`.
 
 ### TODO
 
-* look into varargs or keyword args for php modules ... we need to be able to
-  support `vips_image_new_from_file($filename, access = "sequential");`
+* add `vips_call` to call any vips operation
 
-  looks like we'll need an optional final array arg after the required args
-  containing all the extra stuff, eg.
-
-```php
-$im = vips_image_new_from_file("k2.jpg", array('access' => 'sequential'));
-```
-
-* add the functions we need for vips introspection
+  not quite done, try `examples/vips_call.php`
 
 * make a wrapper over this thing in php which gives it a nice API, including
   exceptions, overloads, and so on
