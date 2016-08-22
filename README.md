@@ -108,7 +108,25 @@ See `examples/`.
 * look into varargs or keyword args for php modules ... we need to be able to
   support `vips_image_new_from_file($filename, access = "sequential");`
 
+  looks like we'll need an optional final array arg after the required args
+  containing all the extra stuff, eg.
+
+```php
+$im = vips_image_new_from_file("k2.jpg", array('access' => 'sequential'));
+```
+
 * add the functions we need for vips introspection
 
 * make a wrapper over this thing in php which gives it a nice API, including
   exceptions, overloads, and so on
+
+### links
+
+http://php.net/manual/en/internals2.php
+
+https://devzone.zend.com/303/extension-writing-part-i-introduction-to-php-and-zend/
+
+https://devzone.zend.com/317/extension-writing-part-ii-parameters-arrays-and-zvals/
+
+https://devzone.zend.com/446/extension-writing-part-iii-resources/
+
