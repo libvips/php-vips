@@ -4,7 +4,7 @@
 
 	$x = vips_image_new_from_file($argv[1]);
 
-	$result = vips_php_call("invert", $x);
+	$result = vips_call("invert", $x);
 	$x = $result["out"];
 
 	vips_image_write_to_file($x, $argv[2]);

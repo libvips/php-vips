@@ -1,6 +1,6 @@
 /* Uncomment for some logging.
-#define VIPS_DEBUG
  */
+#define VIPS_DEBUG
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,14 +407,13 @@ vips_php_get_optional_output(VipsPhpCall *call, zval *options, zval *return_valu
 	zend_string *key;
 	zval *value;
 
-	VIPS_DEBUG_MSG("vips_php_set_optional_input:\n");
+	VIPS_DEBUG_MSG("vips_php_get_optional_output:\n");
 
 	ZEND_HASH_FOREACH_STR_KEY_VAL(Z_ARRVAL_P(call->options), key, value) {
 		char *name;
 		GParamSpec *pspec;
 		VipsArgumentClass *argument_class;
 		VipsArgumentInstance *argument_instance;
-		zval zvalue;
 
 		if (key == NULL) {
 			continue;
@@ -427,15 +426,20 @@ vips_php_get_optional_output(VipsPhpCall *call, zval *options, zval *return_valu
 			return -1;
 		}
 
-		if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
-			(argument_class->flags & VIPS_ARGUMENT_INPUT) &&
-			!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
-			vips_php_get_value(call, pspec, &zvalue)) {
-			error_vips();
-			return -1;
-		}
+		convert_to_boolean(value);
+		if (Z_LVAL_P(value)) {
+			zval zvalue;
 
-		add_assoc_zval(return_value, name, &zvalue);
+		       if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
+				(argument_class->flags & VIPS_ARGUMENT_OUTPUT) &&
+				!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
+				vips_php_get_value(call, pspec, &zvalue)) {
+				error_vips();
+				return -1;
+			}
+
+			add_assoc_zval(return_value, name, &zvalue);
+		}
 	} ZEND_HASH_FOREACH_END();
 
 	return 0;
@@ -547,7 +551,7 @@ vips_php_call_array(const char *operation_name, const char *option_string, int a
 
 /* {{{ proto value vips_php_call(string operation_name [, more])
    Call any vips operation */
-PHP_FUNCTION(vips_php_call)
+PHP_FUNCTION(vips_call)
 {
 	int argc;
 	zval *argv;
@@ -555,7 +559,7 @@ PHP_FUNCTION(vips_php_call)
 	size_t operation_name_len;
 	zval *result;
 
-	VIPS_DEBUG_MSG("vips_php_call:\n");
+	VIPS_DEBUG_MSG("vips_call:\n");
 
 	argc = ZEND_NUM_ARGS();
 
@@ -602,10 +606,6 @@ PHP_FUNCTION(vips_image_new_from_file)
 		return;
 	}
 	VIPS_DEBUG_MSG("vips_image_new_from_file: filename = %s\n", filename);
-
-	/*
-	call_vips(INTERNAL_FUNCTION_PARAM_PASSTHRU, 
-	 */
 
 	if (!(image = vips_image_new_from_file(filename, NULL))) {
 		error_vips();
@@ -785,7 +785,7 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_invert, 0)
 	ZEND_ARG_INFO(0, options)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO(arginfo_vips_php_call, 0)
+ZEND_BEGIN_ARG_INFO(arginfo_vips_call, 0)
 	ZEND_ARG_INFO(0, operation_name)
 ZEND_END_ARG_INFO()
 
@@ -798,7 +798,7 @@ const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
 	PHP_FE(vips_invert, arginfo_vips_invert)
-	PHP_FE(vips_php_call, arginfo_vips_php_call)
+	PHP_FE(vips_call, arginfo_vips_call)
 
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };
