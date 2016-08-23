@@ -5,7 +5,5 @@
 	$x = vips_image_new_from_file($argv[1])["out"];
 	$profile = vips_image_get($x, "icc-profile-data");
 
-	echo $argv[1], " profile:\n";
-	var_dump($profile);
-
+	echo $argv[1], " profile, ", strlen($profile), " bytes of data\n";
 ?>

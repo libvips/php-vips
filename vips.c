@@ -99,6 +99,14 @@ vips_php_call_new(const char *operation_name,
 	return call;
 }
 
+static int
+vips_php_blob_free(void *buf, void *area)
+{
+	g_free(buf);
+
+	return 0;
+}
+
 /* Set a gvalue from a php value. Set the type of the gvalue before calling
  * this to hint what kind of gvalue to make. For example if type is an enum, 
  * a zval string will be used to look up the enum nick.
@@ -170,12 +178,35 @@ vips_php_zval_to_gval(zval *zvalue, GValue *gvalue)
 			break;
 
 		case G_TYPE_BOXED:
-			printf("AAAAAARGH\n");
+			if (type == VIPS_TYPE_REF_STRING) {
+				convert_to_string_ex(zvalue);
+				vips_value_set_ref_string(gvalue, Z_STRVAL_P(zvalue));
+			}
+			else if (type == VIPS_TYPE_BLOB) {
+				void *buf;
+
+				convert_to_string_ex(zvalue);
+				buf = g_malloc(Z_STRLEN_P(zvalue));
+				memcpy(buf, Z_STRVAL_P(zvalue), Z_STRLEN_P(zvalue));
+
+				vips_value_set_blob(gvalue, vips_php_blob_free, buf, Z_STRLEN_P(zvalue));
+			}
+			else if (type == VIPS_TYPE_ARRAY_INT) {
+				printf("arrrrgh\n");
+			}
+			else if (type == VIPS_TYPE_ARRAY_DOUBLE) {
+				printf("nooooo\n");
+			}
+			else if (type == VIPS_TYPE_ARRAY_IMAGE) {
+				printf("nope.txt\n");
+			}
+			else {
+				g_warning( "%s: unimplemented boxed type %s", G_STRLOC, g_type_name(type) );
+			}
 			break;
 
 		default:
-			g_warning( "%s: unimplemented GType %s",
-				G_STRLOC, g_type_name(type) );
+			g_warning( "%s: unimplemented GType %s", G_STRLOC, g_type_name(fundamental) );
 			break;
 	}
 
@@ -333,12 +364,42 @@ vips_php_gval_to_zval(GValue *gvalue, zval *zvalue)
 			break;
 
 		case G_TYPE_BOXED:
-			printf("AAAAAARGH\n");
+			if (type == VIPS_TYPE_REF_STRING ||
+				type == VIPS_TYPE_BLOB) {
+				const char *str;
+				size_t str_len;
+
+				str = vips_value_get_ref_string(gvalue, &str_len);
+				ZVAL_STRINGL(zvalue, str, str_len);
+			}
+			else if (type == VIPS_TYPE_ARRAY_DOUBLE) {
+				double *arr;
+				int n;
+
+				arr = vips_value_get_array_double(gvalue, &n);
+				printf("nope.txt\n");
+			}
+			else if (type == VIPS_TYPE_ARRAY_INT) {
+				int *arr;
+				int n;
+
+				arr = vips_value_get_array_int(gvalue, &n);
+				printf("thanks.txt\n");
+			}
+			else if (type == VIPS_TYPE_ARRAY_IMAGE) {
+				VipsImage **arr;
+				int n;
+
+				arr = vips_value_get_array_image(gvalue, &n);
+				printf("ggs!!\n");
+			}
+			else {
+				g_warning( "%s: unimplemented boxed type %s", G_STRLOC, g_type_name(type));
+			}
 			break;
 
 		default:
-			g_warning( "%s: unimplemented property type %s",
-				G_STRLOC, g_type_name(type));
+			g_warning( "%s: unimplemented GType %s", G_STRLOC, g_type_name(fundamental));
 			break;
 	}
 

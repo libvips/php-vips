@@ -140,6 +140,8 @@ See `examples/`.
 
 * array args, so we can do `linear` etc.
 
+* allow set enum from int
+
 * make a wrapper over this thing in php which gives it a nice API, including
   exceptions, automatic member lookup, properties, and so on
 
