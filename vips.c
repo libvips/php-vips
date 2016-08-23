@@ -1,6 +1,6 @@
 /* Uncomment for some logging.
- */
 #define VIPS_DEBUG
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,14 +426,12 @@ vips_php_get_optional_output(VipsPhpCall *call, zval *options, zval *return_valu
 			return -1;
 		}
 
-		convert_to_boolean(value);
-		if (Z_LVAL_P(value)) {
+	       if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
+			(argument_class->flags & VIPS_ARGUMENT_OUTPUT) &&
+			!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED)) {
 			zval zvalue;
 
-		       if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
-				(argument_class->flags & VIPS_ARGUMENT_OUTPUT) &&
-				!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
-				vips_php_get_value(call, pspec, &zvalue)) {
+			if (vips_php_get_value(call, pspec, &zvalue)) {
 				error_vips();
 				return -1;
 			}

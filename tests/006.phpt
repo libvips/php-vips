@@ -1,16 +1,18 @@
 --TEST--
-Check we support optional output args
+vips_call supports optional input and output args
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
 <?php 
-  $filename = dirname(__FILE__) . "/images/IMG_0073.JPG";
-  $output_filename = dirname(__FILE__) . "/x.tif";
-  $image = vips_image_new_from_file($filename);
-  $result = vips_call("max", $image, array("x" => true, "y" => true));
-  if ($result["out"] == 255 &&
-    $result["x"] == 2893 &&
-    $result["y"] == 1494) {
+  $point = vips_call("black", 1, 1)["out"];
+  $image = vips_call("embed", $point, 10, 20, 100, 100, 
+	array("extend" => "white"))["out"];
+
+  $result = vips_call("min", $image, array("x" => true, "y" => true));
+
+  if ($result["out"] == 0 &&
+    $result["x"] == 10 &&
+    $result["y"] == 20) {
     echo("pass\n");
   }
 ?>
