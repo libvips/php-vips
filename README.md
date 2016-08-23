@@ -133,7 +133,8 @@ See `examples/`.
 
 * still need to do boxed types in `vips_call`
 
-  try reading an icc profile from an image, for example
+  try reading an icc profile from an image, for example, see
+  `examples/vips_icc_profile.php`
 
 * `new_from_memory`, `new_from_array` etc. 
 
