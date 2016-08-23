@@ -99,71 +99,84 @@ vips_php_call_new(const char *operation_name,
 	return call;
 }
 
-/* Set a gvalue from a php value. pspec indicates the kind of thing the operation is expecting.
+/* Set a gvalue from a php value. Set the type of the gvalue before calling
+ * this to hint what kind of gvalue to make. For example if type is an enum, 
+ * a zval string will be used to look up the enum nick.
  */
 static int
-vips_php_zval_to_gval(GParamSpec *pspec, zval *zvalue, GValue *gvalue)
+vips_php_zval_to_gval(zval *zvalue, GValue *gvalue)
 {
-	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+	GType type = G_VALUE_TYPE(gvalue);
 
-	/* We can't use a switch since some param specs don't have fundamental
-	 * types and are hence not compile-time constants, argh.
+	/* The fundamental type ... eg. G_TYPE_ENUM for a VIPS_TYPE_KERNEL, or
+	 * G_TYPE_OBJECT for VIPS_TYPE_IMAGE().
 	 */
-	if (G_IS_PARAM_SPEC_STRING(pspec)) {
-		/* These are GStrings, vips refstrings are handled by boxed, see below.
-		 */
-		convert_to_string_ex(zvalue);
-		g_value_set_string(gvalue, Z_STRVAL_P(zvalue));
-	}
-	else if (G_IS_PARAM_SPEC_OBJECT(pspec)) {
-		VipsImage *image;
+	GType fundamental = G_TYPE_FUNDAMENTAL(type);
 
-		if (Z_TYPE_P(zvalue) != IS_RESOURCE ||
-			(image = (VipsImage *)zend_fetch_resource(Z_RES_P(zvalue), "GObject", le_gobject)) == NULL) {
-			php_error_docref(NULL, E_WARNING, "not a VipsImage");
-			return -1;
-		}
+	VipsImage *image;
+	int enum_value;
 
-		g_value_set_object(gvalue, image);
-	}
-	else if (G_IS_PARAM_SPEC_INT(pspec)) {
-		convert_to_long_ex(zvalue);
-		g_value_set_int(gvalue, Z_LVAL_P(zvalue));
-	}
-	else if (G_IS_PARAM_SPEC_UINT64(pspec)) {
-		convert_to_long_ex(zvalue);
-		g_value_set_uint64(gvalue, Z_LVAL_P(zvalue));
-	}
-	else if (G_IS_PARAM_SPEC_BOOLEAN(pspec)) {
-		convert_to_boolean(zvalue);
-		g_value_set_boolean(gvalue, Z_LVAL_P(zvalue));
-	}
-	else if (G_IS_PARAM_SPEC_ENUM(pspec)) {
-		int enum_value;
+	switch (fundamental) {
+		case G_TYPE_STRING:
+			/* These are GStrings, vips refstrings are handled by boxed, see 
+			 * below.
+			 */
+			convert_to_string_ex(zvalue);
+			g_value_set_string(gvalue, Z_STRVAL_P(zvalue));
+			break;
 
-		convert_to_string_ex(zvalue);
-		if ((enum_value = vips_enum_from_nick("enum", pspec_type, Z_STRVAL_P(zvalue))) < 0 ) {
-			error_vips();
-			return -1;
-		}
-		g_value_set_enum(gvalue, enum_value);
-	}
-	else if (G_IS_PARAM_SPEC_FLAGS(pspec)) {
-		convert_to_long_ex(zvalue);
-		g_value_set_flags(gvalue, Z_LVAL_P(zvalue));
-	}
-	else if (G_IS_PARAM_SPEC_DOUBLE(pspec)) {
-		convert_to_double_ex(zvalue);
-		g_value_set_double(gvalue, Z_DVAL_P(zvalue));
-	}
-	else {
-		/* Need to add at least G_IS_PARAM_SPEC_BOXED(pspec) I guess.
-		 */
+		case G_TYPE_OBJECT:
+			if (Z_TYPE_P(zvalue) != IS_RESOURCE ||
+				(image = (VipsImage *)zend_fetch_resource(Z_RES_P(zvalue), "GObject", le_gobject)) == NULL) {
+				php_error_docref(NULL, E_WARNING, "not a VipsImage");
+				return -1;
+			}
 
-		g_warning( "%s: .%s unimplemented property type %s",
-			G_STRLOC,
-			g_param_spec_get_name(pspec),
-			g_type_name(pspec_type) );
+			g_value_set_object(gvalue, image);
+			break;
+
+		case G_TYPE_INT:
+			convert_to_long_ex(zvalue);
+			g_value_set_int(gvalue, Z_LVAL_P(zvalue));
+			break;
+
+		case G_TYPE_UINT64:
+			convert_to_long_ex(zvalue);
+			g_value_set_uint64(gvalue, Z_LVAL_P(zvalue));
+			break;
+
+		case G_TYPE_BOOLEAN:
+			convert_to_boolean(zvalue);
+			g_value_set_boolean(gvalue, Z_LVAL_P(zvalue));
+			break;
+
+		case G_TYPE_ENUM:
+			convert_to_string_ex(zvalue);
+			if ((enum_value = vips_enum_from_nick("enum", type, Z_STRVAL_P(zvalue))) < 0 ) {
+				error_vips();
+				return -1;
+			}
+			g_value_set_enum(gvalue, enum_value);
+			break;
+
+		case G_TYPE_FLAGS:
+			convert_to_long_ex(zvalue);
+			g_value_set_flags(gvalue, Z_LVAL_P(zvalue));
+			break;
+
+		case G_TYPE_DOUBLE:
+			convert_to_double_ex(zvalue);
+			g_value_set_double(gvalue, Z_DVAL_P(zvalue));
+			break;
+
+		case G_TYPE_BOXED:
+			printf("AAAAAARGH\n");
+			break;
+
+		default:
+			g_warning( "%s: unimplemented GType %s",
+				G_STRLOC, g_type_name(type) );
+			break;
 	}
 
 	return 0;
@@ -177,7 +190,7 @@ vips_php_set_value(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue)
 	GValue gvalue = { 0 };
 
 	g_value_init(&gvalue, pspec_type);
-	if (vips_php_zval_to_gval(pspec, zvalue, &gvalue)) {
+	if (vips_php_zval_to_gval(zvalue, &gvalue)) {
 		g_value_unset(&gvalue);
 		return -1;
 	}
@@ -261,60 +274,72 @@ vips_php_set_optional_input(VipsPhpCall *call, zval *options)
 	return 0;
 }
 
-/* Set a php zval from a gvalue. pspec indicates the kind of thing the operation is offering.
+/* Set a php zval from a gvalue. 
  */
 static int
-vips_php_gval_to_zval(GParamSpec *pspec, GValue *gvalue, zval *zvalue)
+vips_php_gval_to_zval(GValue *gvalue, zval *zvalue)
 {
-	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
+	GType type = G_VALUE_TYPE(gvalue);
 
-	/* We can't use a switch since some param specs don't have fundamental
-	 * types and are hence not compile-time constants, argh.
+	/* The fundamental type ... eg. G_TYPE_ENUM for a VIPS_TYPE_KERNEL, or
+	 * G_TYPE_OBJECT for VIPS_TYPE_IMAGE().
 	 */
-	if (G_IS_PARAM_SPEC_STRING(pspec)) {
-		/* These are GStrings, vips refstrings are handled by boxed, see below.
-		 */
-		const char *str = g_value_get_string(gvalue);
+	GType fundamental = G_TYPE_FUNDAMENTAL(type);
 
-		ZVAL_STRING(zvalue, str);
-	}
-	else if (G_IS_PARAM_SPEC_OBJECT(pspec)) {
-		GObject *gobject;
-		zend_resource *resource;
+	const char *str;
+	GObject *gobject;
+	zend_resource *resource;
+	int enum_value;
 
-		gobject = g_value_get_object(gvalue);
-		resource = zend_register_resource(gobject, le_gobject);
-		ZVAL_RES(zvalue, resource);
-	}
-	else if (G_IS_PARAM_SPEC_INT(pspec)) {
-		ZVAL_LONG(zvalue, g_value_get_int(gvalue));
-	}
-	else if (G_IS_PARAM_SPEC_UINT64(pspec)) {
-		ZVAL_LONG(zvalue, g_value_get_uint64(gvalue));
-	}
-	else if (G_IS_PARAM_SPEC_BOOLEAN(pspec)) {
-		ZVAL_LONG(zvalue, g_value_get_boolean(gvalue));
-	}
-	else if (G_IS_PARAM_SPEC_ENUM(pspec)) {
-		int enum_value = g_value_get_enum(gvalue);
-		const char *nick = vips_enum_nick(pspec_type, enum_value);
-		zend_string *string = zend_string_init(nick, strlen(nick), 1);
+	switch (fundamental) {
+		case G_TYPE_STRING:
+			/* These are GStrings, vips refstrings are handled by boxed, see 
+			 * below.
+			 */
+			str = g_value_get_string(gvalue);
+			ZVAL_STRING(zvalue, str);
+			break;
 
-		ZVAL_STR(zvalue, string);
-	}
-	else if (G_IS_PARAM_SPEC_FLAGS(pspec)) {
-		ZVAL_LONG(zvalue, g_value_get_flags(gvalue));
-	}
-	else if (G_IS_PARAM_SPEC_DOUBLE(pspec)) {
-		ZVAL_DOUBLE(zvalue, g_value_get_double(gvalue));
-	}
-	else { /* Need to add at least G_IS_PARAM_SPEC_BOXED(pspec) I guess.
-		 */
+		case G_TYPE_OBJECT:
+			gobject = g_value_get_object(gvalue);
+			resource = zend_register_resource(gobject, le_gobject);
+			ZVAL_RES(zvalue, resource);
+			break;
 
-		g_warning( "%s: .%s unimplemented property type %s",
-			G_STRLOC,
-			g_param_spec_get_name(pspec),
-			g_type_name(pspec_type) );
+		case G_TYPE_INT:
+			ZVAL_LONG(zvalue, g_value_get_int(gvalue));
+			break;
+
+		case G_TYPE_UINT64:
+			ZVAL_LONG(zvalue, g_value_get_uint64(gvalue));
+			break;
+
+		case G_TYPE_BOOLEAN:
+			ZVAL_LONG(zvalue, g_value_get_boolean(gvalue));
+			break;
+
+		case G_TYPE_ENUM:
+			enum_value = g_value_get_enum(gvalue);
+			str = vips_enum_nick(type, enum_value);
+			ZVAL_STRING(zvalue, str);
+			break;
+
+		case G_TYPE_FLAGS:
+			ZVAL_LONG(zvalue, g_value_get_flags(gvalue));
+			break;
+
+		case G_TYPE_DOUBLE:
+			ZVAL_DOUBLE(zvalue, g_value_get_double(gvalue));
+			break;
+
+		case G_TYPE_BOXED:
+			printf("AAAAAARGH\n");
+			break;
+
+		default:
+			g_warning( "%s: unimplemented property type %s",
+				G_STRLOC, g_type_name(type));
+			break;
 	}
 
 	return 0;
@@ -329,7 +354,7 @@ vips_php_get_value(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue)
 
 	g_value_init(&gvalue, pspec_type);
 	g_object_get_property(G_OBJECT(call->operation), name, &gvalue);
-	if (vips_php_gval_to_zval(pspec, &gvalue, zvalue)) {
+	if (vips_php_gval_to_zval(&gvalue, zvalue)) {
 		g_value_unset(&gvalue);
 		return -1;
 	}
@@ -631,9 +656,9 @@ PHP_FUNCTION(vips_image_write_to_file)
 }
 /* }}} */
 
-/* {{{ proto value vips_header_get(resource image, string field)
-   Fetch header field from image */
-PHP_FUNCTION(vips_header_get)
+/* {{{ proto value vips_image_get(resource image, string field)
+   Fetch field from image */
+PHP_FUNCTION(vips_image_get)
 {
 	zval *im;
 	char *field_name;
@@ -654,7 +679,7 @@ PHP_FUNCTION(vips_header_get)
 		return;
 	}
 
-	if (vips_php_gval_to_zval(pspec, &gvalue, return_result)) {
+	if (vips_php_gval_to_zval(&gvalue, return_value)) {
 		g_value_unset(&gvalue);
 		return;
 	}
@@ -769,7 +794,7 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_call, 0)
 	ZEND_ARG_INFO(0, operation_name)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO(arginfo_vips_header_get, 0)
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_get, 0)
 	ZEND_ARG_INFO(0, image)
 	ZEND_ARG_INFO(0, field)
 ZEND_END_ARG_INFO()
@@ -782,7 +807,7 @@ const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
 	PHP_FE(vips_call, arginfo_vips_call)
-	PHP_FE(vips_header_get, arginfo_vips_header_get)
+	PHP_FE(vips_image_get, arginfo_vips_image_get)
 
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };

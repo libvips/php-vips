@@ -1,17 +1,45 @@
-# Experimental php binding for libvips 
+# Experimental PHP binding for libvips 
 
-This is an experimental php binding for libvips, just to see what it's like.
+This is an incomplete and experimental PHP binding for libvips.
 
-It currently only adds `vips_image_new_from_file()`, 
-`vips_image_write_to_file()`, and the single operation `vips_invert()`, but it 
-does seem to work. 
+### Examples
 
 ```php
 <?php
 	dl('vips.' . PHP_SHLIB_SUFFIX);
-	$x = vips_image_new_from_file($argv[1]);
-	$x = vips_invert($x);
-	vips_image_write_to_file($x, $argv[2]);
+
+	$image = vips_image_new_from_file($argv[1]);
+
+	# you can call any vips operation 
+	$result = vips_call("invert", $image);
+
+	# the result is an array of the output objects, we just want the
+	# image
+	$image = $result["out"];
+
+	vips_image_write_to_file($image, $argv[2]);
+?>
+```
+
+```php
+<?php
+	dl('vips.' . PHP_SHLIB_SUFFIX);
+
+	# you can pass optional arguments as a final array arg
+	# enums can be set with a string
+	$image = vips_image_new_from_file($argv[1], array("access" => "sequential"));
+
+	# set args to true to get optional output args added to result
+	$result = vips_call("min", $image, array("x" => true, "y" => true));
+
+	$mn = $result["out"];
+	$x = $result["x"];
+	$y = $result["y"];
+
+	# show position of minimum
+	echo "min = ", $mn, "\n";
+	echo "x = ", $x, "\n";
+	echo "y = ", $y, "\n";
 ?>
 ```
 
@@ -83,25 +111,12 @@ $ make install
 
 Try:
 
-```
-$ php vips.php 
-Functions available in the test extension:
-confirm_vips_compiled
-vips_image_new_from_file
-vips_image_write_to_file
-
-Congratulations! You have successfully modified ext/vips/config.m4. Module vips
-is now compiled into PHP.
-```
-
-Or this example:
-
 ```php
 #!/usr/bin/env php
 <?php
 	dl('vips.' . PHP_SHLIB_SUFFIX);
 	$x = vips_image_new_from_file($argv[1]);
-	$x = vips_invert($x);
+	$x = vips_call("invert", $x)["out"];
 	vips_image_write_to_file($x, $argv[2]);
 ?>
 ```
@@ -116,10 +131,13 @@ See `examples/`.
 
 ### TODO
 
-* `vips_php_gval_to_zval` needs to not take a pspec so we can do `get_header` ... we just need a plain zval
-  <-> GValue function
-
 * still need to do boxed types in `vips_call`
+
+  try reading an icc profile from an image, for example
+
+* `new_from_memory`, `new_from_array` etc. 
+
+* array args, so we can do `linear` etc.
 
 * make a wrapper over this thing in php which gives it a nice API, including
   exceptions, automatic member lookup, properties, and so on
