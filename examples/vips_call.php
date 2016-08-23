@@ -2,7 +2,7 @@
 <?php
 	dl('vips.' . PHP_SHLIB_SUFFIX);
 
-	$x = vips_image_new_from_file($argv[1]);
+	$x = vips_image_new_from_file($argv[1])["out"];
 
 	$result = vips_call("invert", $x);
 	$x = $result["out"];

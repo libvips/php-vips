@@ -116,11 +116,10 @@ See `examples/`.
 
 ### TODO
 
-* add `vips_call` to call any vips operation
+* `vips_php_gval_to_zval` needs to not take a pspec so we can do `get_header` ... we just need a plain zval
+  <-> GValue function
 
-  some kind of refcounting problem in array handling, try `examples/vips_min.php`
-
-  still need to do more boxed types
+* still need to do boxed types in `vips_call`
 
 * make a wrapper over this thing in php which gives it a nice API, including
   exceptions, automatic member lookup, properties, and so on

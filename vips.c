@@ -31,34 +31,6 @@ PHP_INI_END()
 */
 /* }}} */
 
-/* Remove the following function when you have successfully modified config.m4
-   so that your module can be compiled into PHP, it exists only for testing
-   purposes. */
-
-/* Every user-visible function in PHP should document itself in the source */
-/* {{{ proto string confirm_vips_compiled(string arg)
-   Return a string to confirm that the module is compiled in */
-PHP_FUNCTION(confirm_vips_compiled)
-{
-	char *arg = NULL;
-	size_t arg_len, len;
-	zend_string *strg;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &arg, &arg_len) == FAILURE) {
-		return;
-	}
-
-	strg = strpprintf(0, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "vips", arg);
-
-	RETURN_STR(strg);
-}
-/* }}} */
-/* The previous line is meant for vim and emacs, so it can correctly fold and
-   unfold functions in source code. See the corresponding marks just before
-   function definition, where the functions purpose is also documented. Please
-   follow this convention for the convenience of others editing your code.
-*/
-
 /* Output the vips error buffer as a docref.
  */
 static void
@@ -130,7 +102,7 @@ vips_php_call_new(const char *operation_name,
 /* Set a gvalue from a php value. pspec indicates the kind of thing the operation is expecting.
  */
 static int
-vips_php_zval_to_gval(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue, GValue *gvalue)
+vips_php_zval_to_gval(GParamSpec *pspec, zval *zvalue, GValue *gvalue)
 {
 	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
 
@@ -205,7 +177,7 @@ vips_php_set_value(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue)
 	GValue gvalue = { 0 };
 
 	g_value_init(&gvalue, pspec_type);
-	if (vips_php_zval_to_gval(call, pspec, zvalue, &gvalue)) {
+	if (vips_php_zval_to_gval(pspec, zvalue, &gvalue)) {
 		g_value_unset(&gvalue);
 		return -1;
 	}
@@ -292,7 +264,7 @@ vips_php_set_optional_input(VipsPhpCall *call, zval *options)
 /* Set a php zval from a gvalue. pspec indicates the kind of thing the operation is offering.
  */
 static int
-vips_php_gval_to_zval(VipsPhpCall *call, GParamSpec *pspec, GValue *gvalue, zval *zvalue)
+vips_php_gval_to_zval(GParamSpec *pspec, GValue *gvalue, zval *zvalue)
 {
 	GType pspec_type = G_PARAM_SPEC_VALUE_TYPE(pspec);
 
@@ -303,9 +275,8 @@ vips_php_gval_to_zval(VipsPhpCall *call, GParamSpec *pspec, GValue *gvalue, zval
 		/* These are GStrings, vips refstrings are handled by boxed, see below.
 		 */
 		const char *str = g_value_get_string(gvalue);
-		zend_string *string = zend_string_init(str, strlen(str), 0);
 
-		ZVAL_STR(zvalue, string);
+		ZVAL_STRING(zvalue, str);
 	}
 	else if (G_IS_PARAM_SPEC_OBJECT(pspec)) {
 		GObject *gobject;
@@ -358,7 +329,7 @@ vips_php_get_value(VipsPhpCall *call, GParamSpec *pspec, zval *zvalue)
 
 	g_value_init(&gvalue, pspec_type);
 	g_object_get_property(G_OBJECT(call->operation), name, &gvalue);
-	if (vips_php_gval_to_zval(call, pspec, &gvalue, zvalue)) {
+	if (vips_php_gval_to_zval(pspec, &gvalue, zvalue)) {
 		g_value_unset(&gvalue);
 		return -1;
 	}
@@ -592,30 +563,44 @@ PHP_FUNCTION(vips_call)
    Open an image from a filename */
 PHP_FUNCTION(vips_image_new_from_file)
 {
-	char *filename;
-	size_t filename_len;
-	zval *options = NULL;
+	char *name;
+	size_t name_len;
+	zval *options;
+	char filename[VIPS_PATH_MAX];
+	char option_string[VIPS_PATH_MAX];
+	const char *operation_name;
+	zval argv[2];
+	int argc;
 	VipsImage *image;
 	zend_resource *resource;
 
 	VIPS_DEBUG_MSG("vips_image_new_from_file:\n");
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|a", &filename, &filename_len, &options) == FAILURE) {
+	options = NULL;
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|a", &name, &name_len, &options) == FAILURE) {
 		return;
 	}
-	VIPS_DEBUG_MSG("vips_image_new_from_file: filename = %s\n", filename);
+	VIPS_DEBUG_MSG("vips_image_new_from_file: name = %s\n", name);
 
-	if (!(image = vips_image_new_from_file(filename, NULL))) {
+	vips__filename_split8(name, filename, option_string);
+	if (!(operation_name = vips_foreign_find_load(filename))) {
 		error_vips();
-		RETURN_FALSE;
+		return;
 	}
 
-	VIPS_DEBUG_MSG("vips_image_new_from_file: image = %p\n", image);
+	argc = 1;
+	ZVAL_STRING(&argv[0], filename);
+	if (options) {
+		ZVAL_ARR(&argv[1], Z_ARR_P(options));
+		argc += 1;
+	}
 
-	resource = zend_register_resource(image, le_gobject);
+	if (vips_php_call_array(operation_name, option_string, argc, argv, return_value)) {
+		error_vips();
+		return;
+	}
 
-	RETVAL_RES(resource);
-
+	zval_dtor(&argv[0]);
 }
 /* }}} */
 
@@ -630,7 +615,7 @@ PHP_FUNCTION(vips_image_write_to_file)
 	VipsImage *image;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "rp|a", &IM, &filename, &filename_len, &options) == FAILURE) {
-		return;
+		RETURN_FALSE;
 	}
 
 	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "GObject", le_gobject)) == NULL) {
@@ -646,32 +631,34 @@ PHP_FUNCTION(vips_image_write_to_file)
 }
 /* }}} */
 
-/* {{{ proto resource vips_invert(resource image [, array options])
-   Photographic negative */
-PHP_FUNCTION(vips_invert)
+/* {{{ proto value vips_header_get(resource image, string field)
+   Fetch header field from image */
+PHP_FUNCTION(vips_header_get)
 {
-	zval *IM;
-	zval *options = NULL;
+	zval *im;
+	char *field_name;
+	size_t field_name_len;
 	VipsImage *image;
-	VipsImage *out;
-	zend_resource *resource;
+	GValue gvalue = { 0 };
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "r|a", &IM, &options) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "rs", &im, &field_name, &field_name_len) == FAILURE) {
 		return;
 	}
 
-	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "GObject", le_gobject)) == NULL) {
-		RETURN_FALSE;
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(im), "GObject", le_gobject)) == NULL) {
+		return;
 	}
 
-	if (vips_invert(image, &out, NULL)) {
+	if (vips_image_get(image, field_name, &gvalue)) {
 		error_vips();
-		RETURN_FALSE;
+		return;
 	}
 
-	resource = zend_register_resource(out, le_gobject);
-
-	RETVAL_RES(resource);
+	if (vips_php_gval_to_zval(pspec, &gvalue, return_result)) {
+		g_value_unset(&gvalue);
+		return;
+	}
+	g_value_unset(&gvalue);
 }
 /* }}} */
 
@@ -778,13 +765,13 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_image_write_to_file, 0)
 	ZEND_ARG_INFO(0, options)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO(arginfo_vips_invert, 0)
-	ZEND_ARG_INFO(0, image)
-	ZEND_ARG_INFO(0, options)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_INFO(arginfo_vips_call, 0)
 	ZEND_ARG_INFO(0, operation_name)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO(arginfo_vips_header_get, 0)
+	ZEND_ARG_INFO(0, image)
+	ZEND_ARG_INFO(0, field)
 ZEND_END_ARG_INFO()
 
 /* {{{ vips_functions[]
@@ -792,11 +779,10 @@ ZEND_END_ARG_INFO()
  * Every user visible function must have an entry in vips_functions[].
  */
 const zend_function_entry vips_functions[] = {
-	PHP_FE(confirm_vips_compiled,	NULL)		/* For testing, remove later. */
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
-	PHP_FE(vips_invert, arginfo_vips_invert)
 	PHP_FE(vips_call, arginfo_vips_call)
+	PHP_FE(vips_header_get, arginfo_vips_header_get)
 
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };
