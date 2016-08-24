@@ -192,13 +192,60 @@ vips_php_zval_to_gval(zval *zvalue, GValue *gvalue)
 				vips_value_set_blob(gvalue, vips_php_blob_free, buf, Z_STRLEN_P(zvalue));
 			}
 			else if (type == VIPS_TYPE_ARRAY_INT) {
-				printf("arrrrgh\n");
+				int *arr;
+				int n;
+				int i;
+
+				convert_to_array_ex(zvalue);
+				n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				vips_value_set_array_int(gvalue, NULL, n);
+				arr = vips_value_get_array_int(gvalue, NULL);
+				for (i = 0; i < n; i++) {
+					zval *ele;
+
+					if ((ele = zend_hash_index_find(Z_ARRVAL_P(zvalue), i)) != NULL) {
+						convert_to_long_ex(ele);
+						arr[i] = zval_get_long(ele);
+					}
+				}
 			}
 			else if (type == VIPS_TYPE_ARRAY_DOUBLE) {
-				printf("nooooo\n");
+				double *arr;
+				int n;
+				int i;
+
+				convert_to_array_ex(zvalue);
+				n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				vips_value_set_array_double(gvalue, NULL, n);
+				arr = vips_value_get_array_double(gvalue, NULL);
+				for (i = 0; i < n; i++) {
+					zval *ele;
+
+					if ((ele = zend_hash_index_find(Z_ARRVAL_P(zvalue), i)) != NULL) {
+						convert_to_double_ex(ele);
+						arr[i] = zval_get_double(ele);
+					}
+				}
 			}
 			else if (type == VIPS_TYPE_ARRAY_IMAGE) {
-				printf("nope.txt\n");
+				VipsImage **arr;
+				int n;
+				int i;
+
+				convert_to_array_ex(zvalue);
+				n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				vips_value_set_array_image(gvalue, n);
+				arr = vips_value_get_array_image(gvalue, NULL);
+				for (i = 0; i < n; i++) {
+					zval *ele;
+					VipsImage *image;
+
+					if ((ele = zend_hash_index_find(Z_ARRVAL_P(zvalue), i)) != NULL &&
+						(image = (VipsImage *)zend_fetch_resource(Z_RES_P(ele), "GObject", le_gobject)) != NULL) {
+						arr[i] = image;
+						g_object_ref(image);
+					}
+				}
 			}
 			else {
 				g_warning( "%s: unimplemented boxed type %s", G_STRLOC, g_type_name(type) );

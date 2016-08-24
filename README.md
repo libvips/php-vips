@@ -131,19 +131,18 @@ See `examples/`.
 
 ### TODO
 
-* still need to do boxed types in `vips_call`
+* need array int/double/image output args
 
-  try reading an icc profile from an image, for example, see
-  `examples/vips_icc_profile.php`
+* need `vips_image_get_typeof` so we can test for fields
 
 * `new_from_memory`, `new_from_array` etc. 
-
-* array args, so we can do `linear` etc.
 
 * allow set enum from int
 
 * make a wrapper over this thing in php which gives it a nice API, including
   exceptions, automatic member lookup, properties, and so on
+
+* use python to generate a lot of `vips.php`
 
 ### links
 
