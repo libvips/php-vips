@@ -327,7 +327,6 @@ vips_php_set_optional_input(VipsPhpCall *call, zval *options)
 		GParamSpec *pspec;
 		VipsArgumentClass *argument_class;
 		VipsArgumentInstance *argument_instance;
-		GValue gvalue = { 0 };
 
 		if (key == NULL) {
 			continue;
@@ -547,7 +546,7 @@ vips_php_get_optional_output(VipsPhpCall *call, zval *options, zval *return_valu
 			return -1;
 		}
 
-	       if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
+		if (!(argument_class->flags & VIPS_ARGUMENT_REQUIRED) &&
 			(argument_class->flags & VIPS_ARGUMENT_OUTPUT) &&
 			!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED)) {
 			zval zvalue;
@@ -676,7 +675,6 @@ PHP_FUNCTION(vips_call)
 	zval *argv;
 	char *operation_name;
 	size_t operation_name_len;
-	zval *result;
 
 	VIPS_DEBUG_MSG("vips_call:\n");
 
@@ -698,7 +696,6 @@ PHP_FUNCTION(vips_call)
 		return;
 	}
 
-	result = NULL;
 	if (vips_php_call_array(operation_name, "", argc - 1, argv + 1, return_value)) {
 		efree(argv);
 		return;
@@ -721,8 +718,6 @@ PHP_FUNCTION(vips_image_new_from_file)
 	const char *operation_name;
 	zval argv[2];
 	int argc;
-	VipsImage *image;
-	zend_resource *resource;
 
 	VIPS_DEBUG_MSG("vips_image_new_from_file:\n");
 
@@ -740,6 +735,48 @@ PHP_FUNCTION(vips_image_new_from_file)
 
 	argc = 1;
 	ZVAL_STRING(&argv[0], filename);
+	if (options) {
+		ZVAL_ARR(&argv[1], Z_ARR_P(options));
+		argc += 1;
+	}
+
+	if (vips_php_call_array(operation_name, option_string, argc, argv, return_value)) {
+		error_vips();
+		return;
+	}
+
+	zval_dtor(&argv[0]);
+}
+/* }}} */
+
+/* {{{ proto resource vips_image_new_from_buffer(string buffer [, string option_string, array options])
+   Open an image from a filename */
+PHP_FUNCTION(vips_image_new_from_buffer)
+{
+	char *buffer;
+	size_t buffer_len;
+	char *option_string;
+	size_t option_string_len;
+	zval *options;
+	const char *operation_name;
+	zval argv[2];
+	int argc;
+
+	VIPS_DEBUG_MSG("vips_image_new_from_buffer:\n");
+
+	option_string = NULL;
+	options = NULL;
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|sa", &buffer, &buffer_len, &option_string, &option_string_len, &options) == FAILURE) {
+		return;
+	}
+
+	if (!(operation_name = vips_foreign_find_load_buffer(buffer, buffer_len))) {
+		error_vips();
+		return;
+	}
+
+	argc = 1;
+	ZVAL_STRINGL(&argv[0], buffer, buffer_len);
 	if (options) {
 		ZVAL_ARR(&argv[1], Z_ARR_P(options));
 		argc += 1;
@@ -933,6 +970,12 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_image_new_from_file, 0)
 	ZEND_ARG_INFO(0, options)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_new_from_buffer, 0)
+	ZEND_ARG_INFO(0, buffer)
+	ZEND_ARG_INFO(0, option_string)
+	ZEND_ARG_INFO(0, options)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(arginfo_vips_image_write_to_file, 0)
 	ZEND_ARG_INFO(0, image)
 	ZEND_ARG_INFO(0, filename)
@@ -959,6 +1002,7 @@ ZEND_END_ARG_INFO()
  */
 const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
+	PHP_FE(vips_image_new_from_buffer, arginfo_vips_image_new_from_buffer)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
 	PHP_FE(vips_call, arginfo_vips_call)
 	PHP_FE(vips_image_get, arginfo_vips_image_get)
