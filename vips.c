@@ -750,7 +750,7 @@ PHP_FUNCTION(vips_image_new_from_file)
 /* }}} */
 
 /* {{{ proto resource vips_image_new_from_buffer(string buffer [, string option_string, array options])
-   Open an image from a filename */
+   Open an image from a string */
 PHP_FUNCTION(vips_image_new_from_buffer)
 {
 	char *buffer;
@@ -815,6 +815,49 @@ PHP_FUNCTION(vips_image_write_to_file)
 	}
 
 	RETURN_TRUE;
+}
+/* }}} */
+
+/* {{{ proto string vips_image_write_to_buffer(resource image, string suffix [, array options])
+   Write an image to a string */
+PHP_FUNCTION(vips_image_write_to_buffer)
+{
+	zval *IM;
+	zval *options = NULL;
+	char *suffix;
+	size_t suffix_len;
+	VipsImage *image;
+	char filename[VIPS_PATH_MAX];
+	char option_string[VIPS_PATH_MAX];
+	const char *operation_name;
+	zval argv[2];
+	int argc;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "rs|a", &IM, &suffix, &suffix_len, &options) == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(IM), "GObject", le_gobject)) == NULL) {
+		RETURN_FALSE;
+	}
+
+	vips__filename_split8(suffix, filename, option_string);
+	if (!(operation_name = vips_foreign_find_save_buffer(filename))) {
+		error_vips();
+		return;
+	}
+
+	argc = 1;
+	ZVAL_RES(&argv[0], Z_RES_P(IM));
+	if (options) {
+		ZVAL_ARR(&argv[1], Z_ARR_P(options));
+		argc += 1;
+	}
+
+	if (vips_php_call_array(operation_name, option_string, argc, argv, return_value)) {
+		error_vips();
+		return;
+	}
 }
 /* }}} */
 
@@ -982,6 +1025,11 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_image_write_to_file, 0)
 	ZEND_ARG_INFO(0, options)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_write_to_buffer, 0)
+	ZEND_ARG_INFO(0, image)
+	ZEND_ARG_INFO(0, options)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(arginfo_vips_call, 0)
 	ZEND_ARG_INFO(0, operation_name)
 ZEND_END_ARG_INFO()
@@ -1004,6 +1052,7 @@ const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
 	PHP_FE(vips_image_new_from_buffer, arginfo_vips_image_new_from_buffer)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
+	PHP_FE(vips_image_write_to_buffer, arginfo_vips_image_write_to_buffer)
 	PHP_FE(vips_call, arginfo_vips_call)
 	PHP_FE(vips_image_get, arginfo_vips_image_get)
 	PHP_FE(vips_image_get_typeof, arginfo_vips_image_get_typeof)

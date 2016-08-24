@@ -131,7 +131,7 @@ See `examples/`.
 
 ### TODO
 
-* `new_from_memory`, `new_from_array` etc. 
+* add `new_from_array` 
 
 * allow set enum from int
 
