@@ -159,10 +159,15 @@ vips_php_zval_to_gval(zval *zvalue, GValue *gvalue)
 			break;
 
 		case G_TYPE_ENUM:
-			convert_to_string_ex(zvalue);
-			if ((enum_value = vips_enum_from_nick("enum", type, Z_STRVAL_P(zvalue))) < 0 ) {
-				error_vips();
-				return -1;
+			if (Z_TYPE_P(zvalue) == IS_LONG) {
+				enum_value = Z_LVAL_P(zvalue);
+			}
+			else {
+				convert_to_string_ex(zvalue);
+				if ((enum_value = vips_enum_from_nick("enum", type, Z_STRVAL_P(zvalue))) < 0 ) {
+					error_vips();
+					return -1;
+				}
 			}
 			g_value_set_enum(gvalue, enum_value);
 			break;
