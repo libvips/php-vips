@@ -4,7 +4,7 @@ input array image args work
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
 <?php 
-  $filename = dirname(__FILE__) . "/images/IMG_0073.JPG";
+  $filename = dirname(__FILE__) . "/images/img_0076.jpg";
   $image = vips_image_new_from_file($filename)["out"];
 
   $r = vips_call("extract_band", $image, 0)["out"];

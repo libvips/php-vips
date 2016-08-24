@@ -812,6 +812,30 @@ PHP_FUNCTION(vips_image_get)
 }
 /* }}} */
 
+/* {{{ proto long vips_image_get_typeof(resource image, string field)
+   Fetch type of field from image */
+PHP_FUNCTION(vips_image_get_typeof)
+{
+	zval *im;
+	char *field_name;
+	size_t field_name_len;
+	VipsImage *image;
+	GType type;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "rs", &im, &field_name, &field_name_len) == FAILURE) {
+		return;
+	}
+
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(im), "GObject", le_gobject)) == NULL) {
+		return;
+	}
+
+	type = vips_image_get_typeof(image, field_name); 
+	
+	RETURN_LONG(type);
+}
+/* }}} */
+
 /* {{{ php_vips_init_globals
  */
 /* Uncomment this function if you have INI entries
@@ -924,6 +948,11 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_image_get, 0)
 	ZEND_ARG_INFO(0, field)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_get_typeof, 0)
+	ZEND_ARG_INFO(0, image)
+	ZEND_ARG_INFO(0, field)
+ZEND_END_ARG_INFO()
+
 /* {{{ vips_functions[]
  *
  * Every user visible function must have an entry in vips_functions[].
@@ -933,6 +962,7 @@ const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
 	PHP_FE(vips_call, arginfo_vips_call)
 	PHP_FE(vips_image_get, arginfo_vips_image_get)
+	PHP_FE(vips_image_get_typeof, arginfo_vips_image_get_typeof)
 
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };

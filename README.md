@@ -131,8 +131,6 @@ See `examples/`.
 
 ### TODO
 
-* need `vips_image_get_typeof` so we can test for fields
-
 * `new_from_memory`, `new_from_array` etc. 
 
 * allow set enum from int
