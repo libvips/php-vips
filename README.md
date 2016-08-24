@@ -1,6 +1,7 @@
 # Experimental PHP binding for libvips 
 
-This is an incomplete and experimental PHP binding for libvips.
+This is an experimental PHP binding for libvips. The C layer is done, it just needs a PHP layer over the
+top to make it pleasant to use.
 
 ### Examples
 
