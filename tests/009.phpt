@@ -1,5 +1,5 @@
 --TEST--
-array image args work
+input array image args work
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--

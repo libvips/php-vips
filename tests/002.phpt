@@ -1,5 +1,5 @@
 --TEST--
-Check vips can load a file
+vips can load a file
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--

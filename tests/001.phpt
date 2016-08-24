@@ -1,5 +1,5 @@
 --TEST--
-Check for vips presence
+check for vips presence
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--

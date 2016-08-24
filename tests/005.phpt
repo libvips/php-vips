@@ -1,5 +1,5 @@
 --TEST--
-Check we can call any vips operation 
+we can call any vips operation 
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--

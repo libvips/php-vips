@@ -1,5 +1,5 @@
 --TEST--
-Check vips can save a file
+vips can save a file
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--

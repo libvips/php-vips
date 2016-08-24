@@ -1,5 +1,5 @@
 --TEST--
-array double args work
+input array double args work
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--

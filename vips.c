@@ -422,23 +422,40 @@ vips_php_gval_to_zval(GValue *gvalue, zval *zvalue)
 			else if (type == VIPS_TYPE_ARRAY_DOUBLE) {
 				double *arr;
 				int n;
+				int i;
 
 				arr = vips_value_get_array_double(gvalue, &n);
-				printf("nope.txt\n");
+				array_init(zvalue);
+				for (i = 0; i < n; i++) {
+					add_next_index_double(zvalue, arr[i]);
+				}
 			}
 			else if (type == VIPS_TYPE_ARRAY_INT) {
 				int *arr;
 				int n;
+				int i;
 
 				arr = vips_value_get_array_int(gvalue, &n);
-				printf("thanks.txt\n");
+				array_init(zvalue);
+				for (i = 0; i < n; i++) {
+					add_next_index_long(zvalue, arr[i]);
+				}
 			}
 			else if (type == VIPS_TYPE_ARRAY_IMAGE) {
 				VipsImage **arr;
 				int n;
+				int i;
 
 				arr = vips_value_get_array_image(gvalue, &n);
-				printf("ggs!!\n");
+				array_init(zvalue);
+				for (i = 0; i < n; i++) {
+					zval x;
+
+					g_object_ref(arr[i]);
+					resource = zend_register_resource(arr[i], le_gobject);
+					ZVAL_RES(&x, resource);
+					add_next_index_zval(zvalue, &x);
+				}
 			}
 			else {
 				g_warning( "%s: unimplemented boxed type %s", G_STRLOC, g_type_name(type));

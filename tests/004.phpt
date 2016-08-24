@@ -1,5 +1,5 @@
 --TEST--
-Check vips can get image header fields 
+vips can get image header fields 
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
