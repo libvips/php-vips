@@ -791,6 +791,85 @@ PHP_FUNCTION(vips_image_new_from_buffer)
 }
 /* }}} */
 
+/* {{{ proto resource vips_image_new_from_array(array coefficients [, double scale, double offset])
+   Open an image from a string */
+PHP_FUNCTION(vips_image_new_from_array)
+{
+	zval *array;
+	double scale;
+	double offset;
+	int width;
+	int height;
+	VipsImage *mat;
+	int x, y;
+	zval *row;
+
+	VIPS_DEBUG_MSG("vips_image_new_from_array:\n");
+
+	scale = 1.0;
+	offset = 0.0;
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "a|dd", &array, &scale, &offset) == FAILURE) {
+		return;
+	}
+
+	height = zend_hash_num_elements(Z_ARRVAL_P(array));
+	if ((row = zend_hash_index_find(Z_ARRVAL_P(array), 0)) == NULL) {
+		php_error_docref(NULL, E_WARNING, "no element zero");
+		return;
+	}
+	if (Z_TYPE_P(row) == IS_ARRAY) {
+		/* Try to make a rectangular 2D array.
+		 */
+		width = zend_hash_num_elements(Z_ARRVAL_P(row));
+		mat = vips_image_new_matrix(width, height);
+
+		for (y = 0; y < height; y++) {
+			if ((row = zend_hash_index_find(Z_ARRVAL_P(array), y)) == NULL) {
+				php_error_docref(NULL, E_WARNING, "no row %d", y);
+				return;
+			}
+			if (Z_TYPE_P(row) != IS_ARRAY) {
+				php_error_docref(NULL, E_WARNING, "row %d is not an array", y);
+				return;
+			}
+			if (zend_hash_num_elements(Z_ARRVAL_P(row)) != width) {
+				php_error_docref(NULL, E_WARNING, "array is not rectangular");
+				return;
+			}
+
+			for (x = 0; x < width; x++) {
+				zval *ele;
+
+				ele = zend_hash_index_find(Z_ARRVAL_P(row), x);
+				convert_to_double_ex(ele);
+				*VIPS_MATRIX(mat, x, y) = zval_get_double(ele);
+			}
+		}
+	}
+	else {
+		/* 1D array.
+		 */
+		width = height;
+		height = 1;
+
+		mat = vips_image_new_matrix(width, height);
+
+		for (x = 0; x < width; x++) {
+			zval *ele;
+
+			ele = zend_hash_index_find(Z_ARRVAL_P(array), x);
+			convert_to_double_ex(ele);
+			*VIPS_MATRIX(mat, x, 0) = zval_get_double(ele);
+		}
+	}
+
+	vips_image_set_double(mat, "scale", scale);
+	vips_image_set_double(mat, "offset", offset);
+
+	RETURN_RES(zend_register_resource(mat, le_gobject));
+}
+/* }}} */
+
 /* {{{ proto bool vips_image_write_to_file(resource image, string filename [, array options])
    Write an image to a filename */
 PHP_FUNCTION(vips_image_write_to_file)
@@ -1019,6 +1098,12 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_image_new_from_buffer, 0)
 	ZEND_ARG_INFO(0, options)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_new_from_array, 0)
+	ZEND_ARG_INFO(0, array)
+	ZEND_ARG_INFO(0, scale)
+	ZEND_ARG_INFO(0, offset)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO(arginfo_vips_image_write_to_file, 0)
 	ZEND_ARG_INFO(0, image)
 	ZEND_ARG_INFO(0, filename)
@@ -1051,6 +1136,7 @@ ZEND_END_ARG_INFO()
 const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_image_new_from_file, arginfo_vips_image_new_from_file)
 	PHP_FE(vips_image_new_from_buffer, arginfo_vips_image_new_from_buffer)
+	PHP_FE(vips_image_new_from_array, arginfo_vips_image_new_from_array)
 	PHP_FE(vips_image_write_to_file, arginfo_vips_image_write_to_file)
 	PHP_FE(vips_image_write_to_buffer, arginfo_vips_image_write_to_buffer)
 	PHP_FE(vips_call, arginfo_vips_call)

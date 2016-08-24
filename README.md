@@ -131,8 +131,6 @@ See `examples/`.
 
 ### TODO
 
-* add `new_from_array` 
-
 * allow set enum from int
 
 * make a wrapper over this thing in php which gives it a nice API, including
