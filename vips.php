@@ -33,12 +33,12 @@ class VImage
 		return $result;
 	}
 
-	/* Wrap up the result of a vips_ call ready to erturn it to PHP. We do two
-	 * things:
+	/* Wrap up the result of a vips_ call ready to erturn it to PHP. We do 
+	 * two things:
 	 *
 	 * - If the array is a singleton, we strip it off. For example, many 
-	 *   operations return a single result and there's no sense handling this 
-	 *   as an array of values, so we transform array("out" => x) -> x. 
+	 *   operations return a single result and there's no sense handling 
+	 *   this as an array of values, so we transform ["out" => x] -> x. 
 	 *
 	 * - Any VipsImage resources are rewrapped as instances of our VImage
 	 *   class. 
@@ -74,7 +74,7 @@ class VImage
 		$option_string = "", $options = []) 
 	{
 		$options = self::unwrap($options);
-		$result = vips_image_new_from_buffer($buffer, $option_string, options);
+		$result = vips_image_new_from_buffer($buffer, $option_string, $options);
 		return self::wrap($result);
 	}
 
@@ -84,29 +84,42 @@ class VImage
 		return self::wrap($result);
 	}
 
-	public function write_to_file($filename, $options = []) {
+	public function write_to_file($filename, $options = []) 
+	{
 		$options = self::unwrap($options);
 		$result = vips_image_write_to_file($this->image, $filename, $options);
 		return self::wrap($result);
 	}
 
-	public function write_to_buffer($suffix, $options = []) {
+	public function write_to_buffer($suffix, $options = []) 
+	{
 		$options = self::unwrap($options);
 		$result = vips_image_write_to_buffer($this->image, $suffix, $options);
 		return self::wrap($result);
 	}
 
-	public function __get($name) {
+	public function __get($name) 
+	{
 		$result = vips_image_get($this->image, $name);
 		return self::wrap($result);
 	}
 
-	public function __call($name, $arguments) {
-		$args = array_merge([$name, $this], $arguments);
-		$args = self::unwrap($x);
-		$result = call_user_func_array("vips_call", $args);
+	public function __call($name, $arguments) 
+	{
+		$arguments = array_merge([$name, $this], $arguments);
+		$arguments = self::unwrap($arguments);
+		$result = call_user_func_array("vips_call", $arguments);
 		return self::wrap($result);
 	}
+
+	public static function __callStatic($name, $arguments) 
+	{
+		$arguments = array_merge([$name, NULL], $arguments);
+		$arguments = self::unwrap($arguments);
+		$result = call_user_func_array("vips_call", $arguments);
+		return self::wrap($result);
+	}
+
 }
 
 /*

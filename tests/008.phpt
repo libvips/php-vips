@@ -4,7 +4,7 @@ input array double args work
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
 <?php 
-  $image = vips_call("black", NULL, 100, 100, array("bands" => 3))["out"];
+  $image = vips_call("black", NULL, 100, 100, ["bands" => 3])["out"];
   $image = vips_call("linear", $image, [1, 1, 1], [255, 128, 0])["out"];
   $pixel = vips_call("crop", $image, 10, 10, 1, 1)["out"];
   $r = vips_call("extract_band", $pixel, 0)["out"];

@@ -6,9 +6,9 @@ vips_call supports optional input and output args
 <?php 
   $point = vips_call("black", NULL, 1, 1)["out"];
   $image = vips_call("embed", $point, 10, 20, 100, 100, 
-	array("extend" => "white"))["out"];
+	["extend" => "white"])["out"];
 
-  $result = vips_call("min", $image, array("x" => true, "y" => true));
+  $result = vips_call("min", $image, ["x" => true, "y" => true]);
 
   if ($result["out"] == 0 &&
     $result["x"] == 10 &&

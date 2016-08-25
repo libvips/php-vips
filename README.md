@@ -125,9 +125,13 @@ See `examples/`.
 
 ### TODO
 
-* `__call` needs to generate a nice member not found message
+* various convenience methods:
 
-* add `__callStatic` class methods
+	.cos() etc. enum expansions
+	automatic constants
+	.bandsplit()
+	.bandjoin() method
+	.ifthenelse() method
 
 * use python to generate a lot of `vips.php`
 
