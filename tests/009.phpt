@@ -10,7 +10,7 @@ input array image args work
   $r = vips_call("extract_band", $image, 0)["out"];
   $g = vips_call("extract_band", $image, 1)["out"];
   $b = vips_call("extract_band", $image, 2)["out"];
-  $new_image = vips_call("bandjoin", [$r, $g, $b])["out"];
+  $new_image = vips_call("bandjoin", NULL, [$r, $g, $b])["out"];
 
   $diff = vips_call("subtract", $image, $new_image)["out"];
   $diff = vips_call("abs", $diff)["out"];

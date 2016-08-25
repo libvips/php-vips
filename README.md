@@ -1,8 +1,9 @@
 # Experimental PHP binding for libvips 
 
-This is an experimental PHP binding for libvips. Not quite done yet, but it does more or less work. 
+This is an experimental PHP binding for libvips. Not quite done yet, but 
+it does more or less work. 
 
-### Examples
+### Example
 
 ```php
 #!/usr/bin/env php
@@ -18,6 +19,18 @@ This is an experimental PHP binding for libvips. Not quite done yet, but it does
 	$image->write_to_file($argv[2]);
 ?>
 ```
+
+### How it works
+
+`vips.c` defines a simple but ugly route to call any libvips operation from PHP.
+It uses libvips' own introspection facilities and does not depend on anything
+else (so no gobject-introspection, for example). It's a fairly short 1,200
+lines of C.
+
+`vips.php` is a PHP layer over the ugly `vips.c` API that tries to make a nice
+interface for programmers. It uses `__call()` and `__get()` to make all
+libvips operations appear as methods, and all libvips properties as 
+properties of the PHP `VImage` class.  
 
 ### Preparation
 
@@ -112,13 +125,7 @@ See `examples/`.
 
 ### TODO
 
-* we need a `this` param to `vips_php_call`, meaning first input image
-
-* `__call` needs to unwrap single element array returns
-
-* `__call` needs to wrap image returns up as `VImage`
-
-* `__call` needs to generate a member not found message
+* `__call` needs to generate a nice member not found message
 
 * add `__callStatic` class methods
 

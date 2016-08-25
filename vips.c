@@ -48,6 +48,7 @@ typedef struct _VipsPhpCall {
 	/* Parameters.
 	 */
 	const char *operation_name;
+	zval *instance;
 	const char *option_string;
 	int argc;
 	zval *argv;
@@ -56,9 +57,14 @@ typedef struct _VipsPhpCall {
 	 */
 	VipsOperation *operation;
 
-	/* The num of args this operation needs from php.
+	/* The num of args this operation needs from php. This does not include the
+	 * @instance zval.
 	 */
 	int args_required;
+
+	/* If we've already used the instance zval.
+	 */
+	gboolean used_instance;
 
 	/* Extra php array of optional args.
 	 */
@@ -76,7 +82,7 @@ vips_php_call_free(VipsPhpCall *call)
 }
 
 static VipsPhpCall *
-vips_php_call_new(const char *operation_name,
+vips_php_call_new(const char *operation_name, zval *instance, 
 	const char *option_string, int argc, zval *argv)
 {
 	VipsPhpCall *call;
@@ -86,6 +92,7 @@ vips_php_call_new(const char *operation_name,
 
 	call = g_new0( VipsPhpCall, 1 );
 	call->operation_name = operation_name;
+	call->instance = instance;
 	call->option_string = option_string;
 	call->argc = argc;
 	call->argv = argv;
@@ -306,12 +313,28 @@ vips_php_set_required_input(VipsObject *object,
 		(argument_class->flags & VIPS_ARGUMENT_INPUT) &&
 		!(argument_class->flags & VIPS_ARGUMENT_DEPRECATED) &&
 		!argument_instance->assigned) {
-		if (call->args_required < call->argc &&
-			vips_php_set_value(call, pspec, &call->argv[call->args_required])) {
+		zval *arg;
+
+		/* If this arg needs an image, we use instance, if we can.
+		 */
+		arg = NULL;
+		if (G_PARAM_SPEC_VALUE_TYPE(pspec) == VIPS_TYPE_IMAGE &&
+			call->instance &&
+			!call->used_instance) {
+			arg = call->instance;
+			call->used_instance = TRUE;
+		}
+		else if (call->args_required < call->argc) {
+			/* Pick the next zval off the supplied arg list.
+			 */
+			arg = &call->argv[call->args_required];
+			call->args_required += 1;
+		}
+				
+		if (arg &&
+			vips_php_set_value(call, pspec, arg)) {
 			return call;
 		}
-
-		call->args_required += 1;
 	}
 
 	return NULL;
@@ -572,13 +595,13 @@ vips_php_get_optional_output(VipsPhpCall *call, zval *options, zval *return_valu
  * arg, which is an associative array of optional arguments. 
  */
 static int
-vips_php_call_array(const char *operation_name, const char *option_string, int argc, zval *argv, zval *return_value)
+vips_php_call_array(const char *operation_name, zval *instance, const char *option_string, int argc, zval *argv, zval *return_value)
 {
 	VipsPhpCall *call;
 
 	VIPS_DEBUG_MSG("vips_php_call_array:\n");
 
-	if (!(call = vips_php_call_new(operation_name, option_string, argc, argv))) {
+	if (!(call = vips_php_call_new(operation_name, instance, option_string, argc, argv))) {
 		return -1;
 	}
 
@@ -672,7 +695,7 @@ vips_php_call_array(const char *operation_name, const char *option_string, int a
 	return 0;
 }
 
-/* {{{ proto value vips_php_call(string operation_name [, more])
+/* {{{ proto mixed vips_php_call(string operation_name, resource instance [, more])
    Call any vips operation */
 PHP_FUNCTION(vips_call)
 {
@@ -680,6 +703,7 @@ PHP_FUNCTION(vips_call)
 	zval *argv;
 	char *operation_name;
 	size_t operation_name_len;
+	zval *instance;
 
 	VIPS_DEBUG_MSG("vips_call:\n");
 
@@ -701,7 +725,12 @@ PHP_FUNCTION(vips_call)
 		return;
 	}
 
-	if (vips_php_call_array(operation_name, "", argc - 1, argv + 1, return_value)) {
+	if (zend_parse_parameter(0, 1, &argv[1], "r!", &instance) == FAILURE) {
+		efree(argv);
+		return;
+	}
+
+	if (vips_php_call_array(operation_name, instance, "", argc - 2, argv + 2, return_value)) {
 		efree(argv);
 		return;
 	}
@@ -745,7 +774,7 @@ PHP_FUNCTION(vips_image_new_from_file)
 		argc += 1;
 	}
 
-	if (vips_php_call_array(operation_name, option_string, argc, argv, return_value)) {
+	if (vips_php_call_array(operation_name, NULL, option_string, argc, argv, return_value)) {
 		error_vips();
 		return;
 	}
@@ -787,7 +816,7 @@ PHP_FUNCTION(vips_image_new_from_buffer)
 		argc += 1;
 	}
 
-	if (vips_php_call_array(operation_name, option_string, argc, argv, return_value)) {
+	if (vips_php_call_array(operation_name, NULL, option_string, argc, argv, return_value)) {
 		error_vips();
 		return;
 	}
@@ -914,7 +943,7 @@ PHP_FUNCTION(vips_image_write_to_buffer)
 	char filename[VIPS_PATH_MAX];
 	char option_string[VIPS_PATH_MAX];
 	const char *operation_name;
-	zval argv[2];
+	zval argv[1];
 	int argc;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "rs|a", &IM, &suffix, &suffix_len, &options) == FAILURE) {
@@ -931,14 +960,13 @@ PHP_FUNCTION(vips_image_write_to_buffer)
 		return;
 	}
 
-	argc = 1;
-	ZVAL_RES(&argv[0], Z_RES_P(IM));
+	argc = 0;
 	if (options) {
-		ZVAL_ARR(&argv[1], Z_ARR_P(options));
+		ZVAL_ARR(&argv[0], Z_ARR_P(options));
 		argc += 1;
 	}
 
-	if (vips_php_call_array(operation_name, option_string, argc, argv, return_value)) {
+	if (vips_php_call_array(operation_name, IM, option_string, argc, argv, return_value)) {
 		error_vips();
 		return;
 	}
@@ -1122,6 +1150,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(arginfo_vips_call, 0)
 	ZEND_ARG_INFO(0, operation_name)
+	ZEND_ARG_INFO(0, instance)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO(arginfo_vips_image_get, 0)

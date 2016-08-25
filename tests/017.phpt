@@ -4,7 +4,7 @@ can set enum from int
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
 <?php 
-  $point = vips_call("black", 1, 1)["out"];
+  $point = vips_call("black", NULL, 1, 1)["out"];
   $image = vips_call("embed", $point, 10, 20, 100, 100, 
 		array("extend" => 4))["out"];
 
