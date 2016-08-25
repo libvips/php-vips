@@ -1,46 +1,21 @@
 # Experimental PHP binding for libvips 
 
-This is an experimental PHP binding for libvips. The C layer is done, it just needs a PHP layer over the
-top to make it pleasant to use.
+This is an experimental PHP binding for libvips. Not quite done yet, but it does more or less work. 
 
 ### Examples
 
 ```php
+#!/usr/bin/env php
 <?php
-	dl('vips.' . PHP_SHLIB_SUFFIX);
+	include 'vips.php';
 
-	$image = vips_image_new_from_file($argv[1]);
+	$image = VImage::new_from_file($argv[1]); 
 
-	# you can call any vips operation 
-	$result = vips_call("invert", $image);
+	echo "width = ", $image->width, "\n";
 
-	# the result is an array of the output objects, we just want the
-	# image
-	$image = $result["out"];
+	$image = $image->invert();
 
-	vips_image_write_to_file($image, $argv[2]);
-?>
-```
-
-```php
-<?php
-	dl('vips.' . PHP_SHLIB_SUFFIX);
-
-	# you can pass optional arguments as a final array arg
-	# enums can be set with a string
-	$image = vips_image_new_from_file($argv[1], array("access" => "sequential"));
-
-	# set args to true to get optional output args added to result
-	$result = vips_call("min", $image, array("x" => true, "y" => true));
-
-	$mn = $result["out"];
-	$x = $result["x"];
-	$y = $result["y"];
-
-	# show position of minimum
-	echo "min = ", $mn, "\n";
-	echo "x = ", $x, "\n";
-	echo "y = ", $y, "\n";
+	$image->write_to_file($argv[2]);
 ?>
 ```
 
@@ -115,10 +90,15 @@ Try:
 ```php
 #!/usr/bin/env php
 <?php
-	dl('vips.' . PHP_SHLIB_SUFFIX);
-	$x = vips_image_new_from_file($argv[1]);
-	$x = vips_call("invert", $x)["out"];
-	vips_image_write_to_file($x, $argv[2]);
+	include 'vips.php';
+
+	$image = VImage::new_from_file($argv[1]); 
+
+	echo "width = ", $image->width, "\n";
+
+	$image = $image->invert();
+
+	$image->write_to_file($argv[2]);
 ?>
 ```
 
@@ -132,10 +112,19 @@ See `examples/`.
 
 ### TODO
 
-* make a wrapper over this thing in php which gives it a nice API, including
-  exceptions, automatic member lookup, properties, and so on
+* we need a `this` param to `vips_php_call`, meaning first input image
+
+* `__call` needs to unwrap single element array returns
+
+* `__call` needs to wrap image returns up as `VImage`
+
+* `__call` needs to generate a member not found message
+
+* add `__callStatic` class methods
 
 * use python to generate a lot of `vips.php`
+
+  we'll want phpDoc for the magic methods and properties, at least
 
 ### links
 
