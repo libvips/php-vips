@@ -104,20 +104,291 @@ class VImage
 		return self::wrap($result);
 	}
 
-	public function __call($name, $arguments) 
+	public static function call($name, $instance, $arguments) 
 	{
-		$arguments = array_merge([$name, $this], $arguments);
+		$arguments = array_merge([$name, $instance], $arguments);
 		$arguments = self::unwrap($arguments);
 		$result = call_user_func_array("vips_call", $arguments);
 		return self::wrap($result);
 	}
 
+	public function __call($name, $arguments) 
+	{
+		return self::call($name, $this, $arguments); 
+	}
+
 	public static function __callStatic($name, $arguments) 
 	{
-		$arguments = array_merge([$name, NULL], $arguments);
-		$arguments = self::unwrap($arguments);
-		$result = call_user_func_array("vips_call", $arguments);
-		return self::wrap($result);
+		return self::call($name, NULL, $arguments); 
+	}
+
+	/* paste py stuff in here as a reminder
+
+    def bandsplit(self):
+        """Split an n-band image into n separate images."""
+        return [x for x in self]
+
+    def bandjoin(self, other):
+        """Append a set of images or constants bandwise."""
+        if not isinstance(other, list):
+            other = [other]
+
+        # if [other] is all numbers, we can use bandjoin_const
+        non_number = next((x for x in other 
+                            if not isinstance(x, numbers.Number)), 
+                           None)
+
+        if non_number == None:
+            return self.bandjoin_const(other)
+        else:
+            return _call_base("bandjoin", [[self] + other], {})
+
+    def bandrank(self, other, **kwargs):
+        """Band-wise rank filter a set of images."""
+        if not isinstance(other, list):
+            other = [other]
+
+        return _call_base("bandrank", [[self] + other], kwargs)
+
+    def maxpos(self):
+        """Return the coordinates of the image maximum."""
+        v, opts = self.max(x = True, y = True)
+        x = opts['x']
+        y = opts['y']
+        return v, x, y
+
+    def minpos(self):
+        """Return the coordinates of the image minimum."""
+        v, opts = self.min(x = True, y = True)
+        x = opts['x']
+        y = opts['y']
+        return v, x, y
+
+    # we need different imageize rules for this operator ... we need to 
+    # imageize th and el to match each other first
+    @add_doc(generate_docstring("ifthenelse"))
+    def ifthenelse(self, th, el, **kwargs):
+        for match_image in [th, el, self]:
+            if isinstance(match_image, Vips.Image):
+                break
+
+        if not isinstance(th, Vips.Image):
+            th = imageize(match_image, th)
+        if not isinstance(el, Vips.Image):
+            el = imageize(match_image, el)
+
+        return _call_base("ifthenelse", [th, el], kwargs, self)
+	 */
+
+	# Return the largest integral value not greater than the argument.
+	public function floor() 
+	{
+			return $this->round("floor");
+	}
+
+	# Return the smallest integral value not less than the argument.
+	public function ceil() 
+	{
+			return $this->round("ceil");
+	}
+
+	# Return the nearest integral value.
+	public function rint() 
+	{
+			return $this->round("rint");
+	}
+
+	# AND image bands together.
+	public function bandand() 
+	{
+			return $this->bandbool("and");
+	}
+
+	# OR image bands together.
+	public function bandor() 
+	{
+			return $this->bandbool("or");
+	}
+
+	# EOR image bands together.
+	public function bandeor() 
+	{
+			return $this->bandbool("eor");
+	}
+
+	# Return the real part of a complex image.
+	public function real() 
+	{
+			return $this->complexget("real");
+	}
+
+	# Return the imaginary part of a complex image.
+	public function imag() 
+	{
+			return $this->complexget("imag");
+	}
+
+	/* use this for polar() and rect()
+	 
+def run_cmplx(fn, image):
+    """Run a complex function on a non-complex image.
+
+    The image needs to be complex, or have an even number of bands. The input
+    can be int, the output is always float or double.
+    """
+    original_format = image.format
+
+    if not Vips.band_format_iscomplex(image.format):
+        if image.bands % 2 != 0:
+            raise "not an even number of bands"
+
+        if not Vips.band_format_isfloat(image.format):
+            image = image.cast(Vips.BandFormat.FLOAT)
+
+        if image.format == Vips.BandFormat.DOUBLE:
+            new_format = Vips.BandFormat.DPCOMPLEX
+        else:
+            new_format = Vips.BandFormat.COMPLEX
+
+        image = image.copy(format = new_format, bands = image.bands / 2)
+
+    image = fn(image)
+
+    if not Vips.band_format_iscomplex(original_format):
+        if image.format == Vips.BandFormat.DPCOMPLEX:
+            new_format = Vips.BandFormat.DOUBLE
+        else:
+            new_format = Vips.BandFormat.FLOAT
+
+        image = image.copy(format = new_format, bands = image.bands * 2)
+
+    return image
+	 */
+
+	# Return an image converted to polar coordinates.
+	public function polar() 
+	{
+			return $this->complex("polar");
+	}
+
+	# Return an image converted to rectangular coordinates.
+	public function rect() 
+	{
+			return $this->complex("rect");
+	}
+
+	# Return the complex conjugate of an image.
+	public function conj() 
+	{
+			return $this->complex("conj");
+	}
+
+	# Return the sine of an image in degrees.
+	public function sin() 
+	{
+			return $this->math("sin");
+	}
+
+	# Return the cosine of an image in degrees.
+	public function cos() 
+	{
+			return $this->math("cos");
+	}
+
+	# Return the tangent of an image in degrees.
+	public function tan() 
+	{
+			return $this->math("tan");
+	}
+
+	# Return the inverse sine of an image in degrees.
+	public function asin() 
+	{
+			return $this->math("asin");
+	}
+
+	# Return the inverse cosine of an image in degrees.
+	public function acos() 
+	{
+			return $this->math("acos");
+	}
+
+	# Return the inverse tangent of an image in degrees.
+	public function atan() 
+	{
+			return $this->math("atan");
+	}
+
+	# Return the natural log of an image.
+	public function log() 
+	{
+			return $this->math("log");
+	}
+
+	# Return the log base 10 of an image.
+	public function log10() 
+	{
+			return $this->math("log10");
+	}
+
+	# Return e ** pixel.
+	public function exp() 
+	{
+			return $this->math("exp");
+	}
+
+	# Return 10 ** pixel.
+	public function exp10() 
+	{
+			return $this->math("exp10");
+	}
+
+	# Erode with a structuring element.
+	public function erode($mask) 
+	{
+			return $this->morph($mask, "erode");
+	}
+
+	# Dilate with a structuring element.
+	public function dilate($mask) 
+	{
+			return $this->morph($mask, "dilate");
+	}
+
+	# size x size median filter.
+	public function median($size) 
+	{
+			return $this->rank(size, size, (size * size) / 2);
+	}
+
+	# Flip horizontally.
+	public function fliphor() 
+	{
+			return $this->flip("horizontal");
+	}
+
+	# Flip vertically.
+	public function flipver() 
+	{
+			return $this->flip("vertical");
+	}
+
+	# Rotate 90 degrees clockwise.
+	public function rot90() 
+	{
+			return $this->rot("d90");
+	}
+
+	# Rotate 180 degrees.
+	public function rot180() 
+	{
+			return $this->rot("d180");
+	}
+
+	# Rotate 270 degrees clockwise.
+	public function rot270() 
+	{
+			return $this->rot("d270");
 	}
 
 }

@@ -125,13 +125,24 @@ See `examples/`.
 
 ### TODO
 
+* tests for at least some of the enum expansions
+
 * various convenience methods:
 
-	.cos() etc. enum expansions
-	automatic constants
-	.bandsplit()
-	.bandjoin() method
-	.ifthenelse() method
+  - `.bandsplit()`
+  - `.bandjoin()` method
+  - `.ifthenelse()` method
+  - and others, see comments in vips.php
+
+* `__set` for updating exif
+
+* `[]` for band extract should be easy
+
+* can we overload `()` for pixel extract? unclear
+
+* constant expansion ... this needs to be in C
+
+* add phpDoc comments
 
 * use python to generate a lot of `vips.php`
 
