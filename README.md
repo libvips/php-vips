@@ -125,6 +125,12 @@ See `examples/`.
 
 ### TODO
 
+* constant expansion ... needs testing
+ 
+  also special `.ifthenelse()` method
+
+* add phpDoc comments
+
 * tests for at least some of the enum expansions
 
 * tests for `maxpos`, `bandjoin` etc.
@@ -135,11 +141,7 @@ See `examples/`.
 
 * can we overload `()` for pixel extract? unclear
 
-* constant expansion ... this needs to be in C
- 
-  also special `.ifthenelse()` method
-
-* add phpDoc comments
+* exceptions?
 
 * use python to generate a lot of `vips.php`
 
