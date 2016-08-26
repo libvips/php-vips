@@ -149,6 +149,14 @@ class VImage
 
 	public static function call($name, $instance, $arguments) 
 	{
+		/*
+		echo "call: ", $name, "\n"; 
+		echo "instance = ";
+		var_dump($instance);
+		echo "arguments = ";
+		var_dump($arguments);
+		 */
+
 		$arguments = array_merge([$name, $instance], $arguments);
 		$arguments = self::unwrap($arguments);
 		$result = call_user_func_array("vips_call", $arguments);
@@ -172,17 +180,22 @@ class VImage
 	public function add($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			return self::add($this, $other);
+			/* We can't use self::add, that would recurse.
+			 */
+			return self::call("add", $this, array_merge([$other], $options));
 		}
 		else {
-			return self::linear($this, 1, $other);
+			return self::linear(1, $other, $options); 
 		}
 	}
 
 	public function subtract($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			return self::subtract($this, $other);
+			/* We can't use self::subtract, that would recurse.
+			 */
+			return self::call("subtract", $this, 
+				array_merge([$other], $options));
 		}
 		else {
 			$other = map_numeric($other, function ($value) {
@@ -195,7 +208,10 @@ class VImage
 	public function multiply($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			return self::multiply($this, $other);
+			/* We can't use self::multiply, that would recurse.
+			 */
+			return self::call("multiply", $this, 
+				array_merge([$other], $options));
 		}
 		else {
 			return self::linear($this, $other, 0);
@@ -205,7 +221,9 @@ class VImage
 	public function divide($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			return self::divide($this, $other);
+			/* We can't use self::divide, that would recurse.
+			 */
+			return self::call("divide", $this, array_merge([$other], $options));
 		}
 		else {
 			$other = map_numeric($other, function ($value) {
@@ -215,45 +233,47 @@ class VImage
 		}
 	}
 
-	/* bandjoin will appear as a static class member, as 
-	 * self::bandjoin([a, b, c]), but it's handy to have as  method as well.
-	 * We need to define this by hand.
+	/* bandjoin can use bandjoin_const if all of $other are numeric. 
 	 */
 	public function bandjoin($other, $options = [])
 	{
-			/* Allow a single unarrayed value as well.
-			 */
-			if (!is_array($other)) {
-				$other = [$other];
-			}
+		/* Allow a single unarrayed value as well.
+		 */
+		if (!is_array($other)) {
+			$other = [$other];
+		}
 
-			/* If $other is all numbers, we can use self::bandjoin_const().
-			 */
-			$is_const = TRUE;
-			foreach ($other as $item) {
-				if (!is_numeric($item)) {
-					$is_const = FALSE;
-					break;
-				}
+		/* If $other is all numbers, we can use self::bandjoin_const().
+		 */
+		$is_const = TRUE;
+		foreach ($other as $item) {
+			if (!is_numeric($item)) {
+				$is_const = FALSE;
+				break;
 			}
+		}
 
-			if ($is_const) {
-				return self::bandjoin_const($this, $other, $options);
-			}
-			else {
-				return self::bandjoin([$this] + $other, $options);
-			}
+		/* We can't use self::bandjoin(), that would just recurse.
+		 */
+		if ($is_const) {
+			return self::call("bandjoin_const", $this, 
+				array_merge([$other], $options));
+		}
+		else {
+			return self::call("bandjoin", NULL, 
+				array_merge([array_merge([$this], $other)], $options));
+		}
 	}
 
 	public function bandsplit($options = [])
 	{
-			$result = [];
+		$result = [];
 
-			for ($i = 0; $i < $this->bands; $i++) {
-				$result[] = $this->extract_band($i. $options);
-			}
+		for ($i = 0; $i < $this->bands; $i++) {
+			$result[] = $this->extract_band($i. $options);
+		}
 
-			return $result;
+		return $result;
 	}
 
 	/* bandrank will appear as a static class member, as 
@@ -262,37 +282,37 @@ class VImage
 	 */
 	public function bandrank($other, $options = [])
 	{
-			/* Allow a single unarrayed value as well.
-			 */
-			if (!is_array($other)) {
-				$other = [$other];
-			}
+		/* Allow a single unarrayed value as well.
+		 */
+		if (!is_array($other)) {
+			$other = [$other];
+		}
 
-			return self::bandrank([$this] + $other, $options);
+		return self::bandrank([$this] + $other, $options);
 	}
 
 	/* Position of max is awkward with plain self::max.
 	 */
 	public function maxpos()
 	{
-			$result = $this->max(["x" => TRUE, "y" => TRUE]);
-			$out = $result["out"];
-			$x = $result["x"];
-			$y = $result["y"];
+		$result = $this->max(["x" => TRUE, "y" => TRUE]);
+		$out = $result["out"];
+		$x = $result["x"];
+		$y = $result["y"];
 
-			return [$out, $x, $y];
+		return [$out, $x, $y];
 	}
 
 	/* Position of min is awkward with plain self::min.
 	 */
 	public function minpos()
 	{
-			$result = $this->min(["x" => TRUE, "y" => TRUE]);
-			$out = $result["out"];
-			$x = $result["x"];
-			$y = $result["y"];
+		$result = $this->min(["x" => TRUE, "y" => TRUE]);
+		$out = $result["out"];
+		$x = $result["x"];
+		$y = $result["y"];
 
-			return [$out, $x, $y];
+		return [$out, $x, $y];
 	}
 
 	/* Is a $value a rectangular 2D array?
@@ -300,20 +320,20 @@ class VImage
 	static private function is_2D($value)
 	{
 		if (!is_array($value)) {
-				return FALSE;
+			return FALSE;
 		}
 
 		$height = count($value);
 		if (!is_array($value[0])) {
-				return FALSE;
+			return FALSE;
 		}
 		$width = count($value[0]);
 
 		foreach ($array as $row) {
-				if (!is_array($row) ||
-						count($row) != $width) { 
-						return FALSE;
-				}
+			if (!is_array($row) ||
+				count($row) != $width) { 
+				return FALSE;
+			}
 		}
 
 		return TRUE;
@@ -347,49 +367,49 @@ class VImage
 	# Return the largest integral value not greater than the argument.
 	public function floor() 
 	{
-			return $this->round("floor");
+		return $this->round("floor");
 	}
 
 	# Return the smallest integral value not less than the argument.
 	public function ceil() 
 	{
-			return $this->round("ceil");
+		return $this->round("ceil");
 	}
 
 	# Return the nearest integral value.
 	public function rint() 
 	{
-			return $this->round("rint");
+		return $this->round("rint");
 	}
 
 	# AND image bands together.
 	public function bandand() 
 	{
-			return $this->bandbool("and");
+		return $this->bandbool("and");
 	}
 
 	# OR image bands together.
 	public function bandor() 
 	{
-			return $this->bandbool("or");
+		return $this->bandbool("or");
 	}
 
 	# EOR image bands together.
 	public function bandeor() 
 	{
-			return $this->bandbool("eor");
+		return $this->bandbool("eor");
 	}
 
 	# Return the real part of a complex image.
 	public function real() 
 	{
-			return $this->complexget("real");
+		return $this->complexget("real");
 	}
 
 	# Return the imaginary part of a complex image.
 	public function imag() 
 	{
-			return $this->complexget("imag");
+		return $this->complexget("imag");
 	}
 
 	/* use this for polar() and rect()
@@ -432,127 +452,127 @@ def run_cmplx(fn, image):
 	# Return an image converted to polar coordinates.
 	public function polar() 
 	{
-			return $this->complex("polar");
+		return $this->complex("polar");
 	}
 
 	# Return an image converted to rectangular coordinates.
 	public function rect() 
 	{
-			return $this->complex("rect");
+		return $this->complex("rect");
 	}
 
 	# Return the complex conjugate of an image.
 	public function conj() 
 	{
-			return $this->complex("conj");
+		return $this->complex("conj");
 	}
 
 	# Return the sine of an image in degrees.
 	public function sin() 
 	{
-			return $this->math("sin");
+		return $this->math("sin");
 	}
 
 	# Return the cosine of an image in degrees.
 	public function cos() 
 	{
-			return $this->math("cos");
+		return $this->math("cos");
 	}
 
 	# Return the tangent of an image in degrees.
 	public function tan() 
 	{
-			return $this->math("tan");
+		return $this->math("tan");
 	}
 
 	# Return the inverse sine of an image in degrees.
 	public function asin() 
 	{
-			return $this->math("asin");
+		return $this->math("asin");
 	}
 
 	# Return the inverse cosine of an image in degrees.
 	public function acos() 
 	{
-			return $this->math("acos");
+		return $this->math("acos");
 	}
 
 	# Return the inverse tangent of an image in degrees.
 	public function atan() 
 	{
-			return $this->math("atan");
+		return $this->math("atan");
 	}
 
 	# Return the natural log of an image.
 	public function log() 
 	{
-			return $this->math("log");
+		return $this->math("log");
 	}
 
 	# Return the log base 10 of an image.
 	public function log10() 
 	{
-			return $this->math("log10");
+		return $this->math("log10");
 	}
 
 	# Return e ** pixel.
 	public function exp() 
 	{
-			return $this->math("exp");
+		return $this->math("exp");
 	}
 
 	# Return 10 ** pixel.
 	public function exp10() 
 	{
-			return $this->math("exp10");
+		return $this->math("exp10");
 	}
 
 	# Erode with a structuring element.
 	public function erode($mask) 
 	{
-			return $this->morph($mask, "erode");
+		return $this->morph($mask, "erode");
 	}
 
 	# Dilate with a structuring element.
 	public function dilate($mask) 
 	{
-			return $this->morph($mask, "dilate");
+		return $this->morph($mask, "dilate");
 	}
 
 	# size x size median filter.
 	public function median($size) 
 	{
-			return $this->rank(size, size, (size * size) / 2);
+		return $this->rank(size, size, (size * size) / 2);
 	}
 
 	# Flip horizontally.
 	public function fliphor() 
 	{
-			return $this->flip("horizontal");
+		return $this->flip("horizontal");
 	}
 
 	# Flip vertically.
 	public function flipver() 
 	{
-			return $this->flip("vertical");
+		return $this->flip("vertical");
 	}
 
 	# Rotate 90 degrees clockwise.
 	public function rot90() 
 	{
-			return $this->rot("d90");
+		return $this->rot("d90");
 	}
 
 	# Rotate 180 degrees.
 	public function rot180() 
 	{
-			return $this->rot("d180");
+		return $this->rot("d180");
 	}
 
 	# Rotate 270 degrees clockwise.
 	public function rot270() 
 	{
-			return $this->rot("d270");
+		return $this->rot("d270");
 	}
 
 }
