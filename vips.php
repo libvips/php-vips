@@ -122,50 +122,90 @@ class VImage
 		return self::call($name, NULL, $arguments); 
 	}
 
+	/* bandjoin will appear as a static class member, as 
+	 * VImage::bandjoin([a, b, c]), but it's handy to have as  method as well.
+	 * We need to define this by hand.
+	 */
+	public function bandjoin($other, $options = [])
+	{
+			/* Allow a single unarrayed value as well.
+			 */
+			if (!is_array($other)) {
+				$other = [$other];
+			}
+
+			/* If $other is all numbers, we can use VImage::bandjoin_const().
+			 */
+			$is_const = TRUE;
+			foreach ($other as $item) {
+				if (!is_numeric($item)) {
+					$is_const = FALSE;
+					break;
+				}
+			}
+
+			if ($is_const) {
+				return VImage::bandjoin_const($this, $other, $options);
+			}
+			else {
+				return VImage::bandjoin([$this] + $other, $options);
+			}
+	}
+
+	public function bandsplit($options = [])
+	{
+			$result = [];
+
+			for ($i = 0; $i < $this->bands; $i++) {
+				$result[] = $this->extract_band($i. $options);
+			}
+
+			return $result;
+	}
+
+	/* bandrank will appear as a static class member, as 
+	 * VImage::bandrank([a, b, c]), but it's handy to have as  method as well.
+	 * We need to define this by hand.
+	 */
+	public function bandrank($other, $options = [])
+	{
+			/* Allow a single unarrayed value as well.
+			 */
+			if (!is_array($other)) {
+				$other = [$other];
+			}
+
+			return VImage::bandrank([$this] + $other, $options);
+	}
+
+	/* Position of max is awkward with plain VImage::max.
+	 */
+	public function maxpos()
+	{
+			$result = $this->max(["x" => TRUE, "y" => TRUE]);
+			$out = $result["out"];
+			$x = $result["x"];
+			$y = $result["y"];
+
+			return [$out, $x, $y];
+	}
+
+	/* Position of min is awkward with plain VImage::min.
+	 */
+	public function minpos()
+	{
+			$result = $this->min(["x" => TRUE, "y" => TRUE]);
+			$out = $result["out"];
+			$x = $result["x"];
+			$y = $result["y"];
+
+			return [$out, $x, $y];
+	}
+
 	/* paste py stuff in here as a reminder
 
-    def bandsplit(self):
-        """Split an n-band image into n separate images."""
-        return [x for x in self]
-
-    def bandjoin(self, other):
-        """Append a set of images or constants bandwise."""
-        if not isinstance(other, list):
-            other = [other]
-
-        # if [other] is all numbers, we can use bandjoin_const
-        non_number = next((x for x in other 
-                            if not isinstance(x, numbers.Number)), 
-                           None)
-
-        if non_number == None:
-            return self.bandjoin_const(other)
-        else:
-            return _call_base("bandjoin", [[self] + other], {})
-
-    def bandrank(self, other, **kwargs):
-        """Band-wise rank filter a set of images."""
-        if not isinstance(other, list):
-            other = [other]
-
-        return _call_base("bandrank", [[self] + other], kwargs)
-
-    def maxpos(self):
-        """Return the coordinates of the image maximum."""
-        v, opts = self.max(x = True, y = True)
-        x = opts['x']
-        y = opts['y']
-        return v, x, y
-
-    def minpos(self):
-        """Return the coordinates of the image minimum."""
-        v, opts = self.min(x = True, y = True)
-        x = opts['x']
-        y = opts['y']
-        return v, x, y
-
-    # we need different imageize rules for this operator ... we need to 
-    # imageize th and el to match each other first
+	# we need different constant expansion rules for this operator ... we need 
+	# to imageize th and el to match each other first
     @add_doc(generate_docstring("ifthenelse"))
     def ifthenelse(self, th, el, **kwargs):
         for match_image in [th, el, self]:

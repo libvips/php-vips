@@ -127,12 +127,7 @@ See `examples/`.
 
 * tests for at least some of the enum expansions
 
-* various convenience methods:
-
-  - `.bandsplit()`
-  - `.bandjoin()` method
-  - `.ifthenelse()` method
-  - and others, see comments in vips.php
+* tests for `maxpos`, `bandjoin` etc.
 
 * `__set` for updating exif
 
@@ -141,6 +136,8 @@ See `examples/`.
 * can we overload `()` for pixel extract? unclear
 
 * constant expansion ... this needs to be in C
+ 
+  also special `.ifthenelse()` method
 
 * add phpDoc comments
 
