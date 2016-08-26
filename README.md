@@ -129,7 +129,13 @@ See `examples/`.
  
   also special `.ifthenelse()` method
 
-* add phpDoc comments
+* `this->add(other)` with const other needs testing
+
+* add phpDoc comments 
+
+  need comments for magic properties
+
+  extra phpDoc comments for all magic methods, use py to generate
 
 * tests for at least some of the enum expansions
 
@@ -137,15 +143,13 @@ See `examples/`.
 
 * `__set` for updating exif
 
+  `imageize` in vips.php needs to use this to set interpretation
+
 * `[]` for band extract should be easy
 
 * can we overload `()` for pixel extract? unclear
 
-* exceptions?
-
-* use python to generate a lot of `vips.php`
-
-  we'll want phpDoc for the magic methods and properties, at least
+* exceptions? logging?
 
 ### links
 

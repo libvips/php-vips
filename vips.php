@@ -19,6 +19,42 @@ class VImage
 		$this->image = $image;
 	}
 
+	/* Apply a func to every numeric member of $mixed. Useful for self::subtract
+	 * etc.
+	 */ 
+	private static function map_numeric($value, $func)
+	{
+		if (is_numeric($value)) {
+			$value = $func($value);
+		}
+		else if (is_array($value)) {
+			array_walk_recursive($value, function (&$item, $key) use ($func) {
+				$item = map_numeric($item, $func);
+			});
+		}
+
+		return $value;
+	}
+
+	/* Turn a constant (eg. 1, "12", [1, 2, 3], [[1]]) into an image using
+	 * match_image as a guide.
+	 */
+	private static function imageize($match_image, $value)
+	{
+		if (is_2D($value)) {
+			$result = self::new_from_array($value);
+		}
+		else {
+			$pixel = self::black(1, 1)->add($value)->cast($match_image->format);
+			$result = $pixel->embed(0, 0, 
+				$match_image->width, $match_image->height,
+				["expand" => "copy"]);
+			echo "imageize: FIXME must also set at least interpretation\n";
+		}
+
+		return $result;
+	}
+
 	/* Unwrap an array of stuff ready to pass down to the vips_ layer. We
 	 * swap instances of the VImage class for the plain resource.
 	 */
@@ -31,6 +67,14 @@ class VImage
 		});
 
 		return $result;
+	}
+
+	/* Is $value a VipsImage.
+	 */
+	private static function is_image($value)
+	{
+			return is_resource($value) &&
+				get_resource_type($value) == "GObject";
 	}
 
 	/* Wrap up the result of a vips_ call ready to erturn it to PHP. We do 
@@ -50,8 +94,7 @@ class VImage
 		}
 
 		array_walk_recursive($result, function (&$item) {
-			if (is_resource($item) &&
-				get_resource_type($item) == "GObject") {
+			if (self::is_image($item)) { 
 				$item = new VImage($item);
 			}
 		});
@@ -122,8 +165,58 @@ class VImage
 		return self::call($name, NULL, $arguments); 
 	}
 
+	/* add/sub/mul/div with a constant argument can use linear for a huge
+	 * speedup.
+	 */
+
+	public function add($other, $options = [])
+	{
+		if ($other instanceof VImage) {
+			return self::add($this, $other);
+		}
+		else {
+			return self::linear($this, 1, $other);
+		}
+	}
+
+	public function subtract($other, $options = [])
+	{
+		if ($other instanceof VImage) {
+			return self::subtract($this, $other);
+		}
+		else {
+			$other = map_numeric($other, function ($value) {
+					return -1 * $value;
+			});
+			return self::linear($this, 1, $other);
+		}
+	}
+
+	public function multiply($other, $options = [])
+	{
+		if ($other instanceof VImage) {
+			return self::multiply($this, $other);
+		}
+		else {
+			return self::linear($this, $other, 0);
+		}
+	}
+
+	public function divide($other, $options = [])
+	{
+		if ($other instanceof VImage) {
+			return self::divide($this, $other);
+		}
+		else {
+			$other = map_numeric($other, function ($value) {
+					return $value ** -1;
+			});
+			return self::linear($this, $other, 0);
+		}
+	}
+
 	/* bandjoin will appear as a static class member, as 
-	 * VImage::bandjoin([a, b, c]), but it's handy to have as  method as well.
+	 * self::bandjoin([a, b, c]), but it's handy to have as  method as well.
 	 * We need to define this by hand.
 	 */
 	public function bandjoin($other, $options = [])
@@ -134,7 +227,7 @@ class VImage
 				$other = [$other];
 			}
 
-			/* If $other is all numbers, we can use VImage::bandjoin_const().
+			/* If $other is all numbers, we can use self::bandjoin_const().
 			 */
 			$is_const = TRUE;
 			foreach ($other as $item) {
@@ -145,10 +238,10 @@ class VImage
 			}
 
 			if ($is_const) {
-				return VImage::bandjoin_const($this, $other, $options);
+				return self::bandjoin_const($this, $other, $options);
 			}
 			else {
-				return VImage::bandjoin([$this] + $other, $options);
+				return self::bandjoin([$this] + $other, $options);
 			}
 	}
 
@@ -164,7 +257,7 @@ class VImage
 	}
 
 	/* bandrank will appear as a static class member, as 
-	 * VImage::bandrank([a, b, c]), but it's handy to have as  method as well.
+	 * self::bandrank([a, b, c]), but it's handy to have as  method as well.
 	 * We need to define this by hand.
 	 */
 	public function bandrank($other, $options = [])
@@ -175,10 +268,10 @@ class VImage
 				$other = [$other];
 			}
 
-			return VImage::bandrank([$this] + $other, $options);
+			return self::bandrank([$this] + $other, $options);
 	}
 
-	/* Position of max is awkward with plain VImage::max.
+	/* Position of max is awkward with plain self::max.
 	 */
 	public function maxpos()
 	{
@@ -190,7 +283,7 @@ class VImage
 			return [$out, $x, $y];
 	}
 
-	/* Position of min is awkward with plain VImage::min.
+	/* Position of min is awkward with plain self::min.
 	 */
 	public function minpos()
 	{
@@ -202,23 +295,54 @@ class VImage
 			return [$out, $x, $y];
 	}
 
-	/* paste py stuff in here as a reminder
-
-	# we need different constant expansion rules for this operator ... we need 
-	# to imageize th and el to match each other first
-    @add_doc(generate_docstring("ifthenelse"))
-    def ifthenelse(self, th, el, **kwargs):
-        for match_image in [th, el, self]:
-            if isinstance(match_image, Vips.Image):
-                break
-
-        if not isinstance(th, Vips.Image):
-            th = imageize(match_image, th)
-        if not isinstance(el, Vips.Image):
-            el = imageize(match_image, el)
-
-        return _call_base("ifthenelse", [th, el], kwargs, self)
+	/* Is a $value a rectangular 2D array?
 	 */
+	static private function is_2D($value)
+	{
+		if (!is_array($value)) {
+				return FALSE;
+		}
+
+		$height = count($value);
+		if (!is_array($value[0])) {
+				return FALSE;
+		}
+		$width = count($value[0]);
+
+		foreach ($array as $row) {
+				if (!is_array($row) ||
+						count($row) != $width) { 
+						return FALSE;
+				}
+		}
+
+		return TRUE;
+	}
+
+	/* We need different imageize rules for this. We need $then and $else to
+	 * match each other first, and only if they are both constants do we
+	 * match to $this.
+	 */
+	public function ifthenelse($then, $else, $options = [])
+	{
+		$match_image = NULL;
+		foreach ([$then, $else, $self] as $item) {
+			if ($item instanceof VImage) {
+				$match_image = $item;
+				break;
+			}
+		}
+
+		if (!($then instanceof VImage)) {
+			$then = self::imageize($match_image, $then);
+		}
+
+		if (!($else instanceof VImage)) {
+			$else = self::imageize($match_image, $else);
+		}
+
+		self::ifthenelse($this, $then, $else, $options);
+	}
 
 	# Return the largest integral value not greater than the argument.
 	public function floor() 
