@@ -42,6 +42,9 @@ error_vips( void )
 	vips_error_clear();
 }
 
+/* {{{ proto static int vips_php_call_array(const char *operation_name, zval *instance, const char *option_string, int argc, zval *argv, zval *return_value)
+   Call any vips operation. */
+
 /* Track stuff during a call to a vips operation in one of these.
  */
 typedef struct _VipsPhpCall {
@@ -930,6 +933,8 @@ vips_php_call_array(const char *operation_name, zval *instance,
 
 	return 0;
 }
+
+/* }}} */
 
 /* {{{ proto mixed vips_php_call(string operation_name, resource instance [, more])
    Call any vips operation */
