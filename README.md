@@ -24,7 +24,7 @@ it does more or less work.
 
 `vips.c` defines a simple but ugly route to call any libvips operation from PHP.
 It uses libvips' own introspection facilities and does not depend on anything
-else (so no gobject-introspection, for example). It's a fairly short 1,200
+else (so no gobject-introspection, for example). It's a fairly short 1,600
 lines of C.
 
 `vips.php` is a PHP layer over the ugly `vips.c` API that tries to make a nice
@@ -125,17 +125,15 @@ See `examples/`.
 
 ### TODO
 
+* `[]` for band extract should be easy
+
+* can we overload `()` for `getpoint`? unclear
+
 * add phpDoc comments 
 
   need comments for magic properties
 
   extra phpDoc comments for all magic methods, use py to generate
-
-* tests for at least some of the enum expansions
-
-* `[]` for band extract should be easy
-
-* can we overload `()` for `getpoint`? unclear
 
 * exceptions? logging?
 
