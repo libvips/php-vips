@@ -8,7 +8,7 @@ if (!extension_loaded("vips")) {
 	dl('vips.' . PHP_SHLIB_SUFFIX);
 }
 
-class VImage 
+class VImage implements ArrayAccess
 {
 	/* The resource for the underlying VipsImage.
 	 */
@@ -216,6 +216,29 @@ class VImage
 	public static function __callStatic($name, $arguments) 
 	{
 		return self::call($name, NULL, $arguments); 
+	}
+
+	/* ArrayAccess interface ... we allow [] to get band.
+	 */
+
+	public function offsetExists($offset) 
+	{
+		return $offset >= 0 && $offset <= $this->bands - 1;
+	}
+
+	public function offsetGet($offset) 
+	{
+		return self::offsetExists($offset) ? self::extract_band($offset) : NULL;
+	}
+
+	public function offsetSet($offset, $value) 
+	{
+		echo "VImage::offsetSet: not implemented\n"; 
+	}
+
+	public function offsetUnset($offset) 
+	{
+		echo "VImage::offsetUnset: not implemented\n"; 
 	}
 
 	/* add/sub/mul/div with a constant argument can use linear for a huge

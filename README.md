@@ -1,7 +1,6 @@
 # Experimental PHP binding for libvips 
 
-This is an experimental PHP binding for libvips. Not quite done yet, but 
-it does more or less work. 
+This is an experimental PHP binding for libvips. 
 
 ### Example
 
@@ -10,7 +9,7 @@ it does more or less work.
 <?php
 	include 'vips.php';
 
-	$image = VImage::new_from_file($argv[1]); 
+	$image = VImage::new_from_file($argv[1]);
 
 	echo "width = ", $image->width, "\n";
 
@@ -19,6 +18,25 @@ it does more or less work.
 	$image->write_to_file($argv[2]);
 ?>
 ```
+
+### Missing
+
+Some features that other vips bindings have are not yet implemented:
+
+* You can't assign to an array index to change an image band.
+
+* In-place operations, like `circle`, are not yet supported.
+
+* No phpDoc yet.
+
+* No exceptions yet.
+
+* No logging at the moment. 
+
+Some things will never be done:
+
+* You can't use `()` to get a pixel value, since php does not support multiple
+  arguments to `__invoke()`.
 
 ### How it works
 
@@ -122,20 +140,6 @@ $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
 See `examples/`.
-
-### TODO
-
-* `[]` for band extract should be easy
-
-* can we overload `()` for `getpoint`? unclear
-
-* add phpDoc comments 
-
-  need comments for magic properties
-
-  extra phpDoc comments for all magic methods, use py to generate
-
-* exceptions? logging?
 
 ### links
 
