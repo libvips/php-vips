@@ -19,15 +19,20 @@ This is an experimental PHP binding for libvips.
 ?>
 ```
 
-### Missing
+### TODO
+
+Broken:
+
+* phpDoc is not working for some reason.
 
 Some features that other vips bindings have are not yet implemented:
+
+* Not tried to make a proper package or namespace it yet. Does not 
+  install `vips.php`.
 
 * You can't assign to an array index to change an image band.
 
 * In-place operations, like `circle`, are not yet supported.
-
-* No phpDoc yet.
 
 * No exceptions yet.
 
@@ -40,7 +45,7 @@ Some things will never be done:
 
 ### How it works
 
-`vips.c` defines a simple but ugly route to call any libvips operation from PHP.
+`vips.c` defines a simple but ugly way to call any libvips operation from PHP.
 It uses libvips' own introspection facilities and does not depend on anything
 else (so no gobject-introspection, for example). It's a fairly short 1,600
 lines of C.
