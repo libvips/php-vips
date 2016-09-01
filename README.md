@@ -125,13 +125,6 @@ See `examples/`.
 
 ### TODO
 
-* for `__set`, init the gvalue by reading any existing field, then only
-  guessing if there is nothing there
-
-* constant expansion ... needs more testing
- 
-  also special `.ifthenelse()` method
-
 * add phpDoc comments 
 
   need comments for magic properties

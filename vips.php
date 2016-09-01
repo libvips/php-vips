@@ -277,7 +277,8 @@ class VImage
 				array_merge([$other], $options));
 		}
 		else {
-			return self::remainder_const($this, $other, $options);
+			return self::call("remainder_const", $this, 
+				array_merge([$other], $options));
 		}
 	}
 
@@ -390,7 +391,8 @@ class VImage
 	}
 
 	/* bandrank will appear as a static class member, as 
-	 * self::bandrank([a, b, c]), but it's handy to have as  method as well.
+	 * VImage::bandrank([a, b, c]), but it's better as an instance method.
+	 * 
 	 * We need to define this by hand.
 	 */
 	public function bandrank($other, $options = [])
@@ -401,7 +403,8 @@ class VImage
 			$other = [$other];
 		}
 
-		return self::bandrank([$this] + $other, $options);
+		return self::call("bandrank", NULL, 
+			array_merge([array_merge([$this], $other)], $options));
 	}
 
 	/* Position of max is awkward with plain self::max.
