@@ -1,20 +1,33 @@
 <?php
-
-/* This file tries to make a nice API over the raw `vips_call` thing defined 
- * in C.
+/**
+ * php-vips is a php binding for the vips image processing library.
  */
 
 if (!extension_loaded("vips")) {
 	dl('vips.' . PHP_SHLIB_SUFFIX);
 }
 
+/**
+ * The VImage class represents an image. 
+ */
 class VImage implements ArrayAccess
 {
 	/* The resource for the underlying VipsImage.
 	 */
 	private $image;
 
-	function __construct($image) 
+	/**
+	 * Wrap a VImage around an underlying vips resource. 
+	 *
+	 * Don't call this yourself, users should stick to (for example)
+	 * VImage::new_from_file().
+	 *
+	 * @param resource $image The underlying vips image resource that this
+	 * 	class should wrap.
+	 *
+	 * @return a new VImage.
+	 */
+	public function __construct($image) 
 	{
 		$this->image = $image;
 	}
@@ -130,6 +143,14 @@ class VImage implements ArrayAccess
 		return $result;
 	}
 
+	/** 
+	 * Create a new VImage from a file on disc.
+	 *
+	 * @param string $filename The file to open.
+	 * @param array $options Any options to pass on to the load operation.
+	 *
+	 * @return A new VImage.
+	 */
 	public static function new_from_file($filename, $options = []) 
 	{
 		$options = self::unwrap($options);
@@ -137,6 +158,16 @@ class VImage implements ArrayAccess
 		return self::wrap($result);
 	}
 
+	/** 
+	 * Create a new VImage from a compressed image held as a string. 
+	 *
+	 * @param string $buffer The formatted image to open.
+	 * @param string $option_string Any text-style options to pass to the
+	 * selected loader. 
+	 * @param array $options Any options to pass on to the load operation.
+	 *
+	 * @return A new VImage.
+	 */
 	public static function new_from_buffer($buffer, 
 		$option_string = "", $options = []) 
 	{
@@ -145,12 +176,34 @@ class VImage implements ArrayAccess
 		return self::wrap($result);
 	}
 
+	/** 
+	 * Create a new VImage from a php array. 
+	 *
+	 * 2D arrays become 2D images. 1D arrays become 2D images with height 1. 
+	 *
+	 * @param array $array The array to make the image from. 
+	 * @param double $scale The "scale" metadata item. Useful for integer
+	 * convolution masks.
+	 * @param double $offset The "offset" metadata item. Useful for integer
+	 * convolution masks.
+	 *
+	 * @return A new VImage.
+	 */
 	public static function new_from_array($array, $scale = 1, $offset = 0) 
 	{
 		$result = vips_image_new_from_array($array, $scale, $offset);
 		return self::wrap($result);
 	}
 
+	/** 
+	 * Write an image to a file. 
+	 *
+	 * @param string $filename The file to write the image to.
+	 * @param array $options Any options to pass on to the selected save 
+	 * operation.
+	 *
+	 * @return bool TRUE for success and FALSE for failure.
+	 */
 	public function write_to_file($filename, $options = []) 
 	{
 		$options = self::unwrap($options);
@@ -158,6 +211,15 @@ class VImage implements ArrayAccess
 		return self::wrap($result);
 	}
 
+	/** 
+	 * Write an image to a formatted string. 
+	 *
+	 * @param string $suffix The file type suffix, eg. ".jpg".
+	 * @param array $options Any options to pass on to the selected save 
+	 * operation.
+	 *
+	 * @return string The formatted image. 
+	 */
 	public function write_to_buffer($suffix, $options = []) 
 	{
 		$options = self::unwrap($options);
@@ -165,17 +227,42 @@ class VImage implements ArrayAccess
 		return self::wrap($result);
 	}
 
+	/**
+	 * Get any property from the underlying image.
+	 * 
+	 * @param string $name The property name. 
+	 *
+	 * @return mixed
+	 */
 	public function __get($name) 
 	{
 		$result = vips_image_get($this->image, $name);
 		return self::wrap($result);
 	}
 
+	/**
+	 * Set any property on the underlying image.
+	 * 
+	 * @param string $name The property name. 
+	 * @param mixed $value The value to set for this property.
+	 *
+	 * @return void
+	 */
 	public function __set($name, $value) 
 	{
 		vips_image_set($this->image, $name, $value);
 	}
 
+	/**
+	 * Call any vips operation.
+	 *
+	 * @param string $name The operation name. 
+	 * @param VImage $instance The instance this operation is being invoked
+	 * from.
+	 * @param mixed[] $arguments An array of arguments to pass to the operation.
+	 *
+	 * @return mixed The result(s) of the operation. 
+	 */
 	public static function call($name, $instance, $arguments) 
 	{
 		/*
@@ -208,11 +295,17 @@ class VImage implements ArrayAccess
 		}
 	}
 
+	/**
+	 * Call any vips operation as an instance method.
+	 */
 	public function __call($name, $arguments) 
 	{
 		return self::call($name, $this, $arguments); 
 	}
 
+	/**
+	 * Call any vips operation as a class method.
+	 */
 	public static function __callStatic($name, $arguments) 
 	{
 		return self::call($name, NULL, $arguments); 
@@ -245,6 +338,15 @@ class VImage implements ArrayAccess
 	 * speedup.
 	 */
 
+	/**
+	 * Add to this image.
+	 *
+	 * @param int|double|int[]|double[]|VImage $other The thing to add to this
+	 * image.
+	 * @param array $options Any options to pass on to the add operation.
+	 *
+	 * @return VImage A new image.
+	 */
 	public function add($other, $options = [])
 	{
 		if ($other instanceof VImage) {
@@ -263,7 +365,7 @@ class VImage implements ArrayAccess
 		}
 		else {
 			$other = map_numeric($other, function ($value) {
-					return -1 * $value;
+				return -1 * $value;
 			});
 			return self::linear($this, 1, $other, $options);
 		}
@@ -287,7 +389,7 @@ class VImage implements ArrayAccess
 		}
 		else {
 			$other = map_numeric($other, function ($value) {
-					return $value ** -1;
+				return $value ** -1;
 			});
 			return self::linear($this, $other, 0, $options);
 		}

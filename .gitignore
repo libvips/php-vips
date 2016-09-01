@@ -7,6 +7,7 @@ acinclude.m4
 aclocal.m4
 autom4te.cache
 build
+docs
 config.guess
 config.h
 config.h.in

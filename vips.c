@@ -1,3 +1,7 @@
+/**
+ * C layer of the php-vips binding.
+ */
+
 /* Uncomment for some logging.
 #define VIPS_DEBUG
  */

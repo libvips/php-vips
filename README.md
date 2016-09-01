@@ -58,7 +58,7 @@ I used 7.0.10 and configured with:
 
 ```
 $ ./configure --prefix=/home/john/vips --enable-debug --enable-maintainer-zts \
-	--enable-cgi --enable-cli --with-readline
+	--enable-cgi --enable-cli --with-readline --with-openssl
 ```
 
 ### Regenerate build system
@@ -141,7 +141,7 @@ $ ./try1.php ~/pics/k2.jpg x.tif
 
 See `examples/`.
 
-### links
+### Links
 
 http://php.net/manual/en/internals2.php
 
@@ -151,3 +151,20 @@ https://devzone.zend.com/317/extension-writing-part-ii-parameters-arrays-and-zva
 
 https://devzone.zend.com/446/extension-writing-part-iii-resources/
 
+### Documentation
+
+```
+$ pear channel-discover pear.phpdoc.org
+$ pear install phpdoc/phpDocumentor
+$ phpdoc 
+```
+
+### imagick
+
+```
+$ pecl install imagick
+$ php -a
+Interactive mode enabled
+php > dl('imagick.' . PHP_SHLIB_SUFFIX);
+php > $im = new Imagick();
+```

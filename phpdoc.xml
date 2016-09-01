@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+
+    <parser>
+        <target>docs</target>
+    </parser>
+
+    <transformer>
+        <target>docs</target>
+    </transformer>
+
+    <files>
+        <file>vips.php</file>
+        <file>vips.c</file>
+    </files>
+
+</phpdocumentor>
