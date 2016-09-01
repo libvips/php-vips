@@ -133,8 +133,6 @@ See `examples/`.
 
 * tests for at least some of the enum expansions
 
-* tests for `maxpos`, `bandjoin` etc.
-
 * `[]` for band extract should be easy
 
 * can we overload `()` for `getpoint`? unclear
