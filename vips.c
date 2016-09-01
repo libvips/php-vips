@@ -416,18 +416,30 @@ vips_php_zval_to_gval(VipsImage *match_image, zval *zvalue, GValue *gvalue)
 				int n;
 				int i;
 
-				convert_to_array_ex(zvalue);
-				n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				if (Z_TYPE_P(zvalue) == IS_ARRAY) {
+					n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				}
+				else {
+					n = 1;
+				}
+
 				vips_value_set_array_int(gvalue, NULL, n);
 				arr = vips_value_get_array_int(gvalue, NULL);
-				for (i = 0; i < n; i++) {
-					zval *ele;
 
-					if ((ele = 
-						zend_hash_index_find(Z_ARRVAL_P(zvalue), i)) != NULL) {
-						convert_to_long_ex(ele);
-						arr[i] = zval_get_long(ele);
+				if (Z_TYPE_P(zvalue) == IS_ARRAY) {
+					for (i = 0; i < n; i++) {
+						zval *ele;
+
+						if ((ele = zend_hash_index_find(Z_ARRVAL_P(zvalue), 
+							i)) != NULL) {
+							convert_to_long_ex(ele);
+							arr[i] = zval_get_long(ele);
+						}
 					}
+				}
+				else {
+					convert_to_long_ex(zvalue);
+					arr[0] = zval_get_long(zvalue);
 				}
 			}
 			else if (type == VIPS_TYPE_ARRAY_DOUBLE) {
@@ -435,38 +447,67 @@ vips_php_zval_to_gval(VipsImage *match_image, zval *zvalue, GValue *gvalue)
 				int n;
 				int i;
 
-				convert_to_array_ex(zvalue);
-				n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				if (Z_TYPE_P(zvalue) == IS_ARRAY) {
+					n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				}
+				else {
+					n = 1;
+				}
+
 				vips_value_set_array_double(gvalue, NULL, n);
 				arr = vips_value_get_array_double(gvalue, NULL);
-				for (i = 0; i < n; i++) {
-					zval *ele;
 
-					if ((ele = 
-						zend_hash_index_find(Z_ARRVAL_P(zvalue), i)) != NULL) {
-						convert_to_double_ex(ele);
-						arr[i] = zval_get_double(ele);
+				if (Z_TYPE_P(zvalue) == IS_ARRAY) {
+					for (i = 0; i < n; i++) {
+						zval *ele;
+
+						if ((ele = zend_hash_index_find(Z_ARRVAL_P(zvalue), 
+							i)) != NULL) {
+							convert_to_double_ex(ele);
+							arr[i] = zval_get_double(ele);
+						}
 					}
+				}
+				else {
+					convert_to_double_ex(zvalue);
+					arr[0] = zval_get_double(zvalue);
 				}
 			}
 			else if (type == VIPS_TYPE_ARRAY_IMAGE) {
 				VipsImage **arr;
+				VipsImage *image;
 				int n;
 				int i;
 
-				convert_to_array_ex(zvalue);
-				n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				if (Z_TYPE_P(zvalue) == IS_ARRAY) {
+					n = zend_hash_num_elements(Z_ARRVAL_P(zvalue));
+				}
+				else {
+					n = 1;
+				}
+
 				vips_value_set_array_image(gvalue, n);
 				arr = vips_value_get_array_image(gvalue, NULL);
-				for (i = 0; i < n; i++) {
-					zval *ele;
-					VipsImage *image;
 
-					if ((ele = 
-						zend_hash_index_find(Z_ARRVAL_P(zvalue), i)) != NULL &&
-						(image = (VipsImage *) zend_fetch_resource(Z_RES_P(ele),
+				if (Z_TYPE_P(zvalue) == IS_ARRAY) {
+					for (i = 0; i < n; i++) {
+						zval *ele;
+
+						if ((ele = zend_hash_index_find(Z_ARRVAL_P(zvalue), 
+							i)) != NULL &&
+							(image = (VipsImage *) 
+								zend_fetch_resource(Z_RES_P(ele),
+									"GObject", le_gobject)) != NULL) {
+							arr[i] = image;
+							g_object_ref(image);
+						}
+					}
+				}
+				else {
+					if( (image = (VipsImage *) 
+						zend_fetch_resource(Z_RES_P(zvalue),
 							"GObject", le_gobject)) != NULL) {
-						arr[i] = image;
+						arr[0] = image;
 						g_object_ref(image);
 					}
 				}
@@ -938,6 +979,7 @@ vips_php_call_array(const char *operation_name, zval *instance,
 
 /* {{{ proto mixed vips_php_call(string operation_name, resource instance [, more])
    Call any vips operation */
+
 PHP_FUNCTION(vips_call)
 {
 	int argc;
@@ -945,6 +987,7 @@ PHP_FUNCTION(vips_call)
 	char *operation_name;
 	size_t operation_name_len;
 	zval *instance;
+	int i;
 
 	VIPS_DEBUG_MSG("vips_call:\n");
 
@@ -979,7 +1022,6 @@ PHP_FUNCTION(vips_call)
 	}
 
 	efree(argv);
-
 }
 /* }}} */
 
@@ -1011,8 +1053,8 @@ PHP_FUNCTION(vips_image_new_from_file)
 		return;
 	}
 
-	argc = 1;
 	ZVAL_STRING(&argv[0], filename);
+	argc = 1;
 	if (options) {
 		ZVAL_ARR(&argv[1], Z_ARR_P(options));
 		argc += 1;
@@ -1021,6 +1063,7 @@ PHP_FUNCTION(vips_image_new_from_file)
 	if (vips_php_call_array(operation_name, NULL, 
 		option_string, argc, argv, return_value)) {
 		error_vips();
+		zval_dtor(&argv[0]);
 		return;
 	}
 
@@ -1056,8 +1099,8 @@ PHP_FUNCTION(vips_image_new_from_buffer)
 		return;
 	}
 
-	argc = 1;
 	ZVAL_STRINGL(&argv[0], buffer, buffer_len);
+	argc = 1;
 	if (options) {
 		ZVAL_ARR(&argv[1], Z_ARR_P(options));
 		argc += 1;
@@ -1066,6 +1109,7 @@ PHP_FUNCTION(vips_image_new_from_buffer)
 	if (vips_php_call_array(operation_name, NULL, 
 		option_string, argc, argv, return_value)) {
 		error_vips();
+		zval_dtor(&argv[0]);
 		return;
 	}
 

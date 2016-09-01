@@ -125,8 +125,6 @@ See `examples/`.
 
 ### TODO
 
-* `029.phpt` is reporting a memleak
-
 * constant expansion ... needs more testing
  
   also special `.ifthenelse()` method

@@ -1,8 +1,0 @@
-001+ pass[Fri Aug 26 16:25:58 2016]  Script:  '/home/john/GIT/php-vips/tests/029.php'
-001- pass
-002+ /home/john/package/php/php-7.0.10/Zend/zend_hash.c(135) :  Freeing 0x7FBB57861CC0 (264 bytes), script=/home/john/GIT/php-vips/tests/029.php
-003+ Last leak repeated 1 time
-004+ [Fri Aug 26 16:25:58 2016]  Script:  '/home/john/GIT/php-vips/tests/029.php'
-005+ /home/john/package/php/php-7.0.10/Zend/zend_operators.c(578) :  Freeing 0x7FBB578AD480 (56 bytes), script=/home/john/GIT/php-vips/tests/029.php
-006+ Last leak repeated 1 time
-007+ === Total 4 memory leaks detected ===
