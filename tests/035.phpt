@@ -1,5 +1,5 @@
 --TEST--
-__set and __get work
+VImage::ifthenelse(const, const) works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
@@ -9,10 +9,11 @@ __set and __get work
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
   $image = VImage::new_from_file($filename);
 
-  $image->poop = "banana";
-  $value = $image->poop;
+  $image = $image->more(34)->ifthenelse(128, 255);
 
-  if ($value == "banana") {
+  $pixel = $image->getpoint(0, 0);
+
+  if ($pixel == [128, 128, 255]) { 
 	echo "pass";
   }
 ?>

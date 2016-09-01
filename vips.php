@@ -73,7 +73,7 @@ class VImage
 			$result = $pixel->embed(0, 0, 
 				$match_image->width, $match_image->height,
 				["extend" => "copy"]);
-			echo "imageize: FIXME must also set at least interpretation\n";
+			$result->interpretation = $match_image->interpretation; 
 		}
 
 		return $result;
@@ -169,6 +169,11 @@ class VImage
 	{
 		$result = vips_image_get($this->image, $name);
 		return self::wrap($result);
+	}
+
+	public function __set($name, $value) 
+	{
+		vips_image_set($this->image, $name, $value);
 	}
 
 	public static function call($name, $instance, $arguments) 

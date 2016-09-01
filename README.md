@@ -125,9 +125,8 @@ See `examples/`.
 
 ### TODO
 
-* `__set` for updating exif
-
-  `imageize` in vips.php needs to use this to set interpretation
+* for `__set`, init the gvalue by reading any existing field, then only
+  guessing if there is nothing there
 
 * constant expansion ... needs more testing
  

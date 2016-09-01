@@ -1,3 +1,8 @@
+--TEST--
+VImage::ifthenelse(image, const) works
+--SKIPIF--
+<?php if (!extension_loaded("vips")) print "skip"; ?>
+--FILE--
 <?php 
   include 'vips.php';
 
@@ -12,3 +17,5 @@
 	echo "pass";
   }
 ?>
+--EXPECT--
+pass

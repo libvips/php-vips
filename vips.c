@@ -311,9 +311,9 @@ imageize(VipsImage *match_image, zval *constant)
 
 /* Set a gvalue from a php value. 
  *
- * Set the type of the gvalue before calling this to hint what kind of gvalue 
- * to make. For example if type is an enum, a zval string will be used to 
- * look up the enum nick.
+ * You must set the type of the gvalue before calling this to hint what kind 
+ * of gvalue to make. For example if type is an enum, a zval string will be 
+ * used to look up the enum nick.
  *
  * If non-NULL, @match_image is used to turn constants into images. 
  */
@@ -1304,6 +1304,94 @@ PHP_FUNCTION(vips_image_get_typeof)
 }
 /* }}} */
 
+/* {{{ proto vips_image_set(resource image, string field, mixed value)
+   Set field on image */
+PHP_FUNCTION(vips_image_set)
+{
+	zval *im;
+	char *field_name;
+	size_t field_name_len;
+	zval *zvalue;
+	VipsImage *image;
+	GType type;
+	GValue gvalue = { 0 };
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "rsz", 
+		&im, &field_name, &field_name_len, &zvalue) == FAILURE) {
+		return;
+	}
+
+	if ((image = (VipsImage *)zend_fetch_resource(Z_RES_P(im), 
+		"GObject", le_gobject)) == NULL) {
+		return;
+	}
+
+	type = vips_image_get_typeof(image, field_name); 
+
+	/* If the type is not set, guess a default.
+	 */
+	if (type == 0) {
+		zval *ele;
+
+		type = 0;
+
+		switch (Z_TYPE_P(zvalue)) {
+			case IS_ARRAY:
+				if ((ele = zend_hash_index_find(Z_ARRVAL_P(zvalue), 
+					0)) != NULL) {
+					switch (Z_TYPE_P(ele)) {
+						case IS_RESOURCE:
+							type = VIPS_TYPE_ARRAY_IMAGE;
+							break;
+
+						case IS_LONG:
+							type = VIPS_TYPE_ARRAY_INT;
+							break;
+
+						case IS_DOUBLE:
+							type = VIPS_TYPE_ARRAY_DOUBLE;
+							break;
+
+						default:
+							break;
+					}
+				}
+				break;
+
+			case IS_RESOURCE:
+				type = VIPS_TYPE_IMAGE;
+				break;
+
+			case IS_LONG:
+				type = G_TYPE_INT;
+				break;
+
+			case IS_DOUBLE:
+				type = G_TYPE_DOUBLE;
+				break;
+
+			case IS_STRING:
+				type = VIPS_TYPE_REF_STRING;
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	g_value_init(&gvalue, type);
+
+	if (vips_php_zval_to_gval(NULL, zvalue, &gvalue)) {
+		return;
+	}
+
+	vips_image_set(image, field_name, &gvalue);
+
+	g_value_unset(&gvalue);
+
+}
+/* }}} */
+
 /* {{{ php_vips_init_globals
  */
 /* Uncomment this function if you have INI entries
@@ -1440,6 +1528,12 @@ ZEND_BEGIN_ARG_INFO(arginfo_vips_image_get_typeof, 0)
 	ZEND_ARG_INFO(0, field)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO(arginfo_vips_image_set, 0)
+	ZEND_ARG_INFO(0, image)
+	ZEND_ARG_INFO(0, field)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
+
 /* {{{ vips_functions[]
  *
  * Every user visible function must have an entry in vips_functions[].
@@ -1453,6 +1547,7 @@ const zend_function_entry vips_functions[] = {
 	PHP_FE(vips_call, arginfo_vips_call)
 	PHP_FE(vips_image_get, arginfo_vips_image_get)
 	PHP_FE(vips_image_get_typeof, arginfo_vips_image_get_typeof)
+	PHP_FE(vips_image_set, arginfo_vips_image_set)
 
 	PHP_FE_END	/* Must be the last line in vips_functions[] */
 };
