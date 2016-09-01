@@ -1,5 +1,5 @@
 --TEST--
-VImage::add(const) works
+VImage::bandjoin(const) works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
@@ -7,12 +7,11 @@ VImage::add(const) works
   include 'vips.php';
 
   $image = VImage::new_from_array([[1, 2, 3], [4, 5, 6]]);
-  $image = $image->add(1);
+  $imagea = $image->bandjoin(255);
 
-  $pixel = $image->crop(0, 0, 1, 1);
-  $pixel = $pixel->avg();
+  $pixel = $imagea->getpoint(0, 0);
 
-  if ($pixel == 2) { 
+  if ($pixel == [1, 255]) { 
 	echo "pass";
   }
 ?>

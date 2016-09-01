@@ -36,19 +36,43 @@ class VImage
 		return $value;
 	}
 
+	/* Is a $value a rectangular 2D array?
+	 */
+	static private function is_2D($value)
+	{
+		if (!is_array($value)) {
+			return FALSE;
+		}
+
+		$height = count($value);
+		if (!is_array($value[0])) {
+			return FALSE;
+		}
+		$width = count($value[0]);
+
+		foreach ($array as $row) {
+			if (!is_array($row) ||
+				count($row) != $width) { 
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}
+
 	/* Turn a constant (eg. 1, "12", [1, 2, 3], [[1]]) into an image using
 	 * match_image as a guide.
 	 */
 	private static function imageize($match_image, $value)
 	{
-		if (is_2D($value)) {
+		if (self::is_2D($value)) {
 			$result = self::new_from_array($value);
 		}
 		else {
 			$pixel = self::black(1, 1)->add($value)->cast($match_image->format);
 			$result = $pixel->embed(0, 0, 
 				$match_image->width, $match_image->height,
-				["expand" => "copy"]);
+				["extend" => "copy"]);
 			echo "imageize: FIXME must also set at least interpretation\n";
 		}
 
@@ -163,6 +187,22 @@ class VImage
 		return self::wrap($result);
 	}
 
+	/* Handy for things like self::more. Call a 2-ary vips operator like
+	 * "more", but if the arg is not an image (ie. it's a constant), call
+	 * "more_const" instead.
+	 */
+	private function call_enum($other, $base, $op, $options = [])
+	{
+		if ($other instanceof VImage) {
+			return self::call($base, $this, 
+				array_merge([$other, $op], $options));
+		}
+		else {
+			return self::call($base . "_const", $this, 
+				array_merge([$op, $other], $options));
+		}
+	}
+
 	public function __call($name, $arguments) 
 	{
 		return self::call($name, $this, $arguments); 
@@ -180,8 +220,6 @@ class VImage
 	public function add($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			/* We can't use self::add, that would recurse.
-			 */
 			return self::call("add", $this, array_merge([$other], $options));
 		}
 		else {
@@ -192,8 +230,6 @@ class VImage
 	public function subtract($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			/* We can't use self::subtract, that would recurse.
-			 */
 			return self::call("subtract", $this, 
 				array_merge([$other], $options));
 		}
@@ -201,36 +237,108 @@ class VImage
 			$other = map_numeric($other, function ($value) {
 					return -1 * $value;
 			});
-			return self::linear($this, 1, $other);
+			return self::linear($this, 1, $other, $options);
 		}
 	}
 
 	public function multiply($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			/* We can't use self::multiply, that would recurse.
-			 */
 			return self::call("multiply", $this, 
 				array_merge([$other], $options));
 		}
 		else {
-			return self::linear($this, $other, 0);
+			return self::linear($this, $other, 0, $options);
 		}
 	}
 
 	public function divide($other, $options = [])
 	{
 		if ($other instanceof VImage) {
-			/* We can't use self::divide, that would recurse.
-			 */
 			return self::call("divide", $this, array_merge([$other], $options));
 		}
 		else {
 			$other = map_numeric($other, function ($value) {
 					return $value ** -1;
 			});
-			return self::linear($this, $other, 0);
+			return self::linear($this, $other, 0, $options);
 		}
+	}
+
+	public function remainder($other, $options = [])
+	{
+		if ($other instanceof VImage) {
+			return self::call("remainder", $this, 
+				array_merge([$other], $options));
+		}
+		else {
+			return self::remainder_const($this, $other, $options);
+		}
+	}
+
+	public function pow($other, $options = [])
+	{
+		return self::call_enum($other, "math2", "pow", $options);
+	}
+
+	public function wop($other, $options = [])
+	{
+		return self::call_enum($other, "math2", "wop", $options);
+	}
+
+	public function lshift($other, $options = [])
+	{
+		return self::call_enum($other, "boolean", "lshift", $options);
+	}
+
+	public function rshift($other, $options = [])
+	{
+		return self::call_enum($other, "boolean", "rshift", $options);
+	}
+
+	public function and($other, $options = [])
+	{
+		return self::call_enum($other, "boolean", "and", $options);
+	}
+
+	public function or($other, $options = [])
+	{
+		return self::call_enum($other, "boolean", "or", $options);
+	}
+
+	public function eor($other, $options = [])
+	{
+		return self::call_enum($other, "boolean", "eor", $options);
+	}
+
+	public function more($other, $options = [])
+	{
+		return self::call_enum($other, "relational", "more", $options);
+	}
+
+	public function moreeq($other, $options = [])
+	{
+		return self::call_enum($other, "relational", "moreeq", $options);
+	}
+
+	public function less($other, $options = [])
+	{
+		return self::call_enum($other, "relational", "less", $options);
+	}
+
+	public function lesseq($other, $options = [])
+	{
+		return self::call_enum($other, "relational", "lesseq", $options);
+	}
+
+	public function equal($other, $options = [])
+	{
+		return self::call_enum($other, "relational", "equal", $options);
+	}
+
+	public function noteq($other, $options = [])
+	{
+		return self::call_enum($other, "relational", "noteq", $options);
 	}
 
 	/* bandjoin can use bandjoin_const if all of $other are numeric. 
@@ -315,30 +423,6 @@ class VImage
 		return [$out, $x, $y];
 	}
 
-	/* Is a $value a rectangular 2D array?
-	 */
-	static private function is_2D($value)
-	{
-		if (!is_array($value)) {
-			return FALSE;
-		}
-
-		$height = count($value);
-		if (!is_array($value[0])) {
-			return FALSE;
-		}
-		$width = count($value[0]);
-
-		foreach ($array as $row) {
-			if (!is_array($row) ||
-				count($row) != $width) { 
-				return FALSE;
-			}
-		}
-
-		return TRUE;
-	}
-
 	/* We need different imageize rules for this. We need $then and $else to
 	 * match each other first, and only if they are both constants do we
 	 * match to $this.
@@ -346,7 +430,7 @@ class VImage
 	public function ifthenelse($then, $else, $options = [])
 	{
 		$match_image = NULL;
-		foreach ([$then, $else, $self] as $item) {
+		foreach ([$then, $else, $this] as $item) {
 			if ($item instanceof VImage) {
 				$match_image = $item;
 				break;
@@ -361,7 +445,8 @@ class VImage
 			$else = self::imageize($match_image, $else);
 		}
 
-		self::ifthenelse($this, $then, $else, $options);
+		return self::call("ifthenelse", $this, 
+			array_merge([$then, $else], $options));
 	}
 
 	# Return the largest integral value not greater than the argument.

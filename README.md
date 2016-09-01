@@ -125,11 +125,13 @@ See `examples/`.
 
 ### TODO
 
+* `__set` for updating exif
+
+  `imageize` in vips.php needs to use this to set interpretation
+
 * constant expansion ... needs more testing
  
   also special `.ifthenelse()` method
-
-* `this->add(other)` with const other needs testing
 
 * add phpDoc comments 
 
@@ -141,13 +143,9 @@ See `examples/`.
 
 * tests for `maxpos`, `bandjoin` etc.
 
-* `__set` for updating exif
-
-  `imageize` in vips.php needs to use this to set interpretation
-
 * `[]` for band extract should be easy
 
-* can we overload `()` for pixel extract? unclear
+* can we overload `()` for `getpoint`? unclear
 
 * exceptions? logging?
 
