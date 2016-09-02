@@ -1,21 +1,34 @@
-# Experimental PHP binding for libvips 
+# PHP binding for libvips 
 
-This is an experimental PHP binding for libvips. 
+This package lets you use the libvips image processing library from PHP. 
+
+`vips` is fast and it can work without needing to have the 
+entire image loaded into memory. Programs that use `vips` don't
+manipulate images directly, instead they create pipelines of image processing
+operations building on a source image. When the end of the pipe is connected
+to a destination, the whole pipline executes at once, streaming the image
+in parallel from source to destination a section at a time. 
+
+See also [benchmarks at the official libvips
+website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
+There's a handy blog post explaining [how libvips opens
+files](http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html)
+which gives some more background.
 
 ### Example
 
 ```php
 #!/usr/bin/env php
 <?php
-	include 'vips.php';
+include 'vips.php';
 
-	$image = VImage::new_from_file($argv[1]);
+$image = VImage::new_from_file($argv[1]);
 
-	echo "width = ", $image->width, "\n";
+echo "width = ", $image->width, "\n";
 
-	$image = $image->invert();
+$image = $image->invert();
 
-	$image->write_to_file($argv[2]);
+$image->write_to_file($argv[2]);
 ?>
 ```
 
