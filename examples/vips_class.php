@@ -2,11 +2,11 @@
 <?php
 	include '../vips.php';
 
-	$image = Vips\Image::new_from_file($argv[1]); 
+	$image = Vips\Image::newFromFile($argv[1]); 
 
 	echo "width = ", $image->width, "\n";
 
 	$image = $image->invert();
 
-	$image->write_to_file($argv[2]);
+	$image->writeToFile($argv[2]);
 ?>

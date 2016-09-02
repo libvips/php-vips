@@ -67,7 +67,6 @@ For example:
 
 ```
 $image->writeToFile("fred.jpg", ["Q" => 90]);
-$image = $image->embed("fred.jpg", ["Q" => 90]);
 ```
 
 There are around 300 operations in the library, see the vips docs for an
@@ -158,15 +157,15 @@ Try:
 ```php
 #!/usr/bin/env php
 <?php
-	include 'vips.php';
+include 'vips.php';
 
-	$image = Vips\Image::new_from_file($argv[1]); 
+$image = Vips\Image::newFromFile($argv[1]); 
 
-	echo "width = ", $image->width, "\n";
+echo "width = ", $image->width, "\n";
 
-	$image = $image->invert();
+$image = $image->invert();
 
-	$image->write_to_file($argv[2]);
+$image->writeToFile($argv[2]);
 ?>
 ```
 
