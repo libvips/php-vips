@@ -6,7 +6,7 @@ Vips\Image::maxpos works
 <?php 
   include 'vips.php';
 
-  $image = Vips\Image::new_from_array([[1, 2, 3], [4, 5, 6]]);
+  $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
 
   $result = $image->maxpos();
 

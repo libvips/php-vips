@@ -8,7 +8,7 @@ Vips\Image::__call works
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
 
-  $image = Vips\Image::new_from_file($filename);
+  $image = Vips\Image::newFromFile($filename);
   $image = $image->embed(10, 20, 3000, 2000, ["extend" => "copy"]);
 
   if ($image->width == 3000) {

@@ -63,7 +63,7 @@ class Image implements \ArrayAccess
      * Wrap a Vips\Image around an underlying vips resource. 
      *
      * Don't call this yourself, users should stick to (for example)
-     * Vips\Image::new_from_file().
+     * Vips\Image::newFromFile().
      *
      * @param resource $image The underlying vips image resource that this
      *  class should wrap.
@@ -120,7 +120,7 @@ class Image implements \ArrayAccess
     private static function imageize($match_image, $value)
     {
         if (self::is_2D($value)) {
-            $result = self::new_from_array($value);
+            $result = self::newFromArray($value);
         }
         else {
             $pixel = self::black(1, 1)->add($value)->cast($match_image->format);
@@ -192,7 +192,7 @@ class Image implements \ArrayAccess
      *
      * @return A new Vips\Image.
      */
-    public static function new_from_file($filename, $options = []) 
+    public static function newFromFile($filename, $options = []) 
     {
         $options = self::unwrap($options);
         $result = vips_image_new_from_file($filename, $options);
@@ -209,7 +209,7 @@ class Image implements \ArrayAccess
      *
      * @return A new Vips\Image.
      */
-    public static function new_from_buffer($buffer, 
+    public static function newFromBuffer($buffer, 
         $option_string = "", $options = []) 
     {
         $options = self::unwrap($options);
@@ -230,7 +230,7 @@ class Image implements \ArrayAccess
      *
      * @return A new Vips\Image.
      */
-    public static function new_from_array($array, $scale = 1, $offset = 0) 
+    public static function newFromArray($array, $scale = 1, $offset = 0) 
     {
         $result = vips_image_new_from_array($array, $scale, $offset);
         return self::wrap($result);
@@ -245,7 +245,7 @@ class Image implements \ArrayAccess
      *
      * @return bool TRUE for success and FALSE for failure.
      */
-    public function write_to_file($filename, $options = []) 
+    public function writeToFile($filename, $options = []) 
     {
         $options = self::unwrap($options);
         $result = vips_image_write_to_file($this->image, $filename, $options);
@@ -261,7 +261,7 @@ class Image implements \ArrayAccess
      *
      * @return string The formatted image. 
      */
-    public function write_to_buffer($suffix, $options = []) 
+    public function writeToBuffer($suffix, $options = []) 
     {
         $options = self::unwrap($options);
         $result = vips_image_write_to_buffer($this->image, $suffix, $options);
@@ -488,7 +488,7 @@ class Image implements \ArrayAccess
         return self::call_enum($other, "relational", "more", $options);
     }
 
-    public function moreeq($other, $options = [])
+    public function moreEq($other, $options = [])
     {
         return self::call_enum($other, "relational", "moreeq", $options);
     }
@@ -498,7 +498,7 @@ class Image implements \ArrayAccess
         return self::call_enum($other, "relational", "less", $options);
     }
 
-    public function lesseq($other, $options = [])
+    public function lessEq($other, $options = [])
     {
         return self::call_enum($other, "relational", "lesseq", $options);
     }
@@ -508,7 +508,7 @@ class Image implements \ArrayAccess
         return self::call_enum($other, "relational", "equal", $options);
     }
 
-    public function noteq($other, $options = [])
+    public function notEq($other, $options = [])
     {
         return self::call_enum($other, "relational", "noteq", $options);
     }

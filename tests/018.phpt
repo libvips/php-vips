@@ -6,6 +6,6 @@ can import Vips\Image class
 <?php 
   include 'vips.php';
 
-  $image = Vips\Image::new_from_array([1, 2, 3]);
+  $image = Vips\Image::newFromArray([1, 2, 3]);
 ?>
 --EXPECT--

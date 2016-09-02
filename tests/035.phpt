@@ -7,7 +7,7 @@ Vips\Image::ifthenelse(const, const) works
   include 'vips.php';
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-  $image = Vips\Image::new_from_file($filename);
+  $image = Vips\Image::newFromFile($filename);
 
   $image = $image->more(34)->ifthenelse(128, 255);
 

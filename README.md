@@ -22,39 +22,58 @@ which gives some more background.
 <?php
 include 'vips.php';
 
-$image = Vips\Image::new_from_file($argv[1]);
+$image = Vips\Image::newFromFile($argv[1]);
 
 echo "width = ", $image->width, "\n";
 
 $image = $image->invert();
 
-$image->write_to_file($argv[2]);
+$image->writeToFile($argv[2]);
 ?>
 ```
 
-### TODO
+Almost all methods return a new image for the result, so you can chain them.
+For example:
 
-Broken:
+```
+$image = $image->more(12)->ifThenElse(255, $image);
+```
 
-* phpDoc is not working for some reason.
+will make a mask of pixels greater than 12, then use the mask to set pixels to
+either 255 or the original image.
 
-Some features that other vips bindings have are not yet implemented:
+You use long, double, array and image as parameters. For example:
 
-* Not tried to make a proper package or namespace it yet. Does not 
-  install `vips.php`.
+```
+$image = $image->add(2);
+```
 
-* You can't assign to an array index to change an image band.
+to add two to every band element, or:
 
-* In-place operations, like `circle`, are not yet supported.
+```
+$image = $image->add([1, 2, 3]);
+```
 
-* No exceptions yet.
+to add 1 to the first band, 2 to the second and 3 to the third. Or:
 
-* No logging at the moment. 
+```
+$image = $image->add($image2);
+```
 
-Some things will never be done:
+to add two images. 
 
-* You can't use `()` to get a pixel value, since php does not support multiple
-  arguments to `__invoke()`.
+Almost all methods can take an optional final argument, an array of options.
+For example:
+
+```
+$image->writeToFile("fred.jpg", ["Q" => 90]);
+$image = $image->embed("fred.jpg", ["Q" => 90]);
+```
+
+There are around 300 operations in the library, see the vips docs for an
+introduction:
+
+http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/
 
 ### How it works
 

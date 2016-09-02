@@ -1,5 +1,5 @@
 --TEST--
-Vips\Image::new_from_file works
+Vips\Image::newFromFile works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
@@ -7,7 +7,7 @@ Vips\Image::new_from_file works
   include 'vips.php';
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-  $image = Vips\Image::new_from_file($filename, ["shrink" => 2]);
+  $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
   if ($image->width == 800) {
   	echo "pass\n";
   }

@@ -21,7 +21,7 @@ rounding works
   } 
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-  $image = Vips\Image::new_from_file($filename);
+  $image = Vips\Image::newFromFile($filename);
   $image = $image->add([0.1, 1.5, 0.9]);
 
   $pass = TRUE;
