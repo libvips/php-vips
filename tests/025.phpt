@@ -1,12 +1,12 @@
 --TEST--
-VImage::__callStatic works
+Vips\Image::__callStatic works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
 <?php 
   include 'vips.php';
 
-  $image = VImage::black(1, 2, ["bands" => 3]);
+  $image = Vips\Image::black(1, 2, ["bands" => 3]);
 
   if ($image->width == 1 &&
 	$image->height == 2 &&

@@ -22,7 +22,7 @@ which gives some more background.
 <?php
 include 'vips.php';
 
-$image = VImage::new_from_file($argv[1]);
+$image = Vips\Image::new_from_file($argv[1]);
 
 echo "width = ", $image->width, "\n";
 
@@ -66,7 +66,7 @@ lines of C.
 `vips.php` is a PHP layer over the ugly `vips.c` API that tries to make a nice
 interface for programmers. It uses `__call()` and `__get()` to make all
 libvips operations appear as methods, and all libvips properties as 
-properties of the PHP `VImage` class.  
+properties of the PHP `Vips\Image` class.  
 
 ### Preparation
 
@@ -141,7 +141,7 @@ Try:
 <?php
 	include 'vips.php';
 
-	$image = VImage::new_from_file($argv[1]); 
+	$image = Vips\Image::new_from_file($argv[1]); 
 
 	echo "width = ", $image->width, "\n";
 

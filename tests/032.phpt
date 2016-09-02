@@ -7,7 +7,7 @@ __set and __get work
   include 'vips.php';
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-  $image = VImage::new_from_file($filename);
+  $image = Vips\Image::new_from_file($filename);
 
   $image->poop = "banana";
   $value = $image->poop;

@@ -1,5 +1,5 @@
 --TEST--
-VImage::write_to_buffer works
+Vips\Image::write_to_buffer works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
@@ -9,7 +9,7 @@ VImage::write_to_buffer works
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
   $output_filename = dirname(__FILE__) . "/x.jpg";
 
-  $image = VImage::new_from_file($filename);
+  $image = Vips\Image::new_from_file($filename);
 
   $buffer1 = $image->write_to_buffer(".jpg");
 
@@ -17,7 +17,7 @@ VImage::write_to_buffer works
   $buffer2 = file_get_contents($output_filename);
 
   if ($buffer1 == $buffer2) {
-		echo "pass";
+	echo "pass";
   }
 ?>
 --EXPECT--

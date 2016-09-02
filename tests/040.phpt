@@ -1,5 +1,5 @@
 --TEST--
-VImage::bandand works
+Vips\Image::bandand works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
@@ -7,7 +7,7 @@ VImage::bandand works
   include 'vips.php';
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-  $image = VImage::new_from_file($filename);
+  $image = Vips\Image::new_from_file($filename);
 
   $pass = TRUE;
 

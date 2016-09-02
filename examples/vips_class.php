@@ -2,7 +2,7 @@
 <?php
 	include '../vips.php';
 
-	$image = VImage::new_from_file($argv[1]); 
+	$image = Vips\Image::new_from_file($argv[1]); 
 
 	echo "width = ", $image->width, "\n";
 

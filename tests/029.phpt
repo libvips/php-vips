@@ -1,12 +1,12 @@
 --TEST--
-VImage::add(const) works
+Vips\Image::add(const) works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
 <?php 
   include 'vips.php';
 
-  $image = VImage::new_from_array([[1, 2, 3], [4, 5, 6]]);
+  $image = Vips\Image::new_from_array([[1, 2, 3], [4, 5, 6]]);
   $image = $image->add(1);
 
   $pixel = $image->crop(0, 0, 1, 1);

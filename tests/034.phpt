@@ -1,5 +1,5 @@
 --TEST--
-VImage::ifthenelse(const, image) works
+Vips\Image::ifthenelse(const, image) works
 --SKIPIF--
 <?php if (!extension_loaded("vips")) print "skip"; ?>
 --FILE--
@@ -7,7 +7,7 @@ VImage::ifthenelse(const, image) works
   include 'vips.php';
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-  $image = VImage::new_from_file($filename);
+  $image = Vips\Image::new_from_file($filename);
 
   $image = $image->more(34)->ifthenelse($image, 255);
 

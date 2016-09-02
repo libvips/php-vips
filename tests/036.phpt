@@ -21,7 +21,7 @@ operator expansions all work
   } 
 
   $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-  $image = VImage::new_from_file($filename);
+  $image = Vips\Image::new_from_file($filename);
 
   $pass = TRUE;
 
