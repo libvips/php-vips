@@ -36,7 +36,7 @@ Almost all methods return a new image for the result, so you can chain them.
 For example:
 
 ```
-$image = $image->more(12)->ifThenElse(255, $image);
+$image = $image->more(12)->ifthenelse(255, $image);
 ```
 
 will make a mask of pixels greater than 12, then use the mask to set pixels to
