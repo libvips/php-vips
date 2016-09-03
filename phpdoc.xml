@@ -10,8 +10,7 @@
     </transformer>
 
     <files>
-        <file>vips.php</file>
-        <file>vips.c</file>
+        <directory>src</directory>
     </files>
 
 </phpdocumentor>

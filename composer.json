@@ -1,0 +1,41 @@
+{
+    "name": "jcupitt/vips",
+    "description": "A high-level, fluent interface to the libvips image processing library.",
+    "keywords": [
+        "image",
+        "processing",
+        "libvips"
+    ],
+    "homepage": "https://github.com/jcupitt/php-vips",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "John Cupitt",
+            "email": "jcupitt@gmail.com",
+            "homepage": "https://github.com/jcupitt",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : ">=7.0.0",
+	"jcupitt/vips-base" : ">=0.1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jcupitt\\Vips\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jcupitt\\Vips\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

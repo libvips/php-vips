@@ -1,6 +1,11 @@
-# PHP binding for libvips 
+# use libvips from PHP 
 
-This package lets you use the libvips image processing library from PHP. 
+A high-level, fluent interface to the libvips image processing library. This
+module depends upon the `vips-base` extension. 
+
+The `vips-base` extension is very low-level. This module builds on that to make
+a high-level, fluent interface, very similar to the libvips bindings for Ruby
+and Python. 
 
 `vips` is fast and it can work without needing to have the 
 entire image loaded into memory. Programs that use `vips` don't
@@ -31,6 +36,14 @@ $image = $image->invert();
 $image->writeToFile($argv[2]);
 ?>
 ```
+
+And run with:
+
+```
+$ ./try1.php ~/pics/k2.jpg x.tif
+```
+
+See `examples/`.
 
 Almost all methods return a new image for the result, so you can chain them.
 For example:
@@ -76,120 +89,20 @@ http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/
 
 ### How it works
 
-`vips.c` defines a simple but ugly way to call any libvips operation from PHP.
+`vips-base` defines a simple but ugly way to call any libvips operation from PHP.
 It uses libvips' own introspection facilities and does not depend on anything
 else (so no gobject-introspection, for example). It's a fairly short 1,600
 lines of C.
 
-`vips.php` is a PHP layer over the ugly `vips.c` API that tries to make a nice
-interface for programmers. It uses `__call()` and `__get()` to make all
+This module is a PHP layer over the ugly `vips-base` API that tries to make a 
+nice interface for programmers. It uses `__call()` and `__get()` to make all
 libvips operations appear as methods, and all libvips properties as 
 properties of the PHP `Vips\Image` class.  
-
-### Preparation
-
-PHP is normally built for speed and is missing a lot of debugging support you
-need for extension development. For testing and dev, build your own php. 
-I used 7.0.10 and configured with:
-
-```
-$ ./configure --prefix=/home/john/vips --enable-debug --enable-maintainer-zts \
-	--enable-cgi --enable-cli --with-readline --with-openssl
-```
-
-### Regenerate build system
-
-Run:
-
-```
-$ phpize
-```
-
-To scan `config.m4` and your php install and regenerate the build system.
-
-### Configuring
-
-Run
-
-```
-$ ./configure 
-```
-
-Check the output carefully for errors, and obviously check that it found your
-libvips.
-
-### Installing
-
-Run:
-
-
-```
-$ make
-```
-
-To build the module to the `modules/` directory in this repository. 
-
-Don't post php-vips test results to php.net! Stop this with:
-
-
-```
-$ export NO_INTERACTION=1
-```
-
-
-Test with:
-
-
-```
-$ make test
-```
-
-Finally, install to your php extensions area with:
-
-```
-$ make install
-```
-
-### Using
-
-Try:
-
-```php
-#!/usr/bin/env php
-<?php
-include 'vips.php';
-
-$image = Vips\Image::newFromFile($argv[1]); 
-
-echo "width = ", $image->width, "\n";
-
-$image = $image->invert();
-
-$image->writeToFile($argv[2]);
-?>
-```
-
-And run with:
-
-```
-$ ./try1.php ~/pics/k2.jpg x.tif
-```
-
-See `examples/`.
-
-### Links
-
-http://php.net/manual/en/internals2.php
-
-https://devzone.zend.com/303/extension-writing-part-i-introduction-to-php-and-zend/
-
-https://devzone.zend.com/317/extension-writing-part-ii-parameters-arrays-and-zvals/
-
-https://devzone.zend.com/446/extension-writing-part-iii-resources/
 
 ### Documentation
 
 ```
+$ phpcs src
 $ pear channel-discover pear.phpdoc.org
 $ pear install phpdoc/phpDocumentor
 $ phpdoc 
@@ -204,3 +117,4 @@ Interactive mode enabled
 php > dl('imagick.' . PHP_SHLIB_SUFFIX);
 php > $im = new Imagick();
 ```
+

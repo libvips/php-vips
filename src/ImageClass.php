@@ -44,7 +44,7 @@ if (!extension_loaded("vips")) {
 }
 
 /**
- * The Image class represents an image. 
+ * ImageClass represents an image. 
  *
  * @category   Images
  * @package    Vips
@@ -53,17 +53,17 @@ if (!extension_loaded("vips")) {
  * @license    MIT
  * @version    0.1.0
  */
-class Image implements \ArrayAccess
+class ImageClass implements \ArrayAccess
 {
     /* The resource for the underlying VipsImage.
      */
     private $image;
 
     /**
-     * Wrap a Vips\Image around an underlying vips resource. 
+     * Wrap a Vips\ImageClass around an underlying vips resource. 
      *
      * Don't call this yourself, users should stick to (for example)
-     * Vips\Image::newFromFile().
+     * Vips\ImageClass::newFromFile().
      *
      * @param resource $image The underlying vips image resource that this
      *  class should wrap.
@@ -134,12 +134,12 @@ class Image implements \ArrayAccess
     }
 
     /* Unwrap an array of stuff ready to pass down to the vips_ layer. We
-     * swap instances of the Vips\Image class for the plain resource.
+     * swap instances of the Vips\ImageClass for the plain resource.
      */
     private static function unwrap($result) 
     {
         array_walk_recursive($result, function (&$item, $key) {
-            if ($item instanceof Image) {
+            if ($item instanceof ImageClass) {
                 $item = $item->image;
             }
         });
@@ -162,8 +162,7 @@ class Image implements \ArrayAccess
      *   operations return a single result and there's no sense handling 
      *   this as an array of values, so we transform ["out" => x] -> x. 
      *
-     * - Any VipsImage resources are rewrapped as instances of our Vips\Image
-     *   class. 
+     * - Any VipsImage resources are rewrapped as instances of Vips\ImageClass.
      */
     private static function wrap($result) 
     {
@@ -173,7 +172,7 @@ class Image implements \ArrayAccess
 
         array_walk_recursive($result, function (&$item) {
             if (self::is_image($item)) { 
-                $item = new Image($item);
+                $item = new ImageClass($item);
             }
         });
 
@@ -185,12 +184,12 @@ class Image implements \ArrayAccess
     }
 
     /** 
-     * Create a new Vips\Image from a file on disc.
+     * Create a new Vips\ImageClass from a file on disc.
      *
      * @param string $filename The file to open.
      * @param array $options Any options to pass on to the load operation.
      *
-     * @return A new Vips\Image.
+     * @return A new Vips\ImageClass.
      */
     public static function newFromFile($filename, $options = []) 
     {
@@ -200,14 +199,14 @@ class Image implements \ArrayAccess
     }
 
     /** 
-     * Create a new Vips\Image from a compressed image held as a string. 
+     * Create a new Vips\ImageClass from a compressed image held as a string. 
      *
      * @param string $buffer The formatted image to open.
      * @param string $option_string Any text-style options to pass to the
      * selected loader. 
      * @param array $options Any options to pass on to the load operation.
      *
-     * @return A new Vips\Image.
+     * @return A new Vips\ImageClass.
      */
     public static function newFromBuffer($buffer, 
         $option_string = "", $options = []) 
@@ -218,7 +217,7 @@ class Image implements \ArrayAccess
     }
 
     /** 
-     * Create a new Vips\Image from a php array. 
+     * Create a new Vips\ImageClass from a php array. 
      *
      * 2D arrays become 2D images. 1D arrays become 2D images with height 1. 
      *
@@ -228,7 +227,7 @@ class Image implements \ArrayAccess
      * @param double $offset The "offset" metadata item. Useful for integer
      * convolution masks.
      *
-     * @return A new Vips\Image.
+     * @return A new Vips\ImageClass.
      */
     public static function newFromArray($array, $scale = 1, $offset = 0) 
     {
@@ -298,8 +297,8 @@ class Image implements \ArrayAccess
      * Call any vips operation.
      *
      * @param string $name The operation name. 
-     * @param Vips\Image $instance The instance this operation is being invoked
-     * from.
+     * @param Vips\ImageClass $instance The instance this operation is being 
+     * invoked from.
      * @param mixed[] $arguments An array of arguments to pass to the operation.
      *
      * @return mixed The result(s) of the operation. 
@@ -326,7 +325,7 @@ class Image implements \ArrayAccess
      */
     private function call_enum($other, $base, $op, $options = [])
     {
-        if ($other instanceof Image) {
+        if ($other instanceof ImageClass) {
             return self::call($base, $this, 
                 array_merge([$other, $op], $options));
         }
@@ -367,12 +366,12 @@ class Image implements \ArrayAccess
 
     public function offsetSet($offset, $value) 
     {
-        echo "Vips\Image::offsetSet: not implemented\n"; 
+        echo "Vips\ImageClass::offsetSet: not implemented\n"; 
     }
 
     public function offsetUnset($offset) 
     {
-        echo "Vips\Image::offsetUnset: not implemented\n"; 
+        echo "Vips\ImageClass::offsetUnset: not implemented\n"; 
     }
 
     /* add/sub/mul/div with a constant argument can use linear for a huge
@@ -382,15 +381,15 @@ class Image implements \ArrayAccess
     /**
      * Add to this image.
      *
-     * @param int|double|int[]|double[]|Vips\Image $other The thing to add to 
-     * this image.
+     * @param int|double|int[]|double[]|Vips\ImageClass $other The thing to 
+     * add to this image.
      * @param array $options Any options to pass on to the add operation.
      *
-     * @return Vips\Image A new image.
+     * @return Vips\ImageClass A new image.
      */
     public function add($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if ($other instanceof ImageClass) {
             return self::call("add", $this, array_merge([$other], $options));
         }
         else {
@@ -400,7 +399,7 @@ class Image implements \ArrayAccess
 
     public function subtract($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if ($other instanceof ImageClass) {
             return self::call("subtract", $this, 
                 array_merge([$other], $options));
         }
@@ -414,7 +413,7 @@ class Image implements \ArrayAccess
 
     public function multiply($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if ($other instanceof ImageClass) {
             return self::call("multiply", $this, 
                 array_merge([$other], $options));
         }
@@ -425,7 +424,7 @@ class Image implements \ArrayAccess
 
     public function divide($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if ($other instanceof ImageClass) {
             return self::call("divide", $this, array_merge([$other], $options));
         }
         else {
@@ -438,7 +437,7 @@ class Image implements \ArrayAccess
 
     public function remainder($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if ($other instanceof ImageClass) {
             return self::call("remainder", $this, 
                 array_merge([$other], $options));
         }
@@ -557,7 +556,8 @@ class Image implements \ArrayAccess
     }
 
     /* bandrank will appear as a static class member, as 
-     * Vips\Image::bandrank([a, b, c]), but it's better as an instance method.
+     * Vips\ImageClass::bandrank([a, b, c]), but it's better as an instance 
+     * method.
      * 
      * We need to define this by hand.
      */
@@ -605,17 +605,17 @@ class Image implements \ArrayAccess
     {
         $match_image = NULL;
         foreach ([$then, $else, $this] as $item) {
-            if ($item instanceof Image) {
+            if ($item instanceof ImageClass) {
                 $match_image = $item;
                 break;
             }
         }
 
-        if (!($then instanceof Image)) {
+        if (!($then instanceof ImageClass)) {
             $then = self::imageize($match_image, $then);
         }
 
-        if (!($else instanceof Image)) {
+        if (!($else instanceof ImageClass)) {
             $else = self::imageize($match_image, $else);
         }
 
