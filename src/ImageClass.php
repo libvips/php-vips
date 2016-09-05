@@ -40,7 +40,9 @@
 namespace Vips;
 
 if (!extension_loaded("vips")) {
-    dl('vips.' . PHP_SHLIB_SUFFIX);
+    if (!dl('vips.' . PHP_SHLIB_SUFFIX)) {
+        echo "vips: unable to load vips extension\n"; 
+    }
 }
 
 /**

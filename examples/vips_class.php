@@ -1,12 +1,14 @@
 #!/usr/bin/env php
 <?php
-	include '../vips.php';
 
-	$image = Vips\Image::newFromFile($argv[1]); 
+include '../src/ImageClass.php';
 
-	echo "width = ", $image->width, "\n";
+$image = Vips\ImageClass::newFromFile($argv[1]); 
 
-	$image = $image->invert();
+echo "width = ", $image->width, "\n";
 
-	$image->writeToFile($argv[2]);
+$image = $image->invert();
+
+$image->writeToFile($argv[2]);
+
 ?>
