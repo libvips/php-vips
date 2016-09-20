@@ -1,20 +1,18 @@
-# use libvips from PHP 
+# High-level PHP binding for libvips 
 
-A high-level, fluent interface to the libvips image processing library. This
-module depends upon the `vips-base` extension. 
+A high-level interface to the libvips image processing library. This
+module builds upon the `vips` extension, see:
 
-The `vips-base` extension is very low-level. This module builds on that to make
-a high-level, fluent interface, very similar to the libvips bindings for Ruby
-and Python. 
+https://github.com/jcupitt/php-vips-ext
 
-`vips` is fast and it can work without needing to have the 
-entire image loaded into memory. Programs that use `vips` don't
+libvips is fast and it can work without needing to have the 
+entire image loaded into memory. Programs that use libvips don't
 manipulate images directly, instead they create pipelines of image processing
-operations building on a source image. When the end of the pipe is connected
-to a destination, the whole pipline executes at once, streaming the image
-in parallel from source to destination a section at a time. 
+operations starting from a source image. When the end of the pipe is connected
+to a destination, the whole pipeline executes at once, streaming the image
+in parallel from source to destination in a set of small fragments. 
 
-See also [benchmarks at the official libvips
+See the [benchmarks at the official libvips
 website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
 There's a handy blog post explaining [how libvips opens
 files](http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html)
@@ -89,15 +87,15 @@ http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/
 
 ### How it works
 
-`vips-base` defines a simple but ugly way to call any libvips operation from PHP.
-It uses libvips' own introspection facilities and does not depend on anything
-else (so no gobject-introspection, for example). It's a fairly short 1,600
-lines of C.
+The `vips` extension defines a simple but ugly way to call any libvips
+operation from PHP.  It uses libvips' own introspection facilities
+and does not depend on anything else (so no gobject-introspection,
+for example). It's a fairly short 1,600 lines of C.
 
-This module is a PHP layer over the ugly `vips-base` API that tries to make a 
-nice interface for programmers. It uses `__call()` and `__get()` to make all
-libvips operations appear as methods, and all libvips properties as 
-properties of the PHP `Vips\Image` class.  
+This module is a PHP layer over the ugly `vips` extension API that
+tries to make a nice interface for programmers. It uses `__call()` and
+`__get()` to make all libvips operations appear as methods, and all
+libvips properties as properties of the PHP `Vips\Image` class.
 
 ### Documentation
 
