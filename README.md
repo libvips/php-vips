@@ -132,3 +132,5 @@ php > $im = new Imagick();
 ```
 
   we get an error from composer, even though `php -i` says that vips is enabled
+
+* do `tests/old/036.phpt` next

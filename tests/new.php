@@ -2,7 +2,7 @@
 
 use Vips\Image\Image;
 
-class VipsTest extends PHPUnit_Framework_TestCase 
+class VipsNewTest extends PHPUnit_Framework_TestCase 
 {
 
   public function testVipsNewFromArray()
