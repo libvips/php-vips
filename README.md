@@ -106,6 +106,13 @@ $ pear install phpdoc/phpDocumentor
 $ phpdoc 
 ```
 
+### Install
+
+```
+$ composer install
+$ vendor/bin/phpunit
+```
+
 ### imagick
 
 ```
@@ -116,3 +123,12 @@ php > dl('imagick.' . PHP_SHLIB_SUFFIX);
 php > $im = new Imagick();
 ```
 
+### todo
+
+* strange, why can't we have this in `require` in `composer.json`?
+
+```
+	, "ext-vips" : ">=0.1.0"
+```
+
+  we get an error from composer, even though `php -i` says that vips is enabled

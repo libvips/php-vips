@@ -1,5 +1,5 @@
 {
-    "name": "jcupitt/vips",
+    "name": "vips/image",
     "description": "A high-level interface to the libvips image processing library.",
     "keywords": [
         "image",
@@ -17,20 +17,19 @@
         }
     ],
     "require": {
-        "php" : ">=7.0.0",
-	"ext-vips" : ">=0.1.0"
+        "php" : ">=7.0.0"
     },
     "require-dev": {
         "phpunit/phpunit" : "4.*"
     },
     "autoload": {
         "psr-4": {
-            "Jcupitt\\Vips\\": "src"
+            "Vips\\Image\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jcupitt\\Vips\\Test\\": "tests"
+            "Vips\\Image\\Test\\": "tests"
         }
     },
     "extra": {
