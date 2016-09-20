@@ -37,7 +37,7 @@
  * @link       https://github.com/jcupitt/php-vips
  */
 
-namespace Vips;
+namespace Vips\Image;
 
 if (!extension_loaded("vips")) {
     if (!dl('vips.' . PHP_SHLIB_SUFFIX)) {
