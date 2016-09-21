@@ -5,6 +5,9 @@ module builds upon the `vips` extension, see:
 
 https://github.com/jcupitt/php-vips-ext
 
+You'll need to install that first. It's tested on Linux, OS X should work,
+Windows would need some work. 
+
 libvips is fast and it can work without needing to have the 
 entire image loaded into memory. Programs that use libvips don't
 manipulate images directly, instead they create pipelines of image processing
@@ -92,7 +95,7 @@ operation from PHP.  It uses libvips' own introspection facilities
 and does not depend on anything else (so no gobject-introspection,
 for example). It's a fairly short 1,600 lines of C.
 
-This module is a PHP layer over the ugly `vips` extension API that
+This module is a PHP layer over the ugly `vips` extension that
 tries to make a nice interface for programmers. It uses `__call()` and
 `__get()` to make all libvips operations appear as methods, and all
 libvips properties as properties of the PHP `Vips\Image` class.
@@ -123,14 +126,4 @@ php > dl('imagick.' . PHP_SHLIB_SUFFIX);
 php > $im = new Imagick();
 ```
 
-### todo
 
-* strange, why can't we have this in `require` in `composer.json`?
-
-```
-	, "ext-vips" : ">=0.1.0"
-```
-
-  we get an error from composer, even though `php -i` says that vips is enabled
-
-* do `tests/old/036.phpt` next
