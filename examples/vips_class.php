@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 
-include '../src/ImageClass.php';
+include '../src/Image.php';
 
-$image = Vips\ImageClass::newFromFile($argv[1]); 
+use Vips\Image\Image;
+
+$image = Image::newFromFile($argv[1]); 
 
 echo "width = ", $image->width, "\n";
 
