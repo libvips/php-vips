@@ -100,20 +100,13 @@ tries to make a nice interface for programmers. It uses `__call()` and
 `__get()` to make all libvips operations appear as methods, and all
 libvips properties as properties of the PHP `Vips\Image` class.
 
-### Documentation
-
-```
-$ phpcs src
-$ pear channel-discover pear.phpdoc.org
-$ pear install phpdoc/phpDocumentor
-$ phpdoc 
-```
-
 ### Install
 
 ```
+$ phpcs src
 $ composer install
 $ vendor/bin/phpunit
+$ vendor/bin/phpdoc
 ```
 
 ### imagick

@@ -58,7 +58,8 @@ if (!extension_loaded("vips")) {
  */
 class Image implements \ArrayAccess
 {
-    /* The resource for the underlying VipsImage.
+    /**
+     * The resource for the underlying VipsImage.
      */
     private $_image;
 
@@ -617,14 +618,15 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * Bitwise AND of $this and $other.
+     * Bitwise AND of $this and $other. This has to be called ->andimage()
+     * rather than ->and() to avoid confusion in phpdoc.
      *
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
      * @return Vips\Image A new image.
      */
-    public function and($other, $options = [])
+    public function andimage($other, $options = [])
     {
         return self::_callEnum($other, "boolean", "and", $options);
     }
@@ -637,7 +639,7 @@ class Image implements \ArrayAccess
      *
      * @return Vips\Image A new image.
      */
-    public function or($other, $options = [])
+    public function orimage($other, $options = [])
     {
         return self::_callEnum($other, "boolean", "or", $options);
     }
@@ -650,7 +652,7 @@ class Image implements \ArrayAccess
      *
      * @return Vips\Image A new image.
      */
-    public function eor($other, $options = [])
+    public function eorimage($other, $options = [])
     {
         return self::_callEnum($other, "boolean", "eor", $options);
     }
