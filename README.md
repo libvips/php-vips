@@ -28,7 +28,7 @@ which gives some more background.
 <?php
 include 'Image.php';
 
-use JCupitt\Vips;
+use Jcupitt\Vips;
 
 $image = Vips\Image::newFromFile($argv[1]);
 

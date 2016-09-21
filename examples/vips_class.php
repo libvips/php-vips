@@ -3,7 +3,7 @@
 
 include '../src/Image.php';
 
-use JCupitt\Vips;
+use Jcupitt\Vips;
 
 $image = Vips\Image::newFromFile($argv[1]); 
 

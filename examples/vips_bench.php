@@ -3,7 +3,7 @@
 
 include '../src/Image.php';
 
-use JCupitt\Vips;
+use Jcupitt\Vips;
 
 $im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
 
