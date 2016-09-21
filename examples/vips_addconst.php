@@ -3,9 +3,9 @@
 
 include '../src/Image.php';
 
-use Vips\Image\Image;
+use JCupitt\Vips;
 
-$image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+$image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
 $image = $image->linear(1, 1);
 
 ?>

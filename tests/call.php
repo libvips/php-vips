@@ -1,13 +1,13 @@
 <?php
 
-use Vips\Image\Image;
+use Jcupitt\Vips;
 
 class VipsCallTest extends PHPUnit_Framework_TestCase 
 {
 
   public function testVipsCall()
   {
-    $image = Image::newFromArray([1, 2, 3]);
+    $image = Vips\Image::newFromArray([1, 2, 3]);
     $image = $image->embed(10, 20, 3000, 2000, ["extend" => "copy"]);
 
     $this->assertEquals($image->width, 3000);
@@ -17,7 +17,7 @@ class VipsCallTest extends PHPUnit_Framework_TestCase
 
   public function testVipsCallStatic()
   {
-    $image = Image::black(1, 2, ["bands" => 3]);
+    $image = Vips\Image::black(1, 2, ["bands" => 3]);
 
     $this->assertEquals($image->width, 1);
     $this->assertEquals($image->height, 2);

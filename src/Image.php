@@ -37,7 +37,7 @@
  * @link      https://github.com/jcupitt/php-vips
  */
 
-namespace Vips\Image;
+namespace Jcupitt\Vips;
 
 if (!extension_loaded("vips")) {
     if (!dl('vips.' . PHP_SHLIB_SUFFIX)) {
@@ -414,7 +414,7 @@ class Image implements \ArrayAccess
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param int $offset The index to fetch.
+     * @param long $offset The index to fetch.
      *
      * @return bool true if the index exists.
      */
@@ -426,7 +426,7 @@ class Image implements \ArrayAccess
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param int $offset The index to fetch.
+     * @param long $offset The index to fetch.
      *
      * @return Image the extracted band.
      */
@@ -438,7 +438,7 @@ class Image implements \ArrayAccess
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param int   $offset The index to set.
+     * @param long  $offset The index to set.
      * @param Image $value  The band to insert
      *
      * @return Image the expanded image.
@@ -451,7 +451,7 @@ class Image implements \ArrayAccess
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param int $offset The index to remove.
+     * @param long $offset The index to remove.
      *
      * @return Image the reduced image.
      */
@@ -828,7 +828,7 @@ class Image implements \ArrayAccess
     /**
      * Position of max is awkward with plain self::max.
      *
-     * @return double, int, int The value and position of the maximum. 
+     * @return double, long, long The value and position of the maximum. 
      */
     public function maxpos()
     {
@@ -843,7 +843,7 @@ class Image implements \ArrayAccess
     /**
      * Position of min is awkward with plain self::max.
      *
-     * @return double, int, int The value and position of the minimum. 
+     * @return double, long, long The value and position of the minimum. 
      */
     public function minpos()
     {
@@ -1167,7 +1167,7 @@ class Image implements \ArrayAccess
     /** 
      * $size x $size median filter.
      *
-     * @param int $size Size of median filter.
+     * @param long $size Size of median filter.
      *
      * @return Vips\Image A new image.
      */

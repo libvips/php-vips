@@ -6,7 +6,7 @@ module builds upon the `vips` extension, see:
 https://github.com/jcupitt/php-vips-ext
 
 You'll need to install that first. It's tested on Linux, OS X should work,
-Windows would need some work. 
+Windows would need some work, but should be possible.  
 
 libvips is fast and it can work without needing to have the 
 entire image loaded into memory. Programs that use libvips don't
@@ -26,7 +26,9 @@ which gives some more background.
 ```php
 #!/usr/bin/env php
 <?php
-include 'vips.php';
+include 'Image.php';
+
+use JCupitt\Vips;
 
 $image = Vips\Image::newFromFile($argv[1]);
 

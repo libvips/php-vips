@@ -1,6 +1,6 @@
 <?php
 
-use Vips\Image\Image;
+use Jcupitt\Vips;
 
 class VipsConvenienceTest extends PHPUnit_Framework_TestCase 
 {
@@ -8,7 +8,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $this->image = Image::newFromFile($filename);
+        $this->image = Vips\Image::newFromFile($filename);
 
         /* The original value of pixel (0, 0).
          */
@@ -17,7 +17,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsBandjoin()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $rgb = $image->bandjoin([$image, $image]);
 
         $this->assertEquals($rgb->width, 3);
@@ -27,7 +27,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsAddConst()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $image = $image->add(1);
         $pixel = $image->crop(0, 0, 1, 1)->avg();
 
@@ -36,7 +36,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsSubtractConst()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $image = $image->subtract(1);
         $pixel = $image->getpoint(1, 1);
 
@@ -46,7 +46,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsMultiplyConst()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $image = $image->multiply(2);
         $pixel = $image->getpoint(1, 1);
 
@@ -56,7 +56,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsDivideConst()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $image = $image->divide(2);
         $pixel = $image->getpoint(0, 1);
 
@@ -66,7 +66,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsGetPoint()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $rgb = $image->bandjoin([$image, $image]);
         $rgb = $rgb->add(1);
         $pixel = $rgb->getpoint(0, 0);
@@ -76,7 +76,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsBandjoinConst()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $imagea = $image->bandjoin(255);
         $pixel = $imagea->getpoint(0, 0);
 
@@ -100,7 +100,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
 
     public function testVipsMaxpos()
     {
-        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
         $result = $image->maxpos();
 
         $this->assertEquals($result, [6, 2, 1]);

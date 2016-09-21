@@ -3,9 +3,9 @@
 
 include '../src/Image.php';
 
-use Vips\Image\Image;
+use JCupitt\Vips;
 
-$image = Image::newFromFile($argv[1]); 
+$image = Vips\Image::newFromFile($argv[1]); 
 
 echo "width = ", $image->width, "\n";
 

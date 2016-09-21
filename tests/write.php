@@ -1,6 +1,6 @@
 <?php
 
-use Vips\Image\Image;
+use JCupitt\Vips;
 
 class VipsWriteTest extends PHPUnit_Framework_TestCase 
 {
@@ -30,10 +30,10 @@ class VipsWriteTest extends PHPUnit_Framework_TestCase
   public function testVipsWriteToFile()
   {
     $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-    $image = Image::newFromFile($filename, ["shrink" => 2]);
+    $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
     $output_filename = $this->tmp(".tif");
     $image->writeToFile($output_filename);
-    $image = Image::newFromFile($output_filename);
+    $image = Vips\Image::newFromFile($output_filename);
 
     $this->assertEquals($image->width, 800);
     $this->assertEquals($image->height, 600);
@@ -43,7 +43,7 @@ class VipsWriteTest extends PHPUnit_Framework_TestCase
   public function testVipsWriteToBuffer()
   {
     $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-    $image = Image::newFromFile($filename, ["shrink" => 2]);
+    $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
 
     $buffer1 = $image->writeToBuffer(".jpg");
     $output_filename = $this->tmp(".jpg");

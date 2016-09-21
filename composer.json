@@ -1,5 +1,5 @@
 {
-    "name": "vips/image",
+    "name": "jcupitt/vips",
     "description": "A high-level interface to the libvips image processing library.",
     "keywords": [
         "image",
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Vips\\Image\\": "src"
+            "Jcupitt\\Vips\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vips\\Image\\Test\\": "tests"
+            "JCupitt\\Vips\\Test\\": "tests"
         }
     },
     "extra": {

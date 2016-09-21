@@ -1,6 +1,6 @@
 <?php
 
-use Vips\Image\Image;
+use JCupitt\Vips;
 
 class VipsShortcutTest extends PHPUnit_Framework_TestCase 
 {
@@ -21,7 +21,7 @@ class VipsShortcutTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $this->image = Image::newFromFile($filename);
+        $this->image = Vips\Image::newFromFile($filename);
 
         /* The original value of pixel (0, 0).
          */
@@ -89,21 +89,21 @@ class VipsShortcutTest extends PHPUnit_Framework_TestCase
         $real = self::map_numeric($this->pixel, function ($value) {
             return $value & 2; 
         });
-        $vips = $this->image->and(2)->getpoint(0, 0);
+        $vips = $this->image->andimage(2)->getpoint(0, 0);
 
         $this->assertEquals($vips, $real);
 
         $real = self::map_numeric($this->pixel, function ($value) {
             return $value | 2; 
         });
-        $vips = $this->image->or(2)->getpoint(0, 0);
+        $vips = $this->image->orimage(2)->getpoint(0, 0);
 
         $this->assertEquals($vips, $real);
 
         $real = self::map_numeric($this->pixel, function ($value) {
             return $value ^ 2; 
         });
-        $vips = $this->image->eor(2)->getpoint(0, 0);
+        $vips = $this->image->eorimage(2)->getpoint(0, 0);
 
         $this->assertEquals($vips, $real);
 

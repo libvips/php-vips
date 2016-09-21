@@ -3,15 +3,15 @@
 
 include '../src/Image.php';
 
-use Vips\Image\Image;
+use JCupitt\Vips;
 
-$im = Image::newFromFile($argv[1], ["access" => "sequential"]);
+$im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
 
 $im = $im->crop(100, 100, $im->width - 200, $im->height - 200);
 
 $im = $im->reduce(1.0 / 0.9, 1.0 / 0.9, ["kernel" => "linear"]);
 
-$mask = Image::newFromArray(
+$mask = Vips\Image::newFromArray(
 		  [[-1,  -1, -1], 
 		   [-1,  16, -1], 
 		   [-1,  -1, -1]], 8);
