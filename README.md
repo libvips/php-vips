@@ -17,6 +17,9 @@ in parallel from source to destination in a set of small fragments.
 
 See the [benchmarks at the official libvips
 website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
+There's also a [vips-php-bench](
+https://github.com/jcupitt/php-vips-bench) repository with benchmarks against
+imagick and gd. 
 There's a handy blog post explaining [how libvips opens
 files](http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html)
 which gives some more background.
