@@ -34,6 +34,36 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($pixel, 2);
     }
 
+    public function testVipsSubtractConst()
+    {
+        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = $image->subtract(1);
+        $pixel = $image->getpoint(1, 1);
+
+        $this->assertEquals(count($pixel), 1);
+        $this->assertEquals($pixel[0], 4);
+    }
+
+    public function testVipsMultiplyConst()
+    {
+        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = $image->multiply(2);
+        $pixel = $image->getpoint(1, 1);
+
+        $this->assertEquals(count($pixel), 1);
+        $this->assertEquals($pixel[0], 10);
+    }
+
+    public function testVipsDivideConst()
+    {
+        $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
+        $image = $image->divide(2);
+        $pixel = $image->getpoint(0, 1);
+
+        $this->assertEquals(count($pixel), 1);
+        $this->assertEquals($pixel[0], 2);
+    }
+
     public function testVipsGetPoint()
     {
         $image = Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
