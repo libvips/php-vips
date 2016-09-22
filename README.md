@@ -105,7 +105,7 @@ tries to make a nice interface for programmers. It uses `__call()` and
 `__get()` to make all libvips operations appear as methods, and all
 libvips properties as properties of the PHP `Vips\Image` class.
 
-### Install
+### Test and install
 
 ```
 $ phpcs src
@@ -113,15 +113,4 @@ $ composer install
 $ vendor/bin/phpunit
 $ vendor/bin/phpdoc
 ```
-
-### imagick
-
-```
-$ pecl install imagick
-$ php -a
-Interactive mode enabled
-php > dl('imagick.' . PHP_SHLIB_SUFFIX);
-php > $im = new Imagick();
-```
-
 
