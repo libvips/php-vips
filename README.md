@@ -41,9 +41,18 @@ $image->writeToFile($argv[2]);
 ?>
 ```
 
+You'll need this in your `composer.json`:
+
+```
+    "require": {
+            "jcupitt/vips" : "@dev"
+    }
+```
+
 And run with:
 
 ```
+$ composer install
 $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
