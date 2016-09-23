@@ -29,8 +29,6 @@ which gives some more background.
 ```php
 #!/usr/bin/env php
 <?php
-include 'Image.php';
-
 use Jcupitt\Vips;
 
 $image = Vips\Image::newFromFile($argv[1]);
