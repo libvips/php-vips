@@ -82,7 +82,7 @@ class Image implements \ArrayAccess
      * etc.
      *
      * @param mixed    $value The thing we walk.
-     * @param function $func  Apply this.
+     * @param \Closure $func  Apply this.
      *
      * @return mixed The updated $value.
      */ 
@@ -120,7 +120,7 @@ class Image implements \ArrayAccess
         }
         $width = count($value[0]);
 
-        foreach ($array as $row) {
+        foreach ($value as $row) {
             if (!is_array($row) || count($row) != $width) { 
                 return false;
             }
@@ -230,7 +230,7 @@ class Image implements \ArrayAccess
      * @param string $filename The file to open.
      * @param array  $options  Any options to pass on to the load operation.
      *
-     * @return A new Vips\Image.
+     * @return Image A new Vips\Image.
      */
     public static function newFromFile($filename, $options = []) 
     {
@@ -247,7 +247,7 @@ class Image implements \ArrayAccess
      *     selected loader. 
      * @param array  $options       Any options to pass on to the load operation.
      *
-     * @return A new Vips\Image.
+     * @return Image A new Vips\Image.
      */
     public static function newFromBuffer($buffer, 
         $option_string = "", $options = []
@@ -466,7 +466,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The thing to add to this image.
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function add($other, $options = [])
     {
@@ -483,7 +483,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The thing to subtract from this image.
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function subtract($other, $options = [])
     {
@@ -507,7 +507,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The thing to multiply this image by.
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function multiply($other, $options = [])
     {
@@ -526,7 +526,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The thing to divide this image by.
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function divide($other, $options = [])
     {
@@ -550,7 +550,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The thing to take the remainder with.
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function remainder($other, $options = [])
     {
@@ -571,7 +571,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function pow($other, $options = [])
     {
@@ -584,7 +584,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function wop($other, $options = [])
     {
@@ -597,7 +597,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function lshift($other, $options = [])
     {
@@ -610,7 +610,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function rshift($other, $options = [])
     {
@@ -624,7 +624,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function andimage($other, $options = [])
     {
@@ -637,7 +637,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function orimage($other, $options = [])
     {
@@ -650,7 +650,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function eorimage($other, $options = [])
     {
@@ -663,7 +663,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function more($other, $options = [])
     {
@@ -676,7 +676,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function moreEq($other, $options = [])
     {
@@ -689,7 +689,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function less($other, $options = [])
     {
@@ -702,7 +702,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function lessEq($other, $options = [])
     {
@@ -715,7 +715,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function equal($other, $options = [])
     {
@@ -728,7 +728,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function notEq($other, $options = [])
     {
@@ -741,7 +741,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function bandjoin($other, $options = [])
     {
@@ -801,7 +801,7 @@ class Image implements \ArrayAccess
      * @param mixed   $other   The right-hand side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function bandrank($other, $options = [])
     {
@@ -828,7 +828,7 @@ class Image implements \ArrayAccess
     /**
      * Position of max is awkward with plain self::max.
      *
-     * @return double, long, long The value and position of the maximum. 
+     * @return array (double, long, long) The value and position of the maximum.
      */
     public function maxpos()
     {
@@ -843,7 +843,7 @@ class Image implements \ArrayAccess
     /**
      * Position of min is awkward with plain self::max.
      *
-     * @return double, long, long The value and position of the minimum. 
+     * @return array (double, long, long) The value and position of the minimum.
      */
     public function minpos()
     {
@@ -863,7 +863,7 @@ class Image implements \ArrayAccess
      * @param mixed   $else    The false side of the operator. 
      * @param mixed[] $options An array of options to pass to the operation.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function ifthenelse($then, $else, $options = [])
     {
@@ -896,7 +896,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the largest integral value not greater than the argument.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function floor() 
     {
@@ -906,7 +906,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the smallest integral value not less than the argument.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function ceil() 
     {
@@ -916,7 +916,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the nearest integral value.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function rint() 
     {
@@ -926,7 +926,7 @@ class Image implements \ArrayAccess
     /** 
      * AND image bands together.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function bandand() 
     {
@@ -936,7 +936,7 @@ class Image implements \ArrayAccess
     /** 
      * OR image bands together.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function bandor() 
     {
@@ -946,7 +946,7 @@ class Image implements \ArrayAccess
     /** 
      * EOR image bands together.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function bandeor() 
     {
@@ -956,7 +956,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the real part of a complex image.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function real() 
     {
@@ -966,7 +966,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the imaginary part of a complex image.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function imag() 
     {
@@ -1013,7 +1013,7 @@ class Image implements \ArrayAccess
     /** 
      * Return an image converted to polar coordinates.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function polar() 
     {
@@ -1023,7 +1023,7 @@ class Image implements \ArrayAccess
     /** 
      * Return an image converted to rectangular coordinates.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function rect() 
     {
@@ -1033,7 +1033,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the complex conjugate of an image.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function conj() 
     {
@@ -1043,7 +1043,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the sine of an image in degrees.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function sin() 
     {
@@ -1053,7 +1053,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the cosine of an image in degrees.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function cos() 
     {
@@ -1063,7 +1063,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the tangent of an image in degrees.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function tan() 
     {
@@ -1073,7 +1073,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the inverse sine of an image in degrees.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function asin() 
     {
@@ -1083,7 +1083,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the inverse cosine of an image in degrees.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function acos() 
     {
@@ -1093,7 +1093,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the inverse tangent of an image in degrees.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function atan() 
     {
@@ -1103,7 +1103,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the natural log of an image.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function log() 
     {
@@ -1113,7 +1113,7 @@ class Image implements \ArrayAccess
     /** 
      * Return the log base 10 of an image.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function log10() 
     {
@@ -1123,7 +1123,7 @@ class Image implements \ArrayAccess
     /** 
      * Return e ** pixel.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function exp() 
     {
@@ -1133,7 +1133,7 @@ class Image implements \ArrayAccess
     /** 
      * Return 10 ** pixel.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function exp10() 
     {
@@ -1145,7 +1145,7 @@ class Image implements \ArrayAccess
      *
      * @param mixed $mask Erode with this structing element.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function erode($mask) 
     {
@@ -1157,7 +1157,7 @@ class Image implements \ArrayAccess
      *
      * @param mixed $mask Dilate with this structing element.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function dilate($mask) 
     {
@@ -1169,17 +1169,17 @@ class Image implements \ArrayAccess
      *
      * @param long $size Size of median filter.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
-    public function median($size) 
+    public function median($size)
     {
-        return $this->rank(size, size, (size * size) / 2);
+        return $this->rank($size, $size, ($size * $size) / 2);
     }
 
     /** 
      * Flip horizontally.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function fliphor() 
     {
@@ -1189,7 +1189,7 @@ class Image implements \ArrayAccess
     /** 
      * Flip vertically.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function flipver() 
     {
@@ -1199,7 +1199,7 @@ class Image implements \ArrayAccess
     /** 
      * Rotate 90 degrees clockwise.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function rot90() 
     {
@@ -1209,7 +1209,7 @@ class Image implements \ArrayAccess
     /** 
      * Rotate 180 degrees.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function rot180() 
     {
@@ -1219,7 +1219,7 @@ class Image implements \ArrayAccess
     /** 
      * Rotate 270 degrees clockwise.
      *
-     * @return Vips\Image A new image.
+     * @return Image A new image.
      */
     public function rot270() 
     {
