@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 0.1.1 - 2016-10-01
+
+### Added
+- Nothing
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Many phpdoc markup fixes [Kleis Auke Wolthuizen]
+- Fix capitalization JCupitt -> Jcupitt
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ## 0.1.0 - 2016-09-03
 
 ### Added

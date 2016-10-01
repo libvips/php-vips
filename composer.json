@@ -30,7 +30,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "JCupitt\\Vips\\Test\\": "tests"
+            "Jcupitt\\Vips\\Test\\": "tests"
         }
     },
     "extra": {

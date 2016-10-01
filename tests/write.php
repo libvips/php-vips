@@ -1,6 +1,6 @@
 <?php
 
-use JCupitt\Vips;
+use Jcupitt\Vips;
 
 class VipsWriteTest extends PHPUnit_Framework_TestCase 
 {

@@ -1,19 +1,19 @@
 <?php
 
-use JCupitt\Vips;
+use Jcupitt\Vips;
 
 class VipsNewTest extends PHPUnit_Framework_TestCase 
 {
 
   public function testVipsNewFromArray()
   {
-    $image = VIps\Image::newFromArray([1, 2, 3]);
+    $image = Vips\Image::newFromArray([1, 2, 3]);
 
     $this->assertEquals($image->width, 3);
     $this->assertEquals($image->height, 1);
     $this->assertEquals($image->bands, 1);
 
-    $image = VIps\Image::newFromArray([1, 2, 3], 8, 12);
+    $image = Vips\Image::newFromArray([1, 2, 3], 8, 12);
     $this->assertEquals($image->width, 3);
     $this->assertEquals($image->height, 1);
     $this->assertEquals($image->bands, 1);
@@ -24,7 +24,7 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
   public function testVipsNewFromFile()
   {
     $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-    $image = VIps\Image::newFromFile($filename, ["shrink" => 2]);
+    $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
 
     $this->assertEquals($image->width, 800);
     $this->assertEquals($image->height, 600);
@@ -35,7 +35,7 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
   {
     $filename = dirname(__FILE__) . "/images/img_0076.jpg";
     $buffer = file_get_contents($filename);
-    $image = VIps\Image::newFromBuffer($buffer, "", ["shrink" => 2]);
+    $image = Vips\Image::newFromBuffer($buffer, "", ["shrink" => 2]);
 
     $this->assertEquals($image->width, 800);
     $this->assertEquals($image->height, 600);
