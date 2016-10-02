@@ -53,7 +53,7 @@ if (!extension_loaded("vips")) {
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   Release:0.1.1
+ * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
 class Image implements \ArrayAccess
@@ -127,6 +127,22 @@ class Image implements \ArrayAccess
         }
 
         return true;
+    }
+
+    /**
+     * Is $value something that we should treat as an image? 
+     *
+     * Instance of
+     * Image, or 2D arrays are images; 1D arrays or single values are
+     * constants.
+     *
+     * @param mixed $value  The value to test.
+     *
+     * @return bool true if this is like an image.
+     */
+    private static function _isImageish($value)
+    {
+        return self::_is2D($value) or $value instanceof Image;
     }
 
     /**
@@ -374,7 +390,7 @@ class Image implements \ArrayAccess
      */
     private function _callEnum($other, $base, $op, $options = [])
     {
-        if ($other instanceof Image) {
+        if (self::_isImageish($other)) {
             return self::call(
                 $base, $this, array_merge([$other, $op], $options)
             );
@@ -470,7 +486,7 @@ class Image implements \ArrayAccess
      */
     public function add($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if (self::_isImageish($other)) {
             return self::call("add", $this, array_merge([$other], $options));
         } else {
             return self::linear(1, $other, $options); 
@@ -487,7 +503,7 @@ class Image implements \ArrayAccess
      */
     public function subtract($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if (self::_isImageish($other)) {
             return self::call(
                 "subtract", $this, array_merge([$other], $options)
             );
@@ -511,7 +527,7 @@ class Image implements \ArrayAccess
      */
     public function multiply($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if (self::_isImageish($other)) {
             return self::call(
                 "multiply", $this, array_merge([$other], $options)
             );
@@ -530,7 +546,7 @@ class Image implements \ArrayAccess
      */
     public function divide($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if (self::_isImageish($other)) {
             return self::call(
                 "divide", $this, array_merge([$other], $options)
             );
@@ -554,7 +570,7 @@ class Image implements \ArrayAccess
      */
     public function remainder($other, $options = [])
     {
-        if ($other instanceof Image) {
+        if (self::_isImageish($other)) {
             return self::call(
                 "remainder", $this, array_merge([$other], $options)
             );

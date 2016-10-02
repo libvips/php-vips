@@ -114,4 +114,12 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result, [39, 38, 34]);
     }
 
+    public function testVipsMedian()
+    {
+        $vips = $this->image->median(5);
+        $result = $vips->getpoint(0, 0);
+
+        $this->assertEquals($result, [37, 38, 33]);
+    }
+
 }
