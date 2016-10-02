@@ -804,7 +804,7 @@ class Image implements \ArrayAccess
         $result = [];
 
         for ($i = 0; $i < $this->bands; $i++) {
-            $result[] = $this->extract_band($i. $options);
+            $result[] = $this->extract_band($i, $options);
         }
 
         return $result;

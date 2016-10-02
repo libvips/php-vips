@@ -25,6 +25,14 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($rgb->bands, 3);
     }
 
+    public function testVipsBandsplit()
+    {
+        $arr = $this->image->bandsplit();
+
+        $this->assertEquals(count($arr), 3);
+        $this->assertEquals($arr[0]->bands, 1);
+    }
+
     public function testVipsAddConst()
     {
         $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
