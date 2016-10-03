@@ -4,7 +4,8 @@ All notable changes to `:vips` will be documented in this file.
 ## 0.1.2 - 2016-10-02
 
 ### Added
-- Nothing
+- Image::set and Image::get methods, handy for properties whose names do not
+  confirm to PHP conventions
 
 ### Deprecated
 - now require php >= 7.0.11, fixes #10

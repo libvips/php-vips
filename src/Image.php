@@ -136,7 +136,7 @@ class Image implements \ArrayAccess
      * Image, or 2D arrays are images; 1D arrays or single values are
      * constants.
      *
-     * @param mixed $value  The value to test.
+     * @param mixed $value The value to test.
      *
      * @return bool true if this is like an image.
      */
@@ -346,6 +346,38 @@ class Image implements \ArrayAccess
      * @return void
      */
     public function __set($name, $value) 
+    {
+        vips_image_set($this->_image, $name, $value);
+    }
+
+    /**
+     * Get any property from the underlying image. 
+     *
+     * This is handy for fields whose name
+     * does not match PHP's varoiable naming conventions, like `"exif-data"`.
+     * 
+     * @param string $name The property name. 
+     *
+     * @return mixed
+     */
+    public function get($name) 
+    {
+        $result = vips_image_get($this->_image, $name);
+        return self::_wrap($result);
+    }
+
+    /**
+     * Set any property on the underlying image.
+     *
+     * This is handy for fields whose name
+     * does not match PHP's varoiable naming conventions, like `"exif-data"`.
+     * 
+     * @param string $name  The property name. 
+     * @param mixed  $value The value to set for this property.
+     *
+     * @return void
+     */
+    public function set($name, $value) 
     {
         vips_image_set($this->_image, $name, $value);
     }
