@@ -106,6 +106,15 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($pixel, [128, 128, 255]);
     }
 
+    public function testVipsIfthenelseBlend()
+    {
+        $mask = $this->image[1];
+        $blended = $mask->ifthenelse($mask, [255, 0, 0], ["blend" => true]);
+
+        $pixel = $blended->getpoint(0, 0);
+        $this->assertEquals($pixel, [38, 38, 38]);
+    }
+
     public function testVipsMaxpos()
     {
         $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);

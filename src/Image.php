@@ -937,7 +937,7 @@ class Image implements \ArrayAccess
         }
 
         return self::call(
-            "ifthenelse", $this, array_merge([$then, $else], $options)
+            "ifthenelse", $this, array_merge([$then, $else]), $options
         );
     }
 

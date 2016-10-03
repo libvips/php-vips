@@ -13,6 +13,7 @@ All notable changes to `:vips` will be documented in this file.
 ### Fixed
 - support 2D array args to add() etc. 
 - fix bandsplit
+- fix ifthenelse with options
 
 ### Remove
 - Nothing
