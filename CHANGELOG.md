@@ -7,7 +7,7 @@ All notable changes to `:vips` will be documented in this file.
 - Nothing
 
 ### Deprecated
-- Nothing
+- now require php >= 7.0.11, fixes #10
 
 ### Fixed
 - support 2D array args to add() etc. 
