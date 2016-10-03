@@ -5,7 +5,7 @@
  *
  * PHP version 7
  *
- * LICENSE: 
+ * LICENSE:
  *
  * Copyright (c) 2016 John Cupitt
  *
@@ -16,10 +16,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -29,7 +29,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Images
- * @package   Vips
+ * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
@@ -41,15 +41,15 @@ namespace Jcupitt\Vips;
 
 if (!extension_loaded("vips")) {
     if (!dl('vips.' . PHP_SHLIB_SUFFIX)) {
-        echo "vips: unable to load vips extension\n"; 
+        echo "vips: unable to load vips extension\n";
     }
 }
 
 /**
- * Image represents an image. 
+ * Image represents an image.
  *
  * @category  Images
- * @package   Vips
+ * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
@@ -64,15 +64,15 @@ class Image implements \ArrayAccess
     private $_image;
 
     /**
-     * Wrap a Vips\Image around an underlying vips resource. 
+     * Wrap a Image around an underlying vips resource.
      *
      * Don't call this yourself, users should stick to (for example)
-     * Vips\Image::newFromFile().
+     * Image::newFromFile().
      *
      * @param resource $image The underlying vips image resource that this
      *  class should wrap.
      */
-    public function __construct($image) 
+    public function __construct($image)
     {
         $this->_image = $image;
     }
@@ -85,17 +85,19 @@ class Image implements \ArrayAccess
      * @param \Closure $func  Apply this.
      *
      * @return mixed The updated $value.
-     */ 
-    private static function _mapNumeric($value, $func)
+     */
+    private static function _mapNumeric($value, \Closure $func)
     {
         if (is_numeric($value)) {
             $value = $func($value);
-        } else if (is_array($value)) {
-            array_walk_recursive(
-                $value, function (&$item, $key) use ($func) {
-                    $item = self::_mapNumeric($item, $func);
-                }
-            );
+        } else {
+            if (is_array($value)) {
+                array_walk_recursive(
+                    $value, function (&$item, $key) use ($func) {
+                        $item = self::_mapNumeric($item, $func);
+                    }
+                );
+            }
         }
 
         return $value;
@@ -108,20 +110,19 @@ class Image implements \ArrayAccess
      *
      * @return bool true if this is a 2D array.
      */
-    static private function _is2D($value)
+    static private function _is2D($value): bool
     {
         if (!is_array($value)) {
             return false;
         }
 
-        $height = count($value);
         if (!is_array($value[0])) {
             return false;
         }
         $width = count($value[0]);
 
         foreach ($value as $row) {
-            if (!is_array($row) || count($row) != $width) { 
+            if (!is_array($row) || count($row) != $width) {
                 return false;
             }
         }
@@ -130,7 +131,7 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * Is $value something that we should treat as an image? 
+     * Is $value something that we should treat as an image?
      *
      * Instance of
      * Image, or 2D arrays are images; 1D arrays or single values are
@@ -140,32 +141,32 @@ class Image implements \ArrayAccess
      *
      * @return bool true if this is like an image.
      */
-    private static function _isImageish($value)
+    private static function _isImageish($value): bool
     {
-        return self::_is2D($value) or $value instanceof Image;
+        return self::_is2D($value) || $value instanceof Image;
     }
 
     /**
      * Turn a constant (eg. 1, "12", [1, 2, 3], [[1]]) into an image using
      * match_image as a guide.
      *
-     * @param Image $match_image Use this image as a guide. 
+     * @param Image $match_image Use this image as a guide.
      * @param mixed $value       Turn this into an image.
      *
-     * @return Image The image we created. 
+     * @return Image The image we created.
      */
-    private static function _imageize($match_image, $value)
+    private static function _imageize(Image $match_image, $value): Image
     {
         if (self::_is2D($value)) {
             $result = self::newFromArray($value);
         } else {
             $pixel = self::black(1, 1)->add($value)->cast($match_image->format);
             $result = $pixel->embed(
-                0, 0, 
+                0, 0,
                 $match_image->width, $match_image->height,
                 ["extend" => "copy"]
             );
-            $result->interpretation = $match_image->interpretation; 
+            $result->interpretation = $match_image->interpretation;
         }
 
         return $result;
@@ -173,13 +174,13 @@ class Image implements \ArrayAccess
 
     /**
      * Unwrap an array of stuff ready to pass down to the vips_ layer. We
-     * swap instances of the Vips\Image for the plain resource.
+     * swap instances of the Image for the plain resource.
      *
-     * @param mixed $result Unwrap this.
+     * @param array $result Unwrap this.
      *
-     * @return mixed $result unwrapped, ready for vips.
+     * @return array $result unwrapped, ready for vips.
      */
-    private static function _unwrap($result) 
+    private static function _unwrap(array $result): array
     {
         array_walk_recursive(
             $result, function (&$item, $key) {
@@ -194,32 +195,32 @@ class Image implements \ArrayAccess
 
     /**
      * Is $value a VipsImage.
-     * 
+     *
      * @param mixed $value The thing to test.
      *
      * @return bool true if this is a vips image resource.
      */
-    private static function _isImage($value)
+    private static function _isImage($value): bool
     {
-            return is_resource($value) &&
-                get_resource_type($value) == "GObject";
+        return is_resource($value) &&
+        get_resource_type($value) == "GObject";
     }
 
     /**
-     * Wrap up the result of a vips_ call ready to erturn it to PHP. We do 
+     * Wrap up the result of a vips_ call ready to return it to PHP. We do
      * two things:
      *
-     * - If the array is a singleton, we strip it off. For example, many 
-     *   operations return a single result and there's no sense handling 
-     *   this as an array of values, so we transform ["out" => x] -> x. 
+     * - If the array is a singleton, we strip it off. For example, many
+     *   operations return a single result and there's no sense handling
+     *   this as an array of values, so we transform ["out" => x] -> x.
      *
-     * - Any VipsImage resources are rewrapped as instances of Vips\Image.
+     * - Any VipsImage resources are rewrapped as instances of Image.
      *
      * @param mixed $result Wrap this up.
      *
      * @return mixed $result, but wrapped up as a php class.
      */
-    private static function _wrap($result) 
+    private static function _wrap($result)
     {
         if (!is_array($result)) {
             $result = ["x" => $result];
@@ -227,7 +228,7 @@ class Image implements \ArrayAccess
 
         array_walk_recursive(
             $result, function (&$item) {
-                if (self::_isImage($item)) { 
+                if (self::_isImage($item)) {
                     $item = new Image($item);
                 }
             }
@@ -240,84 +241,89 @@ class Image implements \ArrayAccess
         return $result;
     }
 
-    /** 
-     * Create a new Vips\Image from a file on disc.
+    /**
+     * Create a new Image from a file on disc.
      *
      * @param string $filename The file to open.
      * @param array  $options  Any options to pass on to the load operation.
      *
-     * @return Image A new Vips\Image.
+     * @return Image A new Image.
      */
-    public static function newFromFile($filename, $options = []) 
+    public static function newFromFile(string $filename, array $options = []): Image
     {
         $options = self::_unwrap($options);
         $result = vips_image_new_from_file($filename, $options);
         return self::_wrap($result);
     }
 
-    /** 
-     * Create a new Vips\Image from a compressed image held as a string. 
+    /**
+     * Create a new Image from a compressed image held as a string.
      *
      * @param string $buffer        The formatted image to open.
      * @param string $option_string Any text-style options to pass to the
-     *     selected loader. 
+     *     selected loader.
      * @param array  $options       Any options to pass on to the load operation.
      *
-     * @return Image A new Vips\Image.
+     * @return Image A new Image.
      */
-    public static function newFromBuffer($buffer, 
-        $option_string = "", $options = []
-    ) {
+    public static function newFromBuffer(
+        string $buffer,
+        string $option_string = "",
+        array $options = []
+    ): Image {
+
+
         $options = self::_unwrap($options);
         $result = vips_image_new_from_buffer($buffer, $option_string, $options);
         return self::_wrap($result);
     }
 
-    /** 
-     * Create a new Vips\Image from a php array. 
+    /**
+     * Create a new Image from a php array.
      *
-     * 2D arrays become 2D images. 1D arrays become 2D images with height 1. 
+     * 2D arrays become 2D images. 1D arrays become 2D images with height 1.
      *
-     * @param array  $array  The array to make the image from. 
-     * @param double $scale  The "scale" metadata item. Useful for integer
+     * @param array $array  The array to make the image from.
+     * @param float $scale  The "scale" metadata item. Useful for integer
      *     convolution masks.
-     * @param double $offset The "offset" metadata item. Useful for integer
+     * @param float $offset The "offset" metadata item. Useful for integer
      *     convolution masks.
      *
-     * @return Image A new Vips\Image.
+     * @return Image A new Image.
      */
-    public static function newFromArray($array, $scale = 1, $offset = 0) 
-    {
+    public static function newFromArray(
+        array $array,
+        float $scale = 1.0,
+        float $offset = 0.0
+    ): Image {
         $result = vips_image_new_from_array($array, $scale, $offset);
         return self::_wrap($result);
     }
 
-    /** 
-     * Write an image to a file. 
+    /**
+     * Write an image to a file.
      *
      * @param string $filename The file to write the image to.
-     * @param array  $options  Any options to pass on to the selected save 
-     * operation.
+     * @param array  $options  Any options to pass on to the selected save operation.
      *
      * @return bool true for success and false for failure.
      */
-    public function writeToFile($filename, $options = []) 
+    public function writeToFile(string $filename, array $options = []): bool
     {
         $options = self::_unwrap($options);
         $result = vips_image_write_to_file($this->_image, $filename, $options);
         return self::_wrap($result);
     }
 
-    /** 
-     * Write an image to a formatted string. 
+    /**
+     * Write an image to a formatted string.
      *
      * @param string $suffix  The file type suffix, eg. ".jpg".
-     * @param array  $options Any options to pass on to the selected save 
-     * operation.
+     * @param array  $options Any options to pass on to the selected save operation.
      *
-     * @return string The formatted image. 
+     * @return string The formatted image.
      */
-    public function writeToBuffer($suffix, $options = []) 
+    public function writeToBuffer(string $suffix, array $options = []): string
     {
         $options = self::_unwrap($options);
         $result = vips_image_write_to_buffer($this->_image, $suffix, $options);
@@ -326,12 +332,12 @@ class Image implements \ArrayAccess
 
     /**
      * Get any property from the underlying image.
-     * 
-     * @param string $name The property name. 
+     *
+     * @param string $name The property name.
      *
      * @return mixed
      */
-    public function __get($name) 
+    public function __get(string $name)
     {
         $result = vips_image_get($this->_image, $name);
         return self::_wrap($result);
@@ -339,28 +345,28 @@ class Image implements \ArrayAccess
 
     /**
      * Set any property on the underlying image.
-     * 
-     * @param string $name  The property name. 
+     *
+     * @param string $name  The property name.
      * @param mixed  $value The value to set for this property.
      *
      * @return void
      */
-    public function __set($name, $value) 
+    public function __set(string $name, $value)
     {
         vips_image_set($this->_image, $name, $value);
     }
 
     /**
-     * Get any property from the underlying image. 
+     * Get any property from the underlying image.
      *
      * This is handy for fields whose name
-     * does not match PHP's varoiable naming conventions, like `"exif-data"`.
-     * 
-     * @param string $name The property name. 
+     * does not match PHP's variable naming conventions, like `"exif-data"`.
+     *
+     * @param string $name The property name.
      *
      * @return mixed
      */
-    public function get($name) 
+    public function get(string $name)
     {
         $result = vips_image_get($this->_image, $name);
         return self::_wrap($result);
@@ -370,14 +376,14 @@ class Image implements \ArrayAccess
      * Set any property on the underlying image.
      *
      * This is handy for fields whose name
-     * does not match PHP's varoiable naming conventions, like `"exif-data"`.
-     * 
-     * @param string $name  The property name. 
+     * does not match PHP's variable naming conventions, like `"exif-data"`.
+     *
+     * @param string $name  The property name.
      * @param mixed  $value The value to set for this property.
      *
      * @return void
      */
-    public function set($name, $value) 
+    public function set(string $name, $value)
     {
         vips_image_set($this->_image, $name, $value);
     }
@@ -385,24 +391,29 @@ class Image implements \ArrayAccess
     /**
      * Call any vips operation.
      *
-     * @param string  $name      The operation name. 
-     * @param Image   $instance  The instance this operation is being 
-     *     invoked from.
-     * @param mixed[] $arguments An array of arguments to pass to the operation.
+     * @param string     $name      The operation name.
+     * @param Image|null $instance  The instance this operation is being invoked
+     *     from.
+     * @param array      $arguments An array of arguments to pass to the operation.
+     * @param array      $options   An array of options to pass to the operation.
      *
-     * @return mixed The result(s) of the operation. 
+     * @return mixed The result(s) of the operation.
      */
-    public static function call($name, $instance, $arguments) 
-    {
+    public static function call(
+        string $name,
+        $instance,
+        array $arguments,
+        array $options = []
+    ) {
         /*
-        echo "call: ", $name, "\n"; 
+        echo "call: ", $name, "\n";
         echo "instance = ";
         var_dump($instance);
         echo "arguments = ";
         var_dump($arguments);
          */
 
-        $arguments = array_merge([$name, $instance], $arguments);
+        $arguments = array_merge([$name, $instance], $arguments, $options);
         $arguments = self::_unwrap($arguments);
         $result = call_user_func_array("vips_call", $arguments);
         return self::_wrap($result);
@@ -413,22 +424,27 @@ class Image implements \ArrayAccess
      * "more", but if the arg is not an image (ie. it's a constant), call
      * "more_const" instead.
      *
-     * @param mixed   $other   The right-hand argument. 
-     * @param string  $base    The base part of the operation name. 
-     * @param string  $op      The action to invoke.
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed  $other   The right-hand argument.
+     * @param string $base    The base part of the operation name.
+     * @param string $op      The action to invoke.
+     * @param array  $options An array of options to pass to the operation.
      *
-     * @return mixed[] The operation result.
+     * @return mixed The operation result.
      */
-    private function _callEnum($other, $base, $op, $options = [])
-    {
+    private function _callEnum(
+        $other,
+        string $base,
+        string $op,
+        array $options = []
+    ) {
+
         if (self::_isImageish($other)) {
             return self::call(
-                $base, $this, array_merge([$other, $op], $options)
+                $base, $this, [$other, $op], $options
             );
         } else {
             return self::call(
-                $base . "_const", $this, array_merge([$op, $other], $options)
+                $base . "_const", $this, [$op, $other], $options
             );
         }
     }
@@ -436,37 +452,37 @@ class Image implements \ArrayAccess
     /**
      * Call any vips operation as an instance method.
      *
-     * @param string  $name      The thing we call.
-     * @param mixed[] $arguments The arguments to the thing.
+     * @param string $name      The thing we call.
+     * @param array  $arguments The arguments to the thing.
      *
      * @return mixed The result.
      */
-    public function __call($name, $arguments) 
+    public function __call(string $name, array $arguments)
     {
-        return self::call($name, $this, $arguments); 
+        return self::call($name, $this, $arguments);
     }
 
     /**
      * Call any vips operation as a class method.
      *
-     * @param string  $name      The thing we call.
-     * @param mixed[] $arguments The arguments to the thing.
+     * @param string $name      The thing we call.
+     * @param array  $arguments The arguments to the thing.
      *
      * @return mixed The result.
      */
-    public static function __callStatic($name, $arguments) 
+    public static function __callStatic(string $name, array $arguments)
     {
-        return self::call($name, null, $arguments); 
+        return self::call($name, null, $arguments);
     }
 
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param long $offset The index to fetch.
+     * @param mixed $offset The index to fetch.
      *
      * @return bool true if the index exists.
      */
-    public function offsetExists($offset) 
+    public function offsetExists($offset): bool
     {
         return $offset >= 0 && $offset <= $this->bands - 1;
     }
@@ -474,11 +490,11 @@ class Image implements \ArrayAccess
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param long $offset The index to fetch.
+     * @param mixed $offset The index to fetch.
      *
      * @return Image the extracted band.
      */
-    public function offsetGet($offset) 
+    public function offsetGet($offset): Image
     {
         return self::offsetExists($offset) ? self::extract_band($offset) : null;
     }
@@ -486,58 +502,58 @@ class Image implements \ArrayAccess
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param long  $offset The index to set.
+     * @param mixed $offset The index to set.
      * @param Image $value  The band to insert
      *
      * @return Image the expanded image.
      */
-    public function offsetSet($offset, $value) 
+    public function offsetSet($offset, $value): Image
     {
-        echo "Vips\Image::offsetSet: not implemented\n"; 
+        throw new \BadMethodCallException("Image::offsetSet: not implemented");
     }
 
     /**
      * Our ArrayAccess interface ... we allow [] to get band.
      *
-     * @param long $offset The index to remove.
+     * @param mixed $offset The index to remove.
      *
      * @return Image the reduced image.
      */
-    public function offsetUnset($offset) 
+    public function offsetUnset($offset): Image
     {
-        echo "Vips\Image::offsetUnset: not implemented\n"; 
+        throw new \BadMethodCallException("Image::offsetUnset: not implemented");
     }
 
     /**
      * Add $other to this image.
      *
-     * @param mixed   $other   The thing to add to this image.
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The thing to add to this image.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function add($other, $options = [])
+    public function add($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
-            return self::call("add", $this, array_merge([$other], $options));
+            return self::call("add", $this, [$other], $options);
         } else {
-            return self::linear(1, $other, $options); 
+            return self::linear(1, $other, $options);
         }
     }
 
     /**
      * Subtract $other from this image.
      *
-     * @param mixed   $other   The thing to subtract from this image.
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The thing to subtract from this image.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function subtract($other, $options = [])
+    public function subtract($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
             return self::call(
-                "subtract", $this, array_merge([$other], $options)
+                "subtract", $this, [$other], $options
             );
         } else {
             $other = self::_mapNumeric(
@@ -552,16 +568,16 @@ class Image implements \ArrayAccess
     /**
      * Multiply this image by $other.
      *
-     * @param mixed   $other   The thing to multiply this image by.
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The thing to multiply this image by.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function multiply($other, $options = [])
+    public function multiply($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
             return self::call(
-                "multiply", $this, array_merge([$other], $options)
+                "multiply", $this, [$other], $options
             );
         } else {
             return self::linear($other, 0, $options);
@@ -571,16 +587,16 @@ class Image implements \ArrayAccess
     /**
      * Divide this image by $other.
      *
-     * @param mixed   $other   The thing to divide this image by.
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The thing to divide this image by.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function divide($other, $options = [])
+    public function divide($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
             return self::call(
-                "divide", $this, array_merge([$other], $options)
+                "divide", $this, [$other], $options
             );
         } else {
             $other = self::_mapNumeric(
@@ -595,20 +611,20 @@ class Image implements \ArrayAccess
     /**
      * Remainder of this image and $other.
      *
-     * @param mixed   $other   The thing to take the remainder with.
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The thing to take the remainder with.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function remainder($other, $options = [])
+    public function remainder($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
             return self::call(
-                "remainder", $this, array_merge([$other], $options)
+                "remainder", $this, [$other], $options
             );
         } else {
             return self::call(
-                "remainder_const", $this, array_merge([$other], $options)
+                "remainder_const", $this, [$other], $options
             );
         }
     }
@@ -616,12 +632,12 @@ class Image implements \ArrayAccess
     /**
      * Find $this to the power of $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function pow($other, $options = [])
+    public function pow($other, array $options = []): Image
     {
         return self::_callEnum($other, "math2", "pow", $options);
     }
@@ -629,12 +645,12 @@ class Image implements \ArrayAccess
     /**
      * Find $other to the power of $this.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function wop($other, $options = [])
+    public function wop($other, array $options = []): Image
     {
         return self::_callEnum($other, "math2", "wop", $options);
     }
@@ -642,12 +658,12 @@ class Image implements \ArrayAccess
     /**
      * Shift $this left by $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function lshift($other, $options = [])
+    public function lshift($other, array $options = []): Image
     {
         return self::_callEnum($other, "boolean", "lshift", $options);
     }
@@ -655,12 +671,12 @@ class Image implements \ArrayAccess
     /**
      * Shift $this right by $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function rshift($other, $options = [])
+    public function rshift($other, array $options = []): Image
     {
         return self::_callEnum($other, "boolean", "rshift", $options);
     }
@@ -669,51 +685,51 @@ class Image implements \ArrayAccess
      * Bitwise AND of $this and $other. This has to be called ->andimage()
      * rather than ->and() to avoid confusion in phpdoc.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function andimage($other, $options = [])
+    public function andimage($other, array $options = []): Image
     {
         return self::_callEnum($other, "boolean", "and", $options);
     }
 
     /**
-     * Bitwise OR of $this and $other. 
+     * Bitwise OR of $this and $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function orimage($other, $options = [])
+    public function orimage($other, array $options = []): Image
     {
         return self::_callEnum($other, "boolean", "or", $options);
     }
 
     /**
-     * Bitwise EOR of $this and $other. 
+     * Bitwise EOR of $this and $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function eorimage($other, $options = [])
+    public function eorimage($other, array $options = []): Image
     {
         return self::_callEnum($other, "boolean", "eor", $options);
     }
 
     /**
-     * 255 where $this is more than $other. 
+     * 255 where $this is more than $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function more($other, $options = [])
+    public function more($other, array $options = []): Image
     {
         return self::_callEnum($other, "relational", "more", $options);
     }
@@ -721,12 +737,12 @@ class Image implements \ArrayAccess
     /**
      * 255 where $this is more than or equal to $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function moreEq($other, $options = [])
+    public function moreEq($other, array $options = []): Image
     {
         return self::_callEnum($other, "relational", "moreeq", $options);
     }
@@ -734,12 +750,12 @@ class Image implements \ArrayAccess
     /**
      * 255 where $this is less than $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function less($other, $options = [])
+    public function less($other, array $options = []): Image
     {
         return self::_callEnum($other, "relational", "less", $options);
     }
@@ -747,12 +763,12 @@ class Image implements \ArrayAccess
     /**
      * 255 where $this is less than or equal to $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function lessEq($other, $options = [])
+    public function lessEq($other, array $options = []): Image
     {
         return self::_callEnum($other, "relational", "lesseq", $options);
     }
@@ -760,12 +776,12 @@ class Image implements \ArrayAccess
     /**
      * 255 where $this is equal to $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function equal($other, $options = [])
+    public function equal($other, array $options = []): Image
     {
         return self::_callEnum($other, "relational", "equal", $options);
     }
@@ -773,12 +789,12 @@ class Image implements \ArrayAccess
     /**
      * 255 where $this is not equal to $other.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function notEq($other, $options = [])
+    public function notEq($other, array $options = []): Image
     {
         return self::_callEnum($other, "relational", "noteq", $options);
     }
@@ -786,12 +802,12 @@ class Image implements \ArrayAccess
     /**
      * Join $this and $other bandwise.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function bandjoin($other, $options = [])
+    public function bandjoin($other, array $options = []): Image
     {
         /* Allow a single unarrayed value as well.
          */
@@ -813,13 +829,11 @@ class Image implements \ArrayAccess
          */
         if ($is_const) {
             return self::call(
-                "bandjoin_const", $this, array_merge([$other], $options)
+                "bandjoin_const", $this, [$other], $options
             );
         } else {
             return self::call(
-                "bandjoin", null, array_merge(
-                    [array_merge([$this], $other)], $options
-                )
+                "bandjoin", null, [array_merge([$this], $other)], $options
             );
         }
     }
@@ -827,11 +841,11 @@ class Image implements \ArrayAccess
     /**
      * Split $this into an array of single-band images.
      *
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param array $options An array of options to pass to the operation.
      *
-     * @return Image[] An array of images. 
+     * @return array An array of images.
      */
-    public function bandsplit($options = [])
+    public function bandsplit(array $options = []): array
     {
         $result = [];
 
@@ -844,17 +858,17 @@ class Image implements \ArrayAccess
 
     /**
      * For each band element, sort the array of input images and pick the
-     * median. Use the index option to pick something else.  
+     * median. Use the index option to pick something else.
      *
-     * @param mixed   $other   The right-hand side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $other   The right-hand side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function bandrank($other, $options = [])
+    public function bandrank($other, array $options = []): Image
     {
         /* bandrank will appear as a static class member, as 
-         * Vips\Image::bandrank([a, b, c]), but it's better as an instance 
+         * Image::bandrank([a, b, c]), but it's better as an instance
          * method.
          * 
          * We need to define this by hand.
@@ -867,18 +881,16 @@ class Image implements \ArrayAccess
         }
 
         return self::call(
-            "bandrank", null, array_merge(
-                [array_merge([$this], $other)], $options
-            )
+            "bandrank", $this, $other, $options
         );
     }
 
     /**
      * Position of max is awkward with plain self::max.
      *
-     * @return array (double, long, long) The value and position of the maximum.
+     * @return array (float, int, int) The value and position of the maximum.
      */
-    public function maxpos()
+    public function maxpos(): array
     {
         $result = $this->max(["x" => true, "y" => true]);
         $out = $result["out"];
@@ -891,9 +903,9 @@ class Image implements \ArrayAccess
     /**
      * Position of min is awkward with plain self::max.
      *
-     * @return array (double, long, long) The value and position of the minimum.
+     * @return array (float, int, int) The value and position of the minimum.
      */
-    public function minpos()
+    public function minpos(): array
     {
         $result = $this->min(["x" => true, "y" => true]);
         $out = $result["out"];
@@ -907,13 +919,13 @@ class Image implements \ArrayAccess
      * Use $this as a condition image to pick pixels from either $then or
      * $else.
      *
-     * @param mixed   $then    The true side of the operator
-     * @param mixed   $else    The false side of the operator. 
-     * @param mixed[] $options An array of options to pass to the operation.
+     * @param mixed $then    The true side of the operator
+     * @param mixed $else    The false side of the operator.
+     * @param array $options An array of options to pass to the operation.
      *
      * @return Image A new image.
      */
-    public function ifthenelse($then, $else, $options = [])
+    public function ifthenelse($then, $else, array $options = []): Image
     {
         /* We need different imageize rules for this. We need $then and $else to
          * match each other first, and only if they are both constants do we
@@ -937,86 +949,86 @@ class Image implements \ArrayAccess
         }
 
         return self::call(
-            "ifthenelse", $this, array_merge([$then, $else]), $options
+            "ifthenelse", $this, [$then, $else], $options
         );
     }
 
-    /** 
+    /**
      * Return the largest integral value not greater than the argument.
      *
      * @return Image A new image.
      */
-    public function floor() 
+    public function floor(): Image
     {
         return $this->round("floor");
     }
 
-    /** 
+    /**
      * Return the smallest integral value not less than the argument.
      *
      * @return Image A new image.
      */
-    public function ceil() 
+    public function ceil(): Image
     {
         return $this->round("ceil");
     }
 
-    /** 
+    /**
      * Return the nearest integral value.
      *
      * @return Image A new image.
      */
-    public function rint() 
+    public function rint(): Image
     {
         return $this->round("rint");
     }
 
-    /** 
+    /**
      * AND image bands together.
      *
      * @return Image A new image.
      */
-    public function bandand() 
+    public function bandand(): Image
     {
         return $this->bandbool("and");
     }
 
-    /** 
+    /**
      * OR image bands together.
      *
      * @return Image A new image.
      */
-    public function bandor() 
+    public function bandor(): Image
     {
         return $this->bandbool("or");
     }
 
-    /** 
+    /**
      * EOR image bands together.
      *
      * @return Image A new image.
      */
-    public function bandeor() 
+    public function bandeor(): Image
     {
         return $this->bandbool("eor");
     }
 
-    /** 
+    /**
      * Return the real part of a complex image.
      *
      * @return Image A new image.
      */
-    public function real() 
+    public function real(): Image
     {
         return $this->complexget("real");
     }
 
-    /** 
+    /**
      * Return the imaginary part of a complex image.
      *
      * @return Image A new image.
      */
-    public function imag() 
+    public function imag(): Image
     {
         return $this->complexget("imag");
     }
@@ -1058,218 +1070,218 @@ class Image implements \ArrayAccess
         return image
      */
 
-    /** 
+    /**
      * Return an image converted to polar coordinates.
      *
      * @return Image A new image.
      */
-    public function polar() 
+    public function polar(): Image
     {
         return $this->complex("polar");
     }
 
-    /** 
+    /**
      * Return an image converted to rectangular coordinates.
      *
      * @return Image A new image.
      */
-    public function rect() 
+    public function rect(): Image
     {
         return $this->complex("rect");
     }
 
-    /** 
+    /**
      * Return the complex conjugate of an image.
      *
      * @return Image A new image.
      */
-    public function conj() 
+    public function conj(): Image
     {
         return $this->complex("conj");
     }
 
-    /** 
+    /**
      * Return the sine of an image in degrees.
      *
      * @return Image A new image.
      */
-    public function sin() 
+    public function sin(): Image
     {
         return $this->math("sin");
     }
 
-    /** 
+    /**
      * Return the cosine of an image in degrees.
      *
      * @return Image A new image.
      */
-    public function cos() 
+    public function cos(): Image
     {
         return $this->math("cos");
     }
 
-    /** 
+    /**
      * Return the tangent of an image in degrees.
      *
      * @return Image A new image.
      */
-    public function tan() 
+    public function tan(): Image
     {
         return $this->math("tan");
     }
 
-    /** 
+    /**
      * Return the inverse sine of an image in degrees.
      *
      * @return Image A new image.
      */
-    public function asin() 
+    public function asin(): Image
     {
         return $this->math("asin");
     }
 
-    /** 
+    /**
      * Return the inverse cosine of an image in degrees.
      *
      * @return Image A new image.
      */
-    public function acos() 
+    public function acos(): Image
     {
         return $this->math("acos");
     }
 
-    /** 
+    /**
      * Return the inverse tangent of an image in degrees.
      *
      * @return Image A new image.
      */
-    public function atan() 
+    public function atan(): Image
     {
         return $this->math("atan");
     }
 
-    /** 
+    /**
      * Return the natural log of an image.
      *
      * @return Image A new image.
      */
-    public function log() 
+    public function log(): Image
     {
         return $this->math("log");
     }
 
-    /** 
+    /**
      * Return the log base 10 of an image.
      *
      * @return Image A new image.
      */
-    public function log10() 
+    public function log10(): Image
     {
         return $this->math("log10");
     }
 
-    /** 
+    /**
      * Return e ** pixel.
      *
      * @return Image A new image.
      */
-    public function exp() 
+    public function exp(): Image
     {
         return $this->math("exp");
     }
 
-    /** 
+    /**
      * Return 10 ** pixel.
      *
      * @return Image A new image.
      */
-    public function exp10() 
+    public function exp10(): Image
     {
         return $this->math("exp10");
     }
 
-    /** 
+    /**
      * Erode with a structuring element.
      *
-     * @param mixed $mask Erode with this structing element.
+     * @param mixed $mask Erode with this structuring element.
      *
      * @return Image A new image.
      */
-    public function erode($mask) 
+    public function erode($mask): Image
     {
         return $this->morph($mask, "erode");
     }
 
-    /** 
+    /**
      * Dilate with a structuring element.
      *
-     * @param mixed $mask Dilate with this structing element.
+     * @param mixed $mask Dilate with this structuring element.
      *
      * @return Image A new image.
      */
-    public function dilate($mask) 
+    public function dilate($mask): Image
     {
         return $this->morph($mask, "dilate");
     }
 
-    /** 
+    /**
      * $size x $size median filter.
      *
-     * @param long $size Size of median filter.
+     * @param int $size Size of median filter.
      *
      * @return Image A new image.
      */
-    public function median($size)
+    public function median(int $size): Image
     {
         return $this->rank($size, $size, ($size * $size) / 2);
     }
 
-    /** 
+    /**
      * Flip horizontally.
      *
      * @return Image A new image.
      */
-    public function fliphor() 
+    public function fliphor(): Image
     {
         return $this->flip("horizontal");
     }
 
-    /** 
+    /**
      * Flip vertically.
      *
      * @return Image A new image.
      */
-    public function flipver() 
+    public function flipver(): Image
     {
         return $this->flip("vertical");
     }
 
-    /** 
+    /**
      * Rotate 90 degrees clockwise.
      *
      * @return Image A new image.
      */
-    public function rot90() 
+    public function rot90(): Image
     {
         return $this->rot("d90");
     }
 
-    /** 
+    /**
      * Rotate 180 degrees.
      *
      * @return Image A new image.
      */
-    public function rot180() 
+    public function rot180(): Image
     {
         return $this->rot("d180");
     }
 
-    /** 
+    /**
      * Rotate 270 degrees clockwise.
      *
      * @return Image A new image.
      */
-    public function rot270() 
+    public function rot270(): Image
     {
         return $this->rot("d270");
     }
