@@ -20,14 +20,14 @@ require 'vips'
 
 # these have hand-written methods, don't autodoc them
 $no_generate = %w( 
-    bandjoin, 
-    bandrank, 
-    ifthenelse, 
-    add, 
-    subtract,
-    multiply,
-    divide,
-    remainder,
+    bandjoin 
+    bandrank 
+    ifthenelse
+    add
+    subtract
+    multiply
+    divide
+    remainder
 )
 
 # map Ruby type names to PHP type names
@@ -141,6 +141,10 @@ def generate_class(gtype)
     gtype.children.each {|x| generate_class x}
 end
 
+puts "/**"
+puts " * These @method comments were generated automatically. Do not edit!"
+puts " */"
+puts ""
 puts "/**"
 
 # gobject-introspection 3.0.7 crashes a lot if it GCs while doing 

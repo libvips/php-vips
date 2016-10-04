@@ -1,11 +1,10 @@
 /**
+ * These @method comments were generated automatically. Do not edit!
+ */
+
+/**
  * @method static void system(string $cmd_format, array $options = []) Run an external command.
- * @method Image add(Image $right, array $options = []) Add two images.
- * @method Image subtract(Image $right, array $options = []) Subtract two images.
- * @method Image multiply(Image $right, array $options = []) Multiply two images.
- * @method Image divide(Image $right, array $options = []) Divide two images.
  * @method Image relational(Image $right,  $relational, array $options = []) Relational operation on two images.
- * @method Image remainder(Image $right, array $options = []) Remainder after integer division of two images.
  * @method Image boolean(Image $right,  $boolean, array $options = []) Boolean operation on two images.
  * @method Image math2(Image $right,  $math2, array $options = []) Binary math operations.
  * @method Image complex2(Image $right,  $cmplx, array $options = []) Complex binary operations on two images.
@@ -50,9 +49,7 @@
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
  * @method Image extract_band(integer $band, array $options = []) Extract band from an image.
- * @method static Image bandjoin(array $in, array $options = []) Bandwise join a set of images.
  * @method Image bandjoin_const(array $c, array $options = []) Append a constant band to an image.
- * @method static Image bandrank(array $in, array $options = []) Band-wise rank of a set of images.
  * @method Image bandmean(array $options = []) Band-wise average.
  * @method Image bandbool( $boolean, array $options = []) Boolean operation across image bands.
  * @method Image replicate(integer $across, integer $down, array $options = []) Replicate an image.
@@ -60,7 +57,6 @@
  * @method Image rot( $angle, array $options = []) Rotate an image.
  * @method Image rot45(array $options = []) Rotate an image.
  * @method Image autorot(array $options = []) Autorotate image by exif tag.
- * @method Image ifthenelse(Image $in1, Image $in2, array $options = []) Ifthenelse an image.
  * @method Image recomb(Image $m, array $options = []) Linear recombination with matrix.
  * @method Image bandfold(array $options = []) Fold up x axis into bands.
  * @method Image bandunfold(array $options = []) Unfold image bands into x axis.
