@@ -86,7 +86,13 @@ to add 1 to the first band, 2 to the second and 3 to the third. Or:
 $image = $image->add($image2);
 ```
 
-to add two images. 
+to add two images. Or: 
+
+```
+$image = $image->add([[1, 2, 3], [4, 5, 6]]);
+```
+
+To make a 2 x 3 image from the array, then add that image to the original.
 
 Almost all methods can take an optional final argument, an array of options.
 For example:

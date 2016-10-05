@@ -34,4 +34,16 @@ class VipsCallTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($image->getpoint(0, 0), [1]);
     }
 
+    public function testVipsDraw()
+    {
+        $image = Vips\Image::black(100, 100);
+        $image = $image->draw_circle(255, 50, 50, 20, ["fill" => true]);
+
+        $this->assertEquals($image->width, 100);
+        $this->assertEquals($image->height, 100);
+        $this->assertEquals($image->bands, 1);
+        $this->assertEquals($image->getpoint(0, 0), [0]);
+        $this->assertEquals($image->getpoint(50, 50), [255]);
+    }
+
 }

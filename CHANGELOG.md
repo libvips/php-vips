@@ -7,6 +7,7 @@ All notable changes to `:vips` will be documented in this file.
 - Image::set and Image::get methods, handy for properties whose names do not
   confirm to PHP conventions
 - type annotations [Kleis Auke Wolthuizen]
+- libvips draw calls now work
 
 ### Deprecated
 - now require php >= 7.0.11, fixes #10
