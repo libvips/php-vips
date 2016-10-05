@@ -58,6 +58,19 @@ if (!extension_loaded("vips")) {
  */
 class Image implements \ArrayAccess
 {
+    static private $enable_logging = false;
+
+    /**
+     * Turn logging on and off. This will produce a huge amount of output, but
+     * is handy for debugging.
+     *
+     * @param bool $logging true to turn logging on.
+     */
+    public static function setLogging($logging)
+    {
+        $enable_logging = $logging;
+    }
+
     /**
      * The resource for the underlying VipsImage.
      */
@@ -70,7 +83,7 @@ class Image implements \ArrayAccess
      * Image::newFromFile().
      *
      * @param resource $image The underlying vips image resource that this
-     *  class should wrap.
+     *      class should wrap.
      */
     public function __construct($image)
     {
@@ -133,9 +146,8 @@ class Image implements \ArrayAccess
     /**
      * Is $value something that we should treat as an image?
      *
-     * Instance of
-     * Image, or 2D arrays are images; 1D arrays or single values are
-     * constants.
+     * Instance of Image, or 2D arrays are images; 1D arrays or single values 
+     * are constants.
      *
      * @param mixed $value The value to test.
      *
@@ -249,8 +261,9 @@ class Image implements \ArrayAccess
      *
      * @return Image A new Image.
      */
-    public static function newFromFile(string $filename, array $options = []): Image
-    {
+    public static function newFromFile(
+        string $filename, array $options = []
+    ): Image {
         $options = self::_unwrap($options);
         $result = vips_image_new_from_file($filename, $options);
         return self::_wrap($result);
@@ -271,8 +284,6 @@ class Image implements \ArrayAccess
         string $option_string = "",
         array $options = []
     ): Image {
-
-
         $options = self::_unwrap($options);
         $result = vips_image_new_from_buffer($buffer, $option_string, $options);
         return self::_wrap($result);
@@ -409,13 +420,13 @@ class Image implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        /*
-        echo "call: ", $name, "\n";
-        echo "instance = ";
-        var_dump($instance);
-        echo "arguments = ";
-        var_dump($arguments);
-         */
+        if ($enable_logging) {
+            echo "callBase: ", $name, "\n";
+            echo "instance = ";
+            var_dump($instance);
+            echo "arguments = ";
+            var_dump($arguments);
+        }
 
         $arguments = array_merge([$name, $instance], $arguments);
 
@@ -426,7 +437,25 @@ class Image implements \ArrayAccess
 
         $arguments = self::_unwrap($arguments);
         $result = call_user_func_array("vips_call", $arguments);
-        return self::_wrap($result);
+
+        /* We get -1 on failure, an array of results on success.
+         */
+        if (!is_array($result)) {
+            $message = vips_error_buffer();
+            if ($enable_logging) {
+                echo "failure:  $message\n";
+            }
+            throw new \Exception($message);
+        }
+
+        $result =  self::_wrap($result);
+
+        if ($enable_logging) {
+            echo "result = ";
+            var_dump($result);
+        }
+
+        return $result;
     }
 
     /**
