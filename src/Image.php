@@ -393,6 +393,7 @@ class Image implements \ArrayAccess
     public function __get(string $name)
     {
         $result = vips_image_get($this->_image, $name);
+        self::_errorCheck($result);
         return self::_wrap($result);
     }
 
@@ -422,6 +423,7 @@ class Image implements \ArrayAccess
     public function get(string $name)
     {
         $result = vips_image_get($this->_image, $name);
+        self::_errorCheck($result);
         return self::_wrap($result);
     }
 
