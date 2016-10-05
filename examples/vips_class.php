@@ -5,6 +5,8 @@ include '../src/Image.php';
 
 use Jcupitt\Vips;
 
+Vips\Image::setLogging(true);
+
 $image = Vips\Image::newFromFile($argv[1]); 
 
 echo "width = ", $image->width, "\n";

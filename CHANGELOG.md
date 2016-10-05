@@ -8,6 +8,8 @@ All notable changes to `:vips` will be documented in this file.
   confirm to PHP conventions
 - type annotations [Kleis Auke Wolthuizen]
 - libvips draw calls now work
+- logging, see Vips\Image::setLogging()
+- exceptions on error
 
 ### Deprecated
 - now require php >= 7.0.11, fixes #10

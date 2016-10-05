@@ -68,7 +68,7 @@ class Image implements \ArrayAccess
      */
     public static function setLogging($logging)
     {
-        $enable_logging = $logging;
+        self::$enable_logging = $logging;
     }
 
     /**
@@ -254,6 +254,26 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * Check the result of a vips_ call for an error, and throw an exception
+     * if we see one.
+     *
+     * This won't work for things like __get where a non-array return can be 
+     * a valid return.
+     *
+     * @param mixed $result Test this.
+     */
+    private static function _errorCheck($result)
+    {
+        if (!is_array($result)) {
+            $message = vips_error_buffer();
+            if (self::$enable_logging) {
+                echo "failure:  $message\n";
+            }
+            throw new \Exception($message);
+        }
+    }
+
+    /**
      * Create a new Image from a file on disc.
      *
      * @param string $filename The file to open.
@@ -266,6 +286,7 @@ class Image implements \ArrayAccess
     ): Image {
         $options = self::_unwrap($options);
         $result = vips_image_new_from_file($filename, $options);
+        self::_errorCheck($result);
         return self::_wrap($result);
     }
 
@@ -286,6 +307,7 @@ class Image implements \ArrayAccess
     ): Image {
         $options = self::_unwrap($options);
         $result = vips_image_new_from_buffer($buffer, $option_string, $options);
+        self::_errorCheck($result);
         return self::_wrap($result);
     }
 
@@ -308,6 +330,13 @@ class Image implements \ArrayAccess
         float $offset = 0.0
     ): Image {
         $result = vips_image_new_from_array($array, $scale, $offset);
+        if ($result == -1) {
+            $message = vips_error_buffer();
+            if (self::$enable_logging) {
+                echo "failure:  $message\n";
+            }
+            throw new \Exception($message);
+        }
         return self::_wrap($result);
     }
 
@@ -315,22 +344,28 @@ class Image implements \ArrayAccess
      * Write an image to a file.
      *
      * @param string $filename The file to write the image to.
-     * @param array  $options  Any options to pass on to the selected save operation.
-     *
-     * @return bool true for success and false for failure.
+     * @param array  $options  Any options to pass on to the selected save 
+     *     operation.
      */
-    public function writeToFile(string $filename, array $options = []): bool
+    public function writeToFile(string $filename, array $options = [])
     {
         $options = self::_unwrap($options);
         $result = vips_image_write_to_file($this->_image, $filename, $options);
-        return self::_wrap($result);
+        if ($result == -1) {
+            $message = vips_error_buffer();
+            if (self::$enable_logging) {
+                echo "failure:  $message\n";
+            }
+            throw new \Exception($message);
+        }
     }
 
     /**
      * Write an image to a formatted string.
      *
      * @param string $suffix  The file type suffix, eg. ".jpg".
-     * @param array  $options Any options to pass on to the selected save operation.
+     * @param array  $options Any options to pass on to the selected save 
+     *     operation.
      *
      * @return string The formatted image.
      */
@@ -338,6 +373,13 @@ class Image implements \ArrayAccess
     {
         $options = self::_unwrap($options);
         $result = vips_image_write_to_buffer($this->_image, $suffix, $options);
+        if ($result == -1) {
+            $message = vips_error_buffer();
+            if (self::$enable_logging) {
+                echo "failure:  $message\n";
+            }
+            throw new \Exception($message);
+        }
         return self::_wrap($result);
     }
 
@@ -420,7 +462,7 @@ class Image implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        if ($enable_logging) {
+        if (self::$enable_logging) {
             echo "callBase: ", $name, "\n";
             echo "instance = ";
             var_dump($instance);
@@ -437,20 +479,10 @@ class Image implements \ArrayAccess
 
         $arguments = self::_unwrap($arguments);
         $result = call_user_func_array("vips_call", $arguments);
-
-        /* We get -1 on failure, an array of results on success.
-         */
-        if (!is_array($result)) {
-            $message = vips_error_buffer();
-            if ($enable_logging) {
-                echo "failure:  $message\n";
-            }
-            throw new \Exception($message);
-        }
-
+        self::_errorCheck($result);
         $result =  self::_wrap($result);
 
-        if ($enable_logging) {
+        if (self::$enable_logging) {
             echo "result = ";
             var_dump($result);
         }
