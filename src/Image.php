@@ -389,13 +389,57 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * Call any vips operation.
+     * Call any vips operation. The final element of $arguments can be 
+     * (but doesn't have to be) an array of options to pass to the operation.
+     *
+     * We can't have a separate arg for the options since this will be run from
+     * __call(), which cannot know which args are required and which are
+     * optional. See call() below for a version with the options broken out. 
      *
      * @param string     $name      The operation name.
      * @param Image|null $instance  The instance this operation is being invoked
-     *     from.
-     * @param array      $arguments An array of arguments to pass to the operation.
-     * @param array      $options   An array of options to pass to the operation.
+     *      from.
+     * @param array      $arguments An array of arguments to pass to the 
+     *      operation.
+     *
+     * @return mixed The result(s) of the operation.
+     */
+    public static function callBase(
+        string $name,
+        $instance,
+        array $arguments
+    ) {
+        /*
+        echo "call: ", $name, "\n";
+        echo "instance = ";
+        var_dump($instance);
+        echo "arguments = ";
+        var_dump($arguments);
+         */
+
+        $arguments = array_merge([$name, $instance], $arguments);
+
+        /*
+        echo "after arg composition, arguments = ";
+        var_dump($arguments);
+         */
+
+        $arguments = self::_unwrap($arguments);
+        $result = call_user_func_array("vips_call", $arguments);
+        return self::_wrap($result);
+    }
+
+    /**
+     * Call any vips operation, with an explicit set of options. This is more
+     * convenient than callBase() if you have a set of known options. 
+     *
+     * @param string     $name      The operation name.
+     * @param Image|null $instance  The instance this operation is being invoked
+     *      from.
+     * @param array      $arguments An array of arguments to pass to the 
+     *      operation.
+     * @param array      $options   An array of optional arguments to pass to 
+     *      the operation.
      *
      * @return mixed The result(s) of the operation.
      */
@@ -411,12 +455,13 @@ class Image implements \ArrayAccess
         var_dump($instance);
         echo "arguments = ";
         var_dump($arguments);
+        echo "options = ";
+        var_dump($options);
          */
 
-        $arguments = array_merge([$name, $instance], $arguments, $options);
-        $arguments = self::_unwrap($arguments);
-        $result = call_user_func_array("vips_call", $arguments);
-        return self::_wrap($result);
+        return self::callBase(
+            $name, $instance, array_merge($arguments, [$options])
+        );
     }
 
     /**
@@ -439,13 +484,9 @@ class Image implements \ArrayAccess
     ) {
 
         if (self::_isImageish($other)) {
-            return self::call(
-                $base, $this, [$other, $op], $options
-            );
+            return self::call($base, $this, [$other, $op], $options);
         } else {
-            return self::call(
-                $base . "_const", $this, [$op, $other], $options
-            );
+            return self::call($base . "_const", $this, [$op, $other], $options);
         }
     }
 
@@ -459,7 +500,7 @@ class Image implements \ArrayAccess
      */
     public function __call(string $name, array $arguments)
     {
-        return self::call($name, $this, $arguments);
+        return self::callBase($name, $this, $arguments);
     }
 
     /**
@@ -472,7 +513,7 @@ class Image implements \ArrayAccess
      */
     public static function __callStatic(string $name, array $arguments)
     {
-        return self::call($name, null, $arguments);
+        return self::callBase($name, null, $arguments);
     }
 
     /**
@@ -552,9 +593,7 @@ class Image implements \ArrayAccess
     public function subtract($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
-            return self::call(
-                "subtract", $this, [$other], $options
-            );
+            return self::call("subtract", $this, [$other], $options);
         } else {
             $other = self::_mapNumeric(
                 $other, function ($value) {
@@ -576,9 +615,7 @@ class Image implements \ArrayAccess
     public function multiply($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
-            return self::call(
-                "multiply", $this, [$other], $options
-            );
+            return self::call("multiply", $this, [$other], $options);
         } else {
             return self::linear($other, 0, $options);
         }
@@ -595,9 +632,7 @@ class Image implements \ArrayAccess
     public function divide($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
-            return self::call(
-                "divide", $this, [$other], $options
-            );
+            return self::call("divide", $this, [$other], $options);
         } else {
             $other = self::_mapNumeric(
                 $other, function ($value) {
@@ -619,13 +654,9 @@ class Image implements \ArrayAccess
     public function remainder($other, array $options = []): Image
     {
         if (self::_isImageish($other)) {
-            return self::call(
-                "remainder", $this, [$other], $options
-            );
+            return self::call("remainder", $this, [$other], $options);
         } else {
-            return self::call(
-                "remainder_const", $this, [$other], $options
-            );
+            return self::call("remainder_const", $this, [$other], $options);
         }
     }
 
@@ -828,9 +859,7 @@ class Image implements \ArrayAccess
         /* We can't use self::bandjoin(), that would just recurse.
          */
         if ($is_const) {
-            return self::call(
-                "bandjoin_const", $this, [$other], $options
-            );
+            return self::call("bandjoin_const", $this, [$other], $options);
         } else {
             return self::call(
                 "bandjoin", null, [array_merge([$this], $other)], $options
@@ -880,9 +909,7 @@ class Image implements \ArrayAccess
             $other = [$other];
         }
 
-        return self::call(
-            "bandrank", $this, $other, $options
-        );
+        return self::call("bandrank", $this, $other, $options);
     }
 
     /**
@@ -948,9 +975,7 @@ class Image implements \ArrayAccess
             $else = self::_imageize($match_image, $else);
         }
 
-        return self::call(
-            "ifthenelse", $this, [$then, $else], $options
-        );
+        return self::call("ifthenelse", $this, [$then, $else], $options);
     }
 
     /**

@@ -6,6 +6,7 @@ All notable changes to `:vips` will be documented in this file.
 ### Added
 - Image::set and Image::get methods, handy for properties whose names do not
   confirm to PHP conventions
+- type annotations [Kleis Auke Wolthuizen]
 
 ### Deprecated
 - now require php >= 7.0.11, fixes #10
@@ -14,6 +15,7 @@ All notable changes to `:vips` will be documented in this file.
 - support 2D array args to add() etc. 
 - fix bandsplit
 - fix ifthenelse with options
+- many more phpdoc fixes [Kleis Auke Wolthuizen]
 
 ### Remove
 - Nothing
