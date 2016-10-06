@@ -1,8 +1,40 @@
+<?php
 /**
  * These @method comments were generated automatically. Do not edit!
- */
-
-/**
+ *
+ * PHP version 7
+ *
+ * LICENSE:
+ *
+ * Copyright (c) 2016 John Cupitt
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @category  Images
+ * @package   JcupittVips
+ * @author    John Cupitt <jcupitt@gmail.com>
+ * @copyright 2016 John Cupitt
+ * @license   https://opensource.org/licenses/MIT MIT
+ * @version   GIT:ad44dfdd31056a41cbf217244ce62e7a702e0282
+ * @link      https://github.com/jcupitt/php-vips
+ *
  * @method static void system(string $cmd_format, array $options = []) 
  *     Run an external command.
  * @method Image relational(Image $right,  $relational, array $options = []) 
@@ -190,42 +222,40 @@
  *     Load a radiance image from a file.
  * @method static Image pdfload(string $filename, array $options = []) 
  *     Load pdf with libpoppler.
- * @method static Image pdfload_buffer( $buffer, array $options = []) 
+ * @method static Image pdfload_buffer(string $buffer, array $options = []) 
  *     Load pdf with libpoppler.
  * @method static Image svgload(string $filename, array $options = []) 
  *     Load svg with rsvg.
- * @method static Image svgload_buffer( $buffer, array $options = []) 
+ * @method static Image svgload_buffer(string $buffer, array $options = []) 
  *     Load svg with rsvg.
  * @method static Image gifload(string $filename, array $options = []) 
  *     Load gif with giflib.
- * @method static Image gifload_buffer( $buffer, array $options = []) 
+ * @method static Image gifload_buffer(string $buffer, array $options = []) 
  *     Load gif with giflib.
  * @method static Image pngload(string $filename, array $options = []) 
  *     Load png from file.
- * @method static Image pngload_buffer( $buffer, array $options = []) 
+ * @method static Image pngload_buffer(string $buffer, array $options = []) 
  *     Load png from buffer.
  * @method static Image matload(string $filename, array $options = []) 
  *     Load mat from file.
  * @method static Image jpegload(string $filename, array $options = []) 
  *     Load jpeg from file.
- * @method static Image jpegload_buffer( $buffer, array $options = []) 
+ * @method static Image jpegload_buffer(string $buffer, array $options = []) 
  *     Load jpeg from buffer.
  * @method static Image webpload(string $filename, array $options = []) 
  *     Load webp from file.
- * @method static Image webpload_buffer( $buffer, array $options = []) 
+ * @method static Image webpload_buffer(string $buffer, array $options = []) 
  *     Load webp from buffer.
- * @method static Image flifload(string $filename, array $options = []) 
- *     Load flif with fliflib.
  * @method static Image tiffload(string $filename, array $options = []) 
  *     Load tiff from file.
- * @method static Image tiffload_buffer( $buffer, array $options = []) 
+ * @method static Image tiffload_buffer(string $buffer, array $options = []) 
  *     Load tiff from buffer.
  * @method static Image openslideload(string $filename, array $options = []) 
  *     Load file with openslide.
  * @method static Image magickload(string $filename, array $options = []) 
- *     Load file with imagemagick7.
- * @method static Image magickload_buffer( $buffer, array $options = []) 
- *     Load buffer with imagemagick7.
+ *     Load file with imagemagick.
+ * @method static Image magickload_buffer(string $buffer, array $options = []) 
+ *     Load buffer with imagemagick.
  * @method static Image fitsload(string $filename, array $options = []) 
  *     Load a fits image.
  * @method static Image openexrload(string $filename, array $options = []) 
@@ -245,21 +275,22 @@
  *     Save image to ppm file.
  * @method void radsave(string $filename, array $options = []) 
  *     Save image to radiance file.
- * @method  radsave_buffer(array $options = []) Save image to radiance buffer.
+ * @method string radsave_buffer(array $options = []) 
+ *     Save image to radiance buffer.
  * @method void dzsave(string $filename, array $options = []) 
  *     Save image to deep zoom format.
  * @method void pngsave(string $filename, array $options = []) 
  *     Save image to png file.
- * @method  pngsave_buffer(array $options = []) Save image to png buffer.
+ * @method string pngsave_buffer(array $options = []) Save image to png buffer.
  * @method void jpegsave(string $filename, array $options = []) 
  *     Save image to jpeg file.
- * @method  jpegsave_buffer(array $options = []) Save image to jpeg buffer.
+ * @method string jpegsave_buffer(array $options = []) 
+ *     Save image to jpeg buffer.
  * @method void jpegsave_mime(array $options = []) Save image to jpeg mime.
  * @method void webpsave(string $filename, array $options = []) 
  *     Save image to webp file.
- * @method  webpsave_buffer(array $options = []) Save image to webp buffer.
- * @method void flifsave(string $filename, array $options = []) 
- *     Save image to flif file.
+ * @method string webpsave_buffer(array $options = []) 
+ *     Save image to webp buffer.
  * @method void tiffsave(string $filename, array $options = []) 
  *     Save image to tiff file.
  * @method void fitssave(string $filename, array $options = []) 
@@ -405,3 +436,4 @@
  * @method Image globalbalance(array $options = []) 
  *     Global balance an image mosaic.
  */
+?>

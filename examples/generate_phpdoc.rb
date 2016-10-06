@@ -41,6 +41,7 @@ $to_php_map = {
     "Float" => "float",
     "String" => "string",
     "Boolean" => "bool",
+    "Vips::Blob" => "string",
 }
 
 class Vips::Argument
@@ -172,11 +173,45 @@ def generate_class(gtype)
     gtype.children.each {|x| generate_class x}
 end
 
-puts "/**"
-puts " * These @method comments were generated automatically. Do not edit!"
-puts " */"
-puts ""
-puts "/**"
+puts <<~EOF
+<?php
+/**
+ * These @method comments were generated automatically. Do not edit!
+ *
+ * PHP version 7
+ *
+ * LICENSE:
+ *
+ * Copyright (c) 2016 John Cupitt
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @category  Images
+ * @package   Jcupitt\Vips
+ * @author    John Cupitt <jcupitt@gmail.com>
+ * @copyright 2016 John Cupitt
+ * @license   https://opensource.org/licenses/MIT MIT
+ * @version   GIT:ad44dfdd31056a41cbf217244ce62e7a702e0282
+ * @link      https://github.com/jcupitt/php-vips
+ *
+EOF
 
 # gobject-introspection 3.0.7 crashes a lot if it GCs while doing 
 # something
@@ -186,3 +221,4 @@ Vips::init
 generate_class GLib::Type["VipsOperation"]
 
 puts " */"
+puts "?>"

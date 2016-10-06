@@ -45,7 +45,7 @@ if (!extension_loaded("vips")) {
     }
 }
 
-include 'auto_docs.php';
+require 'auto_docs.php';
 
 /**
  * This class represents a Vips image object.
@@ -151,11 +151,11 @@ include 'auto_docs.php';
  * # Getting more help
  *
  * This binding lets you call the complete C API almost directly. You should 
- * [consult the C 
- * docs](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/index.html) 
+ * [consult the C docs](
+ * http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/index.html)
  * for full details on the operations that are available and
- * the arguments they take. There's a handy [function
- * list](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/func-list.html)
+ * the arguments they take. There's a handy [function list](
+ * http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/func-list.html)
  * which summarises the operations in the library. You can use the `vips`
  * command-line interface to get help as well, for example:
  *
@@ -418,9 +418,9 @@ include 'auto_docs.php';
 class Image implements \ArrayAccess
 {
     /**
-     * @internal 
-     *
      * Set true when we are logging actions.
+     *
+     * @internal 
      */
     static private $_enable_logging = false;
 
@@ -438,15 +438,13 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * The resource for the underlying VipsImage.
+     *
+     * @internal 
      */
     private $_image;
 
     /**
-     * @internal 
-     *
      * Wrap a Image around an underlying vips resource.
      *
      * Don't call this yourself, users should stick to (for example)
@@ -454,6 +452,8 @@ class Image implements \ArrayAccess
      *
      * @param resource $image The underlying vips image resource that this
      *      class should wrap.
+     *
+     * @internal 
      */
     public function __construct($image)
     {
@@ -461,8 +461,6 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Apply a func to every numeric member of $value. Useful for self::subtract
      * etc.
      *
@@ -470,6 +468,8 @@ class Image implements \ArrayAccess
      * @param \Closure $func  Apply this.
      *
      * @return mixed The updated $value.
+     *
+     * @internal 
      */
     private static function _mapNumeric($value, \Closure $func)
     {
@@ -489,13 +489,13 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Is a $value a rectangular 2D array?
      *
      * @param mixed $value Test this.
      *
      * @return bool true if this is a 2D array.
+     *
+     * @internal 
      */
     static private function _is2D($value): bool
     {
@@ -518,8 +518,6 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Is $value something that we should treat as an image?
      *
      * Instance of Image, or 2D arrays are images; 1D arrays or single values 
@@ -528,6 +526,8 @@ class Image implements \ArrayAccess
      * @param mixed $value The value to test.
      *
      * @return bool true if this is like an image.
+     *
+     * @internal 
      */
     private static function _isImageish($value): bool
     {
@@ -535,8 +535,6 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Turn a constant (eg. 1, "12", [1, 2, 3], [[1]]) into an image using
      * match_image as a guide.
      *
@@ -544,6 +542,8 @@ class Image implements \ArrayAccess
      * @param mixed $value       Turn this into an image.
      *
      * @return Image The image we created.
+     *
+     * @internal 
      */
     private static function _imageize(Image $match_image, $value): Image
     {
@@ -563,14 +563,14 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Unwrap an array of stuff ready to pass down to the vips_ layer. We
      * swap instances of the Image for the plain resource.
      *
      * @param array $result Unwrap this.
      *
      * @return array $result unwrapped, ready for vips.
+     *
+     * @internal 
      */
     private static function _unwrap(array $result): array
     {
@@ -586,13 +586,13 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Is $value a VipsImage.
      *
      * @param mixed $value The thing to test.
      *
      * @return bool true if this is a vips image resource.
+     *
+     * @internal 
      */
     private static function _isImage($value): bool
     {
@@ -601,8 +601,6 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Wrap up the result of a vips_ call ready to return it to PHP. We do
      * two things:
      *
@@ -615,6 +613,8 @@ class Image implements \ArrayAccess
      * @param mixed $result Wrap this up.
      *
      * @return mixed $result, but wrapped up as a php class.
+     *
+     * @internal 
      */
     private static function _wrap($result)
     {
@@ -638,8 +638,6 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Check the result of a vips_ call for an error, and throw an exception
      * if we see one.
      *
@@ -649,6 +647,8 @@ class Image implements \ArrayAccess
      * @param mixed $result Test this.
      *
      * @return void
+     *
+     * @internal 
      */
     private static function _errorCheck($result)
     {
@@ -918,8 +918,6 @@ class Image implements \ArrayAccess
     }
 
     /**
-     * @internal 
-     *
      * Handy for things like self::more. Call a 2-ary vips operator like
      * "more", but if the arg is not an image (ie. it's a constant), call
      * "more_const" instead.
@@ -930,6 +928,8 @@ class Image implements \ArrayAccess
      * @param array  $options An array of options to pass to the operation.
      *
      * @return mixed The operation result.
+     *
+     * @internal 
      */
     private function _callEnum(
         $other,
