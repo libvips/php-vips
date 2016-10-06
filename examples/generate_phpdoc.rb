@@ -49,6 +49,34 @@ class Vips::Argument
     end
 end
 
+# we need to wrap output at 80 columns ... this output class keeps text as an
+# array of strings, starting a new one if the thing we append would take the
+# last line over @line_length
+class Output
+    def initialize(start_prefix = " * ", cont_prefix = " *     ", line_length = 80)
+        @line_length = line_length
+        @start_prefix = start_prefix
+        @cont_prefix = cont_prefix
+        @lines = []
+        @current_line = @start_prefix
+    end
+
+    def add(txt)
+        if @current_line.length + txt.length > @line_length - 1
+            @lines << @current_line
+            @current_line = @cont_prefix
+        end
+
+        # we could attempt to break txt, but for now assume it'll be under 80
+        @current_line += txt
+    end
+
+    def get
+        @lines << @current_line if @current_line.length > 0
+        @lines.join("\n")
+    end
+end
+
 def generate_operation(op)
     flags = op.flags
     return if (flags & :deprecated) != 0
@@ -103,28 +131,31 @@ def generate_operation(op)
         required_input.delete member_x
     end
 
-    print " * @method "
-    print "static " if not member_x 
+    out = Output.new
+    out.add "@method "
+    out.add "static " if not member_x 
     if required_output.length == 0
-        print "void "
+        out.add "void "
     elsif required_output.length == 1
-        print "#{required_output[0].to_php} "
+        out.add "#{required_output[0].to_php} "
     elsif 
-        print "array("
+        out.add "array("
         required_output.each do |arg| 
-            print required_output.map(&:to_php).join(", ")
+            out.add required_output.map(&:to_php).join(", ")
         end
-        print ") "
+        out.add ") "
     end
 
-    print "#{nickname}("
+    out.add "#{nickname}("
 
     required_input.each do |arg| 
-        print "#{arg.to_php} $#{arg.name}, "
+        out.add "#{arg.to_php} $#{arg.name}, "
     end
-    print "array $options = []) "
+    out.add "array $options = []) "
 
-    puts "#{op.description.capitalize}."
+    out.add "#{op.description.capitalize}."
+
+    puts out.get
 end
 
 def generate_class(gtype)

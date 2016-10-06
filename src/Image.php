@@ -45,8 +45,367 @@ if (!extension_loaded("vips")) {
     }
 }
 
+include 'auto_docs.php';
+
 /**
- * Image represents an image.
+ * This class represents a Vips image object.
+ *
+ * This module provides a binding for the [vips image processing 
+ * library](http://www.vips.ecs.soton.ac.uk).
+ *
+ * It needs libvips 8.0 or later to be installed, and it needs the binary 
+ * [`vips` extension](https://github.com/jcupitt/php-vips-ext) to be added to
+ * your PHP.
+ *
+ * # Example
+ *
+ * ```php
+ * <?php
+ * use Jcupitt\Vips;
+ * $im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
+ * $im = $im->crop(100, 100, $im->width - 200, $im->height - 200);
+ * $im = $im->reduce(1.0 / 0.9, 1.0 / 0.9, ["kernel" => "linear"]);
+ * $mask = Vips\Image::newFromArray(
+ *      [[-1,  -1, -1], 
+ *       [-1,  16, -1], 
+ *       [-1,  -1, -1]], 8);
+ * $im = $im->conv($mask);
+ * $im->writeToFile($argv[2]);
+ * ?>
+ * ```
+ *
+ * You'll need this in your `composer.json`:
+ * 
+ * ```
+ *     "require": {
+ *         "jcupitt/vips" : "@dev"
+ *     }
+ * ```
+ * 
+ * And run with:
+ * 
+ * ```
+ * $ composer install
+ * $ ./try1.php ~/pics/k2.jpg x.tif
+ * ```
+ * 
+ * This example loads a file, crops 100 pixels from every edge, reduces by 10%
+ * using a bilinear interpolator (the default is lanczos3), 
+ * sharpens the image, and saves it back to disc again. 
+ *
+ * Reading this example line by line, we have:
+ *
+ * ```php
+ * $im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
+ * ```
+ *
+ * `Image::newFromFile` can load any image file supported by vips. Almost all
+ * operations can be given an array of options as a final argument.
+ *
+ * In this
+ * example, we will be accessing pixels top-to-bottom as we sweep through the
+ * image reading and writing, so `sequential` access mode is best for us. The
+ * default mode is `random`, this allows for full random access to image pixels,
+ * but is slower and needs more memory. 
+ *
+ * You can also load formatted images from 
+ * strings or create images from PHP arrays.
+ *
+ * The next line:
+ *
+ * ```php
+ * $im = $im->crop(100, 100, $im->width - 200, $im->height - 200);
+ * ```
+ *
+ * Crops 100 pixels from every edge. You can access any vips image property 
+ * directly as a PHP property. If the vips property name does not
+ * conform to PHP naming conventions, you can use something like 
+ * `$image->get("ipct-data")`.
+ *
+ * Next we have:
+ *
+ * ```php
+ * $mask = Vips\Image::newFromArray(
+ *      [[-1,  -1, -1], 
+ *       [-1,  16, -1], 
+ *       [-1,  -1, -1]], 8);
+ * $im = $im->conv($mask);
+ * ```
+ *
+ * `Image::new_from_array` creates an image from an array constant. The 8 at
+ * the end sets the scale: the amount to divide the image by after 
+ * integer convolution. See the libvips API docs for `vips_conv()` (the operation
+ * invoked by `Image::conv`) for details on the convolution operator. See
+ * **Getting more help** below.
+ *
+ * Finally:
+ *
+ * ```php
+ * $im->writeToFile($argv[2]);
+ * ```
+ *
+ * `Image::writeToFile` writes an image back to the filesystem. It can 
+ * write any format supported by vips: the file type is set from the filename 
+ * suffix. You can also write formatted images to strings.
+ *
+ * # Getting more help
+ *
+ * This binding lets you call the complete C API almost directly. You should 
+ * [consult the C 
+ * docs](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/index.html) 
+ * for full details on the operations that are available and
+ * the arguments they take. There's a handy [function
+ * list](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/func-list.html)
+ * which summarises the operations in the library. You can use the `vips`
+ * command-line interface to get help as well, for example:
+ *
+ * ```
+ * $ vips embed
+ * embed an image in a larger image
+ * usage:
+ *    embed in out x y width height
+ * where:
+ *    in           - Input image, input VipsImage
+ *    out          - Output image, output VipsImage
+ *    x            - Left edge of input in output, input gint
+ *                     default: 0
+ *                     min: -1000000000, max: 1000000000
+ *    y            - Top edge of input in output, input gint
+ *                     default: 0
+ *                     min: -1000000000, max: 1000000000
+ *    width        - Image width in pixels, input gint
+ *                     default: 1
+ *                     min: 1, max: 1000000000
+ *    height       - Image height in pixels, input gint
+ *                     default: 1
+ *                     min: 1, max: 1000000000
+ * optional arguments:
+ *    extend       - How to generate the extra pixels, input VipsExtend
+ *                     default: black
+ *                     allowed: black, copy, repeat, mirror, white, background
+ *    background   - Colour for background pixels, input VipsArrayDouble
+ * operation flags: sequential-unbuffered 
+ * ```
+ *
+ * You can call this from PHP as:
+ *
+ * ```php
+ * $out = $in->embed($x, $y, $width, $height, 
+ *     ["extend" => "copy", "background" => [1, 2, 3]]);
+ * ```
+ *
+ * `"background"` can also be a simple constant, such as `12`, see below.
+ *
+ * The `vipsheader` command-line program is an easy way to see all the
+ * properties of an image. For example:
+ *
+ * ```
+ * $ vipsheader -a ~/pics/k2.jpg
+ * /home/john/pics/k2.jpg: 1450x2048 uchar, 3 bands, srgb, jpegload
+ * width: 1450
+ * height: 2048
+ * bands: 3
+ * format: 0 - uchar
+ * coding: 0 - none
+ * interpretation: 22 - srgb
+ * xoffset: 0
+ * yoffset: 0
+ * xres: 2.834646
+ * yres: 2.834646
+ * filename: "/home/john/pics/k2.jpg"
+ * vips-loader: jpegload
+ * jpeg-multiscan: 0
+ * ipct-data: VIPS_TYPE_BLOB, data = 0x20f0010, length = 332
+ * ```
+ *
+ * You can access any of these fields as PHP properties of the `Image` class.
+ * Use `$image->get("ipct-data")` for property names which are not valid under
+ * PHP syntax.
+ *
+ * # How it works
+ *
+ * The binary 
+ * [`vips` extension](https://github.com/jcupitt/php-vips-ext) adds a few extra
+ * functions to PHP to let you call anything in the libvips library. The API 
+ * it provides is simple, but horrible. 
+ *
+ * This module is pure PHP and builds on the binary extension to provide a
+ * convenient interface for programmers. It uses the PHP magic methods
+ * `__call()`, `__callStatic()`, `__get()` and `__set()` to make vips operators
+ * appear as methods on the `Image` class, and vips properties as PHP
+ * properties.
+ *
+ * The API you end up with is a object-oriented version of the [VIPS C 
+ * API](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/). 
+ * Full documentation
+ * on the operations and what they do is there, you can use it directly. This
+ * document explains the extra features of the PHP API and lists the available 
+ * operations very briefly. 
+ *
+ * # Automatic wrapping
+ *
+ * This binding has a `__call()` method and uses
+ * it to look up vips operations. For example, the libvips operation `embed`, 
+ * which appears in C as `vips_embed()`, appears in PHP as `Image::embed`. 
+ *
+ * The operation's list of required arguments is searched and the first input 
+ * image is set to the value of `self`. Operations which do not take an input 
+ * image, such as `Image::black`, appear as static methods. The remainder of
+ * the arguments you supply in the function call are used to set the other
+ * required input arguments. If the final supplied argument is an array, it is 
+ * used to set any optional input arguments. The result is the required output 
+ * argument if there is only one result, or an array of values if the operation
+ * produces several results.
+ *
+ * For example, `Image::min`, the vips operation that searches an image for 
+ * the minimum value, has a large number of optional arguments. You can use it to
+ * find the minimum value like this:
+ *
+ * ```php
+ * $min_value = $image->min();
+ * ```
+ *
+ * You can ask it to return the position of the minimum with `x` and `y`.
+ *   
+ * ```php
+ * $result = $image->min(["x" => true, "y" => true]);
+ * $min_value = $result["out"];
+ * $x_pos = $result["x"];
+ * $y_pos = $result["y"];
+ * ```
+ *
+ * Now `x_pos` and `y_pos` will have the coordinates of the minimum value. 
+ * There's actually a convenience function for this, `Image::minpos`, see
+ * below.
+ *
+ * You can also ask for the top *n* minimum, for example:
+ *
+ * ```php
+ * $result = $image->min(["size" => 10, "x_array" => true, "y_array" => true]);
+ * $x_pos = $result["x_array"];
+ * $y_pos = $result["y_array"];
+ * ```
+ *
+ * Now `x_pos` and `y_pos` will be 10-element arrays. 
+ *
+ * Because operations are member functions and return the result image, you can
+ * chain them. For example, you can write:
+ *
+ * ```php
+ * $result_image = $image->real()->cos();
+ * ```
+ *
+ * to calculate the cosine of the real part of a complex image. 
+ *
+ * libvips types are also automatically wrapped and unwrapped. The binding 
+ * looks at the type 
+ * of argument required by the operation and converts the value you supply, 
+ * when it can. For example, `Image::linear` takes a `VipsArrayDouble` as 
+ * an argument 
+ * for the set of constants to use for multiplication. You can supply this 
+ * value as an integer, a float, or some kind of compound object and it 
+ * will be converted for you. You can write:
+ *
+ * ```php
+ * $result = $image->linear(1, 3);
+ * $result = $image->linear(12.4, 13.9);
+ * $result = $image->linear([1, 2, 3], [4, 5, 6]);
+ * $result = $image->linear(1, [4, 5, 6]);
+ * ```
+ *
+ * And so on. You can also use `Image::add()` and friends, see below.
+ *
+ * It does a couple of more ambitious conversions. It will automatically convert
+ * to and from the various vips types, like `VipsBlob` and `VipsArrayImage`. For
+ * example, you can read the ICC profile out of an image like this: 
+ *
+ * ```php
+ * $profile = $image->get("icc-profile-data");
+ * ```
+ *
+ * and `$profile` will be a PHP string.
+ *
+ * If an operation takes several input images, you can use a constant for all but
+ * one of them and the wrapper will expand the constant to an image for you. For
+ * example, `Image::ifthenelse()` uses a condition image to pick pixels 
+ * between a then and an else image:
+ *
+ * ```php
+ * $result = $condition->ifthenelse($then_image, $else_image);
+ * ```
+ *
+ * You can use a constant instead of either the then or the else parts and it
+ * will be expanded to an image for you. If you use a constant for both then and
+ * else, it will be expanded to match the condition image. For example:
+ *
+ * ```php
+ * $result = $condition->ifthenelse([0, 255, 0], [255, 0, 0]);
+ * ```
+ *
+ * Will make an image where true pixels are green and false pixels are red.
+ *
+ * This is useful for `Image::bandjoin`, the thing to join two or more 
+ * images up bandwise. You can write:
+ *
+ * ```php
+ * $rgba = $rgb->bandjoin(255);
+ * ```
+ *
+ * to append a constant 255 band to an image, perhaps to add an alpha channel. Of
+ * course you can also write:
+ *
+ * ```ruby
+ * $result = $image->bandjoin($image2);
+ * $result = $image->bandjoin([image2, image3]);
+ * $result = Image::bandjoin([image1, image2, image3]);
+ * $result = $image->bandjoin([image2, 255]);
+ * ```
+ *
+ * and so on. 
+ * 
+ * # Exceptions
+ *
+ * The wrapper spots errors from vips operations and raises `\Exception`.
+ * You can catch it in the usual way. 
+ *
+ * # Draw operations
+ *
+ * Paint operations like `Image::draw_circle` and `Image::draw_line`
+ * modify their input image. This
+ * makes them hard to use with the rest of libvips: you need to be very careful
+ * about the order in which operations execute or you can get nasty crashes.
+ *
+ * The wrapper spots operations of this type and makes a private copy of the
+ * image in memory before calling the operation. This stops crashes, but it does
+ * make it inefficient. If you draw 100 lines on an image, for example, you'll
+ * copy the image 100 times. The wrapper does make sure that memory is recycled
+ * where possible, so you won't have 100 copies in memory. 
+ *
+ * If you want to avoid the copies, you'll need to call drawing operations
+ * yourself.
+ *
+ * # Expansions
+ *
+ * Some vips operators take an enum to select an action, for example 
+ * `Image::math` can be used to calculate sine of every pixel like this:
+ *
+ * ```php
+ * $result = $image->math("sin");
+ * ```
+ *
+ * This is annoying, so the wrapper expands all these enums into separate members
+ * named after the enum. So you can write:
+ *
+ * ```php
+ * $result = $image->sin();
+ * ```
+ *
+ * # Convenience functions
+ *
+ * The wrapper defines a few extra useful utility functions: 
+ * `Image::get`, `Image::set`, `Image::bandsplit`, 
+ * `Image::maxpos`, `Image::minpos`, 
+ * `Image::median`. See below.
  *
  * @category  Images
  * @package   Jcupitt\Vips
@@ -58,25 +417,36 @@ if (!extension_loaded("vips")) {
  */
 class Image implements \ArrayAccess
 {
-    static private $enable_logging = false;
+    /**
+     * @internal 
+     *
+     * Set true when we are logging actions.
+     */
+    static private $_enable_logging = false;
 
     /**
      * Turn logging on and off. This will produce a huge amount of output, but
      * is handy for debugging.
      *
      * @param bool $logging true to turn logging on.
+     *
+     * @return void
      */
     public static function setLogging($logging)
     {
-        self::$enable_logging = $logging;
+        self::$_enable_logging = $logging;
     }
 
     /**
+     * @internal 
+     *
      * The resource for the underlying VipsImage.
      */
     private $_image;
 
     /**
+     * @internal 
+     *
      * Wrap a Image around an underlying vips resource.
      *
      * Don't call this yourself, users should stick to (for example)
@@ -91,6 +461,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Apply a func to every numeric member of $value. Useful for self::subtract
      * etc.
      *
@@ -117,6 +489,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Is a $value a rectangular 2D array?
      *
      * @param mixed $value Test this.
@@ -144,6 +518,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Is $value something that we should treat as an image?
      *
      * Instance of Image, or 2D arrays are images; 1D arrays or single values 
@@ -159,6 +535,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Turn a constant (eg. 1, "12", [1, 2, 3], [[1]]) into an image using
      * match_image as a guide.
      *
@@ -185,6 +563,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Unwrap an array of stuff ready to pass down to the vips_ layer. We
      * swap instances of the Image for the plain resource.
      *
@@ -206,6 +586,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Is $value a VipsImage.
      *
      * @param mixed $value The thing to test.
@@ -219,6 +601,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Wrap up the result of a vips_ call ready to return it to PHP. We do
      * two things:
      *
@@ -254,6 +638,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Check the result of a vips_ call for an error, and throw an exception
      * if we see one.
      *
@@ -261,12 +647,14 @@ class Image implements \ArrayAccess
      * a valid return.
      *
      * @param mixed $result Test this.
+     *
+     * @return void
      */
     private static function _errorCheck($result)
     {
         if (!is_array($result)) {
             $message = vips_error_buffer();
-            if (self::$enable_logging) {
+            if (self::$_enable_logging) {
                 echo "failure:  $message\n";
             }
             throw new \Exception($message);
@@ -332,7 +720,7 @@ class Image implements \ArrayAccess
         $result = vips_image_new_from_array($array, $scale, $offset);
         if ($result == -1) {
             $message = vips_error_buffer();
-            if (self::$enable_logging) {
+            if (self::$_enable_logging) {
                 echo "failure:  $message\n";
             }
             throw new \Exception($message);
@@ -346,6 +734,8 @@ class Image implements \ArrayAccess
      * @param string $filename The file to write the image to.
      * @param array  $options  Any options to pass on to the selected save 
      *     operation.
+     *
+     * @return void
      */
     public function writeToFile(string $filename, array $options = [])
     {
@@ -353,7 +743,7 @@ class Image implements \ArrayAccess
         $result = vips_image_write_to_file($this->_image, $filename, $options);
         if ($result == -1) {
             $message = vips_error_buffer();
-            if (self::$enable_logging) {
+            if (self::$_enable_logging) {
                 echo "failure:  $message\n";
             }
             throw new \Exception($message);
@@ -375,7 +765,7 @@ class Image implements \ArrayAccess
         $result = vips_image_write_to_buffer($this->_image, $suffix, $options);
         if ($result == -1) {
             $message = vips_error_buffer();
-            if (self::$enable_logging) {
+            if (self::$_enable_logging) {
                 echo "failure:  $message\n";
             }
             throw new \Exception($message);
@@ -464,7 +854,7 @@ class Image implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        if (self::$enable_logging) {
+        if (self::$_enable_logging) {
             echo "callBase: ", $name, "\n";
             echo "instance = ";
             var_dump($instance);
@@ -484,7 +874,7 @@ class Image implements \ArrayAccess
         self::_errorCheck($result);
         $result =  self::_wrap($result);
 
-        if (self::$enable_logging) {
+        if (self::$_enable_logging) {
             echo "result = ";
             var_dump($result);
         }
@@ -528,6 +918,8 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * @internal 
+     *
      * Handy for things like self::more. Call a 2-ary vips operator like
      * "more", but if the arg is not an image (ie. it's a constant), call
      * "more_const" instead.
