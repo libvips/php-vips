@@ -42,18 +42,12 @@ class VipsExceptionTest extends PHPUnit_Framework_TestCase
         $x = $this->image->get("I don't exist");
     }
 
-    /* 
-     *
-     * oop this causes a segv
-     *
     public function testVipsOperationException()
     {
         $this->expectException(Exception::class);
 
-        $x = $this->image->add("nonsense");
+        $x = $this->image->add([1, 2, 3, 4]);
     }
-     *
-     */
 
 }
 
