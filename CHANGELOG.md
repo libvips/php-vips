@@ -6,6 +6,7 @@ All notable changes to `:vips` will be documented in this file.
 ### Added
 - Image::set and Image::get methods, handy for properties whose names do not
   confirm to PHP conventions
+- add Image::typeof
 - type annotations [Kleis Auke Wolthuizen]
 - libvips draw calls now work
 - logging, see Vips\Image::setLogging()

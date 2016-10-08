@@ -39,4 +39,15 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($thumb->width, 160);
   }
 
+  public function testVipsGetTypeof()
+  {
+    $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+    $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
+
+    $gint = $image->typeof("width");
+
+    // should always be the same, I think
+    $this->assertEquals($gint, 24);
+  }
+
 }

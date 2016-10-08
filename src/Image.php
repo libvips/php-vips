@@ -806,6 +806,9 @@ class Image implements \ArrayAccess
      * This is handy for fields whose name
      * does not match PHP's variable naming conventions, like `"exif-data"`.
      *
+     * It will throw an exception if $name does not exist. Use Image::typeof()
+     * to test for the existence of a field.
+     *
      * @param string $name The property name.
      *
      * @return mixed
@@ -815,6 +818,20 @@ class Image implements \ArrayAccess
         $result = vips_image_get($this->_image, $name);
         self::_errorCheck($result);
         return self::_wrap($result);
+    }
+
+    /**
+     * Get the GType of a property from the underlying image. GTypes are
+     * integer type identifiers. This function will return 0 if the field does
+     * not exist. 
+     *
+     * @param string $name The property name.
+     *
+     * @return integer
+     */
+    public function typeof(string $name): int
+    {
+        return vips_image_get_typeof($this->_image, $name);
     }
 
     /**
