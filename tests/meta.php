@@ -50,4 +50,18 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($gint, 24);
   }
 
+  public function testVipsRemove()
+  {
+    $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+    $image = Vips\Image::newFromFile($filename);
+
+    $exif = $image->get("exif-data");
+    $this->assertEquals(strlen($exif), 9724);
+
+    $image->remove("exif-data");
+
+    $this->expectException(Exception::class);
+    $exif = $image->get("exif-data");
+  }
+
 }

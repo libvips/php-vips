@@ -638,6 +638,22 @@ class Image implements \ArrayAccess
     }
 
     /**
+     * Throw a vips error as an exception.
+     *
+     * @return void
+     *
+     * @internal 
+     */
+    private static function _errorVips()
+    {
+        $message = vips_error_buffer();
+        if (self::$_enable_logging) {
+            echo "failure:  $message\n";
+        }
+        throw new \Exception($message);
+    }
+
+    /**
      * Check the result of a vips_ call for an error, and throw an exception
      * if we see one.
      *
@@ -650,14 +666,10 @@ class Image implements \ArrayAccess
      *
      * @internal 
      */
-    private static function _errorCheck($result)
+    private static function _errorIsArray($result)
     {
         if (!is_array($result)) {
-            $message = vips_error_buffer();
-            if (self::$_enable_logging) {
-                echo "failure:  $message\n";
-            }
-            throw new \Exception($message);
+            self::_errorVips();
         }
     }
 
@@ -674,7 +686,7 @@ class Image implements \ArrayAccess
     ): Image {
         $options = self::_unwrap($options);
         $result = vips_image_new_from_file($filename, $options);
-        self::_errorCheck($result);
+        self::_errorIsArray($result);
         return self::_wrap($result);
     }
 
@@ -695,7 +707,7 @@ class Image implements \ArrayAccess
     ): Image {
         $options = self::_unwrap($options);
         $result = vips_image_new_from_buffer($buffer, $option_string, $options);
-        self::_errorCheck($result);
+        self::_errorIsArray($result);
         return self::_wrap($result);
     }
 
@@ -719,11 +731,7 @@ class Image implements \ArrayAccess
     ): Image {
         $result = vips_image_new_from_array($array, $scale, $offset);
         if ($result == -1) {
-            $message = vips_error_buffer();
-            if (self::$_enable_logging) {
-                echo "failure:  $message\n";
-            }
-            throw new \Exception($message);
+            self::_errorVips();
         }
         return self::_wrap($result);
     }
@@ -742,11 +750,7 @@ class Image implements \ArrayAccess
         $options = self::_unwrap($options);
         $result = vips_image_write_to_file($this->_image, $filename, $options);
         if ($result == -1) {
-            $message = vips_error_buffer();
-            if (self::$_enable_logging) {
-                echo "failure:  $message\n";
-            }
-            throw new \Exception($message);
+            self::_errorVips();
         }
     }
 
@@ -764,11 +768,7 @@ class Image implements \ArrayAccess
         $options = self::_unwrap($options);
         $result = vips_image_write_to_buffer($this->_image, $suffix, $options);
         if ($result == -1) {
-            $message = vips_error_buffer();
-            if (self::$_enable_logging) {
-                echo "failure:  $message\n";
-            }
-            throw new \Exception($message);
+            self::_errorVips();
         }
         return self::_wrap($result);
     }
@@ -783,7 +783,7 @@ class Image implements \ArrayAccess
     public function __get(string $name)
     {
         $result = vips_image_get($this->_image, $name);
-        self::_errorCheck($result);
+        self::_errorIsArray($result);
         return self::_wrap($result);
     }
 
@@ -816,7 +816,7 @@ class Image implements \ArrayAccess
     public function get(string $name)
     {
         $result = vips_image_get($this->_image, $name);
-        self::_errorCheck($result);
+        self::_errorIsArray($result);
         return self::_wrap($result);
     }
 
@@ -847,7 +847,25 @@ class Image implements \ArrayAccess
      */
     public function set(string $name, $value)
     {
-        vips_image_set($this->_image, $name, $value);
+        $result = vips_image_set($this->_image, $name, $value);
+        if ($result != 0) {
+            self::_errorVips();
+        }
+    }
+
+    /**
+     * Remove a field from the underlying image.
+     *
+     * @param string $name The property name.
+     *
+     * @return void
+     */
+    public function remove(string $name)
+    {
+        $result = vips_image_remove($this->_image, $name);
+        if ($result == -1) {
+            self::_errorVips();
+        }
     }
 
     /**
@@ -888,7 +906,7 @@ class Image implements \ArrayAccess
 
         $arguments = self::_unwrap($arguments);
         $result = call_user_func_array("vips_call", $arguments);
-        self::_errorCheck($result);
+        self::_errorIsArray($result);
         $result =  self::_wrap($result);
 
         if (self::$_enable_logging) {
