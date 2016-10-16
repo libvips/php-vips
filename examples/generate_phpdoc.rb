@@ -176,7 +176,7 @@ end
 puts <<~EOF
 <?php
 /**
- * These @method comments were generated automatically. Do not edit!
+ * This file was generated automatically. Do not edit!
  *
  * PHP version 7
  *
@@ -204,7 +204,7 @@ puts <<~EOF
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @category  Images
- * @package   Jcupitt\Vips
+ * @package   Jcupitt\\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT

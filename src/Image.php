@@ -45,9 +45,6 @@ if (!extension_loaded("vips")) {
     }
 }
 
-require 'Exception.php';
-require 'auto_docs.php';
-
 /**
  * This class represents a Vips image object.
  *
@@ -640,6 +637,8 @@ class Image implements \ArrayAccess
 
     /**
      * Throw a vips error as an exception.
+     *
+     * @throws Exception
      *
      * @return void
      *
