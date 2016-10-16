@@ -45,6 +45,7 @@ if (!extension_loaded("vips")) {
     }
 }
 
+require 'Exception.php';
 require 'auto_docs.php';
 
 /**
@@ -365,8 +366,8 @@ require 'auto_docs.php';
  * 
  * # Exceptions
  *
- * The wrapper spots errors from vips operations and raises `\Exception`.
- * You can catch it in the usual way. 
+ * The wrapper spots errors from vips operations and throws 
+ * `Vips\Exception`. You can catch it in the usual way. 
  *
  * # Draw operations
  *
@@ -650,7 +651,7 @@ class Image implements \ArrayAccess
         if (self::$_enable_logging) {
             echo "failure:  $message\n";
         }
-        throw new \Exception($message);
+        throw new Exception($message);
     }
 
     /**

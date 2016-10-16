@@ -60,7 +60,7 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
 
     $image->remove("exif-data");
 
-    $this->expectException(Exception::class);
+    $this->expectException(Vips\Exception::class);
     $exif = $image->get("exif-data");
   }
 

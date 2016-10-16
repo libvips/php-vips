@@ -16,35 +16,35 @@ class VipsExceptionTest extends PHPUnit_Framework_TestCase
 
     public function testVipsNewFromFileException()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(Vips\Exception::class);
 
         $image = Vips\Image::newFromFile("I don't exist.jpg");
     }
 
     public function testVipsWriteToFileException()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(Vips\Exception::class);
 
         $this->image->writeToFile("/permissions error.jpg");
     }
 
     public function testVipsWriteToBufferException()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(Vips\Exception::class);
 
         $string = $this->image->writeToBuffer(".jpg", ["crazy option" => 42]);
     }
 
     public function testVipsGetException()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(Vips\Exception::class);
 
         $x = $this->image->get("I don't exist");
     }
 
     public function testVipsOperationException()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(Vips\Exception::class);
 
         $x = $this->image->add([1, 2, 3, 4]);
     }
