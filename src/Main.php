@@ -40,8 +40,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The vips exception class. All exceptions thrown by php-vips are subclasses
- * of this.
+ * This class contains the top-level libvips control methods.
  *
  * @category  Images
  * @package   Jcupitt\Vips
@@ -51,8 +50,62 @@ namespace Jcupitt\Vips;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-class Exception extends \Exception
+class Main
 {
+    /**
+     * Set the maximum number of operations to hold in the libvips operation 
+     * cache.
+     *
+     * @param integer $value The maximum number of operations to cache.
+     *
+     * @return void
+     */
+    public static function cacheSetMax($value)
+    {
+        vips_cache_set_max($value);
+    }
+
+    /**
+     * Set the maximum amount of memory to allow cached operations to use, in
+     * bytes.
+     *
+     * @param integer $value The maximum amount of memory cached opertations can
+     *     hold, in bytes. 
+     *
+     * @return void
+     */
+    public static function cacheSetMaxMem($value)
+    {
+        vips_cache_set_max_mem($value);
+    }
+
+    /**
+     * Set the maximum number of open files cached operations can use.
+     *
+     * @param integer $value The maximum number of open files cached operations 
+     *      can use.
+     *
+     * @return void
+     */
+    public static function cacheSetMaxFiles($value)
+    {
+        vips_cache_set_max_files($value);
+    }
+
+    /**
+     * Set the size of the pools of worker threads vips uses for image 
+     * evaluation. 
+     *
+     * @param integer $value The size of the pools of worker threads vips uses 
+     *      for image evaluation.
+     *
+     * @return void
+     */
+    public static function concurrencySet($value)
+    {
+        vips_concurrency_set($value);
+    }
+
 }
 
 /*

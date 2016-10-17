@@ -39,12 +39,6 @@
 
 namespace Jcupitt\Vips;
 
-if (!extension_loaded("vips")) {
-    if (!dl('vips.' . PHP_SHLIB_SUFFIX)) {
-        echo "vips: unable to load vips extension\n";
-    }
-}
-
 /**
  * This class represents a Vips image object.
  *
