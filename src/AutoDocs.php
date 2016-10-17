@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file was generated automatically. Do not edit!
  *
@@ -82,9 +83,9 @@
  *     Find indexed image histogram.
  * @method Image hough_line(array $options = []) Find hough line transform.
  * @method Image hough_circle(array $options = []) Find hough circle transform.
- * @method array(Image, ImageImage, Image) project(array $options = []) 
+ * @method array(Image, Image) project(array $options = []) 
  *     Find image projections.
- * @method array(Image, ImageImage, Image) profile(array $options = []) 
+ * @method array(Image, Image) profile(array $options = []) 
  *     Find image profiles.
  * @method Image measure(integer $h, integer $v, array $options = []) 
  *     Measure a set of patches on a colour chart.
@@ -106,10 +107,6 @@
  *     Join a pair of images.
  * @method static Image arrayjoin(array $in, array $options = []) 
  *     Join an array of images.
- * @method Image extract_area(integer $left, integer $top, integer $width, 
- *     integer $height, array $options = []) Extract an area from an image.
- * @method Image extract_area(integer $left, integer $top, integer $width, 
- *     integer $height, array $options = []) Extract an area from an image.
  * @method Image extract_band(integer $band, array $options = []) 
  *     Extract band from an image.
  * @method Image bandjoin_const(array $c, array $options = []) 
@@ -278,7 +275,8 @@
  * @method string radsave_buffer(array $options = []) 
  *     Save image to radiance buffer.
  * @method void dzsave(string $filename, array $options = []) 
- *     Save image to deep zoom format.
+ *     Save image to deepzoom file.
+ * @method string dzsave_buffer(array $options = []) Save image to dz buffer.
  * @method void pngsave(string $filename, array $options = []) 
  *     Save image to png file.
  * @method string pngsave_buffer(array $options = []) Save image to png buffer.
@@ -293,6 +291,8 @@
  *     Save image to webp buffer.
  * @method void tiffsave(string $filename, array $options = []) 
  *     Save image to tiff file.
+ * @method string tiffsave_buffer(array $options = []) 
+ *     Save image to tiff buffer.
  * @method void fitssave(string $filename, array $options = []) 
  *     Save image to fits file.
  * @method Image mapim(Image $index, array $options = []) 
@@ -435,5 +435,14 @@
  *     array $options = []) First-order match of two images.
  * @method Image globalbalance(array $options = []) 
  *     Global balance an image mosaic.
+ * @method Image extract_area(integer $left, integer $top, integer $width, 
+ *     integer $height, array $options = []) Extract an area from an image.
+ * @method Image crop(integer $left, integer $top, integer $width, 
+ *     integer $height, array $options = []) Extract an area from an image.
  */
+
+class AutoDocs
+{
+}
+
 ?>

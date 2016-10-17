@@ -8,7 +8,7 @@ require 'vips'
 
 # Regenerate docs with something like:
 #
-#   ./generate_phpdoc.rb > docs.php
+#   ./generate_phpdoc.rb > AutoDocs.php
 #
 # See https://www.phpdoc.org/docs/latest/references/phpdoc/tags/method.html for
 # docs on the @method syntax. We generate something like:
@@ -28,6 +28,7 @@ $no_generate = %w(
     multiply
     divide
     remainder
+    extract_area
 )
 
 # map Ruby type names to PHP type names
@@ -54,7 +55,9 @@ end
 # array of strings, starting a new one if the thing we append would take the
 # last line over @line_length
 class Output
-    def initialize(start_prefix = " * ", cont_prefix = " *     ", line_length = 80)
+    def initialize(start_prefix = " * ", 
+                   cont_prefix = " *     ", 
+                   line_length = 80)
         @line_length = line_length
         @start_prefix = start_prefix
         @cont_prefix = cont_prefix
@@ -141,9 +144,7 @@ def generate_operation(op)
         out.add "#{required_output[0].to_php} "
     elsif 
         out.add "array("
-        required_output.each do |arg| 
-            out.add required_output.map(&:to_php).join(", ")
-        end
+        out.add required_output.map(&:to_php).join(", ")
         out.add ") "
     end
 
@@ -173,8 +174,9 @@ def generate_class(gtype)
     gtype.children.each {|x| generate_class x}
 end
 
-puts <<~EOF
+puts <<EOF
 <?php
+
 /**
  * This file was generated automatically. Do not edit!
  *
@@ -220,5 +222,23 @@ GC.disable
 Vips::init
 generate_class GLib::Type["VipsOperation"]
 
+# extract_area is in there twice, once as "crop" ... do them by hand
+puts <<EOF
+ * @method Image extract_area(integer $left, integer $top, integer $width, 
+ *     integer $height, array $options = []) Extract an area from an image.
+ * @method Image crop(integer $left, integer $top, integer $width, 
+ *     integer $height, array $options = []) Extract an area from an image.
+EOF
+
 puts " */"
-puts "?>"
+
+# make an empty docs class that Image can extend ... phpStorm needs this
+puts <<EOF
+
+class AutoDocs
+{
+}
+
+?>
+EOF
+
