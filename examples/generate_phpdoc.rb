@@ -214,6 +214,8 @@ puts <<EOF
  * @link      https://github.com/jcupitt/php-vips
  */
 
+namespace Jcupitt\\Vips;
+
 /**
  * The vips AutoDocs class. This is extended by Image.
  *
