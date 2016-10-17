@@ -111,7 +111,7 @@ def generate_operation(op)
         print "void "
     elsif required_output.length == 1
         print "#{required_output[0].to_php} "
-    elsif 
+    else 
         print "array("
         print required_output.map(&:to_php).join(", ")
         print ") "

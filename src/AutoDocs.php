@@ -79,8 +79,8 @@ namespace Jcupitt\Vips;
  * @method Image hist_find_indexed(Image $index, array $options = []) Find indexed image histogram.
  * @method Image hough_line(array $options = []) Find hough line transform.
  * @method Image hough_circle(array $options = []) Find hough circle transform.
- * @method array(project(array $options = []) Find image projections.
- * @method array(profile(array $options = []) Find image profiles.
+ * @method array(Image, Image) project(array $options = []) Find image projections.
+ * @method array(Image, Image) profile(array $options = []) Find image profiles.
  * @method Image measure(integer $h, integer $v, array $options = []) Measure a set of patches on a colour chart.
  * @method array getpoint(integer $x, integer $y, array $options = []) Read a point from an image.
  * @method Image copy(array $options = []) Copy an image.
