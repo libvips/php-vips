@@ -8,22 +8,22 @@ class VipsMainTest extends PHPUnit_Framework_TestCase
     {
         /* Not easy to test ... just make sure it can execute.
          */
-        Vips\Main\cacheSetMax(12);
+        Vips\Main::cacheSetMax(12);
     }
 
     public function testVipsCacheSetMaxMem()
     {
-        Vips\Main\cacheSetMaxMem(12);
+        Vips\Main::cacheSetMaxMem(12);
     }
 
     public function testVipsCacheSetMaxFiles()
     {
-        Vips\Main\cacheSetMaxFiles(12);
+        Vips\Main::cacheSetMaxFiles(12);
     }
 
     public function testVipsConcurrencySet()
     {
-        Vips\Main\concurrencySet(12);
+        Vips\Main::concurrencySet(12);
     }
 
 }
