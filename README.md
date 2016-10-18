@@ -122,8 +122,15 @@ libvips properties as properties of the PHP `Vips\Image` class.
 
 ```
 $ phpcs src
-$ composer install
+$ php ~/vips/php/composer.phar install
 $ vendor/bin/phpunit
 $ vendor/bin/phpdoc
+```
+
+### Regenerate auto stuff
+
+```
+$ cd src
+$ ../examples/generate_phpdoc.rb
 ```
 

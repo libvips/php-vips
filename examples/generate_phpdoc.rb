@@ -61,7 +61,7 @@ class Vips::Argument
     end
 end
 
-def generate_operation(op)
+def generate_operation(file, op)
     flags = op.flags
     return if (flags & :deprecated) != 0
     nickname = Vips::nickname_find op.gtype
@@ -115,29 +115,29 @@ def generate_operation(op)
         required_input.delete member_x
     end
 
-    print " * @method "
-    print "static " if not member_x 
+    file << " * @method "
+    file << "static " if not member_x 
     if required_output.length == 0
-        print "void "
+        file << "void "
     elsif required_output.length == 1
-        print "#{required_output[0].to_php} "
+        file << "#{required_output[0].to_php} "
     else 
-        print "array("
-        print required_output.map(&:to_php).join(", ")
-        print ") "
+        file << "array("
+        file << required_output.map(&:to_php).join(", ")
+        file << ") "
     end
 
-    print "#{nickname}("
+    file << "#{nickname}("
 
     required_input.each do |arg| 
-        print "#{arg.to_php} $#{arg.name}, "
+        file << "#{arg.to_php} $#{arg.name}, "
     end
-    print "array $options = []) "
+    file << "array $options = []) "
 
-    puts "#{op.description.capitalize}."
+    file << "#{op.description.capitalize}.\n"
 end
 
-def generate_class(gtype)
+def generate_class(file, gtype)
     begin
         # can fail for abstract types
         # can't find a way to get to #abstract? from a gtype
@@ -146,12 +146,12 @@ def generate_class(gtype)
         op = nil
     end
 
-    generate_operation(op) if op
+    generate_operation(file, op) if op
 
-    gtype.children.each {|x| generate_class x}
+    gtype.children.each {|x| generate_class file, x}
 end
 
-puts <<EOF
+preamble = <<EOF
 <?php
 
 /**
@@ -194,7 +194,7 @@ puts <<EOF
 namespace Jcupitt\\Vips;
 
 /**
- * The vips AutoDocs class. This is extended by Image.
+ * %s
  *
  * @category  Images
  * @package   Jcupitt\\Vips
@@ -211,28 +211,61 @@ EOF
 GC.disable
 
 Vips::init
-generate_class GLib::Type["VipsOperation"]
+
+# The image class is the most complex
+puts "Generating ImageAutodoc.php ..."
+File.open("ImageAutodoc.php", "w") do |file|
+    file << preamble % "Autodocs for the Image class."
+
+    generate_class file, GLib::Type["VipsOperation"]
 
 # extract_area is in there twice, once as "crop" ... do them by hand
-puts <<EOF
+    file << <<EOF
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
  * @method Image crop(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
  *
 EOF
 
-# all magic properties
-Vips::Image.properties.each do |name|
-    php_name = name.tr "-", "_"
-    p = Vips::Image.property name
-    puts " * @property #{$to_php_map[p.value_type.name]} $#{php_name} #{p.blurb}"
-end
+    # all magic properties
+    Vips::Image.properties.each do |name|
+        php_name = name.tr "-", "_"
+        p = Vips::Image.property name
+        file << " * @property #{$to_php_map[p.value_type.name]} "
+        file << "$#{php_name} #{p.blurb}\n"
+    end
 
-puts <<EOF
+    file << <<EOF
  */
-class AutoDocs
+class ImageAutodoc
 {
 }
 
 ?>
 EOF
+end
+
+# do the various constants, like VipsInterpretation
+Vips.constants.each do |name|
+    const = Vips.const_get name
+    if const.respond_to? :superclass and
+        const.superclass == GLib::Enum
+        puts "Generating #{name}.php ..."
+        File.open("#{name}.php", "w") do |file|
+            file << preamble % "The #{name} enum."
+            file << <<EOF
+ */
+
+abstract class #{name} {
+EOF
+            const.values.each do |value|
+                next if value.nick == "last" 
+                file << "    const #{value.nick.upcase} = '#{value.nick}';\n"
+            end
+            file << <<EOF
+}
+?>
+EOF
+        end
+    end
+end
 
