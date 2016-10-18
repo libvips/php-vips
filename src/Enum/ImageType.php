@@ -53,7 +53,7 @@ abstract class ImageType {
     const ERROR = 'error';
     const NONE = 'none';
     const SETBUF = 'setbuf';
-    const SETBUF_FOREIGN = 'setbuf_foreign';
+    const SETBUF_FOREIGN = 'setbuf-foreign';
     const OPENIN = 'openin';
     const MMAPIN = 'mmapin';
     const MMAPINRW = 'mmapinrw';

@@ -40,7 +40,7 @@
 namespace Jcupitt\Vips\Enum;
 
 /**
- * The OperationComplex2 enum.
+ * The Interpretation enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,7 +49,26 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class OperationComplex2 {
-    const CROSS_PHASE = 'cross_phase';
+abstract class Interpretation {
+    const ERROR = 'error';
+    const MULTIBAND = 'multiband';
+    const B_W = 'b-w';
+    const HISTOGRAM = 'histogram';
+    const XYZ = 'xyz';
+    const LAB = 'lab';
+    const CMYK = 'cmyk';
+    const LABQ = 'labq';
+    const RGB = 'rgb';
+    const CMC = 'cmc';
+    const LCH = 'lch';
+    const LABS = 'labs';
+    const SRGB = 'srgb';
+    const YXY = 'yxy';
+    const FOURIER = 'fourier';
+    const RGB16 = 'rgb16';
+    const GREY16 = 'grey16';
+    const MATRIX = 'matrix';
+    const SCRGB = 'scrgb';
+    const HSV = 'hsv';
 }
 ?>

@@ -40,7 +40,7 @@
 namespace Jcupitt\Vips\Enum;
 
 /**
- * The Saveable enum.
+ * The OperationComplex2 enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,12 +49,7 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Saveable {
-    const MONO = 'mono';
-    const RGB = 'rgb';
-    const RGBA = 'rgba';
-    const RGBA_ONLY = 'rgba_only';
-    const RGB_CMYK = 'rgb_cmyk';
-    const ANY = 'any';
+abstract class OperationComplex2 {
+    const CROSS_PHASE = 'cross-phase';
 }
 ?>

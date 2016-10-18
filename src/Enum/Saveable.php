@@ -40,7 +40,7 @@
 namespace Jcupitt\Vips\Enum;
 
 /**
- * The Access enum.
+ * The Saveable enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,9 +49,12 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Access {
-    const RANDOM = 'random';
-    const SEQUENTIAL = 'sequential';
-    const SEQUENTIAL_UNBUFFERED = 'sequential_unbuffered';
+abstract class Saveable {
+    const MONO = 'mono';
+    const RGB = 'rgb';
+    const RGBA = 'rgba';
+    const RGBA_ONLY = 'rgba-only';
+    const RGB_CMYK = 'rgb-cmyk';
+    const ANY = 'any';
 }
 ?>

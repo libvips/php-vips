@@ -40,6 +40,22 @@ Vips.constants.each do |name|
     end
 end
 
+def enum?(name)
+    return true if $enums.include?(name)
+
+    # is there a "Vips" at the front of the name? remove it and try the
+    # enums again
+    trim = name.to_s.tap{|s| s.slice!("Vips")}
+    return true if $enums.include?(trim)
+
+    # is there a "::" at the front of the name? remove it and try the
+    # enums again
+    trim.slice! "::"
+    return true if $enums.include?(trim)
+
+    return false
+end
+
 # map Ruby type names to PHP type names
 $to_php_map = {
     "Vips::Image" => "Image",
@@ -60,24 +76,18 @@ $to_php_map = {
     "gpointer" => "string",
 }
 
+def type_to_php(type)
+    return $to_php_map[type] if $to_php_map.include?(type) 
+    return "string" if enum? type
+
+    # no mapping found
+    puts "no mapping found for #{type}"
+    return ""
+end
+
 class Vips::Argument
     def to_php
-        return $to_php_map[type] if $to_php_map.include?(type) 
-        return type if $enums.include?(type)
-
-        # is there a "Vips" at the front of the type name? remove it and try the
-        # enums again
-        trim = type.to_s.tap{|s| s.slice!("Vips")}
-        return trim if $enums.include?(trim)
-
-        # is there a "::" at the front of the type name? remove it and try the
-        # enums again
-        trim.slice! "::"
-        return trim if $enums.include?(trim)
-
-        # no mapping found
-        puts "no mapping found for #{type}"
-        return ""
+        type_to_php type
     end
 end
 
@@ -155,6 +165,13 @@ def generate_operation(file, op)
     file << "array $options = []) "
 
     file << "#{op.description.capitalize}.\n"
+
+    # find any Enum we've referenced and output @see lines for them
+    used_enums = []
+    (required_output + required_input).each do |arg|
+        next if not enum? arg.type
+        file << " *     @see #{arg.type} for possible values for $#{arg.name}\n"
+    end
 end
 
 def generate_class(file, gtype)
@@ -253,8 +270,12 @@ EOF
     Vips::Image.properties.each do |name|
         php_name = name.tr "-", "_"
         p = Vips::Image.property name
-        file << " * @property #{$to_php_map[p.value_type.name]} "
+        file << " * @property #{type_to_php p.value_type.name} "
         file << "$#{php_name} #{p.blurb}\n"
+        if enum? p.value_type.name
+            php_name = p.value_type.name.tap{|s| s.slice!("Vips")}
+            file << " *     @see #{php_name} for possible values\n"
+        end
     end
 
     file << <<EOF
@@ -268,10 +289,11 @@ EOF
 end
 
 # generate all the enums
+Dir.mkdir "Enum" if not File.exists? "Enum"
 $enums.each do |name|
     const = Vips.const_get name
-    puts "Generating #{name}.php ..."
-    File.open("#{name}.php", "w") do |file|
+    puts "Generating Enum/#{name}.php ..."
+    File.open("Enum/#{name}.php", "w") do |file|
         file << preamble 
         file << "\n"
         file << "namespace Jcupitt\\Vips\\Enum;\n"
@@ -283,9 +305,9 @@ $enums.each do |name|
         file << "abstract class #{name} {\n"
 
         const.values.each do |value|
-            php_name = value.nick.tr "-", "_"
             next if value.nick == "last" 
-            file << "    const #{php_name.upcase} = '#{php_name}';\n"
+            php_name = value.nick.tr("-", "_").upcase
+            file << "    const #{php_name} = '#{value.nick}';\n"
         end
 
         file << "}\n"

@@ -86,24 +86,35 @@ use Jcupitt\Vips\Enum\Token;
  * @link      https://github.com/jcupitt/php-vips
  *
  * @method static void system(string $cmd_format, array $options = []) Run an external command.
- * @method Image relational(Image $right, OperationRelational $relational, array $options = []) Relational operation on two images.
- * @method Image boolean(Image $right, OperationBoolean $boolean, array $options = []) Boolean operation on two images.
- * @method Image math2(Image $right, OperationMath2 $math2, array $options = []) Binary math operations.
- * @method Image complex2(Image $right, OperationComplex2 $cmplx, array $options = []) Complex binary operations on two images.
+ * @method Image relational(Image $right, string $relational, array $options = []) Relational operation on two images.
+ *     @see OperationRelational for possible values for $relational
+ * @method Image boolean(Image $right, string $boolean, array $options = []) Boolean operation on two images.
+ *     @see OperationBoolean for possible values for $boolean
+ * @method Image math2(Image $right, string $math2, array $options = []) Binary math operations.
+ *     @see OperationMath2 for possible values for $math2
+ * @method Image complex2(Image $right, string $cmplx, array $options = []) Complex binary operations on two images.
+ *     @see OperationComplex2 for possible values for $cmplx
  * @method Image complexform(Image $right, array $options = []) Form a complex image from two real images.
  * @method static Image sum(array(Image) $in, array $options = []) Sum an array of images.
  * @method Image invert(array $options = []) Invert an image.
  * @method Image linear(array(float)|float $a, array(float)|float $b, array $options = []) Calculate (a * in + b).
- * @method Image math(OperationMath $math, array $options = []) Apply a math operation to an image.
+ * @method Image math(string $math, array $options = []) Apply a math operation to an image.
+ *     @see OperationMath for possible values for $math
  * @method Image abs(array $options = []) Absolute value of an image.
  * @method Image sign(array $options = []) Unit vector of pixel.
- * @method Image round(OperationRound $round, array $options = []) Perform a round function on an image.
- * @method Image relational_const(array(float)|float $c, OperationRelational $relational, array $options = []) Relational operations against a constant.
+ * @method Image round(string $round, array $options = []) Perform a round function on an image.
+ *     @see OperationRound for possible values for $round
+ * @method Image relational_const(array(float)|float $c, string $relational, array $options = []) Relational operations against a constant.
+ *     @see OperationRelational for possible values for $relational
  * @method Image remainder_const(array(float)|float $c, array $options = []) Remainder after integer division of an image and a constant.
- * @method Image boolean_const(array(float)|float $c, OperationBoolean $boolean, array $options = []) Boolean operations against a constant.
- * @method Image math2_const(array(float)|float $c, OperationMath2 $math2, array $options = []) Pow( @in, @c ).
- * @method Image complex(OperationComplex $cmplx, array $options = []) Perform a complex operation on an image.
- * @method Image complexget(OperationComplexget $get, array $options = []) Get a component from a complex image.
+ * @method Image boolean_const(array(float)|float $c, string $boolean, array $options = []) Boolean operations against a constant.
+ *     @see OperationBoolean for possible values for $boolean
+ * @method Image math2_const(array(float)|float $c, string $math2, array $options = []) Pow( @in, @c ).
+ *     @see OperationMath2 for possible values for $math2
+ * @method Image complex(string $cmplx, array $options = []) Perform a complex operation on an image.
+ *     @see OperationComplex for possible values for $cmplx
+ * @method Image complexget(string $get, array $options = []) Get a component from a complex image.
+ *     @see OperationComplexget for possible values for $get
  * @method float avg(array $options = []) Find image average.
  * @method float min(array $options = []) Find image minimum.
  * @method float max(array $options = []) Find image maximum.
@@ -124,17 +135,22 @@ use Jcupitt\Vips\Enum\Token;
  * @method Image sequential(array $options = []) Check sequential access.
  * @method Image cache(array $options = []) Cache an image.
  * @method Image embed(integer $x, integer $y, integer $width, integer $height, array $options = []) Embed an image in a larger image.
- * @method Image flip(Direction $direction, array $options = []) Flip an image.
+ * @method Image flip(string $direction, array $options = []) Flip an image.
+ *     @see Direction for possible values for $direction
  * @method Image insert(Image $sub, integer $x, integer $y, array $options = []) Insert image @sub into @main at @x, @y.
- * @method Image join(Image $in2, Direction $direction, array $options = []) Join a pair of images.
+ * @method Image join(Image $in2, string $direction, array $options = []) Join a pair of images.
+ *     @see Direction for possible values for $direction
  * @method static Image arrayjoin(array(Image) $in, array $options = []) Join an array of images.
  * @method Image extract_band(integer $band, array $options = []) Extract band from an image.
  * @method Image bandjoin_const(array(float)|float $c, array $options = []) Append a constant band to an image.
  * @method Image bandmean(array $options = []) Band-wise average.
- * @method Image bandbool(OperationBoolean $boolean, array $options = []) Boolean operation across image bands.
+ * @method Image bandbool(string $boolean, array $options = []) Boolean operation across image bands.
+ *     @see OperationBoolean for possible values for $boolean
  * @method Image replicate(integer $across, integer $down, array $options = []) Replicate an image.
- * @method Image cast(BandFormat $format, array $options = []) Cast an image.
- * @method Image rot(Angle $angle, array $options = []) Rotate an image.
+ * @method Image cast(string $format, array $options = []) Cast an image.
+ *     @see BandFormat for possible values for $format
+ * @method Image rot(string $angle, array $options = []) Rotate an image.
+ *     @see Angle for possible values for $angle
  * @method Image rot45(array $options = []) Rotate an image.
  * @method Image autorot(array $options = []) Autorotate image by exif tag.
  * @method Image recomb(Image $m, array $options = []) Linear recombination with matrix.
@@ -215,8 +231,7 @@ use Jcupitt\Vips\Enum\Token;
  * @method void ppmsave(string $filename, array $options = []) Save image to ppm file.
  * @method void radsave(string $filename, array $options = []) Save image to radiance file.
  * @method string radsave_buffer(array $options = []) Save image to radiance buffer.
- * @method void dzsave(string $filename, array $options = []) Save image to deepzoom file.
- * @method string dzsave_buffer(array $options = []) Save image to dz buffer.
+ * @method void dzsave(string $filename, array $options = []) Save image to deep zoom format.
  * @method void pngsave(string $filename, array $options = []) Save image to png file.
  * @method string pngsave_buffer(array $options = []) Save image to png buffer.
  * @method void jpegsave(string $filename, array $options = []) Save image to jpeg file.
@@ -225,7 +240,6 @@ use Jcupitt\Vips\Enum\Token;
  * @method void webpsave(string $filename, array $options = []) Save image to webp file.
  * @method string webpsave_buffer(array $options = []) Save image to webp buffer.
  * @method void tiffsave(string $filename, array $options = []) Save image to tiff file.
- * @method string tiffsave_buffer(array $options = []) Save image to tiff buffer.
  * @method void fitssave(string $filename, array $options = []) Save image to fits file.
  * @method Image mapim(Image $index, array $options = []) Resample with an mapim image.
  * @method Image shrink(float $hshrink, float $vshrink, array $options = []) Shrink an image.
@@ -238,7 +252,8 @@ use Jcupitt\Vips\Enum\Token;
  * @method Image affine(array(float)|float $matrix, array $options = []) Affine transform of an image.
  * @method Image similarity(array $options = []) Similarity transform of an image.
  * @method Image resize(float $scale, array $options = []) Resize an image.
- * @method Image colourspace(Interpretation $space, array $options = []) Convert to a new colourspace.
+ * @method Image colourspace(string $space, array $options = []) Convert to a new colourspace.
+ *     @see Interpretation for possible values for $space
  * @method Image Lab2XYZ(array $options = []) Transform cielab to xyz.
  * @method Image XYZ2Lab(array $options = []) Transform xyz to lab.
  * @method Image Lab2LCh(array $options = []) Transform lab to lch.
@@ -296,9 +311,11 @@ use Jcupitt\Vips\Enum\Token;
  * @method Image freqmult(Image $mask, array $options = []) Frequency-domain filtering.
  * @method Image spectrum(array $options = []) Make displayable power spectrum.
  * @method Image phasecor(Image $in2, array $options = []) Calculate phase correlation.
- * @method Image morph(Image $mask, OperationMorphology $morph, array $options = []) Morphology operation.
+ * @method Image morph(Image $mask, string $morph, array $options = []) Morphology operation.
+ *     @see OperationMorphology for possible values for $morph
  * @method Image rank(integer $width, integer $height, integer $index, array $options = []) Rank filter.
- * @method float countlines(Direction $direction, array $options = []) Count lines in an image.
+ * @method float countlines(string $direction, array $options = []) Count lines in an image.
+ *     @see Direction for possible values for $direction
  * @method Image labelregions(array $options = []) Label regions in an image.
  * @method Image draw_rect(array(float)|float $ink, integer $left, integer $top, integer $width, integer $height, array $options = []) Paint a rectangle on an image.
  * @method Image draw_mask(array(float)|float $ink, Image $mask, integer $x, integer $y, array $options = []) Draw a mask on an image.
@@ -307,9 +324,12 @@ use Jcupitt\Vips\Enum\Token;
  * @method Image draw_flood(array(float)|float $ink, integer $x, integer $y, array $options = []) Flood-fill an area.
  * @method Image draw_image(Image $sub, integer $x, integer $y, array $options = []) Paint an image into another image.
  * @method Image draw_smudge(integer $left, integer $top, integer $width, integer $height, array $options = []) Blur a rectangle on an image.
- * @method Image merge(Image $sec, Direction $direction, integer $dx, integer $dy, array $options = []) Merge two images.
- * @method Image mosaic(Image $sec, Direction $direction, integer $xref, integer $yref, integer $xsec, integer $ysec, array $options = []) Mosaic two images.
- * @method Image mosaic1(Image $sec, Direction $direction, integer $xr1, integer $yr1, integer $xs1, integer $ys1, integer $xr2, integer $yr2, integer $xs2, integer $ys2, array $options = []) First-order mosaic of two images.
+ * @method Image merge(Image $sec, string $direction, integer $dx, integer $dy, array $options = []) Merge two images.
+ *     @see Direction for possible values for $direction
+ * @method Image mosaic(Image $sec, string $direction, integer $xref, integer $yref, integer $xsec, integer $ysec, array $options = []) Mosaic two images.
+ *     @see Direction for possible values for $direction
+ * @method Image mosaic1(Image $sec, string $direction, integer $xr1, integer $yr1, integer $xs1, integer $ys1, integer $xr2, integer $yr2, integer $xs2, integer $ys2, array $options = []) First-order mosaic of two images.
+ *     @see Direction for possible values for $direction
  * @method Image match(Image $sec, integer $xr1, integer $yr1, integer $xs1, integer $ys1, integer $xr2, integer $yr2, integer $xs2, integer $ys2, array $options = []) First-order match of two images.
  * @method Image globalbalance(array $options = []) Global balance an image mosaic.
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
@@ -320,9 +340,12 @@ use Jcupitt\Vips\Enum\Token;
  * @property integer $width Image width in pixels
  * @property integer $height Image height in pixels
  * @property integer $bands Number of bands in image
- * @property  $format Pixel format in image
- * @property  $coding Pixel coding
- * @property  $interpretation Pixel interpretation
+ * @property string $format Pixel format in image
+ *     @see BandFormat for possible values
+ * @property string $coding Pixel coding
+ *     @see Coding for possible values
+ * @property string $interpretation Pixel interpretation
+ *     @see Interpretation for possible values
  * @property float $xres Horizontal resolution in pixels/mm
  * @property float $yres Vertical resolution in pixels/mm
  * @property integer $xoffset Horizontal offset of origin
@@ -330,7 +353,8 @@ use Jcupitt\Vips\Enum\Token;
  * @property string $filename Image filename
  * @property string $mode Open mode
  * @property bool $kill Block evaluation on this image
- * @property  $demand Preferred demand style for this image
+ * @property string $demand Preferred demand style for this image
+ *     @see DemandStyle for possible values
  * @property integer $sizeof_header Offset in bytes from start of file
  * @property string $foreign_buffer Pointer to foreign pixels
  */
