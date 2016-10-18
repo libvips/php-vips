@@ -43,9 +43,9 @@ end
 # map Ruby type names to PHP type names
 $to_php_map = {
     "Vips::Image" => "Image",
-    "Array<Integer>" => "array",
-    "Array<Double>" => "array",
-    "Array<Image>" => "array",
+    "Array<Integer>" => "array(integer)|integer",
+    "Array<Double>" => "array(float)|float",
+    "Array<Image>" => "array(Image)",
     "Integer" => "integer",
     "gint" => "integer",
     "guint64" => "integer",
