@@ -38,11 +38,21 @@ $to_php_map = {
     "Array<Double>" => "array",
     "Array<Image>" => "array",
     "Integer" => "integer",
+    "gint" => "integer",
+    "guint64" => "integer",
     "Double" => "float",
+    "gdouble" => "float",
     "Float" => "float",
     "String" => "string",
     "Boolean" => "bool",
+    "gboolean" => "bool",
     "Vips::Blob" => "string",
+    "gchararray" => "string",
+    "gpointer" => "string",
+    "VipsBandFormat" => "BandFormat",
+    "VipsCoding" => "Coding",
+    "VipsInterpretation" => "Interpretation",
+    "VipsDemandStyle" => "DemandStyle",
 }
 
 class Vips::Argument
@@ -207,6 +217,17 @@ generate_class GLib::Type["VipsOperation"]
 puts <<EOF
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
  * @method Image crop(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
+ *
+EOF
+
+# all magic properties
+Vips::Image.properties.each do |name|
+    php_name = name.tr "-", "_"
+    p = Vips::Image.property name
+    puts " * @property #{$to_php_map[p.value_type.name]} $#{php_name} #{p.blurb}"
+end
+
+puts <<EOF
  */
 class AutoDocs
 {

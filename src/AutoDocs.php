@@ -279,6 +279,25 @@ namespace Jcupitt\Vips;
  * @method Image globalbalance(array $options = []) Global balance an image mosaic.
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
  * @method Image crop(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
+ *
+ * @property string $nickname Class nickname
+ * @property string $description Class description
+ * @property integer $width Image width in pixels
+ * @property integer $height Image height in pixels
+ * @property integer $bands Number of bands in image
+ * @property BandFormat $format Pixel format in image
+ * @property Coding $coding Pixel coding
+ * @property Interpretation $interpretation Pixel interpretation
+ * @property float $xres Horizontal resolution in pixels/mm
+ * @property float $yres Vertical resolution in pixels/mm
+ * @property integer $xoffset Horizontal offset of origin
+ * @property integer $yoffset Vertical offset of origin
+ * @property string $filename Image filename
+ * @property string $mode Open mode
+ * @property bool $kill Block evaluation on this image
+ * @property DemandStyle $demand Preferred demand style for this image
+ * @property integer $sizeof_header Offset in bytes from start of file
+ * @property string $foreign_buffer Pointer to foreign pixels
  */
 class AutoDocs
 {
