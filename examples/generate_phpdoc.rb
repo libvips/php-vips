@@ -68,12 +68,12 @@ class Vips::Argument
         # is there a "Vips" at the front of the type name? remove it and try the
         # enums again
         trim = type.to_s.tap{|s| s.slice!("Vips")}
-        return "Enum\\" + trim if $enums.include?(trim)
+        return trim if $enums.include?(trim)
 
         # is there a "::" at the front of the type name? remove it and try the
         # enums again
         trim.slice! "::"
-        return "Enum\\" + trim if $enums.include?(trim)
+        return trim if $enums.include?(trim)
 
         # no mapping found
         puts "no mapping found for #{type}"
