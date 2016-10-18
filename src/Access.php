@@ -37,11 +37,10 @@
  * @link      https://github.com/jcupitt/php-vips
  */
 
-namespace Jcupitt\Vips;
+namespace Jcupitt\Vips\Enum;
 
 /**
  * The Access enum.
- *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,12 +48,10 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
- *
  */
-
 abstract class Access {
     const RANDOM = 'random';
     const SEQUENTIAL = 'sequential';
-    const SEQUENTIAL-UNBUFFERED = 'sequential-unbuffered';
+    const SEQUENTIAL_UNBUFFERED = 'sequential_unbuffered';
 }
 ?>

@@ -37,11 +37,10 @@
  * @link      https://github.com/jcupitt/php-vips
  */
 
-namespace Jcupitt\Vips;
+namespace Jcupitt\Vips\Enum;
 
 /**
  * The Interpretation enum.
- *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,13 +48,11 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
- *
  */
-
 abstract class Interpretation {
     const ERROR = 'error';
     const MULTIBAND = 'multiband';
-    const B-W = 'b-w';
+    const B_W = 'b_w';
     const HISTOGRAM = 'histogram';
     const XYZ = 'xyz';
     const LAB = 'lab';

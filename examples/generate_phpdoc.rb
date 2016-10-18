@@ -8,15 +8,14 @@ require 'vips'
 
 # Regenerate docs with something like:
 #
-#   ./generate_phpdoc.rb > AutoDocs.php
-#
-# See https://www.phpdoc.org/docs/latest/references/phpdoc/tags/method.html for
-# docs on the @method syntax. We generate something like:
-#
-# @method [return type] [name]([[type] [parameter]<, ...>]) [<description>]
-#
-# @method Image embed(Image $in, integer $x, integer $y, integer $width, 
-#   integer $height, array $options = []) embed an image in a larger image
+#   cd src
+#   ../examples/generate_phpdoc.rb 
+
+# gobject-introspection 3.0.7 crashes a lot if it GCs while doing 
+# something
+GC.disable
+
+Vips::init
 
 # these have hand-written methods, don't autodoc them
 $no_generate = %w( 
@@ -30,6 +29,16 @@ $no_generate = %w(
     remainder
     extract_area
 )
+
+# Find all the vips enums 
+$enums = []
+Vips.constants.each do |name|
+    const = Vips.const_get name
+    if const.respond_to? :superclass and
+        const.superclass == GLib::Enum
+        $enums << name.to_s
+    end
+end
 
 # map Ruby type names to PHP type names
 $to_php_map = {
@@ -49,15 +58,26 @@ $to_php_map = {
     "Vips::Blob" => "string",
     "gchararray" => "string",
     "gpointer" => "string",
-    "VipsBandFormat" => "BandFormat",
-    "VipsCoding" => "Coding",
-    "VipsInterpretation" => "Interpretation",
-    "VipsDemandStyle" => "DemandStyle",
 }
 
 class Vips::Argument
     def to_php
-        $to_php_map.include?(type) ? $to_php_map[type] : ""
+        return $to_php_map[type] if $to_php_map.include?(type) 
+        return type if $enums.include?(type)
+
+        # is there a "Vips" at the front of the type name? remove it and try the
+        # enums again
+        trim = type.to_s.tap{|s| s.slice!("Vips")}
+        return "Enum\\" + trim if $enums.include?(trim)
+
+        # is there a "::" at the front of the type name? remove it and try the
+        # enums again
+        trim.slice! "::"
+        return "Enum\\" + trim if $enums.include?(trim)
+
+        # no mapping found
+        puts "no mapping found for #{type}"
+        return ""
     end
 end
 
@@ -190,12 +210,9 @@ preamble = <<EOF
  * @version   GIT:ad44dfdd31056a41cbf217244ce62e7a702e0282
  * @link      https://github.com/jcupitt/php-vips
  */
+EOF
 
-namespace Jcupitt\\Vips;
-
-/**
- * %s
- *
+class_header = <<EOF
  * @category  Images
  * @package   Jcupitt\\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -203,19 +220,25 @@ namespace Jcupitt\\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
- *
 EOF
-
-# gobject-introspection 3.0.7 crashes a lot if it GCs while doing 
-# something
-GC.disable
-
-Vips::init
 
 # The image class is the most complex
 puts "Generating ImageAutodoc.php ..."
 File.open("ImageAutodoc.php", "w") do |file|
-    file << preamble % "Autodocs for the Image class."
+    file << preamble 
+    file << "\n"
+    file << "namespace Jcupitt\\Vips;\n"
+    file << "\n"
+
+    $enums.each do |name|
+        file << "use Jcupitt\\Vips\\Enum\\#{name};\n"
+    end
+
+    file << "\n"
+    file << "/**\n"
+    file << " * Autodocs for the Image class.\n"
+    file << class_header 
+    file << " *\n"
 
     generate_class file, GLib::Type["VipsOperation"]
 
@@ -236,7 +259,7 @@ EOF
 
     file << <<EOF
  */
-class ImageAutodoc
+abstract class ImageAutodoc
 {
 }
 
@@ -244,28 +267,29 @@ class ImageAutodoc
 EOF
 end
 
-# do the various constants, like VipsInterpretation
-Vips.constants.each do |name|
+# generate all the enums
+$enums.each do |name|
     const = Vips.const_get name
-    if const.respond_to? :superclass and
-        const.superclass == GLib::Enum
-        puts "Generating #{name}.php ..."
-        File.open("#{name}.php", "w") do |file|
-            file << preamble % "The #{name} enum."
-            file << <<EOF
- */
+    puts "Generating #{name}.php ..."
+    File.open("#{name}.php", "w") do |file|
+        file << preamble 
+        file << "\n"
+        file << "namespace Jcupitt\\Vips\\Enum;\n"
+        file << "\n"
+        file << "/**\n"
+        file << " * The #{name} enum.\n"
+        file << class_header 
+        file << " */\n"
+        file << "abstract class #{name} {\n"
 
-abstract class #{name} {
-EOF
-            const.values.each do |value|
-                next if value.nick == "last" 
-                file << "    const #{value.nick.upcase} = '#{value.nick}';\n"
-            end
-            file << <<EOF
-}
-?>
-EOF
+        const.values.each do |value|
+            php_name = value.nick.tr "-", "_"
+            next if value.nick == "last" 
+            file << "    const #{php_name.upcase} = '#{php_name}';\n"
         end
+
+        file << "}\n"
+        file << "?>\n"
     end
 end
 

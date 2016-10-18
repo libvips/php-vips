@@ -37,11 +37,10 @@
  * @link      https://github.com/jcupitt/php-vips
  */
 
-namespace Jcupitt\Vips;
+namespace Jcupitt\Vips\Enum;
 
 /**
  * The ImageType enum.
- *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,14 +48,12 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
- *
  */
-
 abstract class ImageType {
     const ERROR = 'error';
     const NONE = 'none';
     const SETBUF = 'setbuf';
-    const SETBUF-FOREIGN = 'setbuf-foreign';
+    const SETBUF_FOREIGN = 'setbuf_foreign';
     const OPENIN = 'openin';
     const MMAPIN = 'mmapin';
     const MMAPINRW = 'mmapinrw';

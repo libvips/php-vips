@@ -407,7 +407,7 @@ namespace Jcupitt\Vips;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-class Image extends AutoDocs implements \ArrayAccess
+class Image extends ImageAutodoc implements \ArrayAccess
 {
     /**
      * Set true when we are logging actions.

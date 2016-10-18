@@ -37,11 +37,10 @@
  * @link      https://github.com/jcupitt/php-vips
  */
 
-namespace Jcupitt\Vips;
+namespace Jcupitt\Vips\Enum;
 
 /**
  * The OperationComplex2 enum.
- *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,10 +48,8 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
- *
  */
-
 abstract class OperationComplex2 {
-    const CROSS-PHASE = 'cross-phase';
+    const CROSS_PHASE = 'cross_phase';
 }
 ?>

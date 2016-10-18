@@ -37,11 +37,10 @@
  * @link      https://github.com/jcupitt/php-vips
  */
 
-namespace Jcupitt\Vips;
+namespace Jcupitt\Vips\Enum;
 
 /**
  * The Saveable enum.
- *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -49,15 +48,13 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
- *
  */
-
 abstract class Saveable {
     const MONO = 'mono';
     const RGB = 'rgb';
     const RGBA = 'rgba';
-    const RGBA-ONLY = 'rgba-only';
-    const RGB-CMYK = 'rgb-cmyk';
+    const RGBA_ONLY = 'rgba_only';
+    const RGB_CMYK = 'rgb_cmyk';
     const ANY = 'any';
 }
 ?>
