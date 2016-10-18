@@ -12,6 +12,8 @@ All notable changes to `:vips` will be documented in this file.
 - libvips draw calls now work
 - logging, see Vips\Image::setLogging()
 - throw Vips\Exception on error
+- much better docs, including automatically-generated docs for magic methods
+  and properties
 
 ### Deprecated
 - now require php >= 7.0.11, fixes #10
