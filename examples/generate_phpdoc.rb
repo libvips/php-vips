@@ -59,9 +59,10 @@ end
 # map Ruby type names to PHP type names
 $to_php_map = {
     "Vips::Image" => "Image",
-    "Array<Integer>" => "array(integer)|integer",
-    "Array<Double>" => "array(float)|float",
-    "Array<Image>" => "array(Image)",
+    "Image" => "Image",
+    "Array<Integer>" => "integer[]|integer",
+    "Array<Double>" => "float[]|float",
+    "Array<Image>" => "Image[]",
     "Integer" => "integer",
     "gint" => "integer",
     "guint64" => "integer",
@@ -152,9 +153,8 @@ def generate_operation(file, op)
     elsif required_output.length == 1
         file << "#{required_output[0].to_php} "
     else 
-        file << "array("
-        file << required_output.map(&:to_php).join(", ")
-        file << ") "
+        # we generate a Returns: block for this case, see below
+        file << "array "
     end
 
     file << "#{nickname}("
@@ -166,11 +166,20 @@ def generate_operation(file, op)
 
     file << "#{op.description.capitalize}.\n"
 
-    # find any Enum we've referenced and output @see lines for them
+    # find any Enums we've referenced and output @see lines for them
     used_enums = []
     (required_output + required_input).each do |arg|
         next if not enum? arg.type
         file << " *     @see #{arg.type} for possible values for $#{arg.name}\n"
+    end
+
+    if required_output.length > 1
+        file << " *     Return array with: [\n"
+        required_output.each do |arg|
+            file << " *         '#{arg.name}' => "
+            file << "@type #{arg.to_php} #{arg.blurb.capitalize}.\n"
+        end
+        file << " *     ];\n"
     end
 end
 
