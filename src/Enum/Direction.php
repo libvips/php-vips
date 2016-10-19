@@ -53,4 +53,3 @@ abstract class Direction {
     const HORIZONTAL = 'horizontal';
     const VERTICAL = 'vertical';
 }
-?>

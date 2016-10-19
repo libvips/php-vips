@@ -54,4 +54,3 @@ abstract class Precision {
     const FLOAT = 'float';
     const APPROXIMATE = 'approximate';
 }
-?>

@@ -53,4 +53,3 @@ abstract class ForeignTiffResunit {
     const CM = 'cm';
     const INCH = 'inch';
 }
-?>

@@ -57,4 +57,3 @@ abstract class ForeignTiffCompression {
     const CCITTFAX4 = 'ccittfax4';
     const LZW = 'lzw';
 }
-?>

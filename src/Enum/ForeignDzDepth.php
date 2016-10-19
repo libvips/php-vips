@@ -54,4 +54,3 @@ abstract class ForeignDzDepth {
     const ONETILE = 'onetile';
     const ONE = 'one';
 }
-?>

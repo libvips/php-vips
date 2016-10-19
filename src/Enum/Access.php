@@ -54,4 +54,3 @@ abstract class Access {
     const SEQUENTIAL = 'sequential';
     const SEQUENTIAL_UNBUFFERED = 'sequential-unbuffered';
 }
-?>

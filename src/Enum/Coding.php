@@ -55,4 +55,3 @@ abstract class Coding {
     const LABQ = 'labq';
     const RAD = 'rad';
 }
-?>

@@ -53,4 +53,3 @@ abstract class OperationMorphology {
     const ERODE = 'erode';
     const DILATE = 'dilate';
 }
-?>

@@ -56,4 +56,3 @@ abstract class Kernel {
     const LANCZOS2 = 'lanczos2';
     const LANCZOS3 = 'lanczos3';
 }
-?>

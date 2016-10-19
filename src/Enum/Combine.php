@@ -53,4 +53,3 @@ abstract class Combine {
     const MAX = 'max';
     const SUM = 'sum';
 }
-?>

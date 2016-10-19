@@ -56,4 +56,3 @@ abstract class Token {
     const EQUALS = 'equals';
     const COMMA = 'comma';
 }
-?>

@@ -71,4 +71,3 @@ abstract class Interpretation {
     const SCRGB = 'scrgb';
     const HSV = 'hsv';
 }
-?>

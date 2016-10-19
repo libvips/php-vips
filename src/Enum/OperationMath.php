@@ -61,4 +61,3 @@ abstract class OperationMath {
     const EXP = 'exp';
     const EXP10 = 'exp10';
 }
-?>

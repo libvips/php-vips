@@ -55,4 +55,3 @@ abstract class Intent {
     const SATURATION = 'saturation';
     const ABSOLUTE = 'absolute';
 }
-?>

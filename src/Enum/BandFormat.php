@@ -62,4 +62,3 @@ abstract class BandFormat {
     const DOUBLE = 'double';
     const DPCOMPLEX = 'dpcomplex';
 }
-?>

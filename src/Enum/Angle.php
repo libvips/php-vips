@@ -55,4 +55,3 @@ abstract class Angle {
     const D180 = 'd180';
     const D270 = 'd270';
 }
-?>

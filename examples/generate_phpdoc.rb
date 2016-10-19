@@ -283,8 +283,6 @@ EOF
 abstract class ImageAutodoc
 {
 }
-
-?>
 EOF
 end
 
@@ -311,7 +309,6 @@ $enums.each do |name|
         end
 
         file << "}\n"
-        file << "?>\n"
     end
 end
 

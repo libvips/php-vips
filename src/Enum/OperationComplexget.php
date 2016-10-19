@@ -53,4 +53,3 @@ abstract class OperationComplexget {
     const REAL = 'real';
     const IMAG = 'imag';
 }
-?>

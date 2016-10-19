@@ -57,4 +57,3 @@ abstract class Saveable {
     const RGB_CMYK = 'rgb-cmyk';
     const ANY = 'any';
 }
-?>

@@ -54,4 +54,3 @@ abstract class OperationRound {
     const CEIL = 'ceil';
     const FLOOR = 'floor';
 }
-?>

@@ -109,7 +109,7 @@ use Jcupitt\Vips\Enum\Token;
  * @method Image remainder_const(array(float)|float $c, array $options = []) Remainder after integer division of an image and a constant.
  * @method Image boolean_const(array(float)|float $c, string $boolean, array $options = []) Boolean operations against a constant.
  *     @see OperationBoolean for possible values for $boolean
- * @method Image math2_const(array(float)|float $c, string $math2, array $options = []) Pow( @in, @c ).
+ * @method Image math2_const(array(float)|float $c, string $math2, array $options = []) Binary math operations with a constant.
  *     @see OperationMath2 for possible values for $math2
  * @method Image complex(string $cmplx, array $options = []) Perform a complex operation on an image.
  *     @see OperationComplex for possible values for $cmplx
@@ -231,7 +231,8 @@ use Jcupitt\Vips\Enum\Token;
  * @method void ppmsave(string $filename, array $options = []) Save image to ppm file.
  * @method void radsave(string $filename, array $options = []) Save image to radiance file.
  * @method string radsave_buffer(array $options = []) Save image to radiance buffer.
- * @method void dzsave(string $filename, array $options = []) Save image to deep zoom format.
+ * @method void dzsave(string $filename, array $options = []) Save image to deepzoom file.
+ * @method string dzsave_buffer(array $options = []) Save image to dz buffer.
  * @method void pngsave(string $filename, array $options = []) Save image to png file.
  * @method string pngsave_buffer(array $options = []) Save image to png buffer.
  * @method void jpegsave(string $filename, array $options = []) Save image to jpeg file.
@@ -240,6 +241,7 @@ use Jcupitt\Vips\Enum\Token;
  * @method void webpsave(string $filename, array $options = []) Save image to webp file.
  * @method string webpsave_buffer(array $options = []) Save image to webp buffer.
  * @method void tiffsave(string $filename, array $options = []) Save image to tiff file.
+ * @method string tiffsave_buffer(array $options = []) Save image to tiff buffer.
  * @method void fitssave(string $filename, array $options = []) Save image to fits file.
  * @method Image mapim(Image $index, array $options = []) Resample with an mapim image.
  * @method Image shrink(float $hshrink, float $vshrink, array $options = []) Shrink an image.
@@ -361,5 +363,3 @@ use Jcupitt\Vips\Enum\Token;
 abstract class ImageAutodoc
 {
 }
-
-?>

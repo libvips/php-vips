@@ -54,4 +54,3 @@ abstract class Align {
     const CENTRE = 'centre';
     const HIGH = 'high';
 }
-?>

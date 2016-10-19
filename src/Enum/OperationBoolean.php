@@ -56,4 +56,3 @@ abstract class OperationBoolean {
     const LSHIFT = 'lshift';
     const RSHIFT = 'rshift';
 }
-?>

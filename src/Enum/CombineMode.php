@@ -53,4 +53,3 @@ abstract class CombineMode {
     const SET = 'set';
     const ADD = 'add';
 }
-?>

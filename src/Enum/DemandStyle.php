@@ -56,4 +56,3 @@ abstract class DemandStyle {
     const THINSTRIP = 'thinstrip';
     const ANY = 'any';
 }
-?>

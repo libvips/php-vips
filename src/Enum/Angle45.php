@@ -59,4 +59,3 @@ abstract class Angle45 {
     const D270 = 'd270';
     const D315 = 'd315';
 }
-?>

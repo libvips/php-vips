@@ -54,4 +54,3 @@ abstract class ForeignTiffPredictor {
     const HORIZONTAL = 'horizontal';
     const FLOAT = 'float';
 }
-?>

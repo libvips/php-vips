@@ -57,4 +57,3 @@ abstract class Extend {
     const WHITE = 'white';
     const BACKGROUND = 'background';
 }
-?>

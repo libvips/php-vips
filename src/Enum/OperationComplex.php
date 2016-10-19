@@ -54,4 +54,3 @@ abstract class OperationComplex {
     const RECT = 'rect';
     const CONJ = 'conj';
 }
-?>

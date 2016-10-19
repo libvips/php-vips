@@ -60,4 +60,3 @@ abstract class ImageType {
     const OPENOUT = 'openout';
     const PARTIAL = 'partial';
 }
-?>

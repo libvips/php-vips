@@ -52,4 +52,3 @@ namespace Jcupitt\Vips\Enum;
 abstract class OperationComplex2 {
     const CROSS_PHASE = 'cross-phase';
 }
-?>

@@ -53,4 +53,3 @@ abstract class PCS {
     const LAB = 'lab';
     const XYZ = 'xyz';
 }
-?>

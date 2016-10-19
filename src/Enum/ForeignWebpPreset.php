@@ -57,4 +57,3 @@ abstract class ForeignWebpPreset {
     const ICON = 'icon';
     const TEXT = 'text';
 }
-?>

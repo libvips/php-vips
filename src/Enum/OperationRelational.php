@@ -57,4 +57,3 @@ abstract class OperationRelational {
     const MORE = 'more';
     const MOREEQ = 'moreeq';
 }
-?>

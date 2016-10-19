@@ -53,4 +53,3 @@ abstract class OperationMath2 {
     const POW = 'pow';
     const WOP = 'wop';
 }
-?>

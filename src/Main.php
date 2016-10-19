@@ -116,5 +116,3 @@ class Main
  * vim600: expandtab sw=4 ts=4 fdm=marker
  * vim<600: expandtab sw=4 ts=4
  */
-
-?>
