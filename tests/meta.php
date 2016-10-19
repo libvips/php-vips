@@ -64,6 +64,15 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
         $exif = $image->get("exif-data");
     }
 
+    public function testVipsEnumString()
+    {
+        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $image = Vips\Image::newFromFile($filename);
+
+        $x = $image->interpretation;
+        $this->assertEquals($x, "srgb");
+    }
+
 }
 
 /*
