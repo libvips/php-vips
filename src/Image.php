@@ -39,13 +39,26 @@
 
 namespace Jcupitt\Vips;
 
+use Jcupitt\Vips\Enum\Angle;
+use Jcupitt\Vips\Enum\Direction;
+use Jcupitt\Vips\Enum\Extend;
+use Jcupitt\Vips\Enum\OperationBoolean;
+use Jcupitt\Vips\Enum\OperationComplex;
+use Jcupitt\Vips\Enum\OperationComplexget;
+use Jcupitt\Vips\Enum\OperationMath;
+use Jcupitt\Vips\Enum\OperationMath2;
+use Jcupitt\Vips\Enum\OperationMorphology;
+use Jcupitt\Vips\Enum\OperationRelational;
+use Jcupitt\Vips\Enum\OperationRound;
+use Psr\Log\LoggerInterface;
+
 /**
  * This class represents a Vips image object.
  *
- * This module provides a binding for the [vips image processing 
+ * This module provides a binding for the [vips image processing
  * library](http://www.vips.ecs.soton.ac.uk).
  *
- * It needs libvips 8.0 or later to be installed, and it needs the binary 
+ * It needs libvips 8.0 or later to be installed, and it needs the binary
  * [`vips` extension](https://github.com/jcupitt/php-vips-ext) to be added to
  * your PHP.
  *
@@ -58,8 +71,8 @@ namespace Jcupitt\Vips;
  * $im = $im->crop(100, 100, $im->width - 200, $im->height - 200);
  * $im = $im->reduce(1.0 / 0.9, 1.0 / 0.9, ["kernel" => "linear"]);
  * $mask = Vips\Image::newFromArray(
- *      [[-1,  -1, -1], 
- *       [-1,  16, -1], 
+ *      [[-1,  -1, -1],
+ *       [-1,  16, -1],
  *       [-1,  -1, -1]], 8);
  * $im = $im->conv($mask);
  * $im->writeToFile($argv[2]);
@@ -67,23 +80,23 @@ namespace Jcupitt\Vips;
  * ```
  *
  * You'll need this in your `composer.json`:
- * 
+ *
  * ```
  *     "require": {
  *         "jcupitt/vips" : "@dev"
  *     }
  * ```
- * 
+ *
  * And run with:
- * 
+ *
  * ```
  * $ composer install
  * $ ./try1.php ~/pics/k2.jpg x.tif
  * ```
- * 
+ *
  * This example loads a file, crops 100 pixels from every edge, reduces by 10%
- * using a bilinear interpolator (the default is lanczos3), 
- * sharpens the image, and saves it back to disc again. 
+ * using a bilinear interpolator (the default is lanczos3),
+ * sharpens the image, and saves it back to disc again.
  *
  * Reading this example line by line, we have:
  *
@@ -98,9 +111,9 @@ namespace Jcupitt\Vips;
  * example, we will be accessing pixels top-to-bottom as we sweep through the
  * image reading and writing, so `sequential` access mode is best for us. The
  * default mode is `random`, this allows for full random access to image pixels,
- * but is slower and needs more memory. 
+ * but is slower and needs more memory.
  *
- * You can also load formatted images from 
+ * You can also load formatted images from
  * strings or create images from PHP arrays.
  *
  * The next line:
@@ -109,23 +122,23 @@ namespace Jcupitt\Vips;
  * $im = $im->crop(100, 100, $im->width - 200, $im->height - 200);
  * ```
  *
- * Crops 100 pixels from every edge. You can access any vips image property 
+ * Crops 100 pixels from every edge. You can access any vips image property
  * directly as a PHP property. If the vips property name does not
- * conform to PHP naming conventions, you can use something like 
+ * conform to PHP naming conventions, you can use something like
  * `$image->get("ipct-data")`.
  *
  * Next we have:
  *
  * ```php
  * $mask = Vips\Image::newFromArray(
- *      [[-1,  -1, -1], 
- *       [-1,  16, -1], 
+ *      [[-1,  -1, -1],
+ *       [-1,  16, -1],
  *       [-1,  -1, -1]], 8);
  * $im = $im->conv($mask);
  * ```
  *
  * `Image::new_from_array` creates an image from an array constant. The 8 at
- * the end sets the scale: the amount to divide the image by after 
+ * the end sets the scale: the amount to divide the image by after
  * integer convolution. See the libvips API docs for `vips_conv()` (the operation
  * invoked by `Image::conv`) for details on the convolution operator. See
  * **Getting more help** below.
@@ -136,13 +149,13 @@ namespace Jcupitt\Vips;
  * $im->writeToFile($argv[2]);
  * ```
  *
- * `Image::writeToFile` writes an image back to the filesystem. It can 
- * write any format supported by vips: the file type is set from the filename 
+ * `Image::writeToFile` writes an image back to the filesystem. It can
+ * write any format supported by vips: the file type is set from the filename
  * suffix. You can also write formatted images to strings.
  *
  * # Getting more help
  *
- * This binding lets you call the complete C API almost directly. You should 
+ * This binding lets you call the complete C API almost directly. You should
  * [consult the C docs](
  * http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/index.html)
  * for full details on the operations that are available and
@@ -176,13 +189,13 @@ namespace Jcupitt\Vips;
  *                     default: black
  *                     allowed: black, copy, repeat, mirror, white, background
  *    background   - Colour for background pixels, input VipsArrayDouble
- * operation flags: sequential-unbuffered 
+ * operation flags: sequential-unbuffered
  * ```
  *
  * You can call this from PHP as:
  *
  * ```php
- * $out = $in->embed($x, $y, $width, $height, 
+ * $out = $in->embed($x, $y, $width, $height,
  *     ["extend" => "copy", "background" => [1, 2, 3]]);
  * ```
  *
@@ -216,10 +229,10 @@ namespace Jcupitt\Vips;
  *
  * # How it works
  *
- * The binary 
+ * The binary
  * [`vips` extension](https://github.com/jcupitt/php-vips-ext) adds a few extra
- * functions to PHP to let you call anything in the libvips library. The API 
- * it provides is simple, but horrible. 
+ * functions to PHP to let you call anything in the libvips library. The API
+ * it provides is simple, but horrible.
  *
  * This module is pure PHP and builds on the binary extension to provide a
  * convenient interface for programmers. It uses the PHP magic methods
@@ -227,29 +240,29 @@ namespace Jcupitt\Vips;
  * appear as methods on the `Image` class, and vips properties as PHP
  * properties.
  *
- * The API you end up with is a object-oriented version of the [VIPS C 
- * API](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/). 
+ * The API you end up with is a object-oriented version of the [VIPS C
+ * API](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/).
  * Full documentation
  * on the operations and what they do is there, you can use it directly. This
- * document explains the extra features of the PHP API and lists the available 
- * operations very briefly. 
+ * document explains the extra features of the PHP API and lists the available
+ * operations very briefly.
  *
  * # Automatic wrapping
  *
  * This binding has a `__call()` method and uses
- * it to look up vips operations. For example, the libvips operation `embed`, 
- * which appears in C as `vips_embed()`, appears in PHP as `Image::embed`. 
+ * it to look up vips operations. For example, the libvips operation `embed`,
+ * which appears in C as `vips_embed()`, appears in PHP as `Image::embed`.
  *
- * The operation's list of required arguments is searched and the first input 
- * image is set to the value of `self`. Operations which do not take an input 
+ * The operation's list of required arguments is searched and the first input
+ * image is set to the value of `self`. Operations which do not take an input
  * image, such as `Image::black`, appear as static methods. The remainder of
  * the arguments you supply in the function call are used to set the other
- * required input arguments. If the final supplied argument is an array, it is 
- * used to set any optional input arguments. The result is the required output 
+ * required input arguments. If the final supplied argument is an array, it is
+ * used to set any optional input arguments. The result is the required output
  * argument if there is only one result, or an array of values if the operation
  * produces several results.
  *
- * For example, `Image::min`, the vips operation that searches an image for 
+ * For example, `Image::min`, the vips operation that searches an image for
  * the minimum value, has a large number of optional arguments. You can use it to
  * find the minimum value like this:
  *
@@ -258,7 +271,7 @@ namespace Jcupitt\Vips;
  * ```
  *
  * You can ask it to return the position of the minimum with `x` and `y`.
- *   
+ *
  * ```php
  * $result = $image->min(["x" => true, "y" => true]);
  * $min_value = $result["out"];
@@ -266,7 +279,7 @@ namespace Jcupitt\Vips;
  * $y_pos = $result["y"];
  * ```
  *
- * Now `x_pos` and `y_pos` will have the coordinates of the minimum value. 
+ * Now `x_pos` and `y_pos` will have the coordinates of the minimum value.
  * There's actually a convenience function for this, `Image::minpos`, see
  * below.
  *
@@ -278,7 +291,7 @@ namespace Jcupitt\Vips;
  * $y_pos = $result["y_array"];
  * ```
  *
- * Now `x_pos` and `y_pos` will be 10-element arrays. 
+ * Now `x_pos` and `y_pos` will be 10-element arrays.
  *
  * Because operations are member functions and return the result image, you can
  * chain them. For example, you can write:
@@ -287,15 +300,15 @@ namespace Jcupitt\Vips;
  * $result_image = $image->real()->cos();
  * ```
  *
- * to calculate the cosine of the real part of a complex image. 
+ * to calculate the cosine of the real part of a complex image.
  *
- * libvips types are also automatically wrapped and unwrapped. The binding 
- * looks at the type 
- * of argument required by the operation and converts the value you supply, 
- * when it can. For example, `Image::linear` takes a `VipsArrayDouble` as 
- * an argument 
- * for the set of constants to use for multiplication. You can supply this 
- * value as an integer, a float, or some kind of compound object and it 
+ * libvips types are also automatically wrapped and unwrapped. The binding
+ * looks at the type
+ * of argument required by the operation and converts the value you supply,
+ * when it can. For example, `Image::linear` takes a `VipsArrayDouble` as
+ * an argument
+ * for the set of constants to use for multiplication. You can supply this
+ * value as an integer, a float, or some kind of compound object and it
  * will be converted for you. You can write:
  *
  * ```php
@@ -309,7 +322,7 @@ namespace Jcupitt\Vips;
  *
  * It does a couple of more ambitious conversions. It will automatically convert
  * to and from the various vips types, like `VipsBlob` and `VipsArrayImage`. For
- * example, you can read the ICC profile out of an image like this: 
+ * example, you can read the ICC profile out of an image like this:
  *
  * ```php
  * $profile = $image->get("icc-profile-data");
@@ -319,7 +332,7 @@ namespace Jcupitt\Vips;
  *
  * If an operation takes several input images, you can use a constant for all but
  * one of them and the wrapper will expand the constant to an image for you. For
- * example, `Image::ifthenelse()` uses a condition image to pick pixels 
+ * example, `Image::ifthenelse()` uses a condition image to pick pixels
  * between a then and an else image:
  *
  * ```php
@@ -336,7 +349,7 @@ namespace Jcupitt\Vips;
  *
  * Will make an image where true pixels are green and false pixels are red.
  *
- * This is useful for `Image::bandjoin`, the thing to join two or more 
+ * This is useful for `Image::bandjoin`, the thing to join two or more
  * images up bandwise. You can write:
  *
  * ```php
@@ -353,12 +366,12 @@ namespace Jcupitt\Vips;
  * $result = $image->bandjoin([image2, 255]);
  * ```
  *
- * and so on. 
- * 
+ * and so on.
+ *
  * # Exceptions
  *
- * The wrapper spots errors from vips operations and throws 
- * `Vips\Exception`. You can catch it in the usual way. 
+ * The wrapper spots errors from vips operations and throws
+ * `Vips\Exception`. You can catch it in the usual way.
  *
  * # Draw operations
  *
@@ -371,14 +384,14 @@ namespace Jcupitt\Vips;
  * image in memory before calling the operation. This stops crashes, but it does
  * make it inefficient. If you draw 100 lines on an image, for example, you'll
  * copy the image 100 times. The wrapper does make sure that memory is recycled
- * where possible, so you won't have 100 copies in memory. 
+ * where possible, so you won't have 100 copies in memory.
  *
  * If you want to avoid the copies, you'll need to call drawing operations
  * yourself.
  *
  * # Expansions
  *
- * Some vips operators take an enum to select an action, for example 
+ * Some vips operators take an enum to select an action, for example
  * `Image::math` can be used to calculate sine of every pixel like this:
  *
  * ```php
@@ -394,9 +407,9 @@ namespace Jcupitt\Vips;
  *
  * # Convenience functions
  *
- * The wrapper defines a few extra useful utility functions: 
- * `Image::get`, `Image::set`, `Image::bandsplit`, 
- * `Image::maxpos`, `Image::minpos`, 
+ * The wrapper defines a few extra useful utility functions:
+ * `Image::get`, `Image::set`, `Image::bandsplit`,
+ * `Image::maxpos`, `Image::minpos`,
  * `Image::median`. See below.
  *
  * @category  Images
@@ -409,32 +422,42 @@ namespace Jcupitt\Vips;
  */
 class Image extends ImageAutodoc implements \ArrayAccess
 {
-    /**
-     * Set true when we are logging actions.
-     *
-     * @internal 
-     */
-    static private $_enable_logging = false;
 
     /**
-     * Turn logging on and off. This will produce a huge amount of output, but
-     * is handy for debugging.
+     * The logger instance.
      *
-     * @param bool $logging true to turn logging on.
+     * @var LoggerInterface
+     */
+    private static $logger;
+
+    /**
+     * Sets a logger.
+     *
+     * @param LoggerInterface $logger
      *
      * @return void
      */
-    public static function setLogging($logging)
+    public static function setLogger(LoggerInterface $logger)
     {
-        self::$_enable_logging = $logging;
+        self::$logger = $logger;
+    }
+
+    /**
+     * Gets a logger.
+     *
+     * @return LoggerInterface $logger|null
+     */
+    public static function getLogger()
+    {
+        return self::$logger;
     }
 
     /**
      * The resource for the underlying VipsImage.
      *
-     * @internal 
+     * @internal
      */
-    private $_image;
+    private $image;
 
     /**
      * Wrap a Image around an underlying vips resource.
@@ -445,11 +468,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param resource $image The underlying vips image resource that this
      *      class should wrap.
      *
-     * @internal 
+     * @internal
      */
     public function __construct($image)
     {
-        $this->_image = $image;
+        $this->image = $image;
     }
 
     /**
@@ -461,19 +484,17 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return mixed The updated $value.
      *
-     * @internal 
+     * @internal
      */
-    private static function _mapNumeric($value, \Closure $func)
+    private static function mapNumeric($value, \Closure $func)
     {
         if (is_numeric($value)) {
             $value = $func($value);
         } else {
             if (is_array($value)) {
-                array_walk_recursive(
-                    $value, function (&$item, $key) use ($func) {
-                        $item = self::_mapNumeric($item, $func);
-                    }
-                );
+                array_walk_recursive($value, function (&$value) use ($func) {
+                    $value = self::mapNumeric($value, $func);
+                });
             }
         }
 
@@ -487,9 +508,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return bool true if this is a 2D array.
      *
-     * @internal 
+     * @internal
      */
-    static private function _is2D($value): bool
+    private static function is2D($value): bool
     {
         if (!is_array($value)) {
             return false;
@@ -512,18 +533,18 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Is $value something that we should treat as an image?
      *
-     * Instance of Image, or 2D arrays are images; 1D arrays or single values 
+     * Instance of Image, or 2D arrays are images; 1D arrays or single values
      * are constants.
      *
      * @param mixed $value The value to test.
      *
      * @return bool true if this is like an image.
      *
-     * @internal 
+     * @internal
      */
-    private static function _isImageish($value): bool
+    private static function isImageish($value): bool
     {
-        return self::_is2D($value) || $value instanceof Image;
+        return self::is2D($value) || $value instanceof Image;
     }
 
     /**
@@ -535,18 +556,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return Image The image we created.
      *
-     * @internal 
+     * @internal
      */
-    private static function _imageize(Image $match_image, $value): Image
+    private static function imageize(Image $match_image, $value): Image
     {
-        if (self::_is2D($value)) {
+        if (self::is2D($value)) {
             $result = self::newFromArray($value);
         } else {
             $pixel = self::black(1, 1)->add($value)->cast($match_image->format);
             $result = $pixel->embed(
-                0, 0,
-                $match_image->width, $match_image->height,
-                ["extend" => "copy"]
+                0,
+                0,
+                $match_image->width,
+                $match_image->height,
+                ["extend" => Extend::COPY]
             );
             $result->interpretation = $match_image->interpretation;
         }
@@ -562,17 +585,15 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return array $result unwrapped, ready for vips.
      *
-     * @internal 
+     * @internal
      */
-    private static function _unwrap(array $result): array
+    private static function unwrap(array $result): array
     {
-        array_walk_recursive(
-            $result, function (&$item, $key) {
-                if ($item instanceof Image) {
-                    $item = $item->_image;
-                }
+        array_walk_recursive($result, function (&$value) {
+            if ($value instanceof Image) {
+                $value = $value->image;
             }
-        );
+        });
 
         return $result;
     }
@@ -584,9 +605,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return bool true if this is a vips image resource.
      *
-     * @internal 
+     * @internal
      */
-    private static function _isImage($value): bool
+    private static function isImage($value): bool
     {
         return is_resource($value) &&
         get_resource_type($value) == "GObject";
@@ -606,21 +627,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return mixed $result, but wrapped up as a php class.
      *
-     * @internal 
+     * @internal
      */
-    private static function _wrap($result)
+    private static function wrapResult($result)
     {
         if (!is_array($result)) {
             $result = ["x" => $result];
         }
 
-        array_walk_recursive(
-            $result, function (&$item) {
-                if (self::_isImage($item)) {
-                    $item = new Image($item);
-                }
+        array_walk_recursive($result, function (&$item) {
+            if (self::isImage($item)) {
+                $item = new Image($item);
             }
-        );
+        });
 
         if (count($result) == 1) {
             $result = array_shift($result);
@@ -636,34 +655,35 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      *
-     * @internal 
+     * @internal
      */
-    private static function _errorVips()
+    private static function errorVips()
     {
         $message = vips_error_buffer();
-        if (self::$_enable_logging) {
-            echo "failure:  $message\n";
+        $exception = new Exception($message);
+        if (self::$logger) {
+            self::$logger->error($message, ['exception' => $exception]);
         }
-        throw new Exception($message);
+        throw $exception;
     }
 
     /**
      * Check the result of a vips_ call for an error, and throw an exception
      * if we see one.
      *
-     * This won't work for things like __get where a non-array return can be 
+     * This won't work for things like __get where a non-array return can be
      * a valid return.
      *
      * @param mixed $result Test this.
      *
      * @return void
      *
-     * @internal 
+     * @internal
      */
-    private static function _errorIsArray($result)
+    private static function errorIsArray($result)
     {
         if (!is_array($result)) {
-            self::_errorVips();
+            self::errorVips();
         }
     }
 
@@ -676,12 +696,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @return Image A new Image.
      */
     public static function newFromFile(
-        string $filename, array $options = []
+        string $filename,
+        array $options = []
     ): Image {
-        $options = self::_unwrap($options);
+        $options = self::unwrap($options);
         $result = vips_image_new_from_file($filename, $options);
-        self::_errorIsArray($result);
-        return self::_wrap($result);
+        self::errorIsArray($result);
+        return self::wrapResult($result);
     }
 
     /**
@@ -699,10 +720,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $option_string = "",
         array $options = []
     ): Image {
-        $options = self::_unwrap($options);
+        $options = self::unwrap($options);
         $result = vips_image_new_from_buffer($buffer, $option_string, $options);
-        self::_errorIsArray($result);
-        return self::_wrap($result);
+        self::errorIsArray($result);
+        return self::wrapResult($result);
     }
 
     /**
@@ -725,26 +746,26 @@ class Image extends ImageAutodoc implements \ArrayAccess
     ): Image {
         $result = vips_image_new_from_array($array, $scale, $offset);
         if ($result == -1) {
-            self::_errorVips();
+            self::errorVips();
         }
-        return self::_wrap($result);
+        return self::wrapResult($result);
     }
 
     /**
      * Write an image to a file.
      *
      * @param string $filename The file to write the image to.
-     * @param array  $options  Any options to pass on to the selected save 
+     * @param array  $options  Any options to pass on to the selected save
      *     operation.
      *
      * @return void
      */
     public function writeToFile(string $filename, array $options = [])
     {
-        $options = self::_unwrap($options);
-        $result = vips_image_write_to_file($this->_image, $filename, $options);
+        $options = self::unwrap($options);
+        $result = vips_image_write_to_file($this->image, $filename, $options);
         if ($result == -1) {
-            self::_errorVips();
+            self::errorVips();
         }
     }
 
@@ -752,19 +773,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Write an image to a formatted string.
      *
      * @param string $suffix  The file type suffix, eg. ".jpg".
-     * @param array  $options Any options to pass on to the selected save 
+     * @param array  $options Any options to pass on to the selected save
      *     operation.
      *
      * @return string The formatted image.
      */
     public function writeToBuffer(string $suffix, array $options = []): string
     {
-        $options = self::_unwrap($options);
-        $result = vips_image_write_to_buffer($this->_image, $suffix, $options);
+        $options = self::unwrap($options);
+        $result = vips_image_write_to_buffer($this->image, $suffix, $options);
         if ($result == -1) {
-            self::_errorVips();
+            self::errorVips();
         }
-        return self::_wrap($result);
+        return self::wrapResult($result);
     }
 
     /**
@@ -776,9 +797,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __get(string $name)
     {
-        $result = vips_image_get($this->_image, $name);
-        self::_errorIsArray($result);
-        return self::_wrap($result);
+        $result = vips_image_get($this->image, $name);
+        self::errorIsArray($result);
+        return self::wrapResult($result);
     }
 
     /**
@@ -791,7 +812,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __set(string $name, $value)
     {
-        vips_image_set($this->_image, $name, $value);
+        vips_image_set($this->image, $name, $value);
     }
 
     /**
@@ -809,15 +830,15 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function get(string $name)
     {
-        $result = vips_image_get($this->_image, $name);
-        self::_errorIsArray($result);
-        return self::_wrap($result);
+        $result = vips_image_get($this->image, $name);
+        self::errorIsArray($result);
+        return self::wrapResult($result);
     }
 
     /**
      * Get the GType of a property from the underlying image. GTypes are
      * integer type identifiers. This function will return 0 if the field does
-     * not exist. 
+     * not exist.
      *
      * @param string $name The property name.
      *
@@ -825,7 +846,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function typeof(string $name): int
     {
-        return vips_image_get_typeof($this->_image, $name);
+        return vips_image_get_typeof($this->image, $name);
     }
 
     /**
@@ -841,9 +862,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function set(string $name, $value)
     {
-        $result = vips_image_set($this->_image, $name, $value);
+        $result = vips_image_set($this->image, $name, $value);
         if ($result != 0) {
-            self::_errorVips();
+            self::errorVips();
         }
     }
 
@@ -856,24 +877,24 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function remove(string $name)
     {
-        $result = vips_image_remove($this->_image, $name);
+        $result = vips_image_remove($this->image, $name);
         if ($result == -1) {
-            self::_errorVips();
+            self::errorVips();
         }
     }
 
     /**
-     * Call any vips operation. The final element of $arguments can be 
+     * Call any vips operation. The final element of $arguments can be
      * (but doesn't have to be) an array of options to pass to the operation.
      *
      * We can't have a separate arg for the options since this will be run from
      * __call(), which cannot know which args are required and which are
-     * optional. See call() below for a version with the options broken out. 
+     * optional. See call() below for a version with the options broken out.
      *
      * @param string     $name      The operation name.
      * @param Image|null $instance  The instance this operation is being invoked
      *      from.
-     * @param array      $arguments An array of arguments to pass to the 
+     * @param array      $arguments An array of arguments to pass to the
      *      operation.
      *
      * @return mixed The result(s) of the operation.
@@ -883,12 +904,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        if (self::$_enable_logging) {
-            echo "callBase: ", $name, "\n";
-            echo "instance = ";
-            var_dump($instance);
-            echo "arguments = ";
-            var_dump($arguments);
+        if (self::$logger) {
+            self::$logger->debug('Called \'callBase\'', [
+                'name' => $name,
+                'instance' => $instance,
+                'arguments' => $arguments
+            ]);
         }
 
         $arguments = array_merge([$name, $instance], $arguments);
@@ -898,14 +919,16 @@ class Image extends ImageAutodoc implements \ArrayAccess
         var_dump($arguments);
          */
 
-        $arguments = self::_unwrap($arguments);
+        $arguments = self::unwrap($arguments);
         $result = call_user_func_array("vips_call", $arguments);
-        self::_errorIsArray($result);
-        $result =  self::_wrap($result);
+        self::errorIsArray($result);
+        $result = self::wrapResult($result);
 
-        if (self::$_enable_logging) {
-            echo "result = ";
-            var_dump($result);
+        if (self::$logger) {
+            self::$logger->debug('Result \'callBase\'', [
+                'name' => $name,
+                'result' => $result,
+            ]);
         }
 
         return $result;
@@ -913,14 +936,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Call any vips operation, with an explicit set of options. This is more
-     * convenient than callBase() if you have a set of known options. 
+     * convenient than callBase() if you have a set of known options.
      *
      * @param string     $name      The operation name.
      * @param Image|null $instance  The instance this operation is being invoked
      *      from.
-     * @param array      $arguments An array of arguments to pass to the 
+     * @param array      $arguments An array of arguments to pass to the
      *      operation.
-     * @param array      $options   An array of optional arguments to pass to 
+     * @param array      $options   An array of optional arguments to pass to
      *      the operation.
      *
      * @return mixed The result(s) of the operation.
@@ -941,9 +964,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         var_dump($options);
          */
 
-        return self::callBase(
-            $name, $instance, array_merge($arguments, [$options])
-        );
+        return self::callBase($name, $instance, array_merge($arguments, [$options]));
     }
 
     /**
@@ -958,16 +979,16 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return mixed The operation result.
      *
-     * @internal 
+     * @internal
      */
-    private function _callEnum(
+    private function callEnum(
         $other,
         string $base,
         string $op,
         array $options = []
     ) {
 
-        if (self::_isImageish($other)) {
+        if (self::isImageish($other)) {
             return self::call($base, $this, [$other, $op], $options);
         } else {
             return self::call($base . "_const", $this, [$op, $other], $options);
@@ -1059,7 +1080,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function add($other, array $options = []): Image
     {
-        if (self::_isImageish($other)) {
+        if (self::isImageish($other)) {
             return self::call("add", $this, [$other], $options);
         } else {
             return self::linear(1, $other, $options);
@@ -1076,14 +1097,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function subtract($other, array $options = []): Image
     {
-        if (self::_isImageish($other)) {
+        if (self::isImageish($other)) {
             return self::call("subtract", $this, [$other], $options);
         } else {
-            $other = self::_mapNumeric(
-                $other, function ($value) {
-                    return -1 * $value;
-                }
-            );
+            $other = self::mapNumeric($other, function ($value) {
+                return -1 * $value;
+            });
             return self::linear(1, $other, $options);
         }
     }
@@ -1098,7 +1117,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function multiply($other, array $options = []): Image
     {
-        if (self::_isImageish($other)) {
+        if (self::isImageish($other)) {
             return self::call("multiply", $this, [$other], $options);
         } else {
             return self::linear($other, 0, $options);
@@ -1115,14 +1134,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function divide($other, array $options = []): Image
     {
-        if (self::_isImageish($other)) {
+        if (self::isImageish($other)) {
             return self::call("divide", $this, [$other], $options);
         } else {
-            $other = self::_mapNumeric(
-                $other, function ($value) {
-                    return $value ** -1;
-                }
-            );
+            $other = self::mapNumeric($other, function ($value) {
+                return $value ** -1;
+            });
             return self::linear($other, 0, $options);
         }
     }
@@ -1137,7 +1154,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function remainder($other, array $options = []): Image
     {
-        if (self::_isImageish($other)) {
+        if (self::isImageish($other)) {
             return self::call("remainder", $this, [$other], $options);
         } else {
             return self::call("remainder_const", $this, [$other], $options);
@@ -1154,7 +1171,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function pow($other, array $options = []): Image
     {
-        return self::_callEnum($other, "math2", "pow", $options);
+        return self::callEnum($other, "math2", OperationMath2::POW, $options);
     }
 
     /**
@@ -1167,7 +1184,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function wop($other, array $options = []): Image
     {
-        return self::_callEnum($other, "math2", "wop", $options);
+        return self::callEnum($other, "math2", OperationMath2::WOP, $options);
     }
 
     /**
@@ -1180,7 +1197,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lshift($other, array $options = []): Image
     {
-        return self::_callEnum($other, "boolean", "lshift", $options);
+        return self::callEnum($other, "boolean", OperationBoolean::LSHIFT, $options);
     }
 
     /**
@@ -1193,7 +1210,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rshift($other, array $options = []): Image
     {
-        return self::_callEnum($other, "boolean", "rshift", $options);
+        return self::callEnum($other, "boolean", OperationBoolean::RSHIFT, $options);
     }
 
     /**
@@ -1207,7 +1224,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function andimage($other, array $options = []): Image
     {
-        return self::_callEnum($other, "boolean", "and", $options);
+        return self::callEnum($other, "boolean", OperationBoolean::AND, $options);
     }
 
     /**
@@ -1220,7 +1237,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function orimage($other, array $options = []): Image
     {
-        return self::_callEnum($other, "boolean", "or", $options);
+        return self::callEnum($other, "boolean", OperationBoolean::OR, $options);
     }
 
     /**
@@ -1233,7 +1250,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function eorimage($other, array $options = []): Image
     {
-        return self::_callEnum($other, "boolean", "eor", $options);
+        return self::callEnum($other, "boolean", OperationBoolean::EOR, $options);
     }
 
     /**
@@ -1246,7 +1263,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function more($other, array $options = []): Image
     {
-        return self::_callEnum($other, "relational", "more", $options);
+        return self::callEnum($other, "relational", OperationRelational::MORE, $options);
     }
 
     /**
@@ -1259,7 +1276,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function moreEq($other, array $options = []): Image
     {
-        return self::_callEnum($other, "relational", "moreeq", $options);
+        return self::callEnum($other, "relational", OperationRelational::MOREEQ, $options);
     }
 
     /**
@@ -1272,7 +1289,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function less($other, array $options = []): Image
     {
-        return self::_callEnum($other, "relational", "less", $options);
+        return self::callEnum($other, "relational", OperationRelational::LESS, $options);
     }
 
     /**
@@ -1285,7 +1302,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lessEq($other, array $options = []): Image
     {
-        return self::_callEnum($other, "relational", "lesseq", $options);
+        return self::callEnum($other, "relational", OperationRelational::LESSEQ, $options);
     }
 
     /**
@@ -1298,7 +1315,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function equal($other, array $options = []): Image
     {
-        return self::_callEnum($other, "relational", "equal", $options);
+        return self::callEnum($other, "relational", OperationRelational::EQUAL, $options);
     }
 
     /**
@@ -1311,7 +1328,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function notEq($other, array $options = []): Image
     {
-        return self::_callEnum($other, "relational", "noteq", $options);
+        return self::callEnum($other, "relational", OperationRelational::NOTEQ, $options);
     }
 
     /**
@@ -1346,7 +1363,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
             return self::call("bandjoin_const", $this, [$other], $options);
         } else {
             return self::call(
-                "bandjoin", null, [array_merge([$this], $other)], $options
+                "bandjoin",
+                null,
+                [array_merge([$this], $other)],
+                $options
             );
         }
     }
@@ -1380,7 +1400,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandrank($other, array $options = []): Image
     {
-        /* bandrank will appear as a static class member, as 
+        /* bandrank will appear as a static class member, as
          * Image::bandrank([a, b, c]), but it's better as an instance
          * method.
          * 
@@ -1452,11 +1472,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         if (!($then instanceof Image)) {
-            $then = self::_imageize($match_image, $then);
+            $then = self::imageize($match_image, $then);
         }
 
         if (!($else instanceof Image)) {
-            $else = self::_imageize($match_image, $else);
+            $else = self::imageize($match_image, $else);
         }
 
         return self::call("ifthenelse", $this, [$then, $else], $options);
@@ -1469,7 +1489,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function floor(): Image
     {
-        return $this->round("floor");
+        return $this->round(OperationRound::FLOOR);
     }
 
     /**
@@ -1479,7 +1499,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function ceil(): Image
     {
-        return $this->round("ceil");
+        return $this->round(OperationRound::CEIL);
     }
 
     /**
@@ -1489,7 +1509,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rint(): Image
     {
-        return $this->round("rint");
+        return $this->round(OperationRound::RINT);
     }
 
     /**
@@ -1499,7 +1519,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandand(): Image
     {
-        return $this->bandbool("and");
+        return $this->bandbool(OperationBoolean::AND);
     }
 
     /**
@@ -1509,7 +1529,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandor(): Image
     {
-        return $this->bandbool("or");
+        return $this->bandbool(OperationBoolean::OR);
     }
 
     /**
@@ -1519,7 +1539,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandeor(): Image
     {
-        return $this->bandbool("eor");
+        return $this->bandbool(OperationBoolean::EOR);
     }
 
     /**
@@ -1529,7 +1549,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function real(): Image
     {
-        return $this->complexget("real");
+        return $this->complexget(OperationComplexget::REAL);
     }
 
     /**
@@ -1539,7 +1559,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function imag(): Image
     {
-        return $this->complexget("imag");
+        return $this->complexget(OperationComplexget::IMAG);
     }
 
     /* use this for polar() and rect()
@@ -1586,7 +1606,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function polar(): Image
     {
-        return $this->complex("polar");
+        return $this->complex(OperationComplex::POLAR);
     }
 
     /**
@@ -1596,7 +1616,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rect(): Image
     {
-        return $this->complex("rect");
+        return $this->complex(OperationComplex::RECT);
     }
 
     /**
@@ -1606,7 +1626,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function conj(): Image
     {
-        return $this->complex("conj");
+        return $this->complex(OperationComplex::CONJ);
     }
 
     /**
@@ -1616,7 +1636,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function sin(): Image
     {
-        return $this->math("sin");
+        return $this->math(OperationMath::SIN);
     }
 
     /**
@@ -1626,7 +1646,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function cos(): Image
     {
-        return $this->math("cos");
+        return $this->math(OperationMath::COS);
     }
 
     /**
@@ -1636,7 +1656,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function tan(): Image
     {
-        return $this->math("tan");
+        return $this->math(OperationMath::TAN);
     }
 
     /**
@@ -1646,7 +1666,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function asin(): Image
     {
-        return $this->math("asin");
+        return $this->math(OperationMath::ASIN);
     }
 
     /**
@@ -1656,7 +1676,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function acos(): Image
     {
-        return $this->math("acos");
+        return $this->math(OperationMath::ACOS);
     }
 
     /**
@@ -1666,7 +1686,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function atan(): Image
     {
-        return $this->math("atan");
+        return $this->math(OperationMath::ATAN);
     }
 
     /**
@@ -1676,7 +1696,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function log(): Image
     {
-        return $this->math("log");
+        return $this->math(OperationMath::LOG);
     }
 
     /**
@@ -1686,7 +1706,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function log10(): Image
     {
-        return $this->math("log10");
+        return $this->math(OperationMath::LOG10);
     }
 
     /**
@@ -1696,7 +1716,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function exp(): Image
     {
-        return $this->math("exp");
+        return $this->math(OperationMath::EXP);
     }
 
     /**
@@ -1706,7 +1726,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function exp10(): Image
     {
-        return $this->math("exp10");
+        return $this->math(OperationMath::EXP10);
     }
 
     /**
@@ -1718,7 +1738,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function erode($mask): Image
     {
-        return $this->morph($mask, "erode");
+        return $this->morph($mask, OperationMorphology::ERODE);
     }
 
     /**
@@ -1730,7 +1750,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function dilate($mask): Image
     {
-        return $this->morph($mask, "dilate");
+        return $this->morph($mask, OperationMorphology::DILATE);
     }
 
     /**
@@ -1752,7 +1772,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function fliphor(): Image
     {
-        return $this->flip("horizontal");
+        return $this->flip(Direction::HORIZONTAL);
     }
 
     /**
@@ -1762,7 +1782,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function flipver(): Image
     {
-        return $this->flip("vertical");
+        return $this->flip(Direction::VERTICAL);
     }
 
     /**
@@ -1772,7 +1792,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rot90(): Image
     {
-        return $this->rot("d90");
+        return $this->rot(Angle::D90);
     }
 
     /**
@@ -1782,7 +1802,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rot180(): Image
     {
-        return $this->rot("d180");
+        return $this->rot(Angle::D180);
     }
 
     /**
@@ -1792,9 +1812,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rot270(): Image
     {
-        return $this->rot("d270");
+        return $this->rot(Angle::D270);
     }
-
 }
 
 /*

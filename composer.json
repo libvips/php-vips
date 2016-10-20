@@ -17,12 +17,14 @@
         }
     ],
     "require": {
-        "php" : ">=7.0.11",
-	"ext-vips" : ">=0.1.1"
+        "php": ">=7.0.11",
+        "ext-vips": ">=0.1.1",
+        "psr/log": "^1.0.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.0",
-        "phpdocumentor/phpdocumentor" : "2.*"
+        "phpunit/phpunit": "^5.5",
+        "phpdocumentor/phpdocumentor" : "2.*",
+        "jakub-onderka/php-parallel-lint": "^0.9"
     },
     "autoload": {
         "psr-4": {
@@ -34,9 +36,18 @@
             "Jcupitt\\Vips\\Test\\": "tests"
         }
     },
+    "provide": {
+        "psr/log-implementation": "1.0.0"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
+    },
+    "scripts": {
+        "test": [
+            "parallel-lint . --exclude vendor",
+            "phpunit"
+        ]
     }
 }
