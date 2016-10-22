@@ -48,7 +48,7 @@ namespace Jcupitt\Vips;
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   Release:0.1.2
+ * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
 class Exception extends \Exception

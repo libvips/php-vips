@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Vips is a php binding for the vips image processing library
+ * This file was generated automatically. Do not edit!
  *
  * PHP version 7
  *
@@ -40,8 +40,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * This class contains the top-level libvips control methods.
- *
+ * The ForeignWebpPreset enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -50,68 +49,12 @@ namespace Jcupitt\Vips;
  * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
-class Main
+abstract class ForeignWebpPreset
 {
-    /**
-     * Set the maximum number of operations to hold in the libvips operation
-     * cache.
-     *
-     * @param integer $value The maximum number of operations to cache.
-     *
-     * @return void
-     */
-    public static function cacheSetMax($value)
-    {
-        vips_cache_set_max($value);
-    }
-
-    /**
-     * Set the maximum amount of memory to allow cached operations to use, in
-     * bytes.
-     *
-     * @param integer $value The maximum amount of memory cached opertations can
-     *     hold, in bytes.
-     *
-     * @return void
-     */
-    public static function cacheSetMaxMem($value)
-    {
-        vips_cache_set_max_mem($value);
-    }
-
-    /**
-     * Set the maximum number of open files cached operations can use.
-     *
-     * @param integer $value The maximum number of open files cached operations
-     *      can use.
-     *
-     * @return void
-     */
-    public static function cacheSetMaxFiles($value)
-    {
-        vips_cache_set_max_files($value);
-    }
-
-    /**
-     * Set the size of the pools of worker threads vips uses for image
-     * evaluation.
-     *
-     * @param integer $value The size of the pools of worker threads vips uses
-     *      for image evaluation.
-     *
-     * @return void
-     */
-    public static function concurrencySet($value)
-    {
-        vips_concurrency_set($value);
-    }
+    const DEFAULT = 'default';
+    const PICTURE = 'picture';
+    const PHOTO = 'photo';
+    const DRAWING = 'drawing';
+    const ICON = 'icon';
+    const TEXT = 'text';
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: expandtab sw=4 ts=4 fdm=marker
- * vim<600: expandtab sw=4 ts=4
- */

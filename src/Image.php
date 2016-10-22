@@ -39,17 +39,17 @@
 
 namespace Jcupitt\Vips;
 
-use Jcupitt\Vips\Enum\Angle;
-use Jcupitt\Vips\Enum\Direction;
-use Jcupitt\Vips\Enum\Extend;
-use Jcupitt\Vips\Enum\OperationBoolean;
-use Jcupitt\Vips\Enum\OperationComplex;
-use Jcupitt\Vips\Enum\OperationComplexget;
-use Jcupitt\Vips\Enum\OperationMath;
-use Jcupitt\Vips\Enum\OperationMath2;
-use Jcupitt\Vips\Enum\OperationMorphology;
-use Jcupitt\Vips\Enum\OperationRelational;
-use Jcupitt\Vips\Enum\OperationRound;
+use Jcupitt\Vips\Angle;
+use Jcupitt\Vips\Direction;
+use Jcupitt\Vips\Extend;
+use Jcupitt\Vips\OperationBoolean;
+use Jcupitt\Vips\OperationComplex;
+use Jcupitt\Vips\OperationComplexget;
+use Jcupitt\Vips\OperationMath;
+use Jcupitt\Vips\OperationMath2;
+use Jcupitt\Vips\OperationMorphology;
+use Jcupitt\Vips\OperationRelational;
+use Jcupitt\Vips\OperationRound;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -417,7 +417,7 @@ use Psr\Log\LoggerInterface;
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   Release:0.1.2
+ * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
 class Image extends ImageAutodoc implements \ArrayAccess

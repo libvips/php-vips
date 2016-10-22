@@ -7,7 +7,7 @@ class VipsCallTest extends PHPUnit_Framework_TestCase
     public function testVipsCall()
     {
         $image = Vips\Image::newFromArray([1, 2, 3]);
-        $image = $image->embed(10, 20, 3000, 2000, ["extend" => Vips\Enum\Extend::COPY]);
+        $image = $image->embed(10, 20, 3000, 2000, ["extend" => Vips\Extend::COPY]);
 
         $this->assertEquals($image->width, 3000);
         $this->assertEquals($image->height, 2000);

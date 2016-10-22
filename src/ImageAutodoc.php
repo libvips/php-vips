@@ -39,41 +39,41 @@
 
 namespace Jcupitt\Vips;
 
-use Jcupitt\Vips\Enum\Access;
-use Jcupitt\Vips\Enum\Align;
-use Jcupitt\Vips\Enum\Angle;
-use Jcupitt\Vips\Enum\Angle45;
-use Jcupitt\Vips\Enum\BandFormat;
-use Jcupitt\Vips\Enum\Coding;
-use Jcupitt\Vips\Enum\Combine;
-use Jcupitt\Vips\Enum\CombineMode;
-use Jcupitt\Vips\Enum\DemandStyle;
-use Jcupitt\Vips\Enum\Direction;
-use Jcupitt\Vips\Enum\Extend;
-use Jcupitt\Vips\Enum\ForeignDzContainer;
-use Jcupitt\Vips\Enum\ForeignDzDepth;
-use Jcupitt\Vips\Enum\ForeignDzLayout;
-use Jcupitt\Vips\Enum\ForeignTiffCompression;
-use Jcupitt\Vips\Enum\ForeignTiffPredictor;
-use Jcupitt\Vips\Enum\ForeignTiffResunit;
-use Jcupitt\Vips\Enum\ForeignWebpPreset;
-use Jcupitt\Vips\Enum\ImageType;
-use Jcupitt\Vips\Enum\Intent;
-use Jcupitt\Vips\Enum\Interpretation;
-use Jcupitt\Vips\Enum\Kernel;
-use Jcupitt\Vips\Enum\OperationBoolean;
-use Jcupitt\Vips\Enum\OperationComplex;
-use Jcupitt\Vips\Enum\OperationComplex2;
-use Jcupitt\Vips\Enum\OperationComplexget;
-use Jcupitt\Vips\Enum\OperationMath;
-use Jcupitt\Vips\Enum\OperationMath2;
-use Jcupitt\Vips\Enum\OperationMorphology;
-use Jcupitt\Vips\Enum\OperationRelational;
-use Jcupitt\Vips\Enum\OperationRound;
-use Jcupitt\Vips\Enum\PCS;
-use Jcupitt\Vips\Enum\Precision;
-use Jcupitt\Vips\Enum\Saveable;
-use Jcupitt\Vips\Enum\Token;
+use Jcupitt\Vips\Access;
+use Jcupitt\Vips\Align;
+use Jcupitt\Vips\Angle;
+use Jcupitt\Vips\Angle45;
+use Jcupitt\Vips\BandFormat;
+use Jcupitt\Vips\Coding;
+use Jcupitt\Vips\Combine;
+use Jcupitt\Vips\CombineMode;
+use Jcupitt\Vips\DemandStyle;
+use Jcupitt\Vips\Direction;
+use Jcupitt\Vips\Extend;
+use Jcupitt\Vips\ForeignDzContainer;
+use Jcupitt\Vips\ForeignDzDepth;
+use Jcupitt\Vips\ForeignDzLayout;
+use Jcupitt\Vips\ForeignTiffCompression;
+use Jcupitt\Vips\ForeignTiffPredictor;
+use Jcupitt\Vips\ForeignTiffResunit;
+use Jcupitt\Vips\ForeignWebpPreset;
+use Jcupitt\Vips\ImageType;
+use Jcupitt\Vips\Intent;
+use Jcupitt\Vips\Interpretation;
+use Jcupitt\Vips\Kernel;
+use Jcupitt\Vips\OperationBoolean;
+use Jcupitt\Vips\OperationComplex;
+use Jcupitt\Vips\OperationComplex2;
+use Jcupitt\Vips\OperationComplexget;
+use Jcupitt\Vips\OperationMath;
+use Jcupitt\Vips\OperationMath2;
+use Jcupitt\Vips\OperationMorphology;
+use Jcupitt\Vips\OperationRelational;
+use Jcupitt\Vips\OperationRound;
+use Jcupitt\Vips\PCS;
+use Jcupitt\Vips\Precision;
+use Jcupitt\Vips\Saveable;
+use Jcupitt\Vips\Token;
 
 /**
  * Autodocs for the Image class.
@@ -82,7 +82,7 @@ use Jcupitt\Vips\Enum\Token;
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   Release:0.1.2
+ * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  *
  * @method static void system(string $cmd_format, array $options = []) Run an external command.

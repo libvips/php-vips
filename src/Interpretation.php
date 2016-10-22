@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Vips is a php binding for the vips image processing library
+ * This file was generated automatically. Do not edit!
  *
  * PHP version 7
  *
@@ -40,8 +40,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * This class contains the top-level libvips control methods.
- *
+ * The Interpretation enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -50,68 +49,26 @@ namespace Jcupitt\Vips;
  * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
-class Main
+abstract class Interpretation
 {
-    /**
-     * Set the maximum number of operations to hold in the libvips operation
-     * cache.
-     *
-     * @param integer $value The maximum number of operations to cache.
-     *
-     * @return void
-     */
-    public static function cacheSetMax($value)
-    {
-        vips_cache_set_max($value);
-    }
-
-    /**
-     * Set the maximum amount of memory to allow cached operations to use, in
-     * bytes.
-     *
-     * @param integer $value The maximum amount of memory cached opertations can
-     *     hold, in bytes.
-     *
-     * @return void
-     */
-    public static function cacheSetMaxMem($value)
-    {
-        vips_cache_set_max_mem($value);
-    }
-
-    /**
-     * Set the maximum number of open files cached operations can use.
-     *
-     * @param integer $value The maximum number of open files cached operations
-     *      can use.
-     *
-     * @return void
-     */
-    public static function cacheSetMaxFiles($value)
-    {
-        vips_cache_set_max_files($value);
-    }
-
-    /**
-     * Set the size of the pools of worker threads vips uses for image
-     * evaluation.
-     *
-     * @param integer $value The size of the pools of worker threads vips uses
-     *      for image evaluation.
-     *
-     * @return void
-     */
-    public static function concurrencySet($value)
-    {
-        vips_concurrency_set($value);
-    }
+    const ERROR = 'error';
+    const MULTIBAND = 'multiband';
+    const B_W = 'b-w';
+    const HISTOGRAM = 'histogram';
+    const XYZ = 'xyz';
+    const LAB = 'lab';
+    const CMYK = 'cmyk';
+    const LABQ = 'labq';
+    const RGB = 'rgb';
+    const CMC = 'cmc';
+    const LCH = 'lch';
+    const LABS = 'labs';
+    const SRGB = 'srgb';
+    const YXY = 'yxy';
+    const FOURIER = 'fourier';
+    const RGB16 = 'rgb16';
+    const GREY16 = 'grey16';
+    const MATRIX = 'matrix';
+    const SCRGB = 'scrgb';
+    const HSV = 'hsv';
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: expandtab sw=4 ts=4 fdm=marker
- * vim<600: expandtab sw=4 ts=4
- */

@@ -244,7 +244,7 @@ class_header = <<EOF
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   Release:0.1.2
+ * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
 EOF
 
@@ -257,7 +257,7 @@ File.open("ImageAutodoc.php", "w") do |file|
     file << "\n"
 
     $enums.each do |name|
-        file << "use Jcupitt\\Vips\\Enum\\#{name};\n"
+        file << "use Jcupitt\\Vips\\#{name};\n"
     end
 
     file << "\n"
@@ -296,14 +296,13 @@ EOF
 end
 
 # generate all the enums
-Dir.mkdir "Enum" if not File.exists? "Enum"
 $enums.each do |name|
     const = Vips.const_get name
-    puts "Generating Enum/#{name}.php ..."
-    File.open("Enum/#{name}.php", "w") do |file|
+    puts "Generating #{name}.php ..."
+    File.open("#{name}.php", "w") do |file|
         file << preamble 
         file << "\n"
-        file << "namespace Jcupitt\\Vips\\Enum;\n"
+        file << "namespace Jcupitt\\Vips;\n"
         file << "\n"
         file << "/**\n"
         file << " * The #{name} enum.\n"

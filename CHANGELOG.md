@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 0.9.0 - 2016-10-22
+
+### Added
+- logging with PSR-3 Logger Interface [Kleis Auke Wolthuizen]
+- switch to PSR2 formatting [Kleis Auke Wolthuizen]
+
+### Deprecated
+- removed `\Enum` from enum names
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ## 0.1.2 - 2016-10-02
 
 ### Added
