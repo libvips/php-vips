@@ -53,7 +53,7 @@ namespace Jcupitt\Vips;
 class Main
 {
     /**
-     * Set the maximum number of operations to hold in the libvips operation 
+     * Set the maximum number of operations to hold in the libvips operation
      * cache.
      *
      * @param integer $value The maximum number of operations to cache.
@@ -70,7 +70,7 @@ class Main
      * bytes.
      *
      * @param integer $value The maximum amount of memory cached opertations can
-     *     hold, in bytes. 
+     *     hold, in bytes.
      *
      * @return void
      */
@@ -82,7 +82,7 @@ class Main
     /**
      * Set the maximum number of open files cached operations can use.
      *
-     * @param integer $value The maximum number of open files cached operations 
+     * @param integer $value The maximum number of open files cached operations
      *      can use.
      *
      * @return void
@@ -93,10 +93,10 @@ class Main
     }
 
     /**
-     * Set the size of the pools of worker threads vips uses for image 
-     * evaluation. 
+     * Set the size of the pools of worker threads vips uses for image
+     * evaluation.
      *
-     * @param integer $value The size of the pools of worker threads vips uses 
+     * @param integer $value The size of the pools of worker threads vips uses
      *      for image evaluation.
      *
      * @return void
@@ -105,7 +105,6 @@ class Main
     {
         vips_concurrency_set($value);
     }
-
 }
 
 /*
