@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ImageType {
+abstract class ImageType
+{
     const ERROR = 'error';
     const NONE = 'none';
     const SETBUF = 'setbuf';

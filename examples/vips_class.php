@@ -9,7 +9,8 @@ const LOG_FORMAT = "[%datetime%] %level_name%: %message% %context%\n";
 const DATE_FORMAT = "Y-m-d\TH:i:sP";
 
 Vips\Image::setLogger(new class implements Psr\Log\LoggerInterface {
-    // Use the LoggerTait so that we only have to implement the generic log method.
+    // Use the LoggerTrait so that we only have to implement the generic 
+    // log method.
     use Psr\Log\LoggerTrait;
 
     /**

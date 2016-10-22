@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class OperationMath2 {
+abstract class OperationMath2
+{
     const POW = 'pow';
     const WOP = 'wop';
 }

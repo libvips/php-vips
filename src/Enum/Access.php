@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Access {
+abstract class Access
+{
     const RANDOM = 'random';
     const SEQUENTIAL = 'sequential';
     const SEQUENTIAL_UNBUFFERED = 'sequential-unbuffered';

@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class OperationComplexget {
+abstract class OperationComplexget
+{
     const REAL = 'real';
     const IMAG = 'imag';
 }

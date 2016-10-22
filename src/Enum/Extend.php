@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Extend {
+abstract class Extend
+{
     const BLACK = 'black';
     const COPY = 'copy';
     const REPEAT = 'repeat';

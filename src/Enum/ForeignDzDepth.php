@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ForeignDzDepth {
+abstract class ForeignDzDepth
+{
     const ONEPIXEL = 'onepixel';
     const ONETILE = 'onetile';
     const ONE = 'one';

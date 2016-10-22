@@ -49,6 +49,7 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class OperationComplex2 {
+abstract class OperationComplex2
+{
     const CROSS_PHASE = 'cross-phase';
 }

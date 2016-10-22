@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class OperationBoolean {
+abstract class OperationBoolean
+{
     const AND = 'and';
     const OR = 'or';
     const EOR = 'eor';

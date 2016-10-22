@@ -309,7 +309,8 @@ $enums.each do |name|
         file << " * The #{name} enum.\n"
         file << class_header 
         file << " */\n"
-        file << "abstract class #{name} {\n"
+        file << "abstract class #{name}\n"
+        file << "{\n"
 
         const.values.each do |value|
             next if value.nick == "last" 

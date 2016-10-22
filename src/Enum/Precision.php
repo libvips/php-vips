@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Precision {
+abstract class Precision
+{
     const INTEGER = 'integer';
     const FLOAT = 'float';
     const APPROXIMATE = 'approximate';

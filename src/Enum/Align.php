@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Align {
+abstract class Align
+{
     const LOW = 'low';
     const CENTRE = 'centre';
     const HIGH = 'high';

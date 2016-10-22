@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Angle45 {
+abstract class Angle45
+{
     const D0 = 'd0';
     const D45 = 'd45';
     const D90 = 'd90';

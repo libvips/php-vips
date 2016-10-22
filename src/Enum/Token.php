@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Token {
+abstract class Token
+{
     const LEFT = 'left';
     const RIGHT = 'right';
     const STRING = 'string';

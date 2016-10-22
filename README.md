@@ -94,7 +94,7 @@ $image = $image->add([[1, 2, 3], [4, 5, 6]]);
 
 To make a 2 x 3 image from the array, then add that image to the original.
 
-Almost all methods can take an optional final argument, an array of options.
+Almost all methods can take an extra final argument: an array of options.
 For example:
 
 ```
@@ -121,7 +121,7 @@ libvips properties as properties of the PHP `Vips\Image` class.
 ### Test and install
 
 ```
-$ phpcs src
+$ phpcs --standard=PSR2 src
 $ php ~/vips/php/composer.phar install
 $ vendor/bin/phpunit
 $ vendor/bin/phpdoc

@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Interpretation {
+abstract class Interpretation
+{
     const ERROR = 'error';
     const MULTIBAND = 'multiband';
     const B_W = 'b-w';

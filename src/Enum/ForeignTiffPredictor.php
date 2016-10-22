@@ -49,7 +49,8 @@ namespace Jcupitt\Vips\Enum;
  * @version   Release:0.1.2
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ForeignTiffPredictor {
+abstract class ForeignTiffPredictor
+{
     const NONE = 'none';
     const HORIZONTAL = 'horizontal';
     const FLOAT = 'float';
