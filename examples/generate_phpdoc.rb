@@ -254,11 +254,6 @@ File.open("ImageAutodoc.php", "w") do |file|
     file << preamble 
     file << "\n"
     file << "namespace Jcupitt\\Vips;\n"
-    file << "\n"
-
-    $enums.each do |name|
-        file << "use Jcupitt\\Vips\\#{name};\n"
-    end
 
     file << "\n"
     file << "/**\n"

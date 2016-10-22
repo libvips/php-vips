@@ -39,17 +39,6 @@
 
 namespace Jcupitt\Vips;
 
-use Jcupitt\Vips\Angle;
-use Jcupitt\Vips\Direction;
-use Jcupitt\Vips\Extend;
-use Jcupitt\Vips\OperationBoolean;
-use Jcupitt\Vips\OperationComplex;
-use Jcupitt\Vips\OperationComplexget;
-use Jcupitt\Vips\OperationMath;
-use Jcupitt\Vips\OperationMath2;
-use Jcupitt\Vips\OperationMorphology;
-use Jcupitt\Vips\OperationRelational;
-use Jcupitt\Vips\OperationRound;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -881,6 +870,24 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if ($result == -1) {
             self::errorVips();
         }
+    }
+
+    /**
+     * Makes a string-ified version of the Image.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $array = [
+            'width' => $this->get('width'),
+            'height' => $this->get('height'),
+            'bands' => $this->get('bands'),
+            'format' => $this->get('format'),
+            'interpretation' => $this->get('interpretation'),
+        ];
+
+        return json_encode($array);
     }
 
     /**

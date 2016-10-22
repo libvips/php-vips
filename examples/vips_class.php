@@ -9,7 +9,7 @@ const LOG_FORMAT = "[%datetime%] %level_name%: %message% %context%\n";
 const DATE_FORMAT = "Y-m-d\TH:i:sP";
 
 Vips\Image::setLogger(new class implements Psr\Log\LoggerInterface {
-    // Use the LoggerTrait so that we only have to implement the generic 
+    // Use the LoggerTrait so that we only have to implement the generic
     // log method.
     use Psr\Log\LoggerTrait;
 
@@ -27,15 +27,7 @@ Vips\Image::setLogger(new class implements Psr\Log\LoggerInterface {
         // `Vips\Image` to string convert
         array_walk_recursive($context, function (&$value) {
             if ($value instanceof Vips\Image) {
-                // TODO: Should we override __toString() in `Vips\Image` instead
-                $value = [
-                    'instance' => 'Vips\Image',
-                    'width' => $value->width,
-                    'height' => $value->height,
-                    'bands' => $value->bands,
-                    'format' => $value->format,
-                    'interpretation' =>  $value->interpretation,
-                ];
+                $value = (string) $value;
             }
         });
 

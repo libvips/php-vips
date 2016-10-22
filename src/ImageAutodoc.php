@@ -39,42 +39,6 @@
 
 namespace Jcupitt\Vips;
 
-use Jcupitt\Vips\Access;
-use Jcupitt\Vips\Align;
-use Jcupitt\Vips\Angle;
-use Jcupitt\Vips\Angle45;
-use Jcupitt\Vips\BandFormat;
-use Jcupitt\Vips\Coding;
-use Jcupitt\Vips\Combine;
-use Jcupitt\Vips\CombineMode;
-use Jcupitt\Vips\DemandStyle;
-use Jcupitt\Vips\Direction;
-use Jcupitt\Vips\Extend;
-use Jcupitt\Vips\ForeignDzContainer;
-use Jcupitt\Vips\ForeignDzDepth;
-use Jcupitt\Vips\ForeignDzLayout;
-use Jcupitt\Vips\ForeignTiffCompression;
-use Jcupitt\Vips\ForeignTiffPredictor;
-use Jcupitt\Vips\ForeignTiffResunit;
-use Jcupitt\Vips\ForeignWebpPreset;
-use Jcupitt\Vips\ImageType;
-use Jcupitt\Vips\Intent;
-use Jcupitt\Vips\Interpretation;
-use Jcupitt\Vips\Kernel;
-use Jcupitt\Vips\OperationBoolean;
-use Jcupitt\Vips\OperationComplex;
-use Jcupitt\Vips\OperationComplex2;
-use Jcupitt\Vips\OperationComplexget;
-use Jcupitt\Vips\OperationMath;
-use Jcupitt\Vips\OperationMath2;
-use Jcupitt\Vips\OperationMorphology;
-use Jcupitt\Vips\OperationRelational;
-use Jcupitt\Vips\OperationRound;
-use Jcupitt\Vips\PCS;
-use Jcupitt\Vips\Precision;
-use Jcupitt\Vips\Saveable;
-use Jcupitt\Vips\Token;
-
 /**
  * Autodocs for the Image class.
  * @category  Images
