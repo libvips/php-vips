@@ -21,7 +21,7 @@ class VipsShortcutTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $this->image = Vips\Image::newFromFile($filename);
+        $this->image = Vips\Image::newFromFile($filename, ["shrink" => 8]);
 
         /* The original value of pixel (0, 0).
          */
@@ -192,7 +192,7 @@ class VipsShortcutTest extends PHPUnit_Framework_TestCase
 
     public function testVipsRound()
     {
-        $image = $this->image->add([0.1, 1.5, 0.9]);
+        $image = $this->image->add([0.1, 1.4, 0.9]);
         $pixel = $image->getpoint(0, 0);
 
         $real = self::map_numeric($pixel, function ($value) {

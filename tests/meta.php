@@ -4,25 +4,24 @@ use Jcupitt\Vips;
 
 class VipsMetaTest extends PHPUnit_Framework_TestCase 
 {
+    protected function setUp()
+    {
+        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $this->image = Vips\Image::newFromFile($filename);
+    }
 
     public function testVipsSetGet()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
-
-        $image->poop = "banana";
-        $value = $image->poop;
+        $this->image->poop = "banana";
+        $value = $this->image->poop;
 
         $this->assertEquals($value, "banana");
     }
 
     public function testVipsGetExifData()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
-
         $name = "exif-data";
-        $exif = $image->$name;
+        $exif = $this->image->$name;
 
         # 9724 bytes of exif attached ... this should work even without libexif
         $this->assertEquals(strlen($exif), 9724);
@@ -30,10 +29,7 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
 
     public function testVipsGetThumbnail()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
-
-        $thumbnail_data = $image->get("jpeg-thumbnail-data");
+        $thumbnail_data = $this->image->get("jpeg-thumbnail-data");
         $thumb = Vips\Image::newFromBuffer($thumbnail_data);
 
         $this->assertEquals($thumb->width, 160);
@@ -41,10 +37,7 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
 
     public function testVipsGetTypeof()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
-
-        $gint = $image->typeof("width");
+        $gint = $this->image->typeof("width");
 
         // should always be the same, I think
         $this->assertEquals($gint, 24);
@@ -52,9 +45,7 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
 
     public function testVipsRemove()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename);
-
+        $image = $this->image->copy();
         $exif = $image->get("exif-data");
         $this->assertEquals(strlen($exif), 9724);
 
@@ -66,10 +57,7 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
 
     public function testVipsEnumString()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename);
-
-        $x = $image->interpretation;
+        $x = $this->image->interpretation;
         $this->assertEquals($x, "srgb");
     }
 

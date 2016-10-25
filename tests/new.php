@@ -24,10 +24,10 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
     public function testVipsNewFromFile()
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
+        $image = Vips\Image::newFromFile($filename);
 
-        $this->assertEquals($image->width, 800);
-        $this->assertEquals($image->height, 600);
+        $this->assertEquals($image->width, 1600);
+        $this->assertEquals($image->height, 1200);
         $this->assertEquals($image->bands, 3);
     }
 
@@ -35,10 +35,10 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
         $buffer = file_get_contents($filename);
-        $image = Vips\Image::newFromBuffer($buffer, "", ["shrink" => 2]);
+        $image = Vips\Image::newFromBuffer($buffer, "");
 
-        $this->assertEquals($image->width, 800);
-        $this->assertEquals($image->height, 600);
+        $this->assertEquals($image->width, 1600);
+        $this->assertEquals($image->height, 1200);
         $this->assertEquals($image->bands, 3);
     }
 

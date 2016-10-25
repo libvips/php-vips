@@ -30,20 +30,20 @@ class VipsWriteTest extends PHPUnit_Framework_TestCase
     public function testVipsWriteToFile()
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
-        $output_filename = $this->tmp(".tif");
+        $image = Vips\Image::newFromFile($filename, ["shrink" => 8]);
+        $output_filename = $this->tmp(".jpg");
         $image->writeToFile($output_filename);
         $image = Vips\Image::newFromFile($output_filename);
 
-        $this->assertEquals($image->width, 800);
-        $this->assertEquals($image->height, 600);
+        $this->assertEquals($image->width, 200);
+        $this->assertEquals($image->height, 150);
         $this->assertEquals($image->bands, 3);
     }
 
     public function testVipsWriteToBuffer()
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $image = Vips\Image::newFromFile($filename, ["shrink" => 2]);
+        $image = Vips\Image::newFromFile($filename, ["shrink" => 8]);
 
         $buffer1 = $image->writeToBuffer(".jpg");
         $output_filename = $this->tmp(".jpg");
