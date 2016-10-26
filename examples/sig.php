@@ -10,7 +10,7 @@ use Jcupitt\Vips;
 # an S-shaped curve which boosts the slope in the mid-tones and drops it for
 # white and black.
 
-function sigmoid(float $alpha, float $beta, bool $ushort = FALSE): Vips\Image
+function sigmoid(float $alpha, float $beta, bool $ushort = false): Vips\Image
 {
     # make a identity LUT, that is, a lut where each pixel has the value of
     # its index ... if you map an image through the identity, you get the
@@ -33,7 +33,7 @@ function sigmoid(float $alpha, float $beta, bool $ushort = FALSE): Vips\Image
     #
     # though that's missing a term -- it should be
     #
-    # (1/(1+exp(β*(α-u))) - 1/(1+exp(β*α))) / 
+    # (1/(1+exp(β*(α-u))) - 1/(1+exp(β*α))) /
     #   (1/(1+exp(β*(α-1))) - 1/(1+exp(β*α)))
     #
     # ie. there should be an extra α in the second term
@@ -47,7 +47,7 @@ function sigmoid(float $alpha, float $beta, bool $ushort = FALSE): Vips\Image
 
     # and get the format right ... $result will be a float image after all
     # that maths, but we want uchar or ushort
-    $result = $result->cast($ushort ? 
+    $result = $result->cast($ushort ?
         Vips\BandFormat::USHORT : Vips\BandFormat::UCHAR);
 
     return $result;
@@ -73,7 +73,7 @@ function sigLAB(Vips\Image $image, float $alpha, float $beta): Vips\Image
     $image = $image->colourspace(Vips\Interpretation::LABS);
 
     # make a 16-bit LUT, then shrink by x2 to make it fit the range of L in labs
-    $lut = sigmoid($alpha, $beta, TRUE);
+    $lut = sigmoid($alpha, $beta, true);
     $lut = $lut->shrinkh(2)->multiply(0.5);
     $lut = $lut->cast(Vips\BandFormat::SHORT);
 
@@ -89,8 +89,10 @@ function sigLAB(Vips\Image $image, float $alpha, float $beta): Vips\Image
     # after the manipulation above, $image will just be tagged as a generic
     # multiband image, vips will no longer know that it's a labs, so we need to
     # tell colourspace what the source space is
-    $image = $image->colourspace($old_interpretation, 
-        ["source_space" => Vips\Interpretation::LABS]);
+    $image = $image->colourspace(
+        $old_interpretation,
+        ["source_space" => Vips\Interpretation::LABS]
+    );
 
     return $image;
 }
