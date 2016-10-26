@@ -28,12 +28,19 @@ function sigmoid(float $alpha, float $beta, bool $ushort = FALSE): Vips\Image
     $lut = $lut->divide($max);
 
     # the sigmoidal equation, see
+    #
     # http://www.imagemagick.org/Usage/color_mods/#sigmoidal
-    $x = $lut->multiply(-1)->add($alpha)->multiply($beta)->exp();
-    $y = exp($beta + 1);
-    $t1 = $x->divide($y)->add(1);
-    $t2 = $x->add(1)->pow(-1)->subtract(1 / $y);
-    $result = $t1->multiply($t2);
+    #
+    # though that's missing a term -- it should be
+    #
+    # (1/(1+exp(β*(α-u))) - 1/(1+exp(β*α))) / 
+    #   (1/(1+exp(β*(α-1))) - 1/(1+exp(β*α)))
+    #
+    # ie. there should be an extra α in the second term
+    $x = 1.0 / (1.0 + exp($beta * $alpha));
+    $y = 1.0 / (1.0 + exp($beta * ($alpha - 1.0))) - $x;
+    $z = $lut->multiply(-1)->add($alpha)->multiply($beta)->exp()->add(1);
+    $result = $z->pow(-1)->subtract($x)->divide($y);
 
     # rescale back to 0 - 255 or 0 - 65535
     $result = $result->multiply($max);
@@ -93,7 +100,7 @@ $im = Vips\Image::newFromFile($argv[1], ["access" => Vips\Access::SEQUENTIAL]);
 # $beta == 10 is a large contrast boost, values below about 4 drop the contrast
 #
 # sigLAB is the fancy one, and is much slower than sigRGB
-$im = sigLAB($im, 0.5, 10);
+$im = sigLAB($im, 0.5, 7);
 
 $im->writeToFile($argv[2]);
 
