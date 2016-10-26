@@ -6,6 +6,7 @@ All notable changes to `:vips` will be documented in this file.
 ### Added
 - logging with PSR-3 Logger Interface [Kleis Auke Wolthuizen]
 - switch to PSR2 formatting [Kleis Auke Wolthuizen]
+- add sig.php example [John Cupitt]
 
 ### Deprecated
 - removed `\Enum` from enum names
