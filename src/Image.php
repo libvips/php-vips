@@ -41,9 +41,6 @@ namespace Jcupitt\Vips;
 
 use Psr\Log\LoggerInterface;
 
-const LOG_FORMAT = "[%datetime%] %level_name%: %message% %context%\n";
-const DATE_FORMAT = "Y-m-d\TH:i:sP";
-
 /**
  * This class represents a Vips image object.
  *
@@ -420,51 +417,57 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @var LoggerInterface
      */
-    private static $logger; 
+    private static $logger;
 
     /**
-     * A basic logger, handy for debugging. 
+     * Make a basic logger, handy for debugging.
      *
-     * @var LoggerInterface
+     * @return LoggerInterface
      */
-    public static $debugLogger = new class implements Psr\Log\LoggerInterface {
-        // Use the LoggerTrait so that we only have to implement the generic
-        // log method.
-        use Psr\Log\LoggerTrait;
-
-        /**
-         * Logs with an arbitrary level.
-         *
-         * @param mixed  $level
-         * @param string $message
-         * @param array  $context
-         *
-         * @return void
-         */
-        public function log($level, $message, array $context = [])
+    public static function debugLogger(): LoggerInterface
+    {
+        return new class implements LoggerInterface
         {
-            // `Vips\Image` to string convert
-            array_walk_recursive($context, function (&$value) {
-                if ($value instanceof Vips\Image) {
-                    $value = (string) $value;
-                }
-            });
+            // Use the LoggerTrait so that we only have to implement the generic
+            // log method.
+            use \Psr\Log\LoggerTrait;
 
-            $strParams = [
-                '%datetime%' => date(DATE_FORMAT),
-                '%level_name%' => $level,
-                '%message%' => $message,
-                '%context%' => json_encode(
-                    $context,
-                    JSON_UNESCAPED_SLASHES |
-                    JSON_UNESCAPED_UNICODE |
-                    JSON_PRESERVE_ZERO_FRACTION
-                ),
-            ];
+            /**
+             * Logs with an arbitrary level.
+             *
+             * @param mixed  $level
+             * @param string $message
+             * @param array  $context
+             *
+             * @return void
+             */
+            public function log($level, $message, array $context = [])
+            {
+                // `Vips\Image` to string convert
+                array_walk_recursive($context, function (&$value) {
+                    if ($value instanceof Vips\Image) {
+                        $value = (string) $value;
+                    }
+                });
+                $strParams = [
+                    '%datetime%' => date("Y-m-d\TH:i:sP"),
+                    '%level_name%' => $level,
+                    '%message%' => $message,
+                    '%context%' => json_encode(
+                        $context,
+                        JSON_UNESCAPED_SLASHES |
+                        JSON_UNESCAPED_UNICODE |
+                        JSON_PRESERVE_ZERO_FRACTION
+                    ),
+                ];
 
-            echo strtr(LOG_FORMAT, $strParams);
-        }
-    });
+                echo strtr(
+                    "[%datetime%] %level_name%: %message% %context%\n",
+                    $strParams
+                );
+            }
+        };
+    }
 
     /**
      * Sets a logger.
@@ -967,11 +970,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         $arguments = array_merge([$name, $instance], $arguments);
-
-        /*
-        echo "after arg composition, arguments = ";
-        var_dump($arguments);
-         */
 
         $arguments = self::unwrap($arguments);
         $result = call_user_func_array("vips_call", $arguments);
