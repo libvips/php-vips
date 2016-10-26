@@ -25,7 +25,7 @@ class VipsExceptionTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(Vips\Exception::class);
 
-        $this->image->writeToFile("/permissions error.jpg");
+        $this->image->writeToFile("/directory/doesn't/exist.jpg");
     }
 
     public function testVipsWriteToBufferException()
