@@ -1229,7 +1229,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function andimage($other, array $options = []): Image
     {
-        return self::callEnum($other, "boolean", OperationBoolean::AND, $options);
+        // phpdoc hates OperationBoolean::AND, so use the string form here
+        return self::callEnum($other, "boolean", "and", $options);
     }
 
     /**
@@ -1242,7 +1243,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function orimage($other, array $options = []): Image
     {
-        return self::callEnum($other, "boolean", OperationBoolean::OR, $options);
+        // phpdoc hates OperationBoolean::OR, so use the string form here
+        return self::callEnum($other, "boolean", "or", $options);
     }
 
     /**
@@ -1524,7 +1526,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandand(): Image
     {
-        return $this->bandbool(OperationBoolean::AND);
+        // phpdoc hates OperationBoolean::AND, so use the string form here
+        return $this->bandbool("and");
     }
 
     /**
@@ -1534,7 +1537,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandor(): Image
     {
-        return $this->bandbool(OperationBoolean::OR);
+        // phpdoc hates OperationBoolean::OR, so use the string form here
+        return $this->bandbool("or");
     }
 
     /**
