@@ -436,51 +436,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Log a debug message.
-     *
-     * @param string     $name The method creating the messages.
-     * @param Image|null $instance Optionally, the instance that created the
-     *      message.
-     * @param array      $arguments The method arguments.
-     *
-     * @return void
-     *
-     * @internal
-     */
-    private static function debug(
-        string $name,
-        $instance,
-        array $arguments
-    ): void {
-        $logger = Main::getLogger();
-        if ($logger) {
-            if ($instance) {
-                $arguments = array_merge(['instance' => $instance], $arguments);
-            }
-            $arguments = array_merge(['name' => $name], $arguments);
-            $logger->debug('Image', $arguments);
-        }
-    }
-
-    /**
-     * Log an error message.
-     *
-     * @param string $message The error message.
-     * @param \Exception $exception The exception.
-     *
-     * @return void
-     *
-     * @internal
-     */
-    private static function error(string $message, \Exception $exception): void
-    {
-        $logger = Main::getLogger();
-        if ($logger) {
-            $logger->error($message, ['exception' => $exception]);
-        }
-    }
-
-    /**
      * Apply a func to every numeric member of $value. Useful for self::subtract
      * etc.
      *
@@ -666,7 +621,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         $message = vips_error_buffer();
         $exception = new Exception($message);
-        self::error($message, $exception);
+        Main::error($message, $exception);
         throw $exception;
     }
 
@@ -925,7 +880,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        self::debug($name, $instance, $arguments);
+        Main::debug($name, array_merge(['instance' => $instance], $arguments));
 
         $arguments = array_merge([$name, $instance], $arguments);
 
@@ -939,7 +894,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
-        self::debug($name, $instance, ['result' => $result]);
+        Main::debug($name, ['result' => $result]);
 
         return $result;
     }
