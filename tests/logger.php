@@ -8,14 +8,14 @@ class VipsLoggerTest extends PHPUnit_Framework_TestCase
     {
         // Asserts that getLogger without setting it should
         // return a null value.
-        $logger = Vips\Image::getLogger();
+        $logger = Vips\Main::getLogger();
 
         $this->assertNull($logger);
     }
 
     public function testSetLoggerCall()
     {
-        Vips\Image::setLogger(new class implements Psr\Log\LoggerInterface {
+        Vips\Main::setLogger(new class implements Psr\Log\LoggerInterface {
             use Psr\Log\LoggerTrait;
 
             public function log($level, $message, array $context = array())
@@ -24,7 +24,7 @@ class VipsLoggerTest extends PHPUnit_Framework_TestCase
             }
         });
 
-        $logger = Vips\Image::getLogger();
+        $logger = Vips\Main::getLogger();
 
         // Asserts that getLogger should return an instance of Psr\Log\LoggerInterface
         $this->assertInstanceOf(Psr\Log\LoggerInterface::class, $logger);

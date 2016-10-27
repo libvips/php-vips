@@ -41,9 +41,6 @@ namespace Jcupitt\Vips;
 
 use Psr\Log\LoggerInterface;
 
-const LOG_FORMAT = "[%datetime%] %level_name%: %message% %context%\n";
-const DATE_FORMAT = "Y-m-d\TH:i:sP";
-
 /**
  * This class represents a Vips image object.
  *
@@ -416,79 +413,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
 {
 
     /**
-     * The logger instance.
-     *
-     * @var LoggerInterface
-     */
-    private static $logger; 
-
-    /**
-     * A basic logger, handy for debugging. 
-     *
-     * @var LoggerInterface
-     */
-    public static $debugLogger = new class implements Psr\Log\LoggerInterface {
-        // Use the LoggerTrait so that we only have to implement the generic
-        // log method.
-        use Psr\Log\LoggerTrait;
-
-        /**
-         * Logs with an arbitrary level.
-         *
-         * @param mixed  $level
-         * @param string $message
-         * @param array  $context
-         *
-         * @return void
-         */
-        public function log($level, $message, array $context = [])
-        {
-            // `Vips\Image` to string convert
-            array_walk_recursive($context, function (&$value) {
-                if ($value instanceof Vips\Image) {
-                    $value = (string) $value;
-                }
-            });
-
-            $strParams = [
-                '%datetime%' => date(DATE_FORMAT),
-                '%level_name%' => $level,
-                '%message%' => $message,
-                '%context%' => json_encode(
-                    $context,
-                    JSON_UNESCAPED_SLASHES |
-                    JSON_UNESCAPED_UNICODE |
-                    JSON_PRESERVE_ZERO_FRACTION
-                ),
-            ];
-
-            echo strtr(LOG_FORMAT, $strParams);
-        }
-    });
-
-    /**
-     * Sets a logger.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return void
-     */
-    public static function setLogger(LoggerInterface $logger)
-    {
-        self::$logger = $logger;
-    }
-
-    /**
-     * Gets a logger.
-     *
-     * @return LoggerInterface $logger|null
-     */
-    public static function getLogger()
-    {
-        return self::$logger;
-    }
-
-    /**
      * The resource for the underlying VipsImage.
      *
      * @internal
@@ -509,6 +433,51 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function __construct($image)
     {
         $this->image = $image;
+    }
+
+    /**
+     * Log a debug message.
+     *
+     * @param string     $name The method creating the messages.
+     * @param Image|null $instance Optionally, the instance that created the
+     *      message.
+     * @param array      $arguments The method arguments.
+     *
+     * @return void
+     *
+     * @internal
+     */
+    private static function debug(
+        string $name,
+        $instance,
+        array $arguments
+    ): void {
+        $logger = Main::getLogger();
+        if ($logger) {
+            if ($instance) {
+                $arguments = array_merge(['instance' => $instance], $arguments);
+            }
+            $arguments = array_merge(['name' => $name], $arguments);
+            $logger->debug('Image', $arguments);
+        }
+    }
+
+    /**
+     * Log an error message.
+     *
+     * @param string $message The error message.
+     * @param \Exception $exception The exception.
+     *
+     * @return void
+     *
+     * @internal
+     */
+    private static function error(string $message, \Exception $exception): void
+    {
+        $logger = Main::getLogger();
+        if ($logger) {
+            $logger->error($message, ['exception' => $exception]);
+        }
     }
 
     /**
@@ -697,9 +666,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         $message = vips_error_buffer();
         $exception = new Exception($message);
-        if (self::$logger) {
-            self::$logger->error($message, ['exception' => $exception]);
-        }
+        self::error($message, $exception);
         throw $exception;
     }
 
@@ -958,13 +925,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        if (self::$logger) {
-            self::$logger->debug('Called \'callBase\'', [
-                'name' => $name,
-                'instance' => $instance,
-                'arguments' => $arguments
-            ]);
-        }
+        self::debug($name, $instance, $arguments);
 
         $arguments = array_merge([$name, $instance], $arguments);
 
@@ -978,12 +939,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
-        if (self::$logger) {
-            self::$logger->debug('Result \'callBase\'', [
-                'name' => $name,
-                'result' => $result,
-            ]);
-        }
+        self::debug($name, $instance, ['result' => $result]);
 
         return $result;
     }

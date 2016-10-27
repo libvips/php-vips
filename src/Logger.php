@@ -41,8 +41,11 @@ namespace Jcupitt\Vips;
 
 use \Psr\Log\LoggerInterface;
 
+const LOG_FORMAT = "[%datetime%] %level_name%: %message% %context%\n";
+const DATE_FORMAT = "Y-m-d\TH:i:sP";
+
 /**
- * This class contains the top-level libvips control methods.
+ * A simple logger, handy for debugging. See Main::setLogger().
  *
  * @category  Images
  * @package   Jcupitt\Vips
@@ -52,90 +55,43 @@ use \Psr\Log\LoggerInterface;
  * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
-class Main
+class Logger implements LoggerInterface
 {
+    // Use the LoggerTrait so that we only have to implement the generic
+    // log method.
+    use \Psr\Log\LoggerTrait;
 
     /**
-     * The logger instance.
+     * Logs with an arbitrary level.
      *
-     * @var LoggerInterface
-     */
-    private static $logger;
-
-    /**
-     * Sets a logger.
-     *
-     * @param LoggerInterface $logger
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
      *
      * @return void
      */
-    public static function setLogger(LoggerInterface $logger)
+    public function log($level, $message, array $context = [])
     {
-        self::$logger = $logger;
-    }
+        // `Vips\Image` to string convert
+        array_walk_recursive($context, function (&$value) {
+            if ($value instanceof Vips\Image) {
+                $value = (string) $value;
+            }
+        });
 
-    /**
-     * Gets a logger.
-     *
-     * @return LoggerInterface $logger|null
-     */
-    public static function getLogger()
-    {
-        return self::$logger;
-    }
+        $strParams = [
+            '%datetime%' => date(DATE_FORMAT),
+            '%level_name%' => $level,
+            '%message%' => $message,
+            '%context%' => json_encode(
+                $context,
+                JSON_UNESCAPED_SLASHES |
+                JSON_UNESCAPED_UNICODE |
+                JSON_PRESERVE_ZERO_FRACTION
+            ),
+        ];
 
-    /**
-     * Set the maximum number of operations to hold in the libvips operation
-     * cache.
-     *
-     * @param integer $value The maximum number of operations to cache.
-     *
-     * @return void
-     */
-    public static function cacheSetMax($value)
-    {
-        vips_cache_set_max($value);
-    }
-
-    /**
-     * Set the maximum amount of memory to allow cached operations to use, in
-     * bytes.
-     *
-     * @param integer $value The maximum amount of memory cached opertations can
-     *     hold, in bytes.
-     *
-     * @return void
-     */
-    public static function cacheSetMaxMem($value)
-    {
-        vips_cache_set_max_mem($value);
-    }
-
-    /**
-     * Set the maximum number of open files cached operations can use.
-     *
-     * @param integer $value The maximum number of open files cached operations
-     *      can use.
-     *
-     * @return void
-     */
-    public static function cacheSetMaxFiles($value)
-    {
-        vips_cache_set_max_files($value);
-    }
-
-    /**
-     * Set the size of the pools of worker threads vips uses for image
-     * evaluation.
-     *
-     * @param integer $value The size of the pools of worker threads vips uses
-     *      for image evaluation.
-     *
-     * @return void
-     */
-    public static function concurrencySet($value)
-    {
-        vips_concurrency_set($value);
+        echo strtr(LOG_FORMAT, $strParams);
     }
 }
 
