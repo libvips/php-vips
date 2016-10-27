@@ -74,7 +74,7 @@ class Logger implements LoggerInterface
     {
         // `Vips\Image` to string convert
         array_walk_recursive($context, function (&$value) {
-            if ($value instanceof Vips\Image) {
+            if ($value instanceof Image) {
                 $value = (string) $value;
             }
         });
