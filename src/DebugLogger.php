@@ -39,7 +39,8 @@
 
 namespace Jcupitt\Vips;
 
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
 
 const LOG_FORMAT = "[%datetime%] %level_name%: %message% %context%\n";
 const DATE_FORMAT = "Y-m-d\TH:i:sP";
@@ -55,11 +56,11 @@ const DATE_FORMAT = "Y-m-d\TH:i:sP";
  * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
-class Logger implements LoggerInterface
+class DebugLogger implements LoggerInterface
 {
     // Use the LoggerTrait so that we only have to implement the generic
     // log method.
-    use \Psr\Log\LoggerTrait;
+    use LoggerTrait;
 
     /**
      * Logs with an arbitrary level.

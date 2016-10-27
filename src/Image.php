@@ -401,6 +401,22 @@ use Psr\Log\LoggerInterface;
  * `Image::maxpos`, `Image::minpos`,
  * `Image::median`. See below.
  *
+ * # Logging
+ *
+ * Use `Config::setLogger` to enable logging in the usual manner. A
+ * sample logger, handy for debugging, is defined in `Vips\DebugLogger`. You
+ * can enable debug logging with:
+ *
+ * ```php
+ * Vips\Config::setLogger(new Vips\DebugLogger);
+ * ```
+ *
+ * # Configuration
+ *
+ * You can use the methods in `Vips\Config` to set various global properties of
+ * the library. For example, you can control the size of the libvips cache,
+ * or the size of the worker threadpools that libvips uses to evaluate images. 
+ *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -411,35 +427,6 @@ use Psr\Log\LoggerInterface;
  */
 class Image extends ImageAutodoc implements \ArrayAccess
 {
-
-    /**
-     * The logger instance.
-     *
-     * @var LoggerInterface
-     */
-    private static $logger;
-
-    /**
-     * Sets a logger.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return void
-     */
-    public static function setLogger(LoggerInterface $logger)
-    {
-        self::$logger = $logger;
-    }
-
-    /**
-     * Gets a logger.
-     *
-     * @return LoggerInterface $logger|null
-     */
-    public static function getLogger()
-    {
-        return self::$logger;
-    }
 
     /**
      * The resource for the underlying VipsImage.
@@ -650,7 +637,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         $message = vips_error_buffer();
         $exception = new Exception($message);
-        Main::error($message, $exception);
+        Config::error($message, $exception);
         throw $exception;
     }
 
@@ -909,7 +896,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        Main::debug($name, array_merge(['instance' => $instance], $arguments));
+        Config::debug(
+            $name,
+            ['instance' => $instance, 'arguments' => $arguments]
+        );
 
         $arguments = array_merge([$name, $instance], $arguments);
 
@@ -918,7 +908,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
-        Main::debug($name, ['result' => $result]);
+        Config::debug($name, ['result' => $result]);
 
         return $result;
     }

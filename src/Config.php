@@ -39,7 +39,7 @@
 
 namespace Jcupitt\Vips;
 
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * This class contains the top-level libvips control methods.
@@ -52,7 +52,7 @@ use \Psr\Log\LoggerInterface;
  * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
-class Main
+class Config
 {
 
     /**
@@ -66,7 +66,7 @@ class Main
      * Sets a logger. This can be handy for debugging. For example:
      *
      * ```php
-     * Vips\Main::setLogger(new Vips\Logger);
+     * Vips\Config::setLogger(new Vips\Logger);
      * ```
      *
      * @param LoggerInterface $logger
