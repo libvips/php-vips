@@ -63,7 +63,11 @@ class Main
     private static $logger;
 
     /**
-     * Sets a logger.
+     * Sets a logger. This can be handy for debugging. For example:
+     *
+     * ```php
+     * Vips\Main::setLogger(new Vips\Logger);
+     * ```
      *
      * @param LoggerInterface $logger
      *

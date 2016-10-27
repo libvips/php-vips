@@ -413,6 +413,35 @@ class Image extends ImageAutodoc implements \ArrayAccess
 {
 
     /**
+     * The logger instance.
+     *
+     * @var LoggerInterface
+     */
+    private static $logger;
+
+    /**
+     * Sets a logger.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
+    public static function setLogger(LoggerInterface $logger)
+    {
+        self::$logger = $logger;
+    }
+
+    /**
+     * Gets a logger.
+     *
+     * @return LoggerInterface $logger|null
+     */
+    public static function getLogger()
+    {
+        return self::$logger;
+    }
+
+    /**
      * The resource for the underlying VipsImage.
      *
      * @internal
@@ -883,11 +912,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         Main::debug($name, array_merge(['instance' => $instance], $arguments));
 
         $arguments = array_merge([$name, $instance], $arguments);
-
-        /*
-        echo "after arg composition, arguments = ";
-        var_dump($arguments);
-         */
 
         $arguments = self::unwrap($arguments);
         $result = call_user_func_array("vips_call", $arguments);
