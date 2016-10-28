@@ -33,7 +33,6 @@
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   GIT:ad44dfdd31056a41cbf217244ce62e7a702e0282
  * @link      https://github.com/jcupitt/php-vips
  */
 
@@ -422,7 +421,6 @@ use Psr\Log\LoggerInterface;
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
 class Image extends ImageAutodoc implements \ArrayAccess
@@ -1203,7 +1201,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function andimage($other, array $options = []): Image
     {
-        return self::callEnum($other, "boolean", OperationBoolean::AND, $options);
+        // phpdoc hates OperationBoolean::AND, so use the string form here
+        return self::callEnum($other, "boolean", "and", $options);
     }
 
     /**
@@ -1216,7 +1215,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function orimage($other, array $options = []): Image
     {
-        return self::callEnum($other, "boolean", OperationBoolean::OR, $options);
+        // phpdoc hates OperationBoolean::OR, so use the string form here
+        return self::callEnum($other, "boolean", "or", $options);
     }
 
     /**
@@ -1498,7 +1498,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandand(): Image
     {
-        return $this->bandbool(OperationBoolean::AND);
+        // phpdoc hates OperationBoolean::AND, so use the string form here
+        return $this->bandbool("and");
     }
 
     /**
@@ -1508,7 +1509,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function bandor(): Image
     {
-        return $this->bandbool(OperationBoolean::OR);
+        // phpdoc hates OperationBoolean::OR, so use the string form here
+        return $this->bandbool("or");
     }
 
     /**
