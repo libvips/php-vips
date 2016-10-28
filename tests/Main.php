@@ -2,28 +2,28 @@
 
 use Jcupitt\Vips;
 
-class VipsMainTest extends PHPUnit_Framework_TestCase 
+class VipsConfigTest extends PHPUnit_Framework_TestCase 
 {
     public function testVipsCacheSetMax()
     {
         /* Not easy to test ... just make sure it can execute.
          */
-        Vips\Main::cacheSetMax(12);
+        Vips\Config::cacheSetMax(12);
     }
 
     public function testVipsCacheSetMaxMem()
     {
-        Vips\Main::cacheSetMaxMem(12);
+        Vips\Config::cacheSetMaxMem(12);
     }
 
     public function testVipsCacheSetMaxFiles()
     {
-        Vips\Main::cacheSetMaxFiles(12);
+        Vips\Config::cacheSetMaxFiles(12);
     }
 
     public function testVipsConcurrencySet()
     {
-        Vips\Main::concurrencySet(12);
+        Vips\Config::concurrencySet(12);
     }
 
 }

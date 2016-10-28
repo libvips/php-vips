@@ -414,7 +414,7 @@ use Psr\Log\LoggerInterface;
  *
  * You can use the methods in `Vips\Config` to set various global properties of
  * the library. For example, you can control the size of the libvips cache,
- * or the size of the worker threadpools that libvips uses to evaluate images. 
+ * or the size of the worker threadpools that libvips uses to evaluate images.
  *
  * @category  Images
  * @package   Jcupitt\Vips
