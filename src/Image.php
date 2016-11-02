@@ -635,7 +635,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         $message = vips_error_buffer();
         $exception = new Exception($message);
-        Config::error($message, $exception);
+        Config::errorLog($message, $exception);
         throw $exception;
     }
 
@@ -894,7 +894,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        Config::debug(
+        Config::debugLog(
             $name,
             ['instance' => $instance, 'arguments' => $arguments]
         );
@@ -906,7 +906,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
-        Config::debug($name, ['result' => $result]);
+        Config::debugLog($name, ['result' => $result]);
 
         return $result;
     }

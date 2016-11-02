@@ -89,12 +89,12 @@ class Config
     /**
      * Log a debug message.
      *
-     * @param string $name The method creating the messages.
+     * @param string $name      The method creating the messages.
      * @param array  $arguments The method arguments.
      *
      * @return void
      */
-    public static function debug(string $name, array $arguments): void
+    public static function debugLog(string $name, array $arguments): void
     {
         $logger = self::getLogger();
         if ($logger) {
@@ -105,12 +105,12 @@ class Config
     /**
      * Log an error message.
      *
-     * @param string $message The error message.
+     * @param string     $message   The error message.
      * @param \Exception $exception The exception.
      *
      * @return void
      */
-    public static function error(string $message, \Exception $exception): void
+    public static function errorLog(string $message, \Exception $exception): void
     {
         $logger = self::getLogger();
         if ($logger) {
