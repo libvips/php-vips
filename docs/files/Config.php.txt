@@ -87,38 +87,6 @@ class Config
     }
 
     /**
-     * Log a debug message.
-     *
-     * @param string $name      The method creating the messages.
-     * @param array  $arguments The method arguments.
-     *
-     * @return void
-     */
-    public static function debugLog(string $name, array $arguments)
-    {
-        $logger = self::getLogger();
-        if ($logger) {
-            $logger->debug($name, $arguments);
-        }
-    }
-
-    /**
-     * Log an error message.
-     *
-     * @param string     $message   The error message.
-     * @param \Exception $exception The exception.
-     *
-     * @return void
-     */
-    public static function errorLog(string $message, \Exception $exception)
-    {
-        $logger = self::getLogger();
-        if ($logger) {
-            $logger->error($message, ['exception' => $exception]);
-        }
-    }
-
-    /**
      * Set the maximum number of operations to hold in the libvips operation
      * cache.
      *
