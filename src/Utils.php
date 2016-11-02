@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file was generated automatically. Do not edit!
+ * Vips is a php binding for the vips image processing library
  *
  * PHP version 7
  *
@@ -38,8 +38,11 @@
 
 namespace Jcupitt\Vips;
 
+use Psr\Log\LoggerInterface;
+
 /**
- * The PCS enum.
+ * Various utilities. For now, just loggers. 
+ *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,9 +50,48 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class PCS
+class Utils
 {
-    const LAB = 'lab';
-    const XYZ = 'xyz';
+
+    /**
+     * Log a debug message.
+     *
+     * @param string $name      The method creating the messages.
+     * @param array  $arguments The method arguments.
+     *
+     * @return void
+     */
+    public static function debugLog(string $name, array $arguments)
+    {
+        $logger = Config::getLogger();
+        if ($logger) {
+            $logger->debug($name, $arguments);
+        }
+    }
+
+    /**
+     * Log an error message.
+     *
+     * @param string     $message   The error message.
+     * @param \Exception $exception The exception.
+     *
+     * @return void
+     */
+    public static function errorLog(string $message, \Exception $exception)
+    {
+        $logger = Config::getLogger();
+        if ($logger) {
+            $logger->error($message, ['exception' => $exception]);
+        }
+    }
+
 }
 
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: expandtab sw=4 ts=4 fdm=marker
+ * vim<600: expandtab sw=4 ts=4
+ */
