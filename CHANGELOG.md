@@ -8,6 +8,7 @@ All notable changes to `:vips` will be documented in this file.
 - switch to PSR2 formatting [Kleis Auke Wolthuizen]
 - add sig.php example [John Cupitt]
 - add Vips\Image::debugLogger() sample logger [John Cupitt]
+- added Vips\Config and Vips\Utils 
 
 ### Deprecated
 - removed `\Enum` from enum names
