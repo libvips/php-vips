@@ -94,7 +94,7 @@ class Config
      *
      * @return void
      */
-    public static function debugLog(string $name, array $arguments): void
+    public static function debugLog(string $name, array $arguments)
     {
         $logger = self::getLogger();
         if ($logger) {
@@ -110,7 +110,7 @@ class Config
      *
      * @return void
      */
-    public static function errorLog(string $message, \Exception $exception): void
+    public static function errorLog(string $message, \Exception $exception)
     {
         $logger = self::getLogger();
         if ($logger) {
