@@ -33,7 +33,6 @@
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   GIT:ad44dfdd31056a41cbf217244ce62e7a702e0282
  * @link      https://github.com/jcupitt/php-vips
  */
 
@@ -53,7 +52,6 @@ const DATE_FORMAT = "Y-m-d\TH:i:sP";
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @version   Release:0.9.0
  * @link      https://github.com/jcupitt/php-vips
  */
 class DebugLogger implements LoggerInterface

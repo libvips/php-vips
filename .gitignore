@@ -1,3 +1,3 @@
 /vendor
+/docs
 *.swp
-docs/phpdoc-cache-*

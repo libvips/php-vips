@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
-## 0.9.0 - 2016-10-22
+## 1.0.0 - 2016-11-03
 
 ### Added
 - logging with PSR-3 Logger Interface [Kleis Auke Wolthuizen]
