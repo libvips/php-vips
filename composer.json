@@ -36,11 +36,6 @@
             "Jcupitt\\Vips\\Test\\": "tests"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
-    },
     "scripts": {
         "test": [
             "parallel-lint . --exclude vendor",
