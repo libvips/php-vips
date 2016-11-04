@@ -38,8 +38,6 @@
 
 namespace Jcupitt\Vips;
 
-use Psr\Log\LoggerInterface;
-
 /**
  * This class represents a Vips image object.
  *
