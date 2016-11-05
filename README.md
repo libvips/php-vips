@@ -55,7 +55,8 @@ $ composer install
 $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
-See `examples/`.
+See `examples/`. We have a [complete set of formatted API
+docs](https://jcupitt.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html).
 
 ### Introduction to the API
 
@@ -102,7 +103,7 @@ For example:
 $image->writeToFile("fred.jpg", ["Q" => 90]);
 ```
 
-`php-vips` comes with full API docs, run:
+`php-vips` comes [with full API docs](https://jcupitt.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html). To regenerate these from your sources, type:
 
 ```
 $ vendor/bin/phpdoc
