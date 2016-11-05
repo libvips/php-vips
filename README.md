@@ -55,7 +55,8 @@ $ composer install
 $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
-See `examples/`.
+We have a [full set of formatted API docs 
+here](docs/classes/Jcupitt.Vips.Image.html).
 
 ### Introduction to the API
 
@@ -108,7 +109,8 @@ $image->writeToFile("fred.jpg", ["Q" => 90]);
 $ vendor/bin/phpdoc
 ```
 
-And look in `docs/`.
+And look in `docs/`. You can [browse these docs online 
+too](docs/classes/Jcupitt.Vips.Image.html).
 
 There are around 300 operations in the library, see the vips docs for an
 introduction:
