@@ -19,7 +19,7 @@ This module builds upon the `vips` PHP extension, see:
 
 https://github.com/jcupitt/php-vips-ext
 
-You'll need to install that first. It's tested on Linux and OS X --- 
+You'll need to install that first. It's tested on Linux and macOS --- 
 Windows would need some work, but should be possible.  
 
 ### Example
