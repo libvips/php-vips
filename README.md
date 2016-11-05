@@ -1,43 +1,25 @@
 # High-level PHP binding for libvips 
 
-`php-vips` is a binding for [libvips](https://github.com/jcupitt/libvips), in
-line with [ruby-vips](https://github.com/jcupitt/ruby-vips),
-[pyvips](https://github.com/jcupitt/libvips/tree/master/python), the [libvips
-C++ API](https://github.com/jcupitt/libvips/tree/master/cplusplus) and the
-[libvips C API](https://github.com/jcupitt/libvips/tree/master/libvips).  
-It aims to be small and simple, and to provide a stable, well-documented
-platform that conforms to [PHP standards
-recommendations](http://www.php-fig.org/psr/).
+`php-vips` is a binding for [libvips](https://github.com/jcupitt/libvips) for
+PHP 7. 
 
-libvips is fast and it can work without needing to have the 
-entire image loaded into memory. Programs that use libvips don't
-manipulate images directly, instead they create pipelines of image processing
-operations starting from a source image. When the pipe is connected
-to a destination, the whole pipeline executes at once, streaming the image
-in parallel from source to destination in a set of small fragments. 
+libvips is fast and needs little memory. The [`vips-php-bench`](
+https://github.com/jcupitt/php-vips-bench) repository tests
+`php-vips` against `imagick` and `gd`. On that test, and on my laptop,
+`php-vips` is around four times faster than `imagick` and needs 10 times less
+memory. 
 
-See the [benchmarks at the official libvips
-website](http://www.vips.ecs.soton.ac.uk/index.php?title=Speed_and_Memory_Use).
-There's also a [vips-php-bench](
-https://github.com/jcupitt/php-vips-bench) repository with benchmarks against
-imagick and gd. 
-There's a handy blog post explaining [how libvips opens
-files](http://libvips.blogspot.co.uk/2012/06/how-libvips-opens-file.html)
-which gives some more background.
+Programs that use libvips don't manipulate images directly, instead they
+create pipelines of image processing operations starting from a source
+image. When the pipe is connected to a destination, the whole pipeline
+executes at once and in parallel, streaming the image from source to
+destination in a set of small fragments.
 
-Extra functionality, such as an image thumbnailer, for example, is 
-implemented in repositories which build on this one, and not incorporated
-directly in this code (though see `examples/`).
-As much of the binding as possible is auto-generated. This reduces
-maintenance effort, increases reliability, and makes it possible to
-reuse core libvips documentation.
-
-This
-module builds upon the `vips` binary extension, see:
+This module builds upon the `vips` PHP extension, see:
 
 https://github.com/jcupitt/php-vips-ext
 
-You'll need to install that first. It's tested on Linux and OS X, 
+You'll need to install that first. It's tested on Linux and OS X --- 
 Windows would need some work, but should be possible.  
 
 ### Example
