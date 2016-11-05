@@ -23,7 +23,7 @@
 <a id="high-level-php-binding-for-libvips" class="anchor" href="#high-level-php-binding-for-libvips" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>High-level PHP binding for libvips</h1>
 
 <p><code>php-vips</code> is a binding for <a href="https://github.com/jcupitt/libvips">libvips</a> for
-PHP 7. We have a set of <a href="docs/index.html">formatted API docs</a>. </p>
+PHP 7. </p>
 
 <p>libvips is fast and needs little memory. The <a href="https://github.com/jcupitt/php-vips-bench"><code>vips-php-bench</code></a> repository tests
 <code>php-vips</code> against <code>imagick</code> and <code>gd</code>. On that test, and on my laptop,
@@ -73,7 +73,8 @@ Windows would need some work, but should be possible.  </p>
 $ ./try1.php ~/pics/k2.jpg x.tif
 </code></pre>
 
-<p>See <code>examples/</code>.</p>
+<p>See <code>examples/</code>. We have a <a href="https://jcupitt.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html">complete set of formatted API
+docs</a>.</p>
 
 <h3>
 <a id="introduction-to-the-api" class="anchor" href="#introduction-to-the-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction to the API</h3>
@@ -109,7 +110,7 @@ For example:</p>
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$image</span><span class="pl-k">-&gt;</span>writeToFile(<span class="pl-s"><span class="pl-pds">"</span>fred.jpg<span class="pl-pds">"</span></span>, [<span class="pl-s"><span class="pl-pds">"</span>Q<span class="pl-pds">"</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">90</span>]);</span></pre></div>
 
-<p><code>php-vips</code> comes with full API docs, run:</p>
+<p><code>php-vips</code> comes <a href="https://jcupitt.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html">with full API docs</a>. To regenerate these from your sources, type:</p>
 
 <pre><code>$ vendor/bin/phpdoc
 </code></pre>
