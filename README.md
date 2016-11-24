@@ -15,12 +15,45 @@ image. When the pipe is connected to a destination, the whole pipeline
 executes at once and in parallel, streaming the image from source to
 destination in a set of small fragments.
 
-This module builds upon the `vips` PHP extension, see:
+This module builds upon the `vips` PHP extension:
 
 https://github.com/jcupitt/php-vips-ext
 
 You'll need to install that first. It's tested on Linux and macOS --- 
 Windows would need some work, but should be possible.  
+
+See the README there, but briefly:
+
+1. Install the development version of the underlying libvips library. It's in
+   the linux package managers, homebrew and MacPorts, and there are Windows
+   binaries on the vips website. For example, on Debian:
+
+   ```
+   sudo apt-get install libvips-dev
+   ```
+
+   Or macOS:
+
+   ```
+   brew install vips
+   ```
+
+2. Install the binary PHP extension:
+
+   ```
+   pecl install vips
+   ```
+
+   You may need to add `extension=vips.so` or equivalent to `php.ini`, see the
+   output of pecl.
+
+3. Add vips to your `composer.json`:
+
+   ```
+     "require": {
+       "jcupitt/vips" : "1.0.0"
+     }
+   ```
 
 ### Example
 
@@ -37,18 +70,9 @@ echo "width = ", $image->width, "\n";
 $image = $image->invert();
 
 $image->writeToFile($argv[2]);
-?>
 ```
 
-You'll need this in your `composer.json`:
-
-```
-    "require": {
-            "jcupitt/vips" : "1.0.0"
-    }
-```
-
-And run with:
+Run with:
 
 ```
 $ composer install
