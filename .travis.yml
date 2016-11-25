@@ -1,6 +1,6 @@
 language: php
 
-sudo: required
+sudo: false
 dist: trusty
 
 php:
@@ -54,8 +54,8 @@ before_install:
     --without-python
     $1
   - make
-  - sudo make install
-  - sudo ldconfig
+  - make install
+  - ldconfig
   - cd ..
   - yes '' | pecl install vips
 
