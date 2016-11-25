@@ -1,10 +1,64 @@
 language: php
-         
+
+sudo: required
+dist: trusty
+
 php:
-  - 7.0
+  - 7.0.13
+  - 7.1
 
-before_script:
-  - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+env:
+  - LIBVIPS=8.3
+  - LIBVIPS=8.4
+  - LIBVIPS=master
 
-script: phpunit
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache
+
+addons:
+  apt:
+    packages:
+      - gobject-introspection
+      - gtk-doc-tools
+      - libcfitsio3-dev
+      - libfftw3-dev
+      - libgif-dev
+      - libgs-dev
+      - libgsf-1-dev
+      - libmatio-dev
+      - libopenslide-dev
+      - liborc-0.4-dev
+      - libpango1.0-dev
+      - libpoppler-glib-dev
+      - libwebp-dev
+
+# VIPS 8.3.3 requires Poppler 0.30 which is not released on Trusty.
+before_install:
+  - wget https://github.com/jcupitt/libvips/archive/$LIBVIPS.zip
+  - unzip $LIBVIPS
+  - cd libvips-$LIBVIPS
+  - test -f autogen.sh && ./autogen.sh || ./bootstrap.sh
+  - >
+    CXXFLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
+    ./configure
+    --disable-debug
+    --disable-dependency-tracking
+    --disable-introspection
+    --disable-static
+    --enable-gtk-doc-html=no
+    --enable-gtk-doc=no
+    --enable-pyvips8=no
+    --without-orc
+    --without-python
+    $1
+  - make
+  - sudo make install
+  - sudo ldconfig
+  - cd ..
+  - yes '' | pecl install vips
+
+install: composer install --prefer-dist
+
+script: composer test
