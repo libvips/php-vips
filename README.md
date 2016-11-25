@@ -1,4 +1,6 @@
-# High-level PHP binding for libvips 
+# PHP binding for libvips 
+
+[![Build Status](https://travis-ci.org/jcupitt/php-vips.svg?branch=master)](https://travis-ci.org/jcupitt/php-vips)
 
 `php-vips` is a binding for [libvips](https://github.com/jcupitt/libvips) for
 PHP 7. 
