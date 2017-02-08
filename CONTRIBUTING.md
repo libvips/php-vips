@@ -2,8 +2,7 @@
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/thephpleague/:package_name).
-
+We accept contributions via Pull Requests on [Github](https://github.com/jcupitt/php-vips).
 
 ## Pull Requests
 
@@ -25,7 +24,7 @@ We accept contributions via Pull Requests on [Github](https://github.com/thephpl
 ## Running Tests
 
 ``` bash
-$ phpunit
+$ vendor/bin/phpunit
 ```
 
 

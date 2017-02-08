@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 1.0.1 - development
+
+### Added
+- fix minor formatting issues reported by phpcs [John Cupitt]
+- regenerated autodocs from libvips 8.4 to reduce confusion [John Cupitt]
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ## 1.0.0 - 2016-11-03
 
 ### Added
