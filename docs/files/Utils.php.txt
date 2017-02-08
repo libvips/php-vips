@@ -41,7 +41,7 @@ namespace Jcupitt\Vips;
 use Psr\Log\LoggerInterface;
 
 /**
- * Various utilities. For now, just loggers. 
+ * Various utilities. For now, just loggers.
  *
  * @category  Images
  * @package   Jcupitt\Vips
@@ -52,7 +52,6 @@ use Psr\Log\LoggerInterface;
  */
 class Utils
 {
-
     /**
      * Log a debug message.
      *
@@ -84,7 +83,6 @@ class Utils
             $logger->error($message, ['exception' => $exception]);
         }
     }
-
 }
 
 /*
