@@ -2,7 +2,7 @@
 
 use Jcupitt\Vips;
 
-class VipsConfigTest extends PHPUnit_Framework_TestCase 
+class VipsConfigTest extends PHPUnit\Framework\TestCase
 {
     public function testVipsCacheSetMax()
     {

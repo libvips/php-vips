@@ -17,11 +17,11 @@ function sigmoid(float $alpha, float $beta, bool $ushort = false): Vips\Image
     # same image back again
     #
     # LUTs in libvips are just images with either the width or height set
-    # to 1, and the "interpretation" tag set to HISTOGRAM
+    # to 1, and the 'interpretation' tag set to HISTOGRAM
     #
-    # if "ushort" is TRUE, we make a 16-bit LUT, ie. 0 - 65535 values;
+    # if 'ushort' is TRUE, we make a 16-bit LUT, ie. 0 - 65535 values;
     # otherwise it's 8-bit (0 - 255)
-    $lut = Vips\Image::identity(["ushort" => $ushort]);
+    $lut = Vips\Image::identity(['ushort' => $ushort]);
 
     # rescale so each element is in [0, 1]
     $max = $lut->max();
@@ -80,7 +80,7 @@ function sigLAB(Vips\Image $image, float $alpha, float $beta): Vips\Image
     # get the L band from our labs image, map though the LUT, then reattach the
     # ab bands from the labs image
     $L = $image->extract_band(0);
-    $AB = $image->extract_band(1, ["n" => 2]);
+    $AB = $image->extract_band(1, ['n' => 2]);
     $L = $L->maplut($lut);
     $image = $L->bandjoin($AB);
 
@@ -91,13 +91,13 @@ function sigLAB(Vips\Image $image, float $alpha, float $beta): Vips\Image
     # tell colourspace what the source space is
     $image = $image->colourspace(
         $old_interpretation,
-        ["source_space" => Vips\Interpretation::LABS]
+        ['source_space' => Vips\Interpretation::LABS]
     );
 
     return $image;
 }
 
-$im = Vips\Image::newFromFile($argv[1], ["access" => Vips\Access::SEQUENTIAL]);
+$im = Vips\Image::newFromFile($argv[1], ['access' => Vips\Access::SEQUENTIAL]);
 
 # $beta == 10 is a large contrast boost, values below about 4 drop the contrast
 #

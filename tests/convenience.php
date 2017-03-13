@@ -2,16 +2,22 @@
 
 use Jcupitt\Vips;
 
-class VipsConvenienceTest extends PHPUnit_Framework_TestCase 
+class VipsConvenienceTest extends PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Vips\Image
+     */
+    private $image;
+
+    /**
+     * The original value of pixel (0, 0).
+     */
+    private $pixel;
 
     protected function setUp()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
         $this->image = Vips\Image::newFromFile($filename);
-
-        /* The original value of pixel (0, 0).
-         */
         $this->pixel = $this->image->getpoint(0, 0);
     }
 
@@ -109,7 +115,7 @@ class VipsConvenienceTest extends PHPUnit_Framework_TestCase
     public function testVipsIfthenelseBlend()
     {
         $mask = $this->image[1];
-        $blended = $mask->ifthenelse($mask, [255, 0, 0], ["blend" => true]);
+        $blended = $mask->ifthenelse($mask, [255, 0, 0], ['blend' => true]);
 
         $pixel = $blended->getpoint(0, 0);
         $this->assertEquals($pixel, [223, 6, 6]);

@@ -1,3 +1,5 @@
-/vendor
+vendor
+.idea
+composer.lock
 /docs
 *.swp
