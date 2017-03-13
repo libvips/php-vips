@@ -6,7 +6,8 @@ All notable changes to `:vips` will be documented in this file.
 ### Added
 - fix minor formatting issues reported by phpcs [John Cupitt]
 - regenerated autodocs from libvips 8.4 to reduce confusion [John Cupitt]
-- add Image::hasAlpha tester
+- add Image::hasAlpha() [Kleis Auke Wolthuizen]
+- add Image::findLoad(), Image::findLoadBuffer() [John Cupitt]
 
 ### Deprecated
 - Nothing

@@ -31,6 +31,14 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($image->bands, 3);
     }
 
+    public function testVipsFindLoad()
+    {
+        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $loader = Vips\Image::findLoad($filename);
+
+        $this->assertEquals($loader, "VipsForeignLoadJpegFile");
+    }
+
     public function testVipsNewFromBuffer()
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
@@ -40,6 +48,15 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($image->width, 1600);
         $this->assertEquals($image->height, 1200);
         $this->assertEquals($image->bands, 3);
+    }
+
+    public function testVipsFindLoadBuffer()
+    {
+        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $buffer = file_get_contents($filename);
+        $loader = Vips\Image::findLoadBuffer($buffer);
+
+        $this->assertEquals($loader, "VipsForeignLoadJpegBuffer");
     }
 
 }

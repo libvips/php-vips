@@ -423,6 +423,44 @@ namespace Jcupitt\Vips;
  */
 class Image extends ImageAutodoc implements \ArrayAccess
 {
+    /**
+     * Map load nicknames to canonical names. Regenerate this table with
+     * something like:
+     *
+     * $ vips -l foreign | grep -i load | awk '{ print $2, $1; }'
+     *
+     * Plus a bit of editing.
+     *
+     * @internal
+     */
+    private $nicknameToCanonical = [
+        "csvload" => "VipsForeignLoadCsv",
+        "matrixload" => "VipsForeignLoadMatrix",
+        "rawload" => "VipsForeignLoadRaw",
+        "vipsload" => "VipsForeignLoadVips",
+        "analyzeload" => "VipsForeignLoadAnalyze",
+        "ppmload" => "VipsForeignLoadPpm",
+        "radload" => "VipsForeignLoadRad",
+        "pdfload" => "VipsForeignLoadPdfFile",
+        "pdfload_buffer" => "VipsForeignLoadPdfBuffer",
+        "svgload" => "VipsForeignLoadSvgFile",
+        "svgload_buffer" => "VipsForeignLoadSvgBuffer",
+        "gifload" => "VipsForeignLoadGifFile",
+        "gifload_buffer" => "VipsForeignLoadGifBuffer",
+        "pngload" => "VipsForeignLoadPng",
+        "pngload_buffer" => "VipsForeignLoadPngBuffer",
+        "matload" => "VipsForeignLoadMat",
+        "jpegload" => "VipsForeignLoadJpegFile",
+        "jpegload_buffer" => "VipsForeignLoadJpegBuffer",
+        "webpload" => "VipsForeignLoadWebpFile",
+        "webpload_buffer" => "VipsForeignLoadWebpBuffer",
+        "tiffload" => "VipsForeignLoadTiffFile",
+        "tiffload_buffer" => "VipsForeignLoadTiffBuffer",
+        "magickload" => "VipsForeignLoadMagickFile",
+        "magickload_buffer" => "VipsForeignLoadMagickBuffer",
+        "fitsload" => "VipsForeignLoadFits",
+        "openexrload" => "VipsForeignLoadOpenexr"
+    ];
 
     /**
      * The resource for the underlying VipsImage.
@@ -676,6 +714,37 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Find the name of the load oepration vips will use to load a file, for
+     * example "VipsForeignLoadJpegFile". You can use this to work out what
+     * options to pass to newFromFile().
+     *
+     * @param string $filename The file to test.
+     *
+     * @return string|null The name of the load operation, or null.
+     */
+    public static function findLoad(string $filename): string
+    {
+        $result = null;
+
+        try {
+            # added in php-vips-ext 1.0.5
+            $result = vips_foreign_find_load($filename);
+        } catch (Exception $e) {
+            # fallback: use the vips-loader property ... this can be much slower
+            try {
+                $image = newFromFile($filename);
+                # Unfortunately, vips-loader is the operation nickname, rather
+                # than the canonical name returned by vips_foreign_find_load().
+                $loader = $image->get("vips-loader");
+                $result = $nicknameToCanonical[$loader];
+            } catch (Exception $e) {
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Create a new Image from a compressed image held as a string.
      *
      * @param string $buffer        The formatted image to open.
@@ -694,6 +763,38 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $result = vips_image_new_from_buffer($buffer, $option_string, $options);
         self::errorIsArray($result);
         return self::wrapResult($result);
+    }
+
+    /**
+     * Find the name of the load oepration vips will use to load a buffer, for
+     * example "VipsForeignLoadJpegBuffer". You can use this to work out what
+     * options to pass to newFromBuffer().
+     *
+     * @param string $filename The formatted image to test.
+     *
+     * @return string|null The name of the load operation, or null.
+     */
+    public static function findLoadBuffer(string $buffer): string
+    {
+        $result = null;
+
+        try {
+            # added in php-vips-ext 1.0.5
+            $result = vips_foreign_find_load_buffer($buffer);
+        } catch (Exception $e) {
+            # fallback: use the vips-loader property ... this can be much slower
+            try {
+                $image = newFromBuffer($buffer);
+                # Unfortunately, vips-loader is the operation nickname, rather
+                # than the canonical name returned by
+                # vips_foreign_find_load_buffer().
+                $loader = $image->get("vips-loader");
+                $result = $nicknameToCanonical[$loader];
+            } catch (Exception $e) {
+            }
+        }
+
+        return $result;
     }
 
     /**
