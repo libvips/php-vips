@@ -433,7 +433,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private $nicknameToCanonical = [
+    private static $nicknameToCanonical = [
         "csvload" => "VipsForeignLoadCsv",
         "matrixload" => "VipsForeignLoadMatrix",
         "rawload" => "VipsForeignLoadRaw",
@@ -724,19 +724,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoad(string $filename): string
     {
-        $result = null;
-
-        try {
-            # added in php-vips-ext 1.0.5
+        # added in 1.0.5 of the binary module
+        if (version_compare(phpversion("vips"), "1.0.5") >= 0) {
             $result = vips_foreign_find_load($filename);
-        } catch (Exception $e) {
+        } else {
+            $result = null;
+
             # fallback: use the vips-loader property ... this can be much slower
             try {
-                $image = newFromFile($filename);
+                $image = Image::newFromFile($filename);
                 # Unfortunately, vips-loader is the operation nickname, rather
                 # than the canonical name returned by vips_foreign_find_load().
                 $loader = $image->get("vips-loader");
-                $result = $nicknameToCanonical[$loader];
+                $result = Image::$nicknameToCanonical[$loader];
             } catch (Exception $e) {
             }
         }
@@ -776,20 +776,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoadBuffer(string $buffer): string
     {
-        $result = null;
+        # added in 1.0.5 of the binary module
+        if (version_compare(phpversion("vips"), "1.0.5") >= 0) {
+            $result = vips_foreign_find_load($filename);
+        } else {
+            $result = null;
 
-        try {
-            # added in php-vips-ext 1.0.5
-            $result = vips_foreign_find_load_buffer($buffer);
-        } catch (Exception $e) {
             # fallback: use the vips-loader property ... this can be much slower
             try {
-                $image = newFromBuffer($buffer);
+                $image = Image::newFromBuffer($buffer);
                 # Unfortunately, vips-loader is the operation nickname, rather
                 # than the canonical name returned by
                 # vips_foreign_find_load_buffer().
                 $loader = $image->get("vips-loader");
-                $result = $nicknameToCanonical[$loader];
+                $result = Image::$nicknameToCanonical[$loader];
             } catch (Exception $e) {
             }
         }
