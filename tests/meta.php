@@ -8,6 +8,9 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
     {
         $filename = dirname(__FILE__) . "/images/img_0076.jpg";
         $this->image = Vips\Image::newFromFile($filename);
+
+        $png_filename = dirname(__FILE__) . "/images/PNG_transparency_demonstration_1.png";
+        $this->png_image = Vips\Image::newFromFile($png_filename);
     }
 
     public function testVipsSetGet()
@@ -59,6 +62,12 @@ class VipsMetaTest extends PHPUnit_Framework_TestCase
     {
         $x = $this->image->interpretation;
         $this->assertEquals($x, "srgb");
+    }
+
+    public function testVipsHasAlpha()
+    {
+        $this->assertEquals($this->image->hasAlpha(), FALSE);
+        $this->assertEquals($this->png_image->hasAlpha(), TRUE);
     }
 
 }

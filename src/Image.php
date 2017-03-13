@@ -861,11 +861,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function __toString()
     {
         $array = [
-            'width' => $this->get('width'),
-            'height' => $this->get('height'),
-            'bands' => $this->get('bands'),
-            'format' => $this->get('format'),
-            'interpretation' => $this->get('interpretation'),
+            'width' => $this->width,
+            'height' => $this->height,
+            'bands' => $this->bands,
+            'format' => $this->format,
+            'interpretation' => $this->interpretation,
         ];
 
         return json_encode($array);
@@ -962,7 +962,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $op,
         array $options = []
     ) {
-
         if (self::isImageish($other)) {
             return self::call($base, $this, [$other, $op], $options);
         } else {
@@ -994,6 +993,24 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public static function __callStatic(string $name, array $arguments)
     {
         return self::callBase($name, null, $arguments);
+    }
+
+    /**
+     * Does this image have an alpha channel?
+     *
+     * Uses colour space interpretation with number of channels to guess
+     * this.
+     *
+     * @param  Image $image The source image.
+     *
+     * @return bool indicating if this image has an alpha channel.
+     */
+    public function hasAlpha(): bool
+    {
+        return $this->bands === 2 ||
+            ($this->bands === 4 &&
+             $this->interpretation !== Interpretation::CMYK) ||
+            $this->bands > 4;
     }
 
     /**
