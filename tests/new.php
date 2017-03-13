@@ -2,7 +2,7 @@
 
 use Jcupitt\Vips;
 
-class VipsNewTest extends PHPUnit_Framework_TestCase 
+class VipsNewTest extends PHPUnit\Framework\TestCase
 {
 
     public function testVipsNewFromArray()
@@ -23,7 +23,7 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
 
     public function testVipsNewFromFile()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
         $image = Vips\Image::newFromFile($filename);
 
         $this->assertEquals($image->width, 1600);
@@ -33,17 +33,17 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
 
     public function testVipsFindLoad()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
         $loader = Vips\Image::findLoad($filename);
 
-        $this->assertEquals($loader, "VipsForeignLoadJpegFile");
+        $this->assertEquals($loader, 'VipsForeignLoadJpegFile');
     }
 
     public function testVipsNewFromBuffer()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
         $buffer = file_get_contents($filename);
-        $image = Vips\Image::newFromBuffer($buffer, "");
+        $image = Vips\Image::newFromBuffer($buffer);
 
         $this->assertEquals($image->width, 1600);
         $this->assertEquals($image->height, 1200);
@@ -52,11 +52,11 @@ class VipsNewTest extends PHPUnit_Framework_TestCase
 
     public function testVipsFindLoadBuffer()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
         $buffer = file_get_contents($filename);
         $loader = Vips\Image::findLoadBuffer($buffer);
 
-        $this->assertEquals($loader, "VipsForeignLoadJpegBuffer");
+        $this->assertEquals($loader, 'VipsForeignLoadJpegBuffer');
     }
 
 }

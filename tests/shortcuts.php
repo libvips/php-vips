@@ -2,8 +2,18 @@
 
 use Jcupitt\Vips;
 
-class VipsShortcutTest extends PHPUnit_Framework_TestCase 
+class VipsShortcutTest extends PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Vips\Image
+     */
+    private $image;
+
+    /**
+     * The original value of pixel (0, 0).
+     */
+    private $pixel;
+
     static function map_numeric($value, $func)
     {
         if (is_numeric($value)) {
@@ -20,11 +30,8 @@ class VipsShortcutTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
-        $this->image = Vips\Image::newFromFile($filename, ["shrink" => 8]);
-
-        /* The original value of pixel (0, 0).
-         */
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
+        $this->image = Vips\Image::newFromFile($filename, ['shrink' => 8]);
         $this->pixel = $this->image->getpoint(0, 0);
     }
 
