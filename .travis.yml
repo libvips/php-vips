@@ -45,15 +45,15 @@ addons:
       - libwebp-dev
 
 before_install:
-  - bash install-vips.sh \
-	    --disable-debug \
-	    --disable-dependency-tracking \
-	    --disable-introspection \
-	    --disable-static \
-	    --enable-gtk-doc-html=no \
-	    --enable-gtk-doc=no \
-	    --enable-pyvips8=no \
-	    --without-orc \
+  - bash install-vips.sh 
+	    --disable-debug 
+	    --disable-dependency-tracking 
+	    --disable-introspection 
+	    --disable-static 
+	    --enable-gtk-doc-html=no 
+	    --enable-gtk-doc=no 
+	    --enable-pyvips8=no
+	    --without-orc 
 	    --without-python
   - yes '' | pecl install vips
 
