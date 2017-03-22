@@ -7,7 +7,7 @@ set -e
 if [ -d "$HOME/vips/bin" ]; then
 	version=$($HOME/vips/bin/vips --version)
 	escaped_version="$VIPS_VERSION_MAJOR\.$VIPS_VERSION_MINOR\.$VIPS_VERSION_MICRO"
-	echo "Need vips $VIPS_VERSION"
+	echo "Need vips $VIPS_VERSION_FULL"
 	echo "Found vips $version"
 	if [[ "$version" =~ ^vips-$escaped_version ]]; then
 		echo "Using cached directory"
