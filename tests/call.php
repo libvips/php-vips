@@ -16,10 +16,10 @@ class VipsCallTest extends PHPUnit_Framework_TestCase
 
     public function testVipsCallStatic()
     {
-        $image = Vips\Image::black(1, 2, ["bands" => 3]);
+        $image = Vips\Image::black(1, 4, ["bands" => 3]);
 
         $this->assertEquals($image->width, 1);
-        $this->assertEquals($image->height, 2);
+        $this->assertEquals($image->height, 4);
         $this->assertEquals($image->bands, 3);
     }
 
