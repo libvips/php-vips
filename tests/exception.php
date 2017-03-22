@@ -2,15 +2,22 @@
 
 use Jcupitt\Vips;
 
-class VipsExceptionTest extends PHPUnit_Framework_TestCase 
+class VipsExceptionTest extends PHPUnit\Framework\TestCase
 {
+    /**
+     * @var Vips\Image
+     */
+    private $image;
+
+    /**
+     * The original value of pixel (0, 0).
+     */
+    private $pixel;
+
     protected function setUp()
     {
-        $filename = dirname(__FILE__) . "/images/img_0076.jpg";
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
         $this->image = Vips\Image::newFromFile($filename);
-
-        /* The original value of pixel (0, 0).
-         */
         $this->pixel = $this->image->getpoint(0, 0);
     }
 
@@ -32,7 +39,7 @@ class VipsExceptionTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(Vips\Exception::class);
 
-        $string = $this->image->writeToBuffer(".jpg", ["crazy option" => 42]);
+        $string = $this->image->writeToBuffer('.jpg', ['crazy option' => 42]);
     }
 
     public function testVipsGetException()

@@ -53,9 +53,9 @@ namespace Jcupitt\Vips;
  * ```php
  * <?php
  * use Jcupitt\Vips;
- * $im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
+ * $im = Vips\Image::newFromFile($argv[1], ['access' => 'sequential']);
  * $im = $im->crop(100, 100, $im->width - 200, $im->height - 200);
- * $im = $im->reduce(1.0 / 0.9, 1.0 / 0.9, ["kernel" => "linear"]);
+ * $im = $im->reduce(1.0 / 0.9, 1.0 / 0.9, ['kernel' => 'linear']);
  * $mask = Vips\Image::newFromArray(
  *      [[-1,  -1, -1],
  *       [-1,  16, -1],
@@ -87,7 +87,7 @@ namespace Jcupitt\Vips;
  * Reading this example line by line, we have:
  *
  * ```php
- * $im = Vips\Image::newFromFile($argv[1], ["access" => "sequential"]);
+ * $im = Vips\Image::newFromFile($argv[1], ['access' => 'sequential']);
  * ```
  *
  * `Image::newFromFile` can load any image file supported by vips. Almost all
@@ -111,7 +111,7 @@ namespace Jcupitt\Vips;
  * Crops 100 pixels from every edge. You can access any vips image property
  * directly as a PHP property. If the vips property name does not
  * conform to PHP naming conventions, you can use something like
- * `$image->get("ipct-data")`.
+ * `$image->get('ipct-data')`.
  *
  * Next we have:
  *
@@ -182,10 +182,10 @@ namespace Jcupitt\Vips;
  *
  * ```php
  * $out = $in->embed($x, $y, $width, $height,
- *     ["extend" => "copy", "background" => [1, 2, 3]]);
+ *     ['extend' => 'copy', 'background' => [1, 2, 3]]);
  * ```
  *
- * `"background"` can also be a simple constant, such as `12`, see below.
+ * `'background'` can also be a simple constant, such as `12`, see below.
  *
  * The `vipsheader` command-line program is an easy way to see all the
  * properties of an image. For example:
@@ -210,7 +210,7 @@ namespace Jcupitt\Vips;
  * ```
  *
  * You can access any of these fields as PHP properties of the `Image` class.
- * Use `$image->get("ipct-data")` for property names which are not valid under
+ * Use `$image->get('ipct-data')` for property names which are not valid under
  * PHP syntax.
  *
  * # How it works
@@ -259,10 +259,10 @@ namespace Jcupitt\Vips;
  * You can ask it to return the position of the minimum with `x` and `y`.
  *
  * ```php
- * $result = $image->min(["x" => true, "y" => true]);
- * $min_value = $result["out"];
- * $x_pos = $result["x"];
- * $y_pos = $result["y"];
+ * $result = $image->min(['x' => true, 'y' => true]);
+ * $min_value = $result['out'];
+ * $x_pos = $result['x'];
+ * $y_pos = $result['y'];
  * ```
  *
  * Now `x_pos` and `y_pos` will have the coordinates of the minimum value.
@@ -272,9 +272,9 @@ namespace Jcupitt\Vips;
  * You can also ask for the top *n* minimum, for example:
  *
  * ```php
- * $result = $image->min(["size" => 10, "x_array" => true, "y_array" => true]);
- * $x_pos = $result["x_array"];
- * $y_pos = $result["y_array"];
+ * $result = $image->min(['size' => 10, 'x_array' => true, 'y_array' => true]);
+ * $x_pos = $result['x_array'];
+ * $y_pos = $result['y_array'];
  * ```
  *
  * Now `x_pos` and `y_pos` will be 10-element arrays.
@@ -311,7 +311,7 @@ namespace Jcupitt\Vips;
  * example, you can read the ICC profile out of an image like this:
  *
  * ```php
- * $profile = $image->get("icc-profile-data");
+ * $profile = $image->get('icc-profile-data');
  * ```
  *
  * and `$profile` will be a PHP string.
@@ -381,7 +381,7 @@ namespace Jcupitt\Vips;
  * `Image::math` can be used to calculate sine of every pixel like this:
  *
  * ```php
- * $result = $image->math("sin");
+ * $result = $image->math('sin');
  * ```
  *
  * This is annoying, so the wrapper expands all these enums into separate members
@@ -434,32 +434,32 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @internal
      */
     private static $nicknameToCanonical = [
-        "csvload" => "VipsForeignLoadCsv",
-        "matrixload" => "VipsForeignLoadMatrix",
-        "rawload" => "VipsForeignLoadRaw",
-        "vipsload" => "VipsForeignLoadVips",
-        "analyzeload" => "VipsForeignLoadAnalyze",
-        "ppmload" => "VipsForeignLoadPpm",
-        "radload" => "VipsForeignLoadRad",
-        "pdfload" => "VipsForeignLoadPdfFile",
-        "pdfload_buffer" => "VipsForeignLoadPdfBuffer",
-        "svgload" => "VipsForeignLoadSvgFile",
-        "svgload_buffer" => "VipsForeignLoadSvgBuffer",
-        "gifload" => "VipsForeignLoadGifFile",
-        "gifload_buffer" => "VipsForeignLoadGifBuffer",
-        "pngload" => "VipsForeignLoadPng",
-        "pngload_buffer" => "VipsForeignLoadPngBuffer",
-        "matload" => "VipsForeignLoadMat",
-        "jpegload" => "VipsForeignLoadJpegFile",
-        "jpegload_buffer" => "VipsForeignLoadJpegBuffer",
-        "webpload" => "VipsForeignLoadWebpFile",
-        "webpload_buffer" => "VipsForeignLoadWebpBuffer",
-        "tiffload" => "VipsForeignLoadTiffFile",
-        "tiffload_buffer" => "VipsForeignLoadTiffBuffer",
-        "magickload" => "VipsForeignLoadMagickFile",
-        "magickload_buffer" => "VipsForeignLoadMagickBuffer",
-        "fitsload" => "VipsForeignLoadFits",
-        "openexrload" => "VipsForeignLoadOpenexr"
+        'csvload' => 'VipsForeignLoadCsv',
+        'matrixload' => 'VipsForeignLoadMatrix',
+        'rawload' => 'VipsForeignLoadRaw',
+        'vipsload' => 'VipsForeignLoadVips',
+        'analyzeload' => 'VipsForeignLoadAnalyze',
+        'ppmload' => 'VipsForeignLoadPpm',
+        'radload' => 'VipsForeignLoadRad',
+        'pdfload' => 'VipsForeignLoadPdfFile',
+        'pdfload_buffer' => 'VipsForeignLoadPdfBuffer',
+        'svgload' => 'VipsForeignLoadSvgFile',
+        'svgload_buffer' => 'VipsForeignLoadSvgBuffer',
+        'gifload' => 'VipsForeignLoadGifFile',
+        'gifload_buffer' => 'VipsForeignLoadGifBuffer',
+        'pngload' => 'VipsForeignLoadPng',
+        'pngload_buffer' => 'VipsForeignLoadPngBuffer',
+        'matload' => 'VipsForeignLoadMat',
+        'jpegload' => 'VipsForeignLoadJpegFile',
+        'jpegload_buffer' => 'VipsForeignLoadJpegBuffer',
+        'webpload' => 'VipsForeignLoadWebpFile',
+        'webpload_buffer' => 'VipsForeignLoadWebpBuffer',
+        'tiffload' => 'VipsForeignLoadTiffFile',
+        'tiffload_buffer' => 'VipsForeignLoadTiffBuffer',
+        'magickload' => 'VipsForeignLoadMagickFile',
+        'magickload_buffer' => 'VipsForeignLoadMagickBuffer',
+        'fitsload' => 'VipsForeignLoadFits',
+        'openexrload' => 'VipsForeignLoadOpenexr'
     ];
 
     /**
@@ -558,7 +558,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Turn a constant (eg. 1, "12", [1, 2, 3], [[1]]) into an image using
+     * Turn a constant (eg. 1, '12', [1, 2, 3], [[1]]) into an image using
      * match_image as a guide.
      *
      * @param Image $match_image Use this image as a guide.
@@ -579,7 +579,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
                 0,
                 $match_image->width,
                 $match_image->height,
-                ["extend" => Extend::COPY]
+                ['extend' => Extend::COPY]
             );
             $result->interpretation = $match_image->interpretation;
         }
@@ -620,7 +620,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     private static function isImage($value): bool
     {
         return is_resource($value) &&
-        get_resource_type($value) == "GObject";
+        get_resource_type($value) == 'GObject';
     }
 
     /**
@@ -629,7 +629,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * - If the array is a singleton, we strip it off. For example, many
      *   operations return a single result and there's no sense handling
-     *   this as an array of values, so we transform ["out" => x] -> x.
+     *   this as an array of values, so we transform ['out' => x] -> x.
      *
      * - Any VipsImage resources are rewrapped as instances of Image.
      *
@@ -642,7 +642,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     private static function wrapResult($result)
     {
         if (!is_array($result)) {
-            $result = ["x" => $result];
+            $result = ['x' => $result];
         }
 
         array_walk_recursive($result, function (&$item) {
@@ -724,20 +724,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoad(string $filename): string
     {
-        # added in 1.0.5 of the binary module
-        if (version_compare(phpversion("vips"), "1.0.5") >= 0) {
+        // added in 1.0.5 of the binary module
+        if (function_exists('vips_foreign_find_load')) {
             $result = vips_foreign_find_load($filename);
         } else {
             $result = null;
 
-            # fallback: use the vips-loader property ... this can be much slower
+            // fallback: use the vips-loader property ... this can be much slower
             try {
-                $image = Image::newFromFile($filename);
-                # Unfortunately, vips-loader is the operation nickname, rather
-                # than the canonical name returned by vips_foreign_find_load().
-                $loader = $image->get("vips-loader");
-                $result = Image::$nicknameToCanonical[$loader];
-            } catch (Exception $e) {
+                $image = self::newFromFile($filename);
+                // Unfortunately, vips-loader is the operation nickname, rather
+                // than the canonical name returned by vips_foreign_find_load().
+                $loader = $image->get('vips-loader');
+                $result = self::$nicknameToCanonical[$loader];
+            } catch (Exception $ignored) {
             }
         }
 
@@ -756,7 +756,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function newFromBuffer(
         string $buffer,
-        string $option_string = "",
+        string $option_string = '',
         array $options = []
     ): Image {
         $options = self::unwrap($options);
@@ -767,30 +767,30 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Find the name of the load oepration vips will use to load a buffer, for
-     * example "VipsForeignLoadJpegBuffer". You can use this to work out what
+     * example 'VipsForeignLoadJpegBuffer'. You can use this to work out what
      * options to pass to newFromBuffer().
      *
-     * @param string $filename The formatted image to test.
+     * @param string $buffer The formatted image to test.
      *
      * @return string|null The name of the load operation, or null.
      */
     public static function findLoadBuffer(string $buffer): string
     {
-        # added in 1.0.5 of the binary module
-        if (version_compare(phpversion("vips"), "1.0.5") >= 0) {
-            $result = vips_foreign_find_load($filename);
+        // added in 1.0.5 of the binary module
+        if (function_exists('vips_foreign_find_load_buffer')) {
+            $result = vips_foreign_find_load_buffer($buffer);
         } else {
             $result = null;
 
-            # fallback: use the vips-loader property ... this can be much slower
+            // fallback: use the vips-loader property ... this can be much slower
             try {
-                $image = Image::newFromBuffer($buffer);
-                # Unfortunately, vips-loader is the operation nickname, rather
-                # than the canonical name returned by
-                # vips_foreign_find_load_buffer().
-                $loader = $image->get("vips-loader");
-                $result = Image::$nicknameToCanonical[$loader];
-            } catch (Exception $e) {
+                $image = self::newFromBuffer($buffer);
+                // Unfortunately, vips-loader is the operation nickname, rather
+                // than the canonical name returned by
+                // vips_foreign_find_load_buffer().
+                $loader = $image->get('vips-loader');
+                $result = self::$nicknameToCanonical[$loader];
+            } catch (Exception $ignored) {
             }
         }
 
@@ -890,7 +890,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Get any property from the underlying image.
      *
      * This is handy for fields whose name
-     * does not match PHP's variable naming conventions, like `"exif-data"`.
+     * does not match PHP's variable naming conventions, like `'exif-data'`.
      *
      * It will throw an exception if $name does not exist. Use Image::typeof()
      * to test for the existence of a field.
@@ -924,7 +924,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Set any property on the underlying image.
      *
      * This is handy for fields whose name
-     * does not match PHP's variable naming conventions, like `"exif-data"`.
+     * does not match PHP's variable naming conventions, like `'exif-data'`.
      *
      * @param string $name  The property name.
      * @param mixed  $value The value to set for this property.
@@ -1001,7 +1001,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $arguments = array_merge([$name, $instance], $arguments);
 
         $arguments = self::unwrap($arguments);
-        $result = call_user_func_array("vips_call", $arguments);
+        $result = call_user_func_array('vips_call', $arguments);
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
@@ -1031,12 +1031,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         array $options = []
     ) {
         /*
-        echo "call: ", $name, "\n";
-        echo "instance = ";
+        echo "call: $name \n";
+        echo "instance = \n";
         var_dump($instance);
-        echo "arguments = ";
+        echo "arguments = \n";
         var_dump($arguments);
-        echo "options = ";
+        echo "options = \n";
         var_dump($options);
          */
 
@@ -1045,8 +1045,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Handy for things like self::more. Call a 2-ary vips operator like
-     * "more", but if the arg is not an image (ie. it's a constant), call
-     * "more_const" instead.
+     * 'more', but if the arg is not an image (ie. it's a constant), call
+     * 'more_const' instead.
      *
      * @param mixed  $other   The right-hand argument.
      * @param string $base    The base part of the operation name.
@@ -1066,7 +1066,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if (self::isImageish($other)) {
             return self::call($base, $this, [$other, $op], $options);
         } else {
-            return self::call($base . "_const", $this, [$op, $other], $options);
+            return self::call($base . '_const', $this, [$op, $other], $options);
         }
     }
 
@@ -1148,7 +1148,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function offsetSet($offset, $value): Image
     {
-        throw new \BadMethodCallException("Image::offsetSet: not implemented");
+        throw new \BadMethodCallException('Image::offsetSet: not implemented');
     }
 
     /**
@@ -1160,7 +1160,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function offsetUnset($offset): Image
     {
-        throw new \BadMethodCallException("Image::offsetUnset: not implemented");
+        throw new \BadMethodCallException('Image::offsetUnset: not implemented');
     }
 
     /**
@@ -1174,7 +1174,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function add($other, array $options = []): Image
     {
         if (self::isImageish($other)) {
-            return self::call("add", $this, [$other], $options);
+            return self::call('add', $this, [$other], $options);
         } else {
             return self::linear(1, $other, $options);
         }
@@ -1191,7 +1191,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function subtract($other, array $options = []): Image
     {
         if (self::isImageish($other)) {
-            return self::call("subtract", $this, [$other], $options);
+            return self::call('subtract', $this, [$other], $options);
         } else {
             $other = self::mapNumeric($other, function ($value) {
                 return -1 * $value;
@@ -1211,7 +1211,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function multiply($other, array $options = []): Image
     {
         if (self::isImageish($other)) {
-            return self::call("multiply", $this, [$other], $options);
+            return self::call('multiply', $this, [$other], $options);
         } else {
             return self::linear($other, 0, $options);
         }
@@ -1228,7 +1228,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function divide($other, array $options = []): Image
     {
         if (self::isImageish($other)) {
-            return self::call("divide", $this, [$other], $options);
+            return self::call('divide', $this, [$other], $options);
         } else {
             $other = self::mapNumeric($other, function ($value) {
                 return $value ** -1;
@@ -1248,9 +1248,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function remainder($other, array $options = []): Image
     {
         if (self::isImageish($other)) {
-            return self::call("remainder", $this, [$other], $options);
+            return self::call('remainder', $this, [$other], $options);
         } else {
-            return self::call("remainder_const", $this, [$other], $options);
+            return self::call('remainder_const', $this, [$other], $options);
         }
     }
 
@@ -1264,7 +1264,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function pow($other, array $options = []): Image
     {
-        return self::callEnum($other, "math2", OperationMath2::POW, $options);
+        return self::callEnum($other, 'math2', OperationMath2::POW, $options);
     }
 
     /**
@@ -1277,7 +1277,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function wop($other, array $options = []): Image
     {
-        return self::callEnum($other, "math2", OperationMath2::WOP, $options);
+        return self::callEnum($other, 'math2', OperationMath2::WOP, $options);
     }
 
     /**
@@ -1290,7 +1290,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lshift($other, array $options = []): Image
     {
-        return self::callEnum($other, "boolean", OperationBoolean::LSHIFT, $options);
+        return self::callEnum($other, 'boolean', OperationBoolean::LSHIFT, $options);
     }
 
     /**
@@ -1303,7 +1303,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rshift($other, array $options = []): Image
     {
-        return self::callEnum($other, "boolean", OperationBoolean::RSHIFT, $options);
+        return self::callEnum($other, 'boolean', OperationBoolean::RSHIFT, $options);
     }
 
     /**
@@ -1318,7 +1318,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function andimage($other, array $options = []): Image
     {
         // phpdoc hates OperationBoolean::AND, so use the string form here
-        return self::callEnum($other, "boolean", "and", $options);
+        return self::callEnum($other, 'boolean', 'and', $options);
     }
 
     /**
@@ -1332,7 +1332,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function orimage($other, array $options = []): Image
     {
         // phpdoc hates OperationBoolean::OR, so use the string form here
-        return self::callEnum($other, "boolean", "or", $options);
+        return self::callEnum($other, 'boolean', 'or', $options);
     }
 
     /**
@@ -1345,7 +1345,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function eorimage($other, array $options = []): Image
     {
-        return self::callEnum($other, "boolean", OperationBoolean::EOR, $options);
+        return self::callEnum($other, 'boolean', OperationBoolean::EOR, $options);
     }
 
     /**
@@ -1358,7 +1358,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function more($other, array $options = []): Image
     {
-        return self::callEnum($other, "relational", OperationRelational::MORE, $options);
+        return self::callEnum($other, 'relational', OperationRelational::MORE, $options);
     }
 
     /**
@@ -1371,7 +1371,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function moreEq($other, array $options = []): Image
     {
-        return self::callEnum($other, "relational", OperationRelational::MOREEQ, $options);
+        return self::callEnum($other, 'relational', OperationRelational::MOREEQ, $options);
     }
 
     /**
@@ -1384,7 +1384,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function less($other, array $options = []): Image
     {
-        return self::callEnum($other, "relational", OperationRelational::LESS, $options);
+        return self::callEnum($other, 'relational', OperationRelational::LESS, $options);
     }
 
     /**
@@ -1397,7 +1397,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lessEq($other, array $options = []): Image
     {
-        return self::callEnum($other, "relational", OperationRelational::LESSEQ, $options);
+        return self::callEnum($other, 'relational', OperationRelational::LESSEQ, $options);
     }
 
     /**
@@ -1410,7 +1410,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function equal($other, array $options = []): Image
     {
-        return self::callEnum($other, "relational", OperationRelational::EQUAL, $options);
+        return self::callEnum($other, 'relational', OperationRelational::EQUAL, $options);
     }
 
     /**
@@ -1423,7 +1423,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function notEq($other, array $options = []): Image
     {
-        return self::callEnum($other, "relational", OperationRelational::NOTEQ, $options);
+        return self::callEnum($other, 'relational', OperationRelational::NOTEQ, $options);
     }
 
     /**
@@ -1455,10 +1455,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
         /* We can't use self::bandjoin(), that would just recurse.
          */
         if ($is_const) {
-            return self::call("bandjoin_const", $this, [$other], $options);
+            return self::call('bandjoin_const', $this, [$other], $options);
         } else {
             return self::call(
-                "bandjoin",
+                'bandjoin',
                 null,
                 [array_merge([$this], $other)],
                 $options
@@ -1508,7 +1508,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $other = [$other];
         }
 
-        return self::call("bandrank", $this, $other, $options);
+        return self::call('bandrank', $this, $other, $options);
     }
 
     /**
@@ -1518,10 +1518,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function maxpos(): array
     {
-        $result = $this->max(["x" => true, "y" => true]);
-        $out = $result["out"];
-        $x = $result["x"];
-        $y = $result["y"];
+        $result = $this->max(['x' => true, 'y' => true]);
+        $out = $result['out'];
+        $x = $result['x'];
+        $y = $result['y'];
 
         return [$out, $x, $y];
     }
@@ -1533,10 +1533,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function minpos(): array
     {
-        $result = $this->min(["x" => true, "y" => true]);
-        $out = $result["out"];
-        $x = $result["x"];
-        $y = $result["y"];
+        $result = $this->min(['x' => true, 'y' => true]);
+        $out = $result['out'];
+        $x = $result['x'];
+        $y = $result['y'];
 
         return [$out, $x, $y];
     }
@@ -1574,7 +1574,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $else = self::imageize($match_image, $else);
         }
 
-        return self::call("ifthenelse", $this, [$then, $else], $options);
+        return self::call('ifthenelse', $this, [$then, $else], $options);
     }
 
     /**
@@ -1615,7 +1615,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function bandand(): Image
     {
         // phpdoc hates OperationBoolean::AND, so use the string form here
-        return $this->bandbool("and");
+        return $this->bandbool('and');
     }
 
     /**
@@ -1626,7 +1626,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function bandor(): Image
     {
         // phpdoc hates OperationBoolean::OR, so use the string form here
-        return $this->bandbool("or");
+        return $this->bandbool('or');
     }
 
     /**

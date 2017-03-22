@@ -2,7 +2,7 @@
 
 use Jcupitt\Vips;
 
-class VipsLoggerTest extends PHPUnit_Framework_TestCase
+class VipsLoggerTest extends PHPUnit\Framework\TestCase
 {
     public function testGetLoggerCall()
     {

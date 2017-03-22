@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Jcupitt\Vips;
 
-Vips\Config::setLogger(new Vips\DebugLogger);
+Vips\Config::setLogger(new Vips\DebugLogger());
 
 $image = Vips\Image::newFromFile($argv[1]);
 

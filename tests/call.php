@@ -2,12 +2,12 @@
 
 use Jcupitt\Vips;
 
-class VipsCallTest extends PHPUnit_Framework_TestCase 
+class VipsCallTest extends PHPUnit\Framework\TestCase
 {
     public function testVipsCall()
     {
         $image = Vips\Image::newFromArray([1, 2, 3]);
-        $image = $image->embed(10, 20, 3000, 2000, ["extend" => Vips\Extend::COPY]);
+        $image = $image->embed(10, 20, 3000, 2000, ['extend' => Vips\Extend::COPY]);
 
         $this->assertEquals($image->width, 3000);
         $this->assertEquals($image->height, 2000);
@@ -37,7 +37,7 @@ class VipsCallTest extends PHPUnit_Framework_TestCase
     public function testVipsDraw()
     {
         $image = Vips\Image::black(100, 100);
-        $image = $image->draw_circle(255, 50, 50, 20, ["fill" => true]);
+        $image = $image->draw_circle(255, 50, 50, 20, ['fill' => true]);
 
         $this->assertEquals($image->width, 100);
         $this->assertEquals($image->height, 100);
