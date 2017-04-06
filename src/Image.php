@@ -722,7 +722,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return string|null The name of the load operation, or null.
      */
-    public static function findLoad(string $filename): string
+    public static function findLoad(string $filename)
     {
         // added in 1.0.5 of the binary module
         if (function_exists('vips_foreign_find_load')) {
@@ -774,7 +774,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return string|null The name of the load operation, or null.
      */
-    public static function findLoadBuffer(string $buffer): string
+    public static function findLoadBuffer(string $buffer)
     {
         // added in 1.0.5 of the binary module
         if (function_exists('vips_foreign_find_load_buffer')) {
