@@ -2,7 +2,7 @@
 
 vips_site=http://www.vips.ecs.soton.ac.uk/supported
 version=$VIPS_VERSION_MAJOR.$VIPS_VERSION_MINOR
-version_full=$VIPS_VERSION.$VIPS_VERSION_MICRO
+version_full=$version.$VIPS_VERSION_MICRO
 
 set -e
 
@@ -11,7 +11,7 @@ set -e
 if [ -d "$HOME/vips/bin" ]; then
 	installed_version=$($HOME/vips/bin/vips --version)
 	escaped_version="$VIPS_VERSION_MAJOR\.$VIPS_VERSION_MINOR\.$VIPS_VERSION_MICRO"
-	echo "Need vips-$version_fulL"
+	echo "Need vips-$version_full"
 	echo "Found $installed_version"
 	if [[ "$installed_version" =~ ^vips-$escaped_version ]]; then
 		echo "Using cached directory"
