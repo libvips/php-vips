@@ -8,6 +8,7 @@ All notable changes to `:vips` will be documented in this file.
 - regenerated autodocs from libvips 8.4 to reduce confusion [John Cupitt]
 - add Image::hasAlpha() [Kleis Auke Wolthuizen]
 - add Image::findLoad(), Image::findLoadBuffer() [John Cupitt]
+- add Image::copyMemory() [John Cupitt]
 
 ### Deprecated
 - Nothing

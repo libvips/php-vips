@@ -860,6 +860,27 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Copy to memory.
+     *
+     * An area of memory large enough to hold the complete image is allocated,
+     * the image is rendered into it, and a new Image is returned which wraps 
+     * this memory area.
+     *
+     * This is useful for ending a pipeline and starting a new random access
+     * one, but can obviously use a lot of memory if the image is large.
+     *
+     * @return Image A new Image.
+     */
+    public function copyMemory()
+    {
+        $result = vips_image_copy_memory($this->image);
+        if ($result == -1) {
+            self::errorVips();
+        }
+        return self::wrapResult($result);
+    }
+
+    /**
      * Get any property from the underlying image.
      *
      * @param string $name The property name.
@@ -1658,43 +1679,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         return $this->complexget(OperationComplexget::IMAG);
     }
-
-    /* use this for polar() and rect()
-     
-    def run_cmplx(fn, image):
-        """Run a complex function on a non-complex image.
-
-        The image needs to be complex, or have an even number of bands. The input
-        can be int, the output is always float or double.
-        """
-        original_format = image.format
-
-        if not Vips.band_format_iscomplex(image.format):
-            if image.bands % 2 != 0:
-                raise "not an even number of bands"
-
-            if not Vips.band_format_isfloat(image.format):
-                image = image.cast(Vips.BandFormat.FLOAT)
-
-            if image.format == Vips.BandFormat.DOUBLE:
-                new_format = Vips.BandFormat.DPCOMPLEX
-            else:
-                new_format = Vips.BandFormat.COMPLEX
-
-            image = image.copy(format = new_format, bands = image.bands / 2)
-
-        image = fn(image)
-
-        if not Vips.band_format_iscomplex(original_format):
-            if image.format == Vips.BandFormat.DPCOMPLEX:
-                new_format = Vips.BandFormat.DOUBLE
-            else:
-                new_format = Vips.BandFormat.FLOAT
-
-            image = image.copy(format = new_format, bands = image.bands * 2)
-
-        return image
-     */
 
     /**
      * Return an image converted to polar coordinates.

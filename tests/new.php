@@ -59,6 +59,15 @@ class VipsNewTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($loader, 'VipsForeignLoadJpegBuffer');
     }
 
+    public function testVipsCopyMemory()
+    {
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
+        $image1 = Vips\Image::newFromFile($filename);
+        $image2 = $image1->copyMemory();
+
+        $this->assertEquals($image1->avg(), $image2->avg());
+    }
+
 }
 
 /*
