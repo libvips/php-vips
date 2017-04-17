@@ -42,7 +42,7 @@ namespace Jcupitt\Vips;
  * This class represents a Vips image object.
  *
  * This module provides a binding for the [vips image processing
- * library](http://www.vips.ecs.soton.ac.uk).
+ * library](https://jcupitt.github.io/libvips/).
  *
  * It needs libvips 8.0 or later to be installed, and it needs the binary
  * [`vips` extension](https://github.com/jcupitt/php-vips-ext) to be added to
@@ -142,11 +142,10 @@ namespace Jcupitt\Vips;
  * # Getting more help
  *
  * This binding lets you call the complete C API almost directly. You should
- * [consult the C docs](
- * http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/index.html)
+ * [consult the C docs](https://jcupitt.github.io/libvips/API/current)
  * for full details on the operations that are available and
- * the arguments they take. There's a handy [function list](
- * http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/func-list.html)
+ * the arguments they take. There's a handy [function 
+ * list](https://jcupitt.github.io/libvips/API/current/func-list.html)
  * which summarises the operations in the library. You can use the `vips`
  * command-line interface to get help as well, for example:
  *
@@ -227,7 +226,7 @@ namespace Jcupitt\Vips;
  * properties.
  *
  * The API you end up with is a object-oriented version of the [VIPS C
- * API](http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/).
+ * API](https://jcupitt.github.io/libvips/API/current).
  * Full documentation
  * on the operations and what they do is there, you can use it directly. This
  * document explains the extra features of the PHP API and lists the available

@@ -140,7 +140,7 @@ And look in `docs/`.
 There are around 300 operations in the library, see the vips docs for an
 introduction:
 
-http://www.vips.ecs.soton.ac.uk/supported/current/doc/html/libvips/
+https://jcupitt.github.io/libvips/API/current
 
 ### How it works
 
