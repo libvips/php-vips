@@ -31,6 +31,29 @@ class VipsNewTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($image->bands, 3);
     }
 
+    public function testVipsNewFromImage()
+    {
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
+        $image = Vips\Image::newFromFile($filename);
+
+        $image2 = $image->newFromImage(12);
+
+        $this->assertEquals($image2->width, $image->width);
+        $this->assertEquals($image2->height, $image->height);
+        $this->assertEquals($image2->format, $image->format);
+        $this->assertEquals($image2->xres, $image->xres);
+        $this->assertEquals($image2->yres, $image->yres);
+        $this->assertEquals($image2->xoffset, $image->xoffset);
+        $this->assertEquals($image2->yoffset, $image->yoffset);
+        $this->assertEquals($image2->bands, 1);
+        $this->assertEquals($image2->avg(), 12);
+
+        $image2 = $image->newFromImage([1,2,3]);
+
+        $this->assertEquals($image2->bands, 3);
+        $this->assertEquals($image2->avg(), 2);
+    }
+
     public function testVipsFindLoad()
     {
         $filename = dirname(__FILE__) . '/images/img_0076.jpg';

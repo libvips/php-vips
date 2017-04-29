@@ -144,7 +144,7 @@ namespace Jcupitt\Vips;
  * This binding lets you call the complete C API almost directly. You should
  * [consult the C docs](https://jcupitt.github.io/libvips/API/current)
  * for full details on the operations that are available and
- * the arguments they take. There's a handy [function 
+ * the arguments they take. There's a handy [function
  * list](https://jcupitt.github.io/libvips/API/current/func-list.html)
  * which summarises the operations in the library. You can use the `vips`
  * command-line interface to get help as well, for example:
@@ -572,15 +572,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if (self::is2D($value)) {
             $result = self::newFromArray($value);
         } else {
-            $pixel = self::black(1, 1)->add($value)->cast($match_image->format);
-            $result = $pixel->embed(
-                0,
-                0,
-                $match_image->width,
-                $match_image->height,
-                ['extend' => Extend::COPY]
-            );
-            $result->interpretation = $match_image->interpretation;
+            $result = $match_image->newFromImage($value);
         }
 
         return $result;
@@ -822,6 +814,41 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Create a new image from a constant.
+     *
+     * The new image has the same width, height, format, interpretation, xres,
+     * yres, xoffset, yoffset as $this, but each pixel has the constant value
+     * $value.
+     *
+     * Pass a single number to make a one-band image, pass an array of numbers
+     * to make an N-band image.
+     *
+     * @param mixed $value The value to set each pixel to.
+     *
+     * @return Image A new Image.
+     */
+    public function newFromImage($value)
+    {
+        $pixel = self::black(1, 1)->add($value)->cast($this->format);
+        $image = $pixel->embed(
+            0,
+            0,
+            $this->width,
+            $this->height,
+            ['extend' => Extend::COPY]
+        );
+        $image = $image->copy([
+            'interpretation' => $this->interpretation,
+            'xres' => $this->xres,
+            'yres' =>  $this->yres,
+            'xoffset' => $this->xoffset,
+            'yoffset' => $this->yoffset
+        ]);
+
+        return $image;
+    }
+
+    /**
      * Write an image to a file.
      *
      * @param string $filename The file to write the image to.
@@ -862,7 +889,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Copy to memory.
      *
      * An area of memory large enough to hold the complete image is allocated,
-     * the image is rendered into it, and a new Image is returned which wraps 
+     * the image is rendered into it, and a new Image is returned which wraps
      * this memory area.
      *
      * This is useful for ending a pipeline and starting a new random access

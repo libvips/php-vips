@@ -1,14 +1,15 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
-## 1.0.1 - development
+## 1.0.1 - 2017-04-29
 
 ### Added
 - fix minor formatting issues reported by phpcs [John Cupitt]
-- regenerated autodocs from libvips 8.4 to reduce confusion [John Cupitt]
 - add Image::hasAlpha() [Kleis Auke Wolthuizen]
 - add Image::findLoad(), Image::findLoadBuffer() [John Cupitt]
 - add Image::copyMemory() [John Cupitt]
+- add Image::newFromImage() [John Cupitt]
+- update docs for libvips 8.5 [John Cupitt]
 
 ### Deprecated
 - Nothing
