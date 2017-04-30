@@ -23,6 +23,11 @@ All notable changes to `:vips` will be documented in this file.
 ### Security
 - Nothing
 
+## 1.0.1 
+
+### Added
+- oops, mistagged, use 1.0.2
+
 ## 1.0.0 - 2016-11-03
 
 ### Added
