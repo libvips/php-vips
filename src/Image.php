@@ -705,7 +705,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Find the name of the load oepration vips will use to load a file, for
+     * Find the name of the load operation vips will use to load a file, for
      * example "VipsForeignLoadJpegFile". You can use this to work out what
      * options to pass to newFromFile().
      *
@@ -757,7 +757,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Find the name of the load oepration vips will use to load a buffer, for
+     * Find the name of the load operation vips will use to load a buffer, for
      * example 'VipsForeignLoadJpegBuffer'. You can use this to work out what
      * options to pass to newFromBuffer().
      *
@@ -811,6 +811,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
             self::errorVips();
         }
         return self::wrapResult($result);
+    }
+
+    /**
+     * Make an interpolator from a name.
+     *
+     * @param string $name Name of the interpolator.
+     *
+     * @return resource|null The interpolator, or null on error.
+     */
+    public static function newInterpolator(string $name)
+    {
+        // added in 1.0.7 of the binary module
+        return vips_interpolate_new($name);
     }
 
     /**
