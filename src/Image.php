@@ -374,6 +374,44 @@ namespace Jcupitt\Vips;
  * If you want to avoid the copies, you'll need to call drawing operations
  * yourself.
  *
+ * # Thumbnailing
+ *
+ * The thumbnailing functionality is implemented by `Vips\Image::thumbnail` and
+ * `Vips\Image::thumbnail_buffer` (which thumbnails an image held as a string).
+ *
+ * You could write:
+ * ```php
+ * $filename = 'image.jpg';
+ * $image = Vips\Image::thumbnail($filename, 200, ['height' => 200]);
+ * $image->writeToFile('my-thumbnail.jpg');
+ * ```
+ *
+ * # Resample
+ *
+ * There are three types of operation in this section.
+ *
+ * First, `->affine()` applies an affine transform to an image.
+ * This is any sort of 2D transform which preserves straight lines;
+ * so any combination of stretch, sheer, rotate and translate.
+ * You supply an interpolator for it to use to generate pixels
+ * (@see Image::newInterpolator()). It will not produce good results for
+ * very large shrinks: you'll see aliasing.
+ *
+ * `->reduce()` is like `->affine()`, but it can only shrink images,
+ * it can't enlarge, rotate, or skew.
+ * It's very fast and uses an adaptive kernel (@see Kernel for possible values)
+ * for interpolation. Again, it will give poor results for large size reductions.
+ *
+ * `->shrink()` is a fast block shrinker. It can quickly reduce images by large
+ * integer factors. It will give poor results for small size reductions:
+ * again, you'll see aliasing.
+ *
+ * Next, `->resize()` specialises in the common task of image reduce and enlarge.
+ * It strings together combinations of `->shrink()`, `->reduce()`, `->affine()`
+ * and others to implement a general, high-quality image resizer.
+ *
+ * Finally, `->mapim()` can apply arbitrary 2D image transforms to an image.
+ *
  * # Expansions
  *
  * Some vips operators take an enum to select an action, for example
@@ -705,7 +743,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Find the name of the load oepration vips will use to load a file, for
+     * Find the name of the load operation vips will use to load a file, for
      * example "VipsForeignLoadJpegFile". You can use this to work out what
      * options to pass to newFromFile().
      *
@@ -757,7 +795,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Find the name of the load oepration vips will use to load a buffer, for
+     * Find the name of the load operation vips will use to load a buffer, for
      * example 'VipsForeignLoadJpegBuffer'. You can use this to work out what
      * options to pass to newFromBuffer().
      *
@@ -811,6 +849,26 @@ class Image extends ImageAutodoc implements \ArrayAccess
             self::errorVips();
         }
         return self::wrapResult($result);
+    }
+
+    /**
+     * Make an interpolator from a name.
+     *
+     * @param string $name Name of the interpolator.
+     * Possible interpolators are:
+     *  - `'nearest'`: Use nearest neighbour interpolation.
+     *  - `'bicubic'`: Use bicubic interpolation.
+     *  - `'bilinear'`: Use bilinear interpolation (the default).
+     *  - `'nohalo'`: Use Nohalo interpolation.
+     *  - `'lbb'`: Use LBB interpolation.
+     *  - `'vsqbs'`: Use the VSQBS interpolation.
+     *
+     * @return resource|null The interpolator, or null on error.
+     */
+    public static function newInterpolator(string $name)
+    {
+        // added in 1.0.7 of the binary module
+        return vips_interpolate_new($name);
     }
 
     /**
