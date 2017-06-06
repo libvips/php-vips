@@ -5,11 +5,11 @@
 `php-vips` is a binding for [libvips](https://github.com/jcupitt/libvips) for
 PHP 7. 
 
-libvips is fast and needs little memory. The [`vips-php-bench`](
-https://github.com/jcupitt/php-vips-bench) repository tests
-`php-vips` against `imagick` and `gd`. On that test, and on my laptop,
-`php-vips` is around four times faster than `imagick` and needs 10 times less
-memory. 
+libvips is fast and needs little memory. The
+[`vips-php-bench`](https://github.com/jcupitt/php-vips-bench) repository
+tests `php-vips` against `imagick` and `gd`. On that test, and on my laptop,
+`php-vips` is around four times faster than `imagick` and needs 10 times
+less memory.
 
 Programs that use libvips don't manipulate images directly, instead they
 create pipelines of image processing operations starting from a source
@@ -26,7 +26,8 @@ Windows would need some work, but should be possible.
 
 See the README there, but briefly:
 
-1. Install the development version of the underlying libvips library. It's in
+1. [Install the libvips library and
+   headers](https://jcupitt.github.io/libvips/install.html). It's in
    the linux package managers, homebrew and MacPorts, and there are Windows
    binaries on the vips website. For example, on Debian:
 
@@ -65,12 +66,14 @@ See the README there, but briefly:
 require __DIR__ . '/vendor/autoload.php';
 use Jcupitt\Vips;
 
+// fast thumbnail generator
+$image = Vips\Image::thumbnail('somefile.jpg', 128);
+$image->writeToFile('tiny.jpg');
+
+// load an image, get fields, process, save
 $image = Vips\Image::newFromFile($argv[1]);
-
-echo "width = ", $image->width, "\n";
-
+echo "width = $image->width\n";
 $image = $image->invert();
-
 $image->writeToFile($argv[2]);
 ```
 
@@ -86,15 +89,18 @@ docs](https://jcupitt.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html).
 
 ### Introduction to the API
 
-Almost all methods return a new image for the result, so you can chain them.
+Almost all methods return a new image as the result, so you can chain them.
 For example:
 
 ```php
-$image = $image->more(12)->ifthenelse(255, $image);
+$new_image = $image->more(12)->ifthenelse(255, $image);
 ```
 
 will make a mask of pixels greater than 12, then use the mask to set pixels to
 either 255 or the original image.
+
+Note that libvips operators always make new images, they don't modify existing
+images, so after the line above, `$image` is unchanged.
 
 You use long, double, array and image as parameters. For example:
 
