@@ -5,6 +5,7 @@ All notable changes to `:vips` will be documented in this file.
 
 ### Added
 - add Image::newInterpolator() [Kleis Auke Wolthuizen]
+- implement array access interface [John Cupitt]
 
 ### Deprecated
 - Nothing
