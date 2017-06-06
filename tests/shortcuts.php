@@ -236,6 +236,92 @@ class VipsShortcutTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($vips->bands, 1);
     }
 
+    public function testOffsetSet()
+    {
+        $base = Vips\Image::newFromArray([1, 2, 3]);
+        $image = $base->bandjoin([$base->add(1), $base->add(2)]);
+
+        // replace band with image
+        $test = $image->copy();
+        $test[1] = $base;
+        $this->assertEquals($test->bands, 3);
+        $this->assertEquals($test[0]->avg(), 2);
+        $this->assertEquals($test[1]->avg(), 2);
+        $this->assertEquals($test[2]->avg(), 4);
+
+        // replace band with constant
+        $test = $image->copy();
+        $test[1] = 12;
+        $this->assertEquals($test->bands, 3);
+        $this->assertEquals($test[0]->avg(), 2);
+        $this->assertEquals($test[1]->avg(), 12);
+        $this->assertEquals($test[2]->avg(), 4);
+
+        // replace band with array
+        $test = $image->copy();
+        $test[1] = [12, 13];
+        $this->assertEquals($test->bands, 4);
+        $this->assertEquals($test[0]->avg(), 2);
+        $this->assertEquals($test[1]->avg(), 12);
+        $this->assertEquals($test[2]->avg(), 13);
+        $this->assertEquals($test[3]->avg(), 4);
+
+        // insert at start
+        $test = $image->copy();
+        $test[-1] = 12;
+        $this->assertEquals($test->bands, 4);
+        $this->assertEquals($test[0]->avg(), 12);
+        $this->assertEquals($test[1]->avg(), 2);
+        $this->assertEquals($test[2]->avg(), 3);
+        $this->assertEquals($test[3]->avg(), 4);
+
+        // append at end
+        $test = $image->copy();
+        $test[] = 12;
+        $this->assertEquals($test->bands, 4);
+        $this->assertEquals($test[0]->avg(), 2);
+        $this->assertEquals($test[1]->avg(), 3);
+        $this->assertEquals($test[2]->avg(), 4);
+        $this->assertEquals($test[3]->avg(), 12);
+
+    }
+
+    public function testOffsetUnset()
+    {
+        $base = Vips\Image::newFromArray([1, 2, 3]);
+        $image = $base->bandjoin([$base->add(1), $base->add(2)]);
+
+        // remove middle
+        $test = $image->copy();
+        unset($test[1]);
+        $this->assertEquals($test->bands, 2);
+        $this->assertEquals($test[0]->avg(), 2);
+        $this->assertEquals($test[1]->avg(), 4);
+
+        // remove first
+        $test = $image->copy();
+        unset($test[0]);
+        $this->assertEquals($test->bands, 2);
+        $this->assertEquals($test[0]->avg(), 3);
+        $this->assertEquals($test[1]->avg(), 4);
+
+
+        // remove last
+        $test = $image->copy();
+        unset($test[2]);
+        $this->assertEquals($test->bands, 2);
+        $this->assertEquals($test[0]->avg(), 2);
+        $this->assertEquals($test[1]->avg(), 3);
+
+        // remove outside range
+        $test = $image->copy();
+        unset($test[12]);
+        $this->assertEquals($test->bands, 3);
+        $this->assertEquals($test[0]->avg(), 2);
+        $this->assertEquals($test[1]->avg(), 3);
+        $this->assertEquals($test[2]->avg(), 4);
+
+    }
 }
 
 /*

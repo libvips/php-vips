@@ -344,7 +344,7 @@ namespace Jcupitt\Vips;
  * to append a constant 255 band to an image, perhaps to add an alpha channel. Of
  * course you can also write:
  *
- * ```ruby
+ * ```php
  * $result = $image->bandjoin($image2);
  * $result = $image->bandjoin([image2, image3]);
  * $result = Image::bandjoin([image1, image2, image3]);
@@ -352,6 +352,43 @@ namespace Jcupitt\Vips;
  * ```
  *
  * and so on.
+ *
+ * # Array access
+ *
+ * Images can be treated as arrays of bands. You can write:
+ *
+ * ```php
+ * $result = $image[1];
+ * ```
+ *
+ * to get band 1 from an image (green, in an RGB image).
+ *
+ * You can assign to bands as well. You can write:
+ *
+ * ```php
+ * $image[1] = $other_image;
+ * ```
+ *
+ * And band 1 will be replaced by all the bands in `$other_image` using
+ * `bandjoin`. Use no offset to mean append, use -1 to mean prepend:
+ *
+ * ```php
+ * $image[] = $other_image; // append bands from other
+ * $image[-1] = $other_image; // prepend bands from other
+ * ```
+ *
+ * You can use number and array constants as well, for example:
+ *
+ * ```php
+ * $image[] = 255; // append a constant 255
+ * $image[1] = [1, 2, 3]; // swap band 1 for three constant bands
+ * ```
+ *
+ * Finally, you can delete bands with `unset`:
+ *
+ * ```php
+ * unset($image[1]); // remove band 1
+ * ```
  *
  * # Exceptions
  *
@@ -1162,7 +1199,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Our ArrayAccess interface ... we allow [] to get band.
+     * Does band exist in image.
      *
      * @param mixed $offset The index to fetch.
      *
@@ -1174,7 +1211,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Our ArrayAccess interface ... we allow [] to get band.
+     * Get band from image.
      *
      * @param mixed $offset The index to fetch.
      *
@@ -1186,28 +1223,88 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Our ArrayAccess interface ... we allow [] to get band.
+     * Set a band.
      *
-     * @param mixed $offset The index to set.
+     * Use `$image[1] = $other_image;' to remove band 1 from this image,
+     * replacing it with all the bands in `$other_image`.
+     *
+     * Use `$image[] = $other_image;' to append all the bands in `$other_image`
+     * to `$image`.
+     *
+     * Use `$image[-1] = $other_image;` to prepend all the bands in
+     * `$other_image` to `$image`.
+     *
+     * You can use constants or arrays in place of `$other_image`. Use `$image[]
+     * = 255;` to append a constant 255 band, for example, or `$image[1]
+     * = [1, 2];` to replace band 1 with two constant bands.
+     *
+     * @param int   $offset The index to set.
      * @param Image $value  The band to insert
      *
-     * @return Image the expanded image.
+     * @return void
      */
-    public function offsetSet($offset, $value): Image
+    public function offsetSet($offset, $value): void
     {
-        throw new \BadMethodCallException('Image::offsetSet: not implemented');
+        // no offset means append
+        if (is_null($offset)) {
+            $offset = $this->bands;
+        }
+
+        if (!is_int($offset)) {
+            throw new \BadMethodCallException('Image::offsetSet: offset is not integer or null');
+        }
+
+        // expand constant, if necessary
+        if (!($value instanceof Image)) {
+            $value = self::imageize($this, $value);
+        }
+
+        // number of bands to the left and right of $value
+        $n_left = min($this->bands, max(0, $offset));
+        $n_right = min($this->bands, max(0, $this->bands - 1 - $offset));
+        $offset = $this->bands - $n_right;
+
+        $components = [];
+        if ($n_left > 0) {
+            $components[] = $this->extract_band(0, ["n" => $n_left]);
+        }
+        $components[] = $value;
+        if ($n_right) {
+            $components[] = $this->extract_band($offset, ["n" => $n_right]);
+        }
+
+        $head = array_shift($components);
+        $this->image = $head->bandjoin($components)->image;
     }
 
     /**
-     * Our ArrayAccess interface ... we allow [] to get band.
+     * Remove a band from an image.
      *
-     * @param mixed $offset The index to remove.
+     * @param int $offset The index to remove.
      *
-     * @return Image the reduced image.
+     * @return void
      */
-    public function offsetUnset($offset): Image
+    public function offsetUnset($offset): void
     {
-        throw new \BadMethodCallException('Image::offsetUnset: not implemented');
+        if (is_int($offset) and $offset >= 0 and $offset < $this->bands) {
+            $components = [];
+            if ($offset > 0) {
+                $components[] = $this->extract_band(0, ["n" => $offset]);
+            }
+            if ($offset < $this->bands - 1) {
+                $components[] = $this->extract_band(
+                    $offset + 1,
+                    ["n" => $this->bands - 1 - $offset]
+                );
+            }
+
+            $head = array_shift($components);
+            if ($components != null) {
+                $this->image = $head->bandjoin($components)->image;
+            } else {
+                $this->image = $head->image;
+            }
+        }
     }
 
     /**

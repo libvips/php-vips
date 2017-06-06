@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 1.0.2 - 2017-06-06
+
+### Added
+- implement array access interface [John Cupitt]
+
 ## 1.0.1 - 2017-04-29
 
 ### Added
