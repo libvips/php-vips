@@ -216,6 +216,7 @@ namespace Jcupitt\Vips;
  * @method void fitssave(string $filename, array $options = []) Save image to fits file.
  * @method static Image thumbnail(string $filename, integer $width, array $options = []) Generate thumbnail from file.
  * @method static Image thumbnail_buffer(string $buffer, integer $width, array $options = []) Generate thumbnail from buffer.
+ * @method Image thumbnail_image(integer $width, array $options = []) Generate thumbnail from image.
  * @method Image mapim(Image $index, array $options = []) Resample with an mapim image.
  * @method Image shrink(float $hshrink, float $vshrink, array $options = []) Shrink an image.
  * @method Image shrinkh(integer $hshrink, array $options = []) Shrink an image horizontally.
