@@ -380,6 +380,7 @@ namespace Jcupitt\Vips;
  * `Vips\Image::thumbnail_buffer` (which thumbnails an image held as a string).
  *
  * You could write:
+ *
  * ```php
  * $filename = 'image.jpg';
  * $image = Vips\Image::thumbnail($filename, 200, ['height' => 200]);
@@ -400,7 +401,7 @@ namespace Jcupitt\Vips;
  * `->reduce()` is like `->affine()`, but it can only shrink images,
  * it can't enlarge, rotate, or skew.
  * It's very fast and uses an adaptive kernel (@see Kernel for possible values)
- * for interpolation. Again, it will give poor results for large size reductions.
+ * for interpolation. It will be slow for very large shrink factors.
  *
  * `->shrink()` is a fast block shrinker. It can quickly reduce images by large
  * integer factors. It will give poor results for small size reductions:
