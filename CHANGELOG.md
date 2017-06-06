@@ -1,12 +1,25 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
-## 1.0.2 - 2017-06-06
+## 1.0.3-dev - 2017-06-06
 
 ### Added
+- add Image::newInterpolator() [Kleis Auke Wolthuizen]
 - implement array access interface [John Cupitt]
 
-## 1.0.1 - 2017-04-29
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
+## 1.0.2 - 2017-04-29
 
 ### Added
 - fix minor formatting issues reported by phpcs [John Cupitt]

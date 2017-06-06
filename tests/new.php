@@ -91,6 +91,20 @@ class VipsNewTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($image1->avg(), $image2->avg());
     }
 
+    public function testVipsNewInterpolator()
+    {
+        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
+        $image1 = Vips\Image::newFromFile($filename);
+        $interp = Vips\Image::newInterpolator('bicubic');
+        $image2 = $image1->affine([2, 0, 0, 2], ['interpolate' => $interp]);
+
+        $widthInput = $image1->width;
+        $widthOutput = $image2->width;
+
+        $this->assertNotNull($interp);
+        $this->assertEquals($widthInput * 2, $widthOutput);
+    }
+
 }
 
 /*
