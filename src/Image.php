@@ -1243,7 +1243,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         // no offset means append
         if (is_null($offset)) {
@@ -1266,11 +1266,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $components = [];
         if ($n_left > 0) {
-            $components[] = $this->extract_band(0, ["n" => $n_left]);
+            $components[] = $this->extract_band(0, ['n' => $n_left]);
         }
         $components[] = $value;
         if ($n_right) {
-            $components[] = $this->extract_band($offset, ["n" => $n_right]);
+            $components[] = $this->extract_band($offset, ['n' => $n_right]);
         }
 
         $head = array_shift($components);
@@ -1284,17 +1284,17 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         if (is_int($offset) and $offset >= 0 and $offset < $this->bands) {
             $components = [];
             if ($offset > 0) {
-                $components[] = $this->extract_band(0, ["n" => $offset]);
+                $components[] = $this->extract_band(0, ['n' => $offset]);
             }
             if ($offset < $this->bands - 1) {
                 $components[] = $this->extract_band(
                     $offset + 1,
-                    ["n" => $this->bands - 1 - $offset]
+                    ['n' => $this->bands - 1 - $offset]
                 );
             }
 
