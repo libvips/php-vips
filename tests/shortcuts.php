@@ -305,7 +305,6 @@ class VipsShortcutTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($test[0]->avg(), 3);
         $this->assertEquals($test[1]->avg(), 4);
 
-
         // remove last
         $test = $image->copy();
         unset($test[2]);
@@ -321,6 +320,16 @@ class VipsShortcutTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($test[1]->avg(), 3);
         $this->assertEquals($test[2]->avg(), 4);
 
+    }
+
+    public function testOffsetUnsetAll()
+    {
+        $base = Vips\Image::newFromArray([1, 2, 3]);
+
+        // remove all
+        $test = $base->copy();
+        $this->expectException(BadMethodCallException::class);
+        unset($test[0]);
     }
 }
 
