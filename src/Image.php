@@ -1313,22 +1313,23 @@ class Image extends ImageAutodoc implements \ArrayAccess
             throw new \BadMethodCallException('Image::offsetSet: offset is not integer or null');
         }
 
-        // expand constant, if necessary
-        if (!($value instanceof Image)) {
-            $value = self::imageize($this, $value);
-        }
-
         // number of bands to the left and right of $value
         $n_left = min($this->bands, max(0, $offset));
         $n_right = min($this->bands, max(0, $this->bands - 1 - $offset));
         $offset = $this->bands - $n_right;
+
+        // if we are setting a constant as the first element, we must expand it
+        // to an image, since bandjoin must have an image as the first argument
+        if ($n_left == 0 && !($value instanceof Image)) {
+            $value = self::imageize($this, $value);
+        }
 
         $components = [];
         if ($n_left > 0) {
             $components[] = $this->extract_band(0, ['n' => $n_left]);
         }
         $components[] = $value;
-        if ($n_right) {
+        if ($n_right > 0) {
             $components[] = $this->extract_band($offset, ['n' => $n_right]);
         }
 
@@ -1345,7 +1346,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        if (is_int($offset) and $offset >= 0 and $offset < $this->bands) {
+        if (is_int($offset) && $offset >= 0 && $offset < $this->bands) {
+            if ($this->bands == 1) {
+                throw new \BadMethodCallException('Image::offsetUnset: cannot delete final band');
+            }
+
             $components = [];
             if ($offset > 0) {
                 $components[] = $this->extract_band(0, ['n' => $offset]);
@@ -1358,10 +1363,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
             }
 
             $head = array_shift($components);
-            if ($components != null) {
-                $this->image = $head->bandjoin($components)->image;
-            } else {
+            if (empty($components)) {
                 $this->image = $head->image;
+            } else {
+                $this->image = $head->bandjoin($components)->image;
             }
         }
     }
