@@ -56,13 +56,13 @@ def enum?(name)
     return false
 end
 
-# map Ruby type names to PHP type names
+# map Ruby type names to PHP argument type names
 $to_php_map = {
     "Vips::Image" => "Image",
     "Image" => "Image",
     "Array<Integer>" => "integer[]|integer",
     "Array<Double>" => "float[]|float",
-    "Array<Image>" => "Image[]",
+    "Array<Image>" => "Image[]|image",
     "Integer" => "integer",
     "gint" => "integer",
     "guint64" => "integer",
@@ -77,8 +77,29 @@ $to_php_map = {
     "gpointer" => "string",
 }
 
-def type_to_php(type)
-    return $to_php_map[type] if $to_php_map.include?(type) 
+# php result type names are different, annoyingly, and very restricted
+$to_php_result_map = {
+    "Vips::Image" => "Image",
+    "Image" => "Image",
+    "Array<Integer>" => "array",
+    "Array<Double>" => "array",
+    "Array<Image>" => "array",
+    "Integer" => "integer",
+    "gint" => "integer",
+    "guint64" => "integer",
+    "Double" => "float",
+    "gdouble" => "float",
+    "Float" => "float",
+    "String" => "string",
+    "Boolean" => "bool",
+    "gboolean" => "bool",
+    "Vips::Blob" => "string",
+    "gchararray" => "string",
+    "gpointer" => "string",
+}
+
+def type_to_php(map, type)
+    return map[type] if map.include?(type) 
     return "string" if enum? type
 
     # no mapping found
@@ -88,7 +109,11 @@ end
 
 class Vips::Argument
     def to_php
-        type_to_php type
+        type_to_php $to_php_map, type
+    end
+
+    def to_php_result
+        type_to_php $to_php_result_map, type
     end
 end
 
@@ -151,7 +176,7 @@ def generate_operation(file, op)
     if required_output.length == 0
         file << "void "
     elsif required_output.length == 1
-        file << "#{required_output[0].to_php} "
+        file << "#{required_output[0].to_php_result} "
     else 
         # we generate a Returns: block for this case, see below
         file << "array "
@@ -272,7 +297,7 @@ EOF
     Vips::Image.properties.each do |name|
         php_name = name.tr "-", "_"
         p = Vips::Image.property name
-        file << " * @property #{type_to_php p.value_type.name} "
+        file << " * @property #{type_to_php $to_php_map, p.value_type.name} "
         file << "$#{php_name} #{p.blurb}\n"
         if enum? p.value_type.name
             php_name = p.value_type.name.tap{|s| s.slice!("Vips")}
