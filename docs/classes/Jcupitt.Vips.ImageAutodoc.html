@@ -144,28 +144,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-965391493"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-544897403"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-965391493" class="accordion-body collapse in">
+            <div id="namespace-544897403" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1014648489"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1434853248"></a>
                                 <a href="../namespaces/Jcupitt.html" style="margin-left: 30px; padding-left: 0">Jcupitt</a>
             </div>
-            <div id="namespace-1014648489" class="accordion-body collapse ">
+            <div id="namespace-1434853248" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1547592495"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-314548622"></a>
                                 <a href="../namespaces/Jcupitt.Vips.html" style="margin-left: 30px; padding-left: 0">Vips</a>
             </div>
-            <div id="namespace-1547592495" class="accordion-body collapse ">
+            <div id="namespace-314548622" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -296,7 +296,7 @@
                                                                     <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_project" class="">project()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_profile" class="">profile()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_measure" class="">measure()</a><br />
-                                                                    <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_" class="">()</a><br />
+                                                                    <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_getpoint" class="">getpoint()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_copy" class="">copy()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_tilecache" class="">tilecache()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.ImageAutodoc.html#method_linecache" class="">linecache()</a><br />
@@ -1330,14 +1330,14 @@
             <article class="method">
                 <h3 class="public ">sum()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">sum(array&lt;mixed,\Image&gt;  <span class="argument">$in</span>, array  <span class="argument">$options = []</span>) : \Jcupitt\Vips\Image</pre>
+                <pre class="signature" style="margin-right: 54px;">sum(array&lt;mixed,\Image&gt;|\image  <span class="argument">$in</span>, array  <span class="argument">$options = []</span>) : \Jcupitt\Vips\Image</pre>
                 <p><em></em></p>
                 <p>Sum an array of images.</p>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>array&lt;mixed,\Image&gt;</td>
+                                <td>array&lt;mixed,\Image&gt;|\image</td>
                                 <td>$in </td>
                                 <td></td>
                             </tr>
@@ -2362,18 +2362,36 @@ Return array with: [
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_" name="method_" class="anchor"></a>
+            <a id="method_getpoint" name="method_getpoint" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">()</h3>
+                <h3 class="public ">getpoint()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">() : </pre>
+                <pre class="signature" style="margin-right: 54px;">getpoint(integer  <span class="argument">$x</span>, integer  <span class="argument">$y</span>, array  <span class="argument">$options = []</span>) : array</pre>
                 <p><em></em></p>
-                <p>float[]|float getpoint(integer $x, integer $y, array $options = []) Read a point from an image.</p>
+                <p>Read a point from an image.</p>
 
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$x </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$y </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$options </td>
+                                <td></td>
+                            </tr>
+                                            </table>
                 
                 
                                     <h4>Returns</h4>
-                    
+                    array
                                     				
                             </article>
         </div>
@@ -2770,14 +2788,14 @@ Return array with: [
             <article class="method">
                 <h3 class="public ">arrayjoin()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">arrayjoin(array&lt;mixed,\Image&gt;  <span class="argument">$in</span>, array  <span class="argument">$options = []</span>) : \Jcupitt\Vips\Image</pre>
+                <pre class="signature" style="margin-right: 54px;">arrayjoin(array&lt;mixed,\Image&gt;|\image  <span class="argument">$in</span>, array  <span class="argument">$options = []</span>) : \Jcupitt\Vips\Image</pre>
                 <p><em></em></p>
                 <p>Join an array of images.</p>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>array&lt;mixed,\Image&gt;</td>
+                                <td>array&lt;mixed,\Image&gt;|\image</td>
                                 <td>$in </td>
                                 <td></td>
                             </tr>
@@ -10863,7 +10881,7 @@ Return array with: [
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on July 8th, 2017 at 10:28.
+                    on July 8th, 2017 at 11:06.
                 </section>
             </section>
         </section>

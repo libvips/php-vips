@@ -57,7 +57,7 @@ namespace Jcupitt\Vips;
  * @method Image complex2(Image $right, string $cmplx, array $options = []) Complex binary operations on two images.
  *     @see OperationComplex2 for possible values for $cmplx
  * @method Image complexform(Image $right, array $options = []) Form a complex image from two real images.
- * @method static Image sum(Image[] $in, array $options = []) Sum an array of images.
+ * @method static Image sum(Image[]|image $in, array $options = []) Sum an array of images.
  * @method Image invert(array $options = []) Invert an image.
  * @method Image linear(float[]|float $a, float[]|float $b, array $options = []) Calculate (a * in + b).
  * @method Image math(string $math, array $options = []) Apply a math operation to an image.
@@ -98,7 +98,7 @@ namespace Jcupitt\Vips;
  *         'rows' => @type Image First non-zero pixel in row.
  *     ];
  * @method Image measure(integer $h, integer $v, array $options = []) Measure a set of patches on a colour chart.
- * @method float[]|float getpoint(integer $x, integer $y, array $options = []) Read a point from an image.
+ * @method array getpoint(integer $x, integer $y, array $options = []) Read a point from an image.
  * @method Image copy(array $options = []) Copy an image.
  * @method Image tilecache(array $options = []) Cache an image as a set of tiles.
  * @method Image linecache(array $options = []) Cache an image as a set of lines.
@@ -110,7 +110,7 @@ namespace Jcupitt\Vips;
  * @method Image insert(Image $sub, integer $x, integer $y, array $options = []) Insert image @sub into @main at @x, @y.
  * @method Image join(Image $in2, string $direction, array $options = []) Join a pair of images.
  *     @see Direction for possible values for $direction
- * @method static Image arrayjoin(Image[] $in, array $options = []) Join an array of images.
+ * @method static Image arrayjoin(Image[]|image $in, array $options = []) Join an array of images.
  * @method Image smartcrop(integer $width, integer $height, array $options = []) Extract an area from an image.
  * @method Image extract_band(integer $band, array $options = []) Extract band from an image.
  * @method Image bandjoin_const(float[]|float $c, array $options = []) Append a constant band to an image.
