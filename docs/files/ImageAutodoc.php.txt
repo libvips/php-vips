@@ -66,12 +66,12 @@ namespace Jcupitt\Vips;
  * @method Image sign(array $options = []) Unit vector of pixel.
  * @method Image round(string $round, array $options = []) Perform a round function on an image.
  *     @see OperationRound for possible values for $round
- * @method Image relational_const(float[]|float $c, string $relational, array $options = []) Relational operations against a constant.
+ * @method Image relational_const(string $relational, float[]|float $c, array $options = []) Relational operations against a constant.
  *     @see OperationRelational for possible values for $relational
  * @method Image remainder_const(float[]|float $c, array $options = []) Remainder after integer division of an image and a constant.
- * @method Image boolean_const(float[]|float $c, string $boolean, array $options = []) Boolean operations against a constant.
+ * @method Image boolean_const(string $boolean, float[]|float $c, array $options = []) Boolean operations against a constant.
  *     @see OperationBoolean for possible values for $boolean
- * @method Image math2_const(float[]|float $c, string $math2, array $options = []) Pow( @in, @c ).
+ * @method Image math2_const(string $math2, float[]|float $c, array $options = []) Binary math operations with a constant.
  *     @see OperationMath2 for possible values for $math2
  * @method Image complex(string $cmplx, array $options = []) Perform a complex operation on an image.
  *     @see OperationComplex for possible values for $cmplx
@@ -111,6 +111,7 @@ namespace Jcupitt\Vips;
  * @method Image join(Image $in2, string $direction, array $options = []) Join a pair of images.
  *     @see Direction for possible values for $direction
  * @method static Image arrayjoin(Image[] $in, array $options = []) Join an array of images.
+ * @method Image smartcrop(integer $width, integer $height, array $options = []) Extract an area from an image.
  * @method Image extract_band(integer $band, array $options = []) Extract band from an image.
  * @method Image bandjoin_const(float[]|float $c, array $options = []) Append a constant band to an image.
  * @method Image bandmean(array $options = []) Band-wise average.
@@ -201,7 +202,8 @@ namespace Jcupitt\Vips;
  * @method void ppmsave(string $filename, array $options = []) Save image to ppm file.
  * @method void radsave(string $filename, array $options = []) Save image to radiance file.
  * @method string radsave_buffer(array $options = []) Save image to radiance buffer.
- * @method void dzsave(string $filename, array $options = []) Save image to deep zoom format.
+ * @method void dzsave(string $filename, array $options = []) Save image to deepzoom file.
+ * @method string dzsave_buffer(array $options = []) Save image to dz buffer.
  * @method void pngsave(string $filename, array $options = []) Save image to png file.
  * @method string pngsave_buffer(array $options = []) Save image to png buffer.
  * @method void jpegsave(string $filename, array $options = []) Save image to jpeg file.
@@ -210,7 +212,10 @@ namespace Jcupitt\Vips;
  * @method void webpsave(string $filename, array $options = []) Save image to webp file.
  * @method string webpsave_buffer(array $options = []) Save image to webp buffer.
  * @method void tiffsave(string $filename, array $options = []) Save image to tiff file.
+ * @method string tiffsave_buffer(array $options = []) Save image to tiff buffer.
  * @method void fitssave(string $filename, array $options = []) Save image to fits file.
+ * @method static Image thumbnail(string $filename, integer $width, array $options = []) Generate thumbnail from file.
+ * @method static Image thumbnail_buffer(string $buffer, integer $width, array $options = []) Generate thumbnail from buffer.
  * @method Image mapim(Image $index, array $options = []) Resample with an mapim image.
  * @method Image shrink(float $hshrink, float $vshrink, array $options = []) Shrink an image.
  * @method Image shrinkh(integer $hshrink, array $options = []) Shrink an image horizontally.

@@ -52,6 +52,5 @@ abstract class Size
     const BOTH = 'both';
     const UP = 'up';
     const DOWN = 'down';
-    const FORCE = 'force';
 }
 
