@@ -1,8 +1,13 @@
 <?php
 
-use Jcupitt\Vips;
+namespace Jcupitt\Vips\Test;
 
-class VipsLoggerTest extends PHPUnit\Framework\TestCase
+use Jcupitt\Vips;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
+
+class LoggerTest extends TestCase
 {
     public function testGetLoggerCall()
     {
@@ -15,9 +20,19 @@ class VipsLoggerTest extends PHPUnit\Framework\TestCase
 
     public function testSetLoggerCall()
     {
-        Vips\Config::setLogger(new class implements Psr\Log\LoggerInterface {
-            use Psr\Log\LoggerTrait;
+        Vips\Config::setLogger(new class implements LoggerInterface
+        {
+            use LoggerTrait;
 
+            /**
+             * Logs with an arbitrary level.
+             *
+             * @param mixed  $level
+             * @param string $message
+             * @param array  $context
+             *
+             * @return void
+             */
             public function log($level, $message, array $context = array())
             {
                 // Do logging logic here.
@@ -27,9 +42,8 @@ class VipsLoggerTest extends PHPUnit\Framework\TestCase
         $logger = Vips\Config::getLogger();
 
         // Asserts that getLogger should return an instance of Psr\Log\LoggerInterface
-        $this->assertInstanceOf(Psr\Log\LoggerInterface::class, $logger);
+        $this->assertInstanceOf(LoggerInterface::class, $logger);
     }
-
 }
 
 /*

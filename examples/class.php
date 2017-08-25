@@ -9,7 +9,7 @@ Vips\Config::setLogger(new Vips\DebugLogger());
 
 $image = Vips\Image::newFromFile($argv[1]);
 
-echo "width = " . $image->width . "\n";
+echo 'width = ' . $image->width . "\n";
 
 $image = $image->invert();
 

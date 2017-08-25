@@ -1,8 +1,11 @@
 <?php
 
-use Jcupitt\Vips;
+namespace Jcupitt\Vips\Test;
 
-class VipsExceptionTest extends PHPUnit\Framework\TestCase
+use Jcupitt\Vips;
+use PHPUnit\Framework\TestCase;
+
+class ExceptionTest extends TestCase
 {
     /**
      * @var Vips\Image
@@ -16,7 +19,7 @@ class VipsExceptionTest extends PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
+        $filename = __DIR__ . '/images/img_0076.jpg';
         $this->image = Vips\Image::newFromFile($filename);
         $this->pixel = $this->image->getpoint(0, 0);
     }
@@ -55,7 +58,6 @@ class VipsExceptionTest extends PHPUnit\Framework\TestCase
 
         $x = $this->image->add([1, 2, 3, 4]);
     }
-
 }
 
 /*
