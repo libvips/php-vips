@@ -1154,7 +1154,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $arguments = array_merge([$name, $instance], $arguments);
 
-        $arguments = self::unwrap($arguments);
+        $arguments = array_values(self::unwrap($arguments));
         $result = vips_call(...$arguments);
         self::errorIsArray($result);
         $result = self::wrapResult($result);
