@@ -46,7 +46,7 @@
         "test": [
             "parallel-lint . --exclude vendor",
             "phpunit",
-            "phpcs -p --standard=PSR2 --extensions=php --ignore=/vendor/ ."
+            "phpcs -np --standard=PSR2 --extensions=php --ignore=/vendor/ ."
         ]
     }
 }
