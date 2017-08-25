@@ -1646,9 +1646,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         /* Allow a single unarrayed value as well.
          */
-        if (!is_array($other)) {
-            $other = [$other];
-        }
+        $other = (array) $other;
 
         /* If $other is all numbers, we can use self::bandjoin_const().
          */
@@ -1712,9 +1710,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         /* Allow a single unarrayed value as well.
          */
-        if (!is_array($other)) {
-            $other = [$other];
-        }
+        $other = (array) $other;
 
         return self::call('bandrank', $this, $other, $options);
     }
