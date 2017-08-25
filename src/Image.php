@@ -607,7 +607,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $width = count($value[0]);
 
         foreach ($value as $row) {
-            if (!is_array($row) || count($row) != $width) {
+            if (!is_array($row) || count($row) !== $width) {
                 return false;
             }
         }
@@ -687,7 +687,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     private static function isImage($value): bool
     {
         return is_resource($value) &&
-        get_resource_type($value) == 'GObject';
+        get_resource_type($value) === 'GObject';
     }
 
     /**
@@ -714,11 +714,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         array_walk_recursive($result, function (&$item) {
             if (self::isImage($item)) {
-                $item = new Image($item);
+                $item = new self($item);
             }
         });
 
-        if (count($result) == 1) {
+        if (count($result) === 1) {
             $result = array_shift($result);
         }
 
@@ -883,7 +883,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         float $offset = 0.0
     ): Image {
         $result = vips_image_new_from_array($array, $scale, $offset);
-        if ($result == -1) {
+        if ($result === -1) {
             self::errorVips();
         }
         return self::wrapResult($result);
@@ -923,7 +923,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return Image A new Image.
      */
-    public function newFromImage($value)
+    public function newFromImage($value): Image
     {
         $pixel = self::black(1, 1)->add($value)->cast($this->format);
         $image = $pixel->embed(
@@ -957,7 +957,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         $options = self::unwrap($options);
         $result = vips_image_write_to_file($this->image, $filename, $options);
-        if ($result == -1) {
+        if ($result === -1) {
             self::errorVips();
         }
     }
@@ -975,7 +975,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         $options = self::unwrap($options);
         $result = vips_image_write_to_buffer($this->image, $suffix, $options);
-        if ($result == -1) {
+        if ($result === -1) {
             self::errorVips();
         }
         return self::wrapResult($result);
@@ -993,10 +993,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return Image A new Image.
      */
-    public function copyMemory()
+    public function copyMemory(): Image
     {
         $result = vips_image_copy_memory($this->image);
-        if ($result == -1) {
+        if ($result === -1) {
             self::errorVips();
         }
         return self::wrapResult($result);
@@ -1027,6 +1027,17 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function __set(string $name, $value)
     {
         vips_image_set($this->image, $name, $value);
+    }
+
+    /**
+     * Check if the GType of a property from the underlying image exists.
+     *
+     * @param string $name The property name.
+     *
+     * @return bool
+     */
+    public function __isset(string $name) {
+        return $this->typeof($name) !== 0;
     }
 
     /**
@@ -1077,7 +1088,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function set(string $name, $value)
     {
         $result = vips_image_set($this->image, $name, $value);
-        if ($result != 0) {
+        if ($result === -1) {
             self::errorVips();
         }
     }
@@ -1092,7 +1103,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function remove(string $name)
     {
         $result = vips_image_remove($this->image, $name);
-        if ($result == -1) {
+        if ($result === -1) {
             self::errorVips();
         }
     }
@@ -1144,7 +1155,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $arguments = array_merge([$name, $instance], $arguments);
 
         $arguments = self::unwrap($arguments);
-        $result = call_user_func_array('vips_call', $arguments);
+        $result = vips_call(...$arguments);
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
@@ -1166,6 +1177,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *      the operation.
      *
      * @return mixed The result(s) of the operation.
+     *
+     * @throws \Jcupitt\Vips\Exception
      */
     public static function call(
         string $name,
@@ -1208,9 +1221,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     ) {
         if (self::isImageish($other)) {
             return self::call($base, $this, [$other, $op], $options);
-        } else {
-            return self::call($base . '_const', $this, [$op, $other], $options);
         }
+
+        return self::call($base . '_const', $this, [$op, $other], $options);
     }
 
     /**
@@ -1245,8 +1258,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Uses colour space interpretation with number of channels to guess
      * this.
      *
-     * @param  Image $image The source image.
-     *
      * @return bool indicating if this image has an alpha channel.
      */
     public function hasAlpha(): bool
@@ -1278,7 +1289,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function offsetGet($offset): Image
     {
-        return self::offsetExists($offset) ? self::extract_band($offset) : null;
+        return $this->offsetExists($offset) ? $this->extract_band($offset) : null;
     }
 
     /**
@@ -1301,11 +1312,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param Image $value  The band to insert
      *
      * @return void
+     *
+     * @throws \BadMethodCallException if the offset is not integer or null
      */
     public function offsetSet($offset, $value)
     {
         // no offset means append
-        if (is_null($offset)) {
+        if ($offset === null) {
             $offset = $this->bands;
         }
 
@@ -1320,7 +1333,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         // if we are setting a constant as the first element, we must expand it
         // to an image, since bandjoin must have an image as the first argument
-        if ($n_left == 0 && !($value instanceof Image)) {
+        if ($n_left === 0 && !($value instanceof Image)) {
             $value = self::imageize($this, $value);
         }
 
@@ -1343,11 +1356,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param int $offset The index to remove.
      *
      * @return void
+     *
+     * @throws \BadMethodCallException if there is only one band left in
+     * the image
      */
     public function offsetUnset($offset)
     {
         if (is_int($offset) && $offset >= 0 && $offset < $this->bands) {
-            if ($this->bands == 1) {
+            if ($this->bands === 1) {
                 throw new \BadMethodCallException('Image::offsetUnset: cannot delete final band');
             }
 
@@ -1383,9 +1399,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('add', $this, [$other], $options);
-        } else {
-            return self::linear(1, $other, $options);
         }
+
+        return $this->linear(1, $other, $options);
     }
 
     /**
@@ -1400,12 +1416,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('subtract', $this, [$other], $options);
-        } else {
-            $other = self::mapNumeric($other, function ($value) {
-                return -1 * $value;
-            });
-            return self::linear(1, $other, $options);
         }
+
+        $other = self::mapNumeric($other, function ($value) {
+            return -1 * $value;
+        });
+        return $this->linear(1, $other, $options);
     }
 
     /**
@@ -1420,9 +1436,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('multiply', $this, [$other], $options);
-        } else {
-            return self::linear($other, 0, $options);
         }
+
+        return $this->linear($other, 0, $options);
     }
 
     /**
@@ -1437,12 +1453,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('divide', $this, [$other], $options);
-        } else {
-            $other = self::mapNumeric($other, function ($value) {
-                return $value ** -1;
-            });
-            return self::linear($other, 0, $options);
         }
+
+        $other = self::mapNumeric($other, function ($value) {
+            return $value ** -1;
+        });
+        return $this->linear($other, 0, $options);
     }
 
     /**
@@ -1457,9 +1473,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('remainder', $this, [$other], $options);
-        } else {
-            return self::call('remainder_const', $this, [$other], $options);
         }
+
+        return self::call('remainder_const', $this, [$other], $options);
     }
 
     /**
@@ -1472,7 +1488,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function pow($other, array $options = []): Image
     {
-        return self::callEnum($other, 'math2', OperationMath2::POW, $options);
+        return $this->callEnum($other, 'math2', OperationMath2::POW, $options);
     }
 
     /**
@@ -1485,7 +1501,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function wop($other, array $options = []): Image
     {
-        return self::callEnum($other, 'math2', OperationMath2::WOP, $options);
+        return $this->callEnum($other, 'math2', OperationMath2::WOP, $options);
     }
 
     /**
@@ -1498,7 +1514,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lshift($other, array $options = []): Image
     {
-        return self::callEnum($other, 'boolean', OperationBoolean::LSHIFT, $options);
+        return $this->callEnum($other, 'boolean', OperationBoolean::LSHIFT, $options);
     }
 
     /**
@@ -1511,7 +1527,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rshift($other, array $options = []): Image
     {
-        return self::callEnum($other, 'boolean', OperationBoolean::RSHIFT, $options);
+        return $this->callEnum($other, 'boolean', OperationBoolean::RSHIFT, $options);
     }
 
     /**
@@ -1526,7 +1542,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function andimage($other, array $options = []): Image
     {
         // phpdoc hates OperationBoolean::AND, so use the string form here
-        return self::callEnum($other, 'boolean', 'and', $options);
+        return $this->callEnum($other, 'boolean', 'and', $options);
     }
 
     /**
@@ -1540,7 +1556,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function orimage($other, array $options = []): Image
     {
         // phpdoc hates OperationBoolean::OR, so use the string form here
-        return self::callEnum($other, 'boolean', 'or', $options);
+        return $this->callEnum($other, 'boolean', 'or', $options);
     }
 
     /**
@@ -1553,7 +1569,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function eorimage($other, array $options = []): Image
     {
-        return self::callEnum($other, 'boolean', OperationBoolean::EOR, $options);
+        return $this->callEnum($other, 'boolean', OperationBoolean::EOR, $options);
     }
 
     /**
@@ -1566,7 +1582,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function more($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::MORE, $options);
+        return $this->callEnum($other, 'relational', OperationRelational::MORE, $options);
     }
 
     /**
@@ -1579,7 +1595,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function moreEq($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::MOREEQ, $options);
+        return $this->callEnum($other, 'relational', OperationRelational::MOREEQ, $options);
     }
 
     /**
@@ -1592,7 +1608,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function less($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::LESS, $options);
+        return $this->callEnum($other, 'relational', OperationRelational::LESS, $options);
     }
 
     /**
@@ -1605,7 +1621,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lessEq($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::LESSEQ, $options);
+        return $this->callEnum($other, 'relational', OperationRelational::LESSEQ, $options);
     }
 
     /**
@@ -1618,7 +1634,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function equal($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::EQUAL, $options);
+        return $this->callEnum($other, 'relational', OperationRelational::EQUAL, $options);
     }
 
     /**
@@ -1631,7 +1647,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function notEq($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::NOTEQ, $options);
+        return $this->callEnum($other, 'relational', OperationRelational::NOTEQ, $options);
     }
 
     /**
@@ -1662,14 +1678,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
          */
         if ($is_const) {
             return self::call('bandjoin_const', $this, [$other], $options);
-        } else {
-            return self::call(
-                'bandjoin',
-                null,
-                [array_merge([$this], $other)],
-                $options
-            );
         }
+
+        return self::call(
+            'bandjoin',
+            null,
+            [array_merge([$this], $other)],
+            $options
+        );
     }
 
     /**
