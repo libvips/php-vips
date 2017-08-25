@@ -1036,7 +1036,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return bool
      */
-    public function __isset(string $name) 
+    public function __isset(string $name)
     {
         return $this->typeof($name) !== 0;
     }
@@ -1222,9 +1222,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     ) {
         if (self::isImageish($other)) {
             return self::call($base, $this, [$other, $op], $options);
+        } else {
+            return self::call($base . '_const', $this, [$op, $other], $options);
         }
-
-        return self::call($base . '_const', $this, [$op, $other], $options);
     }
 
     /**
@@ -1400,9 +1400,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('add', $this, [$other], $options);
+        } else {
+            return $this->linear(1, $other, $options);
         }
-
-        return $this->linear(1, $other, $options);
     }
 
     /**
@@ -1417,12 +1417,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('subtract', $this, [$other], $options);
+        } else {
+            $other = self::mapNumeric($other, function ($value) {
+                return -1 * $value;
+            });
+            return $this->linear(1, $other, $options);
         }
-
-        $other = self::mapNumeric($other, function ($value) {
-            return -1 * $value;
-        });
-        return $this->linear(1, $other, $options);
     }
 
     /**
@@ -1437,9 +1437,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('multiply', $this, [$other], $options);
+        } else {
+            return $this->linear($other, 0, $options);
         }
-
-        return $this->linear($other, 0, $options);
     }
 
     /**
@@ -1454,12 +1454,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('divide', $this, [$other], $options);
+        } else {
+            $other = self::mapNumeric($other, function ($value) {
+                return $value ** -1;
+            });
+            return $this->linear($other, 0, $options);
         }
-
-        $other = self::mapNumeric($other, function ($value) {
-            return $value ** -1;
-        });
-        return $this->linear($other, 0, $options);
     }
 
     /**
@@ -1474,9 +1474,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::isImageish($other)) {
             return self::call('remainder', $this, [$other], $options);
+        } else {
+            return self::call('remainder_const', $this, [$other], $options);
         }
-
-        return self::call('remainder_const', $this, [$other], $options);
     }
 
     /**
@@ -1679,14 +1679,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
          */
         if ($is_const) {
             return self::call('bandjoin_const', $this, [$other], $options);
+        } else {
+            return self::call(
+                'bandjoin',
+                null,
+                [array_merge([$this], $other)],
+                $options
+            );
         }
-
-        return self::call(
-            'bandjoin',
-            null,
-            [array_merge([$this], $other)],
-            $options
-        );
     }
 
     /**
