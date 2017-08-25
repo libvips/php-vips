@@ -1036,7 +1036,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return bool
      */
-    public function __isset(string $name) {
+    public function __isset(string $name) 
+    {
         return $this->typeof($name) !== 0;
     }
 
