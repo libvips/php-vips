@@ -130,8 +130,8 @@ class ShortcutTest extends TestCase
         $this->assertEquals($vips, $real);
 
         $real = self::mapNumeric($this->pixel, function ($value) {
-            // FIXME: Left and right operands are identical
-            return $value > $value ? 255 : 0;
+            // $value > $value is always false
+            return 0;
         });
         $vips = $this->image->more($this->image)->getpoint(0, 0);
         $this->assertEquals($vips, $real);
