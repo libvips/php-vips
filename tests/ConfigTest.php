@@ -1,8 +1,11 @@
 <?php
 
-use Jcupitt\Vips;
+namespace Jcupitt\Vips\Test;
 
-class VipsConfigTest extends PHPUnit\Framework\TestCase
+use Jcupitt\Vips;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     public function testVipsCacheSetMax()
     {
@@ -25,7 +28,6 @@ class VipsConfigTest extends PHPUnit\Framework\TestCase
     {
         Vips\Config::concurrencySet(12);
     }
-
 }
 
 /*

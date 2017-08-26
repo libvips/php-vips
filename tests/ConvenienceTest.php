@@ -1,8 +1,11 @@
 <?php
 
-use Jcupitt\Vips;
+namespace Jcupitt\Vips\Test;
 
-class VipsConvenienceTest extends PHPUnit\Framework\TestCase
+use Jcupitt\Vips;
+use PHPUnit\Framework\TestCase;
+
+class ConvenienceTest extends TestCase
 {
     /**
      * @var Vips\Image
@@ -16,7 +19,7 @@ class VipsConvenienceTest extends PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
+        $filename = __DIR__ . '/images/img_0076.jpg';
         $this->image = Vips\Image::newFromFile($filename);
         $this->pixel = $this->image->getpoint(0, 0);
     }
@@ -35,7 +38,7 @@ class VipsConvenienceTest extends PHPUnit\Framework\TestCase
     {
         $arr = $this->image->bandsplit();
 
-        $this->assertEquals(count($arr), 3);
+        $this->assertCount(3, $arr);
         $this->assertEquals($arr[0]->bands, 1);
     }
 
@@ -54,7 +57,7 @@ class VipsConvenienceTest extends PHPUnit\Framework\TestCase
         $image = $image->subtract(1);
         $pixel = $image->getpoint(1, 1);
 
-        $this->assertEquals(count($pixel), 1);
+        $this->assertCount(1, $pixel);
         $this->assertEquals($pixel[0], 4);
     }
 
@@ -64,7 +67,7 @@ class VipsConvenienceTest extends PHPUnit\Framework\TestCase
         $image = $image->multiply(2);
         $pixel = $image->getpoint(1, 1);
 
-        $this->assertEquals(count($pixel), 1);
+        $this->assertCount(1, $pixel);
         $this->assertEquals($pixel[0], 10);
     }
 
@@ -74,7 +77,7 @@ class VipsConvenienceTest extends PHPUnit\Framework\TestCase
         $image = $image->divide(2);
         $pixel = $image->getpoint(0, 1);
 
-        $this->assertEquals(count($pixel), 1);
+        $this->assertCount(1, $pixel);
         $this->assertEquals($pixel[0], 2);
     }
 
@@ -144,7 +147,6 @@ class VipsConvenienceTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals($result, [37, 38, 33]);
     }
-
 }
 
 /*

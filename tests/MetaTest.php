@@ -1,8 +1,11 @@
 <?php
 
-use Jcupitt\Vips;
+namespace Jcupitt\Vips\Test;
 
-class VipsMetaTest extends PHPUnit\Framework\TestCase
+use Jcupitt\Vips;
+use PHPUnit\Framework\TestCase;
+
+class MetaTest extends TestCase
 {
     /**
      * @var Vips\Image
@@ -16,10 +19,10 @@ class VipsMetaTest extends PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $filename = dirname(__FILE__) . '/images/img_0076.jpg';
+        $filename = __DIR__ . '/images/img_0076.jpg';
         $this->image = Vips\Image::newFromFile($filename);
 
-        $png_filename = dirname(__FILE__) . '/images/PNG_transparency_demonstration_1.png';
+        $png_filename = __DIR__ . '/images/PNG_transparency_demonstration_1.png';
         $this->png_image = Vips\Image::newFromFile($png_filename);
     }
 
@@ -76,10 +79,9 @@ class VipsMetaTest extends PHPUnit\Framework\TestCase
 
     public function testVipsHasAlpha()
     {
-        $this->assertEquals($this->image->hasAlpha(), FALSE);
-        $this->assertEquals($this->png_image->hasAlpha(), TRUE);
+        $this->assertEquals($this->image->hasAlpha(), false);
+        $this->assertEquals($this->png_image->hasAlpha(), true);
     }
-
 }
 
 /*

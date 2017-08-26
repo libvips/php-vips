@@ -1,8 +1,11 @@
 <?php
 
-use Jcupitt\Vips;
+namespace Jcupitt\Vips\Test;
 
-class VipsCallTest extends PHPUnit\Framework\TestCase
+use Jcupitt\Vips;
+use PHPUnit\Framework\TestCase;
+
+class CallTest extends TestCase
 {
     public function testVipsCall()
     {
@@ -16,7 +19,7 @@ class VipsCallTest extends PHPUnit\Framework\TestCase
 
     public function testVipsCallStatic()
     {
-        $image = Vips\Image::black(1, 4, ["bands" => 3]);
+        $image = Vips\Image::black(1, 4, ['bands' => 3]);
 
         $this->assertEquals($image->width, 1);
         $this->assertEquals($image->height, 4);
@@ -45,7 +48,6 @@ class VipsCallTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($image->getpoint(0, 0), [0]);
         $this->assertEquals($image->getpoint(50, 50), [255]);
     }
-
 }
 
 /*
