@@ -687,7 +687,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     private static function isImage($value): bool
     {
         return is_resource($value) &&
-        get_resource_type($value) === 'GObject';
+            get_resource_type($value) === 'GObject';
     }
 
     /**
@@ -774,10 +774,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $filename,
         array $options = []
     ): Image {
+        Utils::debugLog('newFromFile', [
+            'instance' => null,
+            'arguments' => [$filename, $options]
+        ]);
+
         $options = self::unwrap($options);
         $result = vips_image_new_from_file($filename, $options);
         self::errorIsArray($result);
-        return self::wrapResult($result);
+        $result = self::wrapResult($result);
+
+        Utils::debugLog('newFromFile', ['result' => $result]);
+
+        return $result;
     }
 
     /**
@@ -791,6 +800,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoad(string $filename)
     {
+        Utils::debugLog('findLoad', [
+            'instance' => null,
+            'arguments' => [$filename]
+        ]);
+
         // added in 1.0.5 of the binary module
         if (function_exists('vips_foreign_find_load')) {
             $result = vips_foreign_find_load($filename);
@@ -807,6 +821,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             } catch (Exception $ignored) {
             }
         }
+
+        Utils::debugLog('findLoad', ['result' => [$result]]);
 
         return $result;
     }
@@ -826,10 +842,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $option_string = '',
         array $options = []
     ): Image {
+        Utils::debugLog('newFromBuffer', [
+            'instance' => null,
+            'arguments' => [$buffer, $option_string, $options]
+        ]);
+
         $options = self::unwrap($options);
         $result = vips_image_new_from_buffer($buffer, $option_string, $options);
         self::errorIsArray($result);
-        return self::wrapResult($result);
+        $result = self::wrapResult($result);
+
+        Utils::debugLog('newFromBuffer', ['result' => $result]);
+
+        return $result;
     }
 
     /**
@@ -843,6 +868,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoadBuffer(string $buffer)
     {
+        Utils::debugLog('findLoadBuffer', [
+            'instance' => null,
+            'arguments' => [$buffer]
+        ]);
+
         // added in 1.0.5 of the binary module
         if (function_exists('vips_foreign_find_load_buffer')) {
             $result = vips_foreign_find_load_buffer($buffer);
@@ -860,6 +890,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             } catch (Exception $ignored) {
             }
         }
+
+        Utils::debugLog('findLoadBuffer', ['result' => [$result]]);
 
         return $result;
     }
@@ -882,11 +914,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
         float $scale = 1.0,
         float $offset = 0.0
     ): Image {
+        Utils::debugLog('newFromArray', [
+            'instance' => null,
+            'arguments' => [$array, $scale, $offset]
+        ]);
+
         $result = vips_image_new_from_array($array, $scale, $offset);
         if ($result === -1) {
             self::errorVips();
         }
-        return self::wrapResult($result);
+        $result = self::wrapResult($result);
+
+        Utils::debugLog('newFromArray', ['result' => $result]);
+
+        return $result;
     }
 
     /**
@@ -905,6 +946,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function newInterpolator(string $name)
     {
+        Utils::debugLog('newInterpolator', [
+            'instance' => null,
+            'arguments' => [$name]
+        ]);
+
         // added in 1.0.7 of the binary module
         return vips_interpolate_new($name);
     }
@@ -925,6 +971,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function newFromImage($value): Image
     {
+        Utils::debugLog('newFromImage', [
+            'instance' => $this,
+            'arguments' => [$value]
+        ]);
+
         $pixel = self::black(1, 1)->add($value)->cast($this->format);
         $image = $pixel->embed(
             0,
@@ -936,10 +987,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $image = $image->copy([
             'interpretation' => $this->interpretation,
             'xres' => $this->xres,
-            'yres' =>  $this->yres,
+            'yres' => $this->yres,
             'xoffset' => $this->xoffset,
             'yoffset' => $this->yoffset
         ]);
+
+        Utils::debugLog('newFromImage', ['result' => $image]);
 
         return $image;
     }
@@ -955,6 +1008,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToFile(string $filename, array $options = [])
     {
+        Utils::debugLog('writeToFile', [
+            'instance' => $this,
+            'arguments' => [$filename, $options]
+        ]);
+
         $options = self::unwrap($options);
         $result = vips_image_write_to_file($this->image, $filename, $options);
         if ($result === -1) {
@@ -973,12 +1031,21 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToBuffer(string $suffix, array $options = []): string
     {
+        Utils::debugLog('writeToBuffer', [
+            'instance' => $this,
+            'arguments' => [$suffix, $options]
+        ]);
+
         $options = self::unwrap($options);
         $result = vips_image_write_to_buffer($this->image, $suffix, $options);
         if ($result === -1) {
             self::errorVips();
         }
-        return self::wrapResult($result);
+        $result = self::wrapResult($result);
+
+        Utils::debugLog('writeToBuffer', ['result' => $result]);
+
+        return $result;
     }
 
     /**
@@ -995,11 +1062,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function copyMemory(): Image
     {
+        Utils::debugLog('copyMemory', [
+            'instance' => $this,
+            'arguments' => []
+        ]);
+
         $result = vips_image_copy_memory($this->image);
         if ($result === -1) {
             self::errorVips();
         }
-        return self::wrapResult($result);
+        $result = self::wrapResult($result);
+
+        Utils::debugLog('copyMemory', ['result' => $result]);
+
+        return $result;
     }
 
     /**
@@ -1148,10 +1224,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $instance,
         array $arguments
     ) {
-        Utils::debugLog(
-            $name,
-            ['instance' => $instance, 'arguments' => $arguments]
-        );
+        Utils::debugLog($name, [
+            'instance' => $instance,
+            'arguments' => $arguments
+        ]);
 
         $arguments = array_merge([$name, $instance], $arguments);
 
@@ -1265,7 +1341,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         return $this->bands === 2 ||
             ($this->bands === 4 &&
-             $this->interpretation !== Interpretation::CMYK) ||
+                $this->interpretation !== Interpretation::CMYK) ||
             $this->bands > 4;
     }
 
