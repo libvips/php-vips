@@ -123,7 +123,7 @@ namespace Jcupitt\Vips;
  * $im = $im->conv($mask);
  * ```
  *
- * `Image::new_from_array` creates an image from an array constant. The 8 at
+ * `Image::newFromArray` creates an image from an array constant. The 8 at
  * the end sets the scale: the amount to divide the image by after
  * integer convolution. See the libvips API docs for `vips_conv()` (the operation
  * invoked by `Image::conv`) for details on the convolution operator. See
@@ -931,6 +931,40 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Wraps an Image around an area of memory containing a C-style array.
+     *
+     * @param array  $data   C-style array.
+     * @param int    $width  Image width in pixels.
+     * @param int    $height Image height in pixels.
+     * @param int    $bands  Number of bands.
+     * @param string $format Band format. (@see BandFormat)
+     *
+     * @return Image A new Image.
+     */
+    public static function newFromMemory(
+        array $data,
+        int $width,
+        int $height,
+        int $bands,
+        string $format
+    ): Image {
+        Utils::debugLog('newFromMemory', [
+            'instance' => null,
+            'arguments' => [$data, $width, $height, $bands, $format]
+        ]);
+
+        $result = vips_image_new_from_memory($data, $width, $height, $bands, $format);
+        if ($result === -1) {
+            self::errorVips();
+        }
+        $result = self::wrapResult($result);
+
+        Utils::debugLog('newFromMemory', ['result' => $result]);
+
+        return $result;
+    }
+
+    /**
      * Make an interpolator from a name.
      *
      * @param string $name Name of the interpolator.
@@ -1044,6 +1078,28 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $result = self::wrapResult($result);
 
         Utils::debugLog('writeToBuffer', ['result' => $result]);
+
+        return $result;
+    }
+
+    /**
+     * Write an image to a large memory array.
+     *
+     * @return array The memory array.
+     */
+    public function writeToMemory(): array
+    {
+        Utils::debugLog('writeToMemory', [
+            'instance' => $this,
+            'arguments' => []
+        ]);
+
+        $result = vips_image_write_to_memory($this->image);
+        if ($result === -1) {
+            self::errorVips();
+        }
+
+        Utils::debugLog('writeToMemory', ['result' => $result]);
 
         return $result;
     }

@@ -107,6 +107,18 @@ class NewTest extends TestCase
         $this->assertNotNull($interp);
         $this->assertEquals($widthInput * 2, $widthOutput);
     }
+
+    public function testVipsNewFromMemory()
+    {
+        $byte_array = array_fill(0, 200, 0);
+        $image = Vips\Image::newFromMemory($byte_array, 20, 10, 1, Vips\BandFormat::UCHAR);
+
+        $this->assertEquals($image->width, 20);
+        $this->assertEquals($image->height, 10);
+        $this->assertEquals($image->format, Vips\BandFormat::UCHAR);
+        $this->assertEquals($image->bands, 1);
+        $this->assertEquals($image->avg(), 0);
+    }
 }
 
 /*

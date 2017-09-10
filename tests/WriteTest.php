@@ -59,6 +59,15 @@ class WriteTest extends TestCase
 
         $this->assertEquals($buffer1, $buffer2);
     }
+
+    public function testVipsWriteToMemory()
+    {
+        $byte_array = array_fill(0, 200, 0);
+        $image = Vips\Image::newFromMemory($byte_array, 20, 10, 1, Vips\BandFormat::UCHAR);
+        $mem_arr = $image->writeToMemory();
+
+        $this->assertEquals($byte_array, $mem_arr);
+    }
 }
 
 /*
