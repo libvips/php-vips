@@ -42,6 +42,16 @@ class ConvenienceTest extends TestCase
         $this->assertEquals($arr[0]->bands, 1);
     }
 
+    public function testVipsComposite()
+    {
+        $overlay = $this->image->add(20)->bandjoin(128);
+        $overlay = $overlay->cast(Vips\BandFormat::UCHAR);
+        $comp = $this->image->composite($overlay, Vips\BlendMode::OVER);
+        $comp = $this->image->composite($overlay, 99);
+
+        $this->assertEquals($comp->getpoint(0, 0)[0], $this->pixel[0] + 10);
+    }
+
     public function testVipsAddConst()
     {
         $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);

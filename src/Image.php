@@ -1817,6 +1817,40 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Composite $other on top of $this with $mode.
+     *
+     * @param mixed $other          The overlay.
+     * @param BlendMode|array $mode The mode to composite with.
+     * @param array $options        An array of options to pass to the operation.
+     *
+     * @return Image A new image.
+     */
+    public function composite($other, $mode, array $options = []): Image
+    {
+        /* Allow a single unarrayed value as well.
+         */
+        if ($other instanceof Image) {
+            $other = [$other];
+        } else {
+            $other = (array) $other;
+        }
+        if (!is_array($mode)) {
+            $mode = [$mode];
+        }
+
+        foreach ($mode as &$x) {
+            $x = BlendMode::TO_INT[$x];
+        }
+
+        return self::call(
+            'composite',
+            null,
+            [array_merge([$this], $other), $mode],
+            $options
+        );
+    }
+
+    /**
      * Position of max is awkward with plain self::max.
      *
      * @return array (float, int, int) The value and position of the maximum.

@@ -11,6 +11,8 @@ require 'vips'
 #   cd src
 #   ../examples/generate_phpdoc.rb 
 
+# this needs version 1.x of ruby-vips
+
 # gobject-introspection 3.0.7 crashes a lot if it GCs while doing 
 # something
 GC.disable
