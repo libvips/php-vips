@@ -7,6 +7,7 @@ All notable changes to `:vips` will be documented in this file.
 - add Image::newInterpolator() [Kleis Auke Wolthuizen]
 - implement array access interface [John Cupitt]
 - add BlendMode and Image::composite [John Cupitt]
+- add Config::version() [John Cupitt]
 
 ### Deprecated
 - Nothing

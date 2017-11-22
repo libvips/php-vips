@@ -28,6 +28,12 @@ class ConfigTest extends TestCase
     {
         Vips\Config::concurrencySet(12);
     }
+
+    public function testVipsVersion()
+    {
+        $version = Vips\Config::version();
+        $this->assertEquals(preg_match("/\d+\.\d+\.\d+/", $version), 1);
+    }
 }
 
 /*

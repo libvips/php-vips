@@ -139,6 +139,17 @@ class Config
     {
         vips_concurrency_set($value);
     }
+
+    /**
+     * Gets the libvips version number as a atring of the form
+     * MAJOR.MINOR.MICRO, for example "8.6.1".
+     *
+     * @return string
+     */
+    public static function version()
+    {
+        return vips_version();
+    }
 }
 
 /*
