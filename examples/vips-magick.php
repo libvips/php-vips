@@ -9,8 +9,10 @@ use Jcupitt\Vips;
  * image around that, then use imagick to save as another file.
  */
 
-$image = Vips\Image::newFromFile($argv[1], 
-    ['access' => Vips\Access::SEQUENTIAL]);
+$image = Vips\Image::newFromFile(
+    $argv[1],
+    ['access' => Vips\Access::SEQUENTIAL]
+);
 $image = $image->colourspace(Vips\Interpretation::RGB16);
 $bin = $image->writeToMemory();
 $imagick = new \Imagick();
