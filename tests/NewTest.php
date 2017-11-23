@@ -110,8 +110,8 @@ class NewTest extends TestCase
 
     public function testVipsNewFromMemory()
     {
-        $byte_array = array_fill(0, 200, 0);
-        $image = Vips\Image::newFromMemory($byte_array, 20, 10, 1, Vips\BandFormat::UCHAR);
+        $binaryStr = pack('C*', ...array_fill(0, 200, 0));
+        $image = Vips\Image::newFromMemory($binaryStr, 20, 10, 1, Vips\BandFormat::UCHAR);
 
         $this->assertEquals($image->width, 20);
         $this->assertEquals($image->height, 10);

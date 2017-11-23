@@ -933,7 +933,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Wraps an Image around an area of memory containing a C-style array.
      *
-     * @param array  $data   C-style array.
+     * @param string $data   C-style array.
      * @param int    $width  Image width in pixels.
      * @param int    $height Image height in pixels.
      * @param int    $bands  Number of bands.
@@ -942,7 +942,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @return Image A new Image.
      */
     public static function newFromMemory(
-        array $data,
+        string $data,
         int $width,
         int $height,
         int $bands,
@@ -1085,9 +1085,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Write an image to a large memory array.
      *
-     * @return array The memory array.
+     * @return string The memory array.
      */
-    public function writeToMemory(): array
+    public function writeToMemory(): string
     {
         Utils::debugLog('writeToMemory', [
             'instance' => $this,
