@@ -1,13 +1,14 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
-## 1.0.3-dev - 2017-06-06
+## 1.0.3 - 2017-06-06
 
 ### Added
 - add Image::newInterpolator() [Kleis Auke Wolthuizen]
 - implement array access interface [John Cupitt]
 - add BlendMode and Image::composite [John Cupitt]
 - add Config::version() [John Cupitt]
+- add Image::newFromMemory() / Image::writeToMemory() [Kleis Auke Wolthuizen]
 
 ### Deprecated
 - Nothing

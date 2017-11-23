@@ -62,11 +62,11 @@ class WriteTest extends TestCase
 
     public function testVipsWriteToMemory()
     {
-        /*$binaryStr = pack('C*', ...array_fill(0, 200, 0));
+        $binaryStr = pack('C*', ...array_fill(0, 200, 0));
         $image = Vips\Image::newFromMemory($binaryStr, 20, 10, 1, Vips\BandFormat::UCHAR);
         $memStr = $image->writeToMemory();
 
-        $this->assertEquals($binaryStr, $memStr);*/
+        $this->assertEquals($binaryStr, $memStr);
     }
 }
 

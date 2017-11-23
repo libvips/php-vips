@@ -44,16 +44,12 @@ class ConvenienceTest extends TestCase
 
     public function testVipsComposite()
     {
-        /* Enable this when we have vips_version() in pecl
-         *
         if (version_compare(Vips\Config::version(), '8.6.0') >= 0) {
             $overlay = $this->image->add(20)->bandjoin(128);
             $overlay = $overlay->cast(Vips\BandFormat::UCHAR);
             $comp = $this->image->composite($overlay, Vips\BlendMode::OVER);
             $this->assertEquals($comp->getpoint(0, 0)[0], $this->pixel[0] + 10);
         }
-         *
-         */
     }
 
     public function testVipsAddConst()
