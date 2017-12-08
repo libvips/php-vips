@@ -12,12 +12,14 @@ require 'vips'
 #   ../examples/generate_phpdoc.rb 
 
 # this needs version 1.x of ruby-vips
+#
+#   gem install ruby-vips -v 1.0.6
 
 # gobject-introspection 3.0.7 crashes a lot if it GCs while doing 
 # something
 GC.disable
 
-Vips::init
+Vips::init("")
 
 # these have hand-written methods, don't autodoc them
 $no_generate = %w( 
@@ -208,6 +210,8 @@ def generate_operation(file, op)
         end
         file << " *     ];\n"
     end
+
+    file << " *     @throws Exception\n"
 end
 
 def generate_class(file, gtype)

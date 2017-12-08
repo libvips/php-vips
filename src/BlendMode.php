@@ -56,10 +56,10 @@ abstract class BlendMode
     const OUT = 'out';
     const ATOP = 'atop';
     const DEST = 'dest';
-    const DEST_OVER = 'dest_over';
-    const DEST_IN = 'dest_in';
-    const DEST_OUT = 'dest_out';
-    const DEST_ATOP = 'dest_atop';
+    const DEST_OVER = 'dest-over';
+    const DEST_IN = 'dest-in';
+    const DEST_OUT = 'dest-out';
+    const DEST_ATOP = 'dest-atop';
     const XOR = 'xor';
     const ADD = 'add';
     const SATURATE = 'saturate';
@@ -68,44 +68,10 @@ abstract class BlendMode
     const OVERLAY = 'overlay';
     const DARKEN = 'darken';
     const LIGHTEN = 'lighten';
-    const COLOUR_DOFGE = 'colour_dodge';
-    const COLOUR_BURN = 'colour_burn';
-    const HARD_LIGHT = 'hard_light';
-    const SOFT_LIGHT = 'soft_light';
+    const COLOUR_DODGE = 'colour-dodge';
+    const COLOUR_BURN = 'colour-burn';
+    const HARD_LIGHT = 'hard-light';
+    const SOFT_LIGHT = 'soft-light';
     const DIFFERENCE = 'difference';
     const EXCLUSION = 'exclusion';
-
-    /* combine takes an array of blend modes, passed to libvips as an array of
-     * int. Because libvips does now know they should be enums, we have to do
-     * the string->int conversion ourselves. We ought to introspect to find the
-     * mapping, but until we have the machinery for that, we just hardwire the
-     * mapping here.
-     */
-    const TO_INT = [
-        BlendMode::CLEAR => 0,
-        BlendMode::SOURCE => 1,
-        BlendMode::OVER => 2,
-        BlendMode::IN => 3,
-        BlendMode::OUT => 4,
-        BlendMode::ATOP => 5,
-        BlendMode::DEST => 6,
-        BlendMode::DEST_OVER => 7,
-        BlendMode::DEST_IN => 8,
-        BlendMode::DEST_OUT => 9,
-        BlendMode::DEST_ATOP => 10,
-        BlendMode::XOR => 11,
-        BlendMode::ADD => 12,
-        BlendMode::SATURATE => 13,
-        BlendMode::MULTIPLY => 14,
-        BlendMode::SCREEN => 15,
-        BlendMode::OVERLAY => 16,
-        BlendMode::DARKEN => 17,
-        BlendMode::LIGHTEN => 18,
-        BlendMode::COLOUR_DOFGE => 19,
-        BlendMode::COLOUR_BURN => 20,
-        BlendMode::HARD_LIGHT => 21,
-        BlendMode::SOFT_LIGHT => 22,
-        BlendMode::DIFFERENCE => 23,
-        BlendMode::EXCLUSION => 24
-    ];
 }

@@ -639,6 +639,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param Image $match_image Use this image as a guide.
      * @param mixed $value       Turn this into an image.
      *
+     * @throws Exception
+     *
      * @return Image The image we created.
      *
      * @internal
@@ -751,6 +753,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $result Test this.
      *
+     * @throws Exception
+     *
      * @return void
      *
      * @internal
@@ -767,6 +771,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param string $filename The file to open.
      * @param array  $options  Any options to pass on to the load operation.
+     *
+     * @throws Exception
      *
      * @return Image A new Image.
      */
@@ -834,6 +840,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param string $option_string Any text-style options to pass to the
      *     selected loader.
      * @param array  $options       Any options to pass on to the load operation.
+     *
+     * @throws Exception
      *
      * @return Image A new Image.
      */
@@ -907,6 +915,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param float $offset The "offset" metadata item. Useful for integer
      *     convolution masks.
      *
+     * @throws Exception
+     *
      * @return Image A new Image.
      */
     public static function newFromArray(
@@ -938,6 +948,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param int    $height Image height in pixels.
      * @param int    $bands  Number of bands.
      * @param string $format Band format. (@see BandFormat)
+     *
+     * @throws Exception
      *
      * @return Image A new Image.
      */
@@ -1038,6 +1050,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param array  $options  Any options to pass on to the selected save
      *     operation.
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function writeToFile(string $filename, array $options = [])
@@ -1060,6 +1074,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param string $suffix  The file type suffix, eg. ".jpg".
      * @param array  $options Any options to pass on to the selected save
      *     operation.
+     *
+     * @throws Exception
      *
      * @return string The formatted image.
      */
@@ -1084,6 +1100,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Write an image to a large memory array.
+     *
+     * @throws Exception
      *
      * @return string The memory array.
      */
@@ -1114,6 +1132,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * This is useful for ending a pipeline and starting a new random access
      * one, but can obviously use a lot of memory if the image is large.
      *
+     * @throws Exception
+     *
      * @return Image A new Image.
      */
     public function copyMemory(): Image
@@ -1138,6 +1158,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Get any property from the underlying image.
      *
      * @param string $name The property name.
+     *
+     * @throws Exception
      *
      * @return mixed
      */
@@ -1184,6 +1206,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param string $name The property name.
      *
+     * @throws Exception
+     *
      * @return mixed
      */
     public function get(string $name)
@@ -1216,6 +1240,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param string $name  The property name.
      * @param mixed  $value The value to set for this property.
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function set(string $name, $value)
@@ -1230,6 +1256,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Remove a field from the underlying image.
      *
      * @param string $name The property name.
+     *
+     * @throws Exception
      *
      * @return void
      */
@@ -1273,6 +1301,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param array      $arguments An array of arguments to pass to the
      *      operation.
      *
+     * @throws Exception
+     *
      * @return mixed The result(s) of the operation.
      */
     public static function callBase(
@@ -1309,9 +1339,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param array      $options   An array of optional arguments to pass to
      *      the operation.
      *
-     * @return mixed The result(s) of the operation.
+     * @throws Exception
      *
-     * @throws \Jcupitt\Vips\Exception
+     * @return mixed The result(s) of the operation.
      */
     public static function call(
         string $name,
@@ -1342,6 +1372,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param string $op      The action to invoke.
      * @param array  $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return mixed The operation result.
      *
      * @internal
@@ -1365,6 +1397,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param string $name      The thing we call.
      * @param array  $arguments The arguments to the thing.
      *
+     * @throws Exception
+     *
      * @return mixed The result.
      */
     public function __call(string $name, array $arguments)
@@ -1377,6 +1411,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param string $name      The thing we call.
      * @param array  $arguments The arguments to the thing.
+     *
+     * @throws Exception
      *
      * @return mixed The result.
      */
@@ -1418,6 +1454,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $offset The index to fetch.
      *
+     * @throws Exception
+     *
      * @return Image the extracted band.
      */
     public function offsetGet($offset): Image
@@ -1444,9 +1482,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param int   $offset The index to set.
      * @param Image $value  The band to insert
      *
-     * @return void
-     *
      * @throws \BadMethodCallException if the offset is not integer or null
+     *
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
@@ -1488,10 +1526,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param int $offset The index to remove.
      *
-     * @return void
-     *
      * @throws \BadMethodCallException if there is only one band left in
      * the image
+     *
+     * @return void
      */
     public function offsetUnset($offset)
     {
@@ -1526,6 +1564,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The thing to add to this image.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function add($other, array $options = []): Image
@@ -1542,6 +1582,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The thing to subtract from this image.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1563,6 +1605,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The thing to multiply this image by.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function multiply($other, array $options = []): Image
@@ -1579,6 +1623,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The thing to divide this image by.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1600,6 +1646,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The thing to take the remainder with.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function remainder($other, array $options = []): Image
@@ -1617,6 +1665,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function pow($other, array $options = []): Image
@@ -1629,6 +1679,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1643,6 +1695,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function lshift($other, array $options = []): Image
@@ -1655,6 +1709,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1670,6 +1726,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function andimage($other, array $options = []): Image
@@ -1683,6 +1741,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1698,6 +1758,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function eorimage($other, array $options = []): Image
@@ -1710,6 +1772,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1724,6 +1788,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function moreEq($other, array $options = []): Image
@@ -1736,6 +1802,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1750,6 +1818,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function lessEq($other, array $options = []): Image
@@ -1762,6 +1832,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1776,6 +1848,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function notEq($other, array $options = []): Image
@@ -1788,6 +1862,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1830,6 +1906,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param array $options An array of options to pass to the operation.
      *
+     * @throws Exception
+     *
      * @return array An array of images.
      */
     public function bandsplit(array $options = []): array
@@ -1849,6 +1927,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $other   The right-hand side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1878,6 +1958,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $other          The overlay.
      * @param BlendMode|array $mode The mode to composite with.
      * @param array $options        An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1909,6 +1991,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Position of max is awkward with plain self::max.
      *
+     * @throws Exception
+     *
      * @return array (float, int, int) The value and position of the maximum.
      */
     public function maxpos(): array
@@ -1923,6 +2007,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Position of min is awkward with plain self::max.
+     *
+     * @throws Exception
      *
      * @return array (float, int, int) The value and position of the minimum.
      */
@@ -1943,6 +2029,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed $then    The true side of the operator
      * @param mixed $else    The false side of the operator.
      * @param array $options An array of options to pass to the operation.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1975,6 +2063,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return the largest integral value not greater than the argument.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function floor(): Image
@@ -1984,6 +2074,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return the smallest integral value not less than the argument.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -1995,6 +2087,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return the nearest integral value.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function rint(): Image
@@ -2004,6 +2098,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * AND image bands together.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2016,6 +2112,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * OR image bands together.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function bandor(): Image
@@ -2027,6 +2125,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * EOR image bands together.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function bandeor(): Image
@@ -2036,6 +2136,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return the real part of a complex image.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2047,6 +2149,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return the imaginary part of a complex image.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function imag(): Image
@@ -2056,6 +2160,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return an image converted to polar coordinates.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2067,6 +2173,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return an image converted to rectangular coordinates.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function rect(): Image
@@ -2076,6 +2184,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return the complex conjugate of an image.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2087,6 +2197,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return the sine of an image in degrees.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function sin(): Image
@@ -2096,6 +2208,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return the cosine of an image in degrees.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2107,6 +2221,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return the tangent of an image in degrees.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function tan(): Image
@@ -2116,6 +2232,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return the inverse sine of an image in degrees.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2127,6 +2245,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return the inverse cosine of an image in degrees.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function acos(): Image
@@ -2136,6 +2256,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return the inverse tangent of an image in degrees.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2147,6 +2269,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return the natural log of an image.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function log(): Image
@@ -2156,6 +2280,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return the log base 10 of an image.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2167,6 +2293,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Return e ** pixel.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function exp(): Image
@@ -2176,6 +2304,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Return 10 ** pixel.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2189,6 +2319,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $mask Erode with this structuring element.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function erode($mask): Image
@@ -2200,6 +2332,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * Dilate with a structuring element.
      *
      * @param mixed $mask Dilate with this structuring element.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2213,6 +2347,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param int $size Size of median filter.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function median(int $size): Image
@@ -2222,6 +2358,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Flip horizontally.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2233,6 +2371,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Flip vertically.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function flipver(): Image
@@ -2242,6 +2382,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Rotate 90 degrees clockwise.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */
@@ -2253,6 +2395,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Rotate 180 degrees.
      *
+     * @throws Exception
+     *
      * @return Image A new image.
      */
     public function rot180(): Image
@@ -2262,6 +2406,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Rotate 270 degrees clockwise.
+     *
+     * @throws Exception
      *
      * @return Image A new image.
      */

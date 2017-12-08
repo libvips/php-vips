@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The Size enum.
+ * The CompassDirection enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,10 +47,15 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Size
+abstract class CompassDirection
 {
-    const BOTH = 'both';
-    const UP = 'up';
-    const DOWN = 'down';
-    const FORCE = 'force';
+    const CENTRE = 'centre';
+    const NORTH = 'north';
+    const EAST = 'east';
+    const SOUTH = 'south';
+    const WEST = 'west';
+    const NORTH_EAST = 'north-east';
+    const SOUTH_EAST = 'south-east';
+    const SOUTH_WEST = 'south-west';
+    const NORTH_WEST = 'north-west';
 }
