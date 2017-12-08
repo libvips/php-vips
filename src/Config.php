@@ -146,7 +146,7 @@ class Config
      *
      * @return string
      */
-    public static function version()
+    public static function version(): string
     {
         return vips_version();
     }

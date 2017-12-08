@@ -538,6 +538,43 @@ class Image extends ImageAutodoc implements \ArrayAccess
     ];
 
     /**
+     * Combine takes an array of blend modes, passed to libvips as an array of
+     * int. Because libvips does now know they should be enums, we have to do
+     * the string->int conversion ourselves. We ought to introspect to find the
+     * mapping, but until we have the machinery for that, we just hardwire the
+     * mapping here.
+     *
+     * @internal
+     */
+    private static $blendModeToInt = [
+        BlendMode::CLEAR => 0,
+        BlendMode::SOURCE => 1,
+        BlendMode::OVER => 2,
+        BlendMode::IN => 3,
+        BlendMode::OUT => 4,
+        BlendMode::ATOP => 5,
+        BlendMode::DEST => 6,
+        BlendMode::DEST_OVER => 7,
+        BlendMode::DEST_IN => 8,
+        BlendMode::DEST_OUT => 9,
+        BlendMode::DEST_ATOP => 10,
+        BlendMode::XOR => 11,
+        BlendMode::ADD => 12,
+        BlendMode::SATURATE => 13,
+        BlendMode::MULTIPLY => 14,
+        BlendMode::SCREEN => 15,
+        BlendMode::OVERLAY => 16,
+        BlendMode::DARKEN => 17,
+        BlendMode::LIGHTEN => 18,
+        BlendMode::COLOUR_DODGE => 19,
+        BlendMode::COLOUR_BURN => 20,
+        BlendMode::HARD_LIGHT => 21,
+        BlendMode::SOFT_LIGHT => 22,
+        BlendMode::DIFFERENCE => 23,
+        BlendMode::EXCLUSION => 24
+    ];
+
+    /**
      * The resource for the underlying VipsImage.
      *
      * @internal
@@ -1013,6 +1050,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @param mixed $value The value to set each pixel to.
      *
+     * @throws Exception
+     *
      * @return Image A new Image.
      */
     public function newFromImage($value): Image
@@ -1483,6 +1522,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param Image $value  The band to insert
      *
      * @throws \BadMethodCallException if the offset is not integer or null
+     * @throws Exception
      *
      * @return void
      */
@@ -1528,6 +1568,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @throws \BadMethodCallException if there is only one band left in
      * the image
+     * @throws Exception
      *
      * @return void
      */
@@ -1976,9 +2017,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $mode = [$mode];
         }
 
-        foreach ($mode as &$x) {
-            $x = BlendMode::TO_INT[$x];
-        }
+        $mode = array_map(function ($x) {
+            // Use BlendMode::OVER if a non-existent value is given.
+            return self::$blendModeToInt[$x] ?? BlendMode::OVER;
+        }, $mode);
 
         return self::call(
             'composite',
