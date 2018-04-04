@@ -164,7 +164,7 @@ libvips properties as properties of the PHP `Vips\Image` class.
 
 ```
 $ phpcs --standard=PSR2 src
-$ php ~/packages/php/composer.phar install
+$ composer install
 $ vendor/bin/phpunit
 $ vendor/bin/phpdoc
 ```
