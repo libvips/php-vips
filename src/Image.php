@@ -1978,7 +1978,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         /* bandrank will appear as a static class member, as
          * Image::bandrank([a, b, c]), but it's better as an instance
          * method.
-         * 
+         *
          * We need to define this by hand.
          */
 
