@@ -53,5 +53,4 @@ abstract class DemandStyle
     const SMALLTILE = 'smalltile';
     const FATSTRIP = 'fatstrip';
     const THINSTRIP = 'thinstrip';
-    const ANY = 'any';
 }

@@ -57,5 +57,4 @@ abstract class ImageType
     const MMAPIN = 'mmapin';
     const MMAPINRW = 'mmapinrw';
     const OPENOUT = 'openout';
-    const PARTIAL = 'partial';
 }

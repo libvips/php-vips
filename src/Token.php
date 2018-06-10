@@ -53,5 +53,4 @@ abstract class Token
     const RIGHT = 'right';
     const STRING = 'string';
     const EQUALS = 'equals';
-    const COMMA = 'comma';
 }

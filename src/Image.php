@@ -612,12 +612,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (is_numeric($value)) {
             $value = $func($value);
-        } else {
-            if (is_array($value)) {
-                array_walk_recursive($value, function (&$value) use ($func) {
-                    $value = self::mapNumeric($value, $func);
-                });
-            }
+        } elseif (is_array($value)) {
+            array_walk_recursive($value, function (&$value) use ($func) {
+                $value = self::mapNumeric($value, $func);
+            });
         }
 
         return $value;
