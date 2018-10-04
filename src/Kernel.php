@@ -52,6 +52,7 @@ abstract class Kernel
     const NEAREST = 'nearest';
     const LINEAR = 'linear';
     const CUBIC = 'cubic';
+    const MITCHELL = 'mitchell';
     const LANCZOS2 = 'lanczos2';
     const LANCZOS3 = 'lanczos3';
 }

@@ -1,8 +1,8 @@
 # PHP binding for libvips 
 
-[![Build Status](https://travis-ci.org/jcupitt/php-vips.svg?branch=master)](https://travis-ci.org/jcupitt/php-vips)
+[![Build Status](https://travis-ci.org/libvips/php-vips.svg?branch=master)](https://travis-ci.org/libvips/php-vips)
 
-`php-vips` is a binding for [libvips](https://github.com/jcupitt/libvips) for
+`php-vips` is a binding for [libvips](https://github.com/libvips/libvips) for
 PHP 7. 
 
 libvips is fast and needs little memory. The
@@ -19,7 +19,7 @@ destination in a set of small fragments.
 
 This module builds upon the `vips` PHP extension:
 
-https://github.com/jcupitt/php-vips-ext
+https://github.com/libvips/php-vips-ext
 
 You'll need to install that first. It's tested on Linux and macOS --- 
 Windows would need some work, but should be possible.  
@@ -27,7 +27,7 @@ Windows would need some work, but should be possible.
 See the README there, but briefly:
 
 1. [Install the libvips library and
-   headers](https://jcupitt.github.io/libvips/install.html). It's in
+   headers](https://libvips.github.io/libvips/install.html). It's in
    the linux package managers, homebrew and MacPorts, and there are Windows
    binaries on the vips website. For example, on Debian:
 
@@ -85,7 +85,7 @@ $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
 See `examples/`. We have a [complete set of formatted API
-docs](https://jcupitt.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html).
+docs](https://libvips.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html).
 
 ### Introduction to the API
 
@@ -135,7 +135,7 @@ For example:
 $image->writeToFile("fred.jpg", ["Q" => 90]);
 ```
 
-`php-vips` comes [with full API docs](https://jcupitt.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html). To regenerate these from your sources, type:
+`php-vips` comes [with full API docs](https://libvips.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html). To regenerate these from your sources, type:
 
 ```
 $ vendor/bin/phpdoc
@@ -146,7 +146,7 @@ And look in `docs/`.
 There are around 300 operations in the library, see the vips docs for an
 introduction:
 
-https://jcupitt.github.io/libvips/API/current
+https://libvips.github.io/libvips/API/current
 
 ### How it works
 
@@ -173,6 +173,6 @@ $ vendor/bin/phpdoc
 
 ```
 $ cd src
-$ ../examples/generate_phpdoc.rb
+$ ../examples/generate_phpdoc.py
 ```
 

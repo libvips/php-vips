@@ -6,7 +6,7 @@
         "processing",
         "libvips"
     ],
-    "homepage": "https://github.com/jcupitt/php-vips",
+    "homepage": "https://github.com/libvips/php-vips",
     "license": "MIT",
     "authors": [
         {

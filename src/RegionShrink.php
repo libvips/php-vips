@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The Interesting enum.
+ * The RegionShrink enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,12 +47,9 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Interesting
+abstract class RegionShrink
 {
-    const NONE = 'none';
-    const CENTRE = 'centre';
-    const ENTROPY = 'entropy';
-    const ATTENTION = 'attention';
-    const LOW = 'low';
-    const HIGH = 'high';
+    const MEAN = 'mean';
+    const MEDIAN = 'median';
+    const MODE = 'mode';
 }

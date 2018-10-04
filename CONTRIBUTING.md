@@ -2,7 +2,7 @@
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/jcupitt/php-vips).
+We accept contributions via Pull Requests on [Github](https://github.com/libvips/php-vips).
 
 ## Pull Requests
 

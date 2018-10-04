@@ -118,6 +118,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image cache(array $options = []) Cache an image.
  *     @throws Exception
+ * @method Image canny(array $options = []) Canny edge detector.
+ *     @throws Exception
  * @method Image cast(string $format, array $options = []) Cast an image.
  *     @see BandFormat for possible values for $format
  *     @throws Exception
@@ -320,6 +322,10 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick.
  *     @throws Exception
+ * @method void magicksave(string $filename, array $options = []) Save file with ImageMagick.
+ *     @throws Exception
+ * @method string magicksave_buffer(array $options = []) Save image to magick buffer.
+ *     @throws Exception
  * @method Image mapim(Image $index, array $options = []) Resample with an mapim image.
  *     @throws Exception
  * @method Image maplut(Image $lut, array $options = []) Map an image though a lut.
@@ -382,6 +388,10 @@ namespace Jcupitt\Vips;
  *     @see Direction for possible values for $direction
  *     @throws Exception
  * @method Image msb(array $options = []) Pick most-significant byte from an image.
+ *     @throws Exception
+ * @method static Image niftiload(string $filename, array $options = []) Load a NIFTI image.
+ *     @throws Exception
+ * @method void niftisave(string $filename, array $options = []) Save image to nifti file.
  *     @throws Exception
  * @method static Image openexrload(string $filename, array $options = []) Load an OpenEXR image.
  *     @throws Exception
@@ -466,6 +476,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image rot45(array $options = []) Rotate an image.
  *     @throws Exception
+ * @method Image rotate(float $angle, array $options = []) Rotate an image by a number of degrees.
+ *     @throws Exception
  * @method Image round(string $round, array $options = []) Perform a round function on an image.
  *     @see OperationRound for possible values for $round
  *     @throws Exception
@@ -499,11 +511,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image smartcrop(integer $width, integer $height, array $options = []) Extract an area from an image.
  *     @throws Exception
+ * @method Image sobel(array $options = []) Sobel edge detector.
+ *     @throws Exception
  * @method Image spcor(Image $ref, array $options = []) Spatial correlation.
  *     @throws Exception
  * @method Image spectrum(array $options = []) Make displayable power spectrum.
  *     @throws Exception
- * @method Image stats(array $options = []) Find image average.
+ * @method Image stats(array $options = []) Find many image stats.
  *     @throws Exception
  * @method Image stdif(integer $width, integer $height, array $options = []) Statistical difference.
  *     @throws Exception
@@ -536,6 +550,8 @@ namespace Jcupitt\Vips;
  * @method Image tilecache(array $options = []) Cache an image as a set of tiles.
  *     @throws Exception
  * @method static Image tonelut(array $options = []) Build a look-up table.
+ *     @throws Exception
+ * @method Image transpose3d(array $options = []) Transpose3d an image.
  *     @throws Exception
  * @method Image unpremultiply(array $options = []) Unpremultiply image alpha.
  *     @throws Exception
