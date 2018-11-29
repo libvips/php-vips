@@ -558,7 +558,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         BlendMode::DEST_IN => 8,
         BlendMode::DEST_OUT => 9,
         BlendMode::DEST_ATOP => 10,
-        BlendMode::XOR => 11,
+        BlendMode::XOR1 => 11,
         BlendMode::ADD => 12,
         BlendMode::SATURATE => 13,
         BlendMode::MULTIPLY => 14,

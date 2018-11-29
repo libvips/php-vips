@@ -22,6 +22,7 @@
         "psr/log": "^1.0.2"
     },
     "require-dev": {
+        "jms/serializer" : ">=0.12 < 1.8.0",
         "phpunit/phpunit": "^6.5",
         "phpdocumentor/phpdocumentor" : "^2.9",
         "jakub-onderka/php-parallel-lint": "^1.0.0",

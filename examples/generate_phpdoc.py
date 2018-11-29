@@ -61,6 +61,14 @@ _MODIFY = 128
 # for VipsOperationFlags
 _OPERATION_DEPRECATED = 8
 
+# some names we might generate are reserved PHP names ... just append a "1".
+reserved_php_names = {
+    'DEFAULT': 'DEFAULT1',
+    'XOR': 'XOR1',
+    'AND': 'AND1',
+    'OR': 'OR1'
+}
+
 
 def gtype_to_php(gtype, result=False):
     """Map a gtype to PHP type name we use to represent it.
@@ -322,6 +330,8 @@ def generate_enums():
 
             for value in values_for_enum(gtype):
                 php_name = value.replace('-', '_').upper()
+                if php_name in reserved_php_names:
+                    php_name = reserved_php_names[php_name]
                 f.write('    const {0} = \'{1}\';\n'.format(php_name, value))
 
             f.write('}\n')

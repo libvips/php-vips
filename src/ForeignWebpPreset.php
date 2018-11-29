@@ -49,7 +49,7 @@ namespace Jcupitt\Vips;
  */
 abstract class ForeignWebpPreset
 {
-    const DEFAULT = 'default';
+    const DEFAULT1 = 'default';
     const PICTURE = 'picture';
     const PHOTO = 'photo';
     const DRAWING = 'drawing';

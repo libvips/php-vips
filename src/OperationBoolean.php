@@ -49,8 +49,8 @@ namespace Jcupitt\Vips;
  */
 abstract class OperationBoolean
 {
-    const AND = 'and';
-    const OR = 'or';
+    const AND1 = 'and';
+    const OR1 = 'or';
     const EOR = 'eor';
     const LSHIFT = 'lshift';
     const RSHIFT = 'rshift';
