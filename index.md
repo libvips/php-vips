@@ -1,4 +1,5 @@
-# PHP binding for libvips 
+---
+---
 
 [![Build Status](https://travis-ci.org/libvips/php-vips.svg?branch=master)](https://travis-ci.org/libvips/php-vips)
 

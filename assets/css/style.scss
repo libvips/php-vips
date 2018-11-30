@@ -1,0 +1,49 @@
+---
+---
+
+$body-text-color: #2f444c;
+
+@import "{{ site.theme }}";
+
+// strange, you'd think setting $body-text-color would do this, but it doesn't
+// you also can't use a variable here
+body {
+	color: #2f444c;
+}
+
+.page-header {
+	padding: 0.5rem 1rem;
+	line-height: 1.1;
+}
+
+.project-name {
+	a { 
+		text-decoration: none;
+		color: white;
+		font-family: 'Cabin', sans-serif;
+	}
+}
+
+.navigation {
+	img {
+		max-width: 16px;
+	}
+}
+
+.main-content .navigation td {
+	border: 0;
+}
+
+.main-content .refnamediv td {
+	border: 0;
+}
+
+.blog-index {
+	list-style: none;
+	.date {
+		float: right;
+		font-size: small;
+	}
+	li { 
+	}
+}
