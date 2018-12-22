@@ -53,6 +53,4 @@ abstract class Interesting
     const CENTRE = 'centre';
     const ENTROPY = 'entropy';
     const ATTENTION = 'attention';
-    const LOW = 'low';
-    const HIGH = 'high';
 }
