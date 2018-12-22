@@ -802,6 +802,59 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Run a function expecting a complex image. If the image is not in complex
+     * format, try to make it complex by joining adjacant bands as real and
+     * imaginary.
+     *
+     * @param function $filename The function to run.
+     * @param Image    $image    The image to run the function on.
+     *
+     * @throws Exception
+     *
+     * @return Image A new Image.
+     *
+     * @internal
+     */
+    private static function runCmplx($func, Image $image): Image
+    {
+        $original_format = $image->format;
+
+        if ($image->format != 'complex' && $image->format != 'dpcomplex') {
+            if ($image->bands % 2 != 0) {
+                throw new Exception('not an even number of bands');
+            }
+
+            if ($image->format != 'float' && $image->format != 'double') {
+                $image = $image->cast('float');
+            }
+
+            if ($image->format == 'double') {
+                $new_format = 'dpcomplex';
+            } else {
+                $new_format = 'complex';
+            }
+
+            $image = $image->copy(['format' => $new_format,
+                                   'bands' => $image->bands / 2]);
+        }
+
+        $image = $func($image);
+
+        if ($original_format != 'complex' && $original_format != 'dpcomplex') {
+            if ($image->format == 'dpcomplex') {
+                $new_format = 'double';
+            } else {
+                $new_format = 'float';
+            }
+
+            $image = $image->copy(['format' => $new_format,
+                                   'bands' => $image->bands * 2]);
+        }
+
+        return $image;
+    }
+
+    /**
      * Create a new Image from a file on disc.
      *
      * @param string $filename The file to open.
@@ -2207,7 +2260,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function polar(): Image
     {
-        return $this->complex(OperationComplex::POLAR);
+        return self::runCmplx(function ($image) {
+            return $image->complex(OperationComplex::POLAR);
+        }, $this);
     }
 
     /**
@@ -2219,7 +2274,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rect(): Image
     {
-        return $this->complex(OperationComplex::RECT);
+        return self::runCmplx(function ($image) {
+            return $image->complex(OperationComplex::RECT);
+        }, $this);
     }
 
     /**

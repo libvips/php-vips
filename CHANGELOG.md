@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 1.0.4 - 2018-12-22
+
+### Added
+- polar() and rect() now work onadd cross_phase() [John Cupitt]
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ## 1.0.3 - 2017-06-06
 
 ### Added
