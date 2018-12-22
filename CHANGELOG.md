@@ -4,7 +4,9 @@ All notable changes to `:vips` will be documented in this file.
 ## 1.0.4 - 2018-12-22
 
 ### Added
-- polar() and rect() now work onadd cross_phase() [John Cupitt]
+- polar() and rect() now work on non-complex images [John Cupitt]
+- add crossPhase() [John Cupitt]
+- update autodocs [John Cupitt]
 
 ### Deprecated
 - Nothing

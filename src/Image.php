@@ -2292,6 +2292,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Find the cross-phase of this image with $other.
+     *
+     * @param mixed $other   The thing to cross-phase by.
+     *
+     * @throws Exception
+     *
+     * @return Image A new image.
+     */
+    public function crossPhase($other): Image
+    {
+        return $this->complex2($other, OperationComplex2::CROSS_PHASE);
+    }
+
+    /**
      * Return the sine of an image in degrees.
      *
      * @throws Exception
