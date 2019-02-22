@@ -54,7 +54,7 @@ See the README there, but briefly:
 
    ```
      "require": {
-       "jcupitt/vips" : "1.0.2"
+       "jcupitt/vips" : "1.0.4"
      }
    ```
 
