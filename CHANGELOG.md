@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 1.0.5 - 2019-09-26
+
+### Added
+- writeToArray() [John Cupitt]
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ## 1.0.4 - 2018-12-22
 
 ### Added

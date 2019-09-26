@@ -137,7 +137,8 @@ namespace Jcupitt\Vips;
  *
  * `Image::writeToFile` writes an image back to the filesystem. It can
  * write any format supported by vips: the file type is set from the filename
- * suffix. You can also write formatted images to strings.
+ * suffix. You can write formatted images to strings, and pixel values to
+ * arrays.
  *
  * # Getting more help
  *
@@ -1208,6 +1209,46 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         Utils::debugLog('writeToMemory', ['result' => $result]);
+
+        return $result;
+    }
+
+    /**
+     * Write an image to a PHP array.
+     *
+     * Pixels are written as a simple one-dimensional array, for example, if
+     * you write:
+     *
+     * ```php
+     * $result = $image->crop(100, 100, 10, 1)->writeToArray();
+     * ```
+     *
+     * This will crop out 10 pixels and write them to the array. If `$image`
+     * is an RGB image, then `$array` will contain 30 numbers, with the first
+     * three being R, G and B for the first pixel.
+     *
+     * You'll need to slice and repack the array if you want more dimensions.
+     *
+     * This method is much faster than repeatedly calling `getpoint()`. It
+     * will use a lot of memory.
+     *
+     * @throws Exception
+     *
+     * @return array The pixel values as a PHP array.
+     */
+    public function writeToArray(): array
+    {
+        Utils::debugLog('writeToArray', [
+            'instance' => $this,
+            'arguments' => []
+        ]);
+
+        $result = vips_image_write_to_array($this->image);
+        if ($result === -1) {
+            self::errorVips();
+        }
+
+        Utils::debugLog('writeToArray', ['result' => $result]);
 
         return $result;
     }
