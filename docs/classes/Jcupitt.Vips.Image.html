@@ -144,28 +144,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-407166283"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1016855137"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-407166283" class="accordion-body collapse in">
+            <div id="namespace-1016855137" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-208424508"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-723611515"></a>
                                 <a href="../namespaces/Jcupitt.html" style="margin-left: 30px; padding-left: 0">Jcupitt</a>
             </div>
-            <div id="namespace-208424508" class="accordion-body collapse ">
+            <div id="namespace-723611515" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-329692040"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-407396520"></a>
                                 <a href="../namespaces/Jcupitt.Vips.html" style="margin-left: 30px; padding-left: 0">Vips</a>
             </div>
-            <div id="namespace-329692040" class="accordion-body collapse ">
+            <div id="namespace-407396520" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -311,7 +311,8 @@ invoked by <code>Image::conv</code>) for details on the convolution operator. Se
 <pre><code class="language-php">$im-&gt;writeToFile($argv[2]);</code></pre>
 <p><code>Image::writeToFile</code> writes an image back to the filesystem. It can
 write any format supported by vips: the file type is set from the filename
-suffix. You can also write formatted images to strings.</p>
+suffix. You can write formatted images to strings, and pixel values to
+arrays.</p>
 <h1>Getting more help</h1>
 <p>This binding lets you call the complete C API almost directly. You should
 <a href="https://jcupitt.github.io/libvips/API/current">consult the C docs</a>
@@ -562,6 +563,7 @@ or the size of the worker threadpools that libvips uses to evaluate images.</p>
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_writeToFile" class="">writeToFile()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_writeToBuffer" class="">writeToBuffer()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_writeToMemory" class="">writeToMemory()</a><br />
+                                                                    <a href="../classes/Jcupitt.Vips.Image.html#method_writeToArray" class="">writeToArray()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_copyMemory" class="">copyMemory()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method___get" class="">__get()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method___set" class="">__set()</a><br />
@@ -616,6 +618,7 @@ or the size of the worker threadpools that libvips uses to evaluate images.</p>
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_polar" class="">polar()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_rect" class="">rect()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_conj" class="">conj()</a><br />
+                                                                    <a href="../classes/Jcupitt.Vips.Image.html#method_crossPhase" class="">crossPhase()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_sin" class="">sin()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_cos" class="">cos()</a><br />
                                                                     <a href="../classes/Jcupitt.Vips.Image.html#method_tan" class="">tan()</a><br />
@@ -1795,6 +1798,48 @@ operation.</p></td>
                                     <h4>Returns</h4>
                     string
                                             &mdash; <p>The memory array.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_writeToArray" name="method_writeToArray" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">writeToArray()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">writeToArray() : array</pre>
+                <p><em>Write an image to a PHP array.</em></p>
+                <p>Pixels are written as a simple one-dimensional array, for example, if
+you write:</p>
+<pre><code class="language-php">$result = $image-&gt;crop(100, 100, 10, 1)-&gt;writeToArray();</code></pre>
+<p>This will crop out 10 pixels and write them to the array. If <code>$image</code>
+is an RGB image, then <code>$array</code> will contain 30 numbers, with the first
+three being R, G and B for the first pixel.</p>
+<p>You'll need to slice and repack the array if you want more dimensions.</p>
+<p>This method is much faster than repeatedly calling <code>getpoint()</code>. It
+will use a lot of memory.</p>
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Jcupitt\Vips\Exception</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>The pixel values as a PHP array.</p>
                                     				
                             </article>
         </div>
@@ -4080,6 +4125,48 @@ $else.</em></p>
                 <p><em>Return the complex conjugate of an image.</em></p>
                 
 
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Jcupitt\Vips\Exception</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Jcupitt.Vips.Image.html">\Jcupitt\Vips\Image</a>
+                                            &mdash; <p>A new image.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_crossPhase" name="method_crossPhase" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">crossPhase()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">crossPhase(mixed  <span class="argument">$other</span>) : \Jcupitt\Vips\Image</pre>
+                <p><em>Find the cross-phase of this image with $other.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$other </td>
+                                <td><p>The thing to cross-phase by.</p></td>
+                            </tr>
+                                            </table>
                 
                                     <h4>Throws</h4>
                     <dl>
@@ -15871,7 +15958,7 @@ Return array with: [
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on November 29th, 2018 at 17:30.
+                    on September 26th, 2019 at 15:33.
                 </section>
             </section>
         </section>

@@ -137,7 +137,8 @@ namespace Jcupitt\Vips;
  *
  * `Image::writeToFile` writes an image back to the filesystem. It can
  * write any format supported by vips: the file type is set from the filename
- * suffix. You can also write formatted images to strings.
+ * suffix. You can write formatted images to strings, and pixel values to
+ * arrays.
  *
  * # Getting more help
  *
@@ -558,7 +559,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         BlendMode::DEST_IN => 8,
         BlendMode::DEST_OUT => 9,
         BlendMode::DEST_ATOP => 10,
-        BlendMode::XOR => 11,
+        BlendMode::XOR1 => 11,
         BlendMode::ADD => 12,
         BlendMode::SATURATE => 13,
         BlendMode::MULTIPLY => 14,
@@ -799,6 +800,59 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if (!is_array($result)) {
             self::errorVips();
         }
+    }
+
+    /**
+     * Run a function expecting a complex image. If the image is not in complex
+     * format, try to make it complex by joining adjacant bands as real and
+     * imaginary.
+     *
+     * @param function $filename The function to run.
+     * @param Image    $image    The image to run the function on.
+     *
+     * @throws Exception
+     *
+     * @return Image A new Image.
+     *
+     * @internal
+     */
+    private static function runCmplx($func, Image $image): Image
+    {
+        $original_format = $image->format;
+
+        if ($image->format != 'complex' && $image->format != 'dpcomplex') {
+            if ($image->bands % 2 != 0) {
+                throw new Exception('not an even number of bands');
+            }
+
+            if ($image->format != 'float' && $image->format != 'double') {
+                $image = $image->cast('float');
+            }
+
+            if ($image->format == 'double') {
+                $new_format = 'dpcomplex';
+            } else {
+                $new_format = 'complex';
+            }
+
+            $image = $image->copy(['format' => $new_format,
+                                   'bands' => $image->bands / 2]);
+        }
+
+        $image = $func($image);
+
+        if ($original_format != 'complex' && $original_format != 'dpcomplex') {
+            if ($image->format == 'dpcomplex') {
+                $new_format = 'double';
+            } else {
+                $new_format = 'float';
+            }
+
+            $image = $image->copy(['format' => $new_format,
+                                   'bands' => $image->bands * 2]);
+        }
+
+        return $image;
     }
 
     /**
@@ -1155,6 +1209,46 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         Utils::debugLog('writeToMemory', ['result' => $result]);
+
+        return $result;
+    }
+
+    /**
+     * Write an image to a PHP array.
+     *
+     * Pixels are written as a simple one-dimensional array, for example, if
+     * you write:
+     *
+     * ```php
+     * $result = $image->crop(100, 100, 10, 1)->writeToArray();
+     * ```
+     *
+     * This will crop out 10 pixels and write them to the array. If `$image`
+     * is an RGB image, then `$array` will contain 30 numbers, with the first
+     * three being R, G and B for the first pixel.
+     *
+     * You'll need to slice and repack the array if you want more dimensions.
+     *
+     * This method is much faster than repeatedly calling `getpoint()`. It
+     * will use a lot of memory.
+     *
+     * @throws Exception
+     *
+     * @return array The pixel values as a PHP array.
+     */
+    public function writeToArray(): array
+    {
+        Utils::debugLog('writeToArray', [
+            'instance' => $this,
+            'arguments' => []
+        ]);
+
+        $result = vips_image_write_to_array($this->image);
+        if ($result === -1) {
+            self::errorVips();
+        }
+
+        Utils::debugLog('writeToArray', ['result' => $result]);
 
         return $result;
     }
@@ -2207,7 +2301,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function polar(): Image
     {
-        return $this->complex(OperationComplex::POLAR);
+        return self::runCmplx(function ($image) {
+            return $image->complex(OperationComplex::POLAR);
+        }, $this);
     }
 
     /**
@@ -2219,7 +2315,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rect(): Image
     {
-        return $this->complex(OperationComplex::RECT);
+        return self::runCmplx(function ($image) {
+            return $image->complex(OperationComplex::RECT);
+        }, $this);
     }
 
     /**
@@ -2232,6 +2330,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function conj(): Image
     {
         return $this->complex(OperationComplex::CONJ);
+    }
+
+    /**
+     * Find the cross-phase of this image with $other.
+     *
+     * @param mixed $other   The thing to cross-phase by.
+     *
+     * @throws Exception
+     *
+     * @return Image A new image.
+     */
+    public function crossPhase($other): Image
+    {
+        return $this->complex2($other, OperationComplex2::CROSS_PHASE);
     }
 
     /**

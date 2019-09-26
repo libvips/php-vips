@@ -60,7 +60,7 @@ abstract class BlendMode
     const DEST_IN = 'dest-in';
     const DEST_OUT = 'dest-out';
     const DEST_ATOP = 'dest-atop';
-    const XOR = 'xor';
+    const XOR1 = 'xor';
     const ADD = 'add';
     const SATURATE = 'saturate';
     const MULTIPLY = 'multiply';
