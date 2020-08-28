@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The ForeignDzLayout enum.
+ * The ForeignJpegSubsample enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,10 +47,9 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ForeignDzLayout
+abstract class ForeignJpegSubsample
 {
-    const DZ = 'dz';
-    const ZOOMIFY = 'zoomify';
-    const GOOGLE = 'google';
-    const IIIF = 'iiif';
+    const AUTO = 'auto';
+    const ON = 'on';
+    const OFF = 'off';
 }

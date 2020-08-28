@@ -52,4 +52,7 @@ abstract class RegionShrink
     const MEAN = 'mean';
     const MEDIAN = 'median';
     const MODE = 'mode';
+    const MAX = 'max';
+    const MIN = 'min';
+    const NEAREST = 'nearest';
 }

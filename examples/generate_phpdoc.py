@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from pyvips import Image, Operation, GValue, Error, \
+from pyvips import Image, Introspect, GValue, Error, \
     ffi, values_for_enum, vips_lib, gobject_lib, \
     type_map, type_name, type_from_name, nickname_find
 
@@ -95,71 +95,47 @@ def remove_prefix(enum_str):
 
 
 def generate_operation(operation_name):
-    op = Operation.new_from_name(operation_name)
-
-    # we are only interested in non-deprecated args
-    args = [[name, flags] for name, flags in op.get_args()
-            if not flags & _DEPRECATED]
-
-    # find the first required input image arg, if any ... that will be self
-    member_x = None
-    for name, flags in args:
-        if ((flags & _INPUT) != 0 and
-                (flags & _REQUIRED) != 0 and
-                op.get_typeof(name) == GValue.image_type):
-            member_x = name
-            break
-
-    required_input = [name for name, flags in args
-                      if (flags & _INPUT) != 0 and
-                      (flags & _REQUIRED) != 0 and
-                      name != member_x]
-
-    required_output = [name for name, flags in args
-                       if ((flags & _OUTPUT) != 0 and
-                           (flags & _REQUIRED) != 0) or
-                       ((flags & _INPUT) != 0 and
-                        (flags & _REQUIRED) != 0 and
-                        (flags & _MODIFY) != 0)]
+    intro = Introspect.get(operation_name)
 
     result = ' * @method '
-    if member_x is None:
+    if intro.member_x is None:
         result += 'static '
-    if len(required_output) == 0:
+    if len(intro.required_output) == 0:
         result += 'void '
-    elif len(required_output) == 1:
-        result += '{0} '.format(gtype_to_php(op.get_typeof(required_output[0]), True))
+    elif len(intro.required_output) == 1:
+        arg = intro.required_output[0]
+        details = intro.details[arg]
+        result += '{0} '.format(gtype_to_php(details['type'], True))
     else:
         # we generate a Returns: block for this case, see below
         result += 'array '
 
     result += '{0}('.format(operation_name)
-    for name in required_input:
-        gtype = op.get_typeof(name)
-        result += '{0} ${1}, '.format(gtype_to_php(gtype), name)
+    for name in intro.required_input:
+        details = intro.details[name]
+        result += '{0} ${1}, '.format(gtype_to_php(details['type']), name)
 
     result += 'array $options = []) '
 
-    description = op.get_description()
+    description = intro.description
     result += description[0].upper() + description[1:] + '.\n'
 
     # find any Enums we've referenced and output @see lines for them
-    for name in required_output + required_input:
-        gtype = op.get_typeof(name)
-        fundamental = gobject_lib.g_type_fundamental(gtype)
+    for name in intro.required_output + intro.required_input:
+        details = intro.details[name]
+        fundamental = gobject_lib.g_type_fundamental(details['type'])
 
         if fundamental != GValue.genum_type:
             continue
 
-        result += ' *     @see {0} for possible values for ${1}\n'.format(remove_prefix(type_name(gtype)), name)
+        result += ' *     @see {0} for possible values for ${1}\n'.format(remove_prefix(type_name(details['type'])), name)
 
-    if len(required_output) > 1:
+    if len(intro.required_output) > 1:
         result += ' *     Return array with: [\n'
-        for name in required_output:
-            gtype = op.get_typeof(name)
-            blurb = op.get_blurb(name)
-            result += ' *         \'{0}\' => @type {1} {2}\n'.format(name, gtype_to_php(gtype),
-                                                                     blurb[0].upper() + blurb[1:])
+        for name in intro.required_output:
+            details = intro.details[name]
+            result += ' *         \'{0}\' => @type {1} {2}\n'.format(name, gtype_to_php(details['type']),
+                                                                     details['blurb'][0].upper() + details['blurb'][1:])
         result += ' *     ];\n'
 
     result += ' *     @throws Exception\n'
@@ -222,10 +198,10 @@ def generate_auto_doc(filename):
         nickname = nickname_find(gtype)
         try:
             # can fail for abstract types
-            op = Operation.new_from_name(nickname)
+            intro = Introspect.get(nickname)
 
             # we are only interested in non-deprecated operations
-            if (op.get_flags() & _OPERATION_DEPRECATED) == 0:
+            if (intro.flags & _OPERATION_DEPRECATED) == 0:
                 all_nicknames.append(nickname)
         except Error:
             pass

@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The ForeignDzLayout enum.
+ * The ForeignHeifCompression enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,10 +47,10 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ForeignDzLayout
+abstract class ForeignHeifCompression
 {
-    const DZ = 'dz';
-    const ZOOMIFY = 'zoomify';
-    const GOOGLE = 'google';
-    const IIIF = 'iiif';
+    const HEVC = 'hevc';
+    const AVC = 'avc';
+    const JPEG = 'jpeg';
+    const AV1 = 'av1';
 }

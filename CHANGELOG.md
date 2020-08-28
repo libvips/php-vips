@@ -6,6 +6,7 @@ All notable changes to `:vips` will be documented in this file.
 ### Added
 - Image::setType() 
 - Utils::typeFromName() 
+- Updated autodocs for libvips 8.10
 
 ### Deprecated
 - Nothing

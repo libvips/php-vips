@@ -51,4 +51,5 @@ abstract class ForeignDzContainer
 {
     const FS = 'fs';
     const ZIP = 'zip';
+    const SZI = 'szi';
 }

@@ -55,4 +55,6 @@ abstract class ForeignTiffCompression
     const PACKBITS = 'packbits';
     const CCITTFAX4 = 'ccittfax4';
     const LZW = 'lzw';
+    const WEBP = 'webp';
+    const ZSTD = 'zstd';
 }
