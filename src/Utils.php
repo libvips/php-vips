@@ -38,8 +38,6 @@
 
 namespace Jcupitt\Vips;
 
-use Psr\Log\LoggerInterface;
-
 /**
  * Various utilities.
  *
@@ -60,7 +58,7 @@ class Utils
      *
      * @return void
      */
-    public static function debugLog(string $name, array $arguments)
+    public static function debugLog(string $name, array $arguments): void
     {
         $logger = Config::getLogger();
         if ($logger) {
@@ -76,7 +74,7 @@ class Utils
      *
      * @return void
      */
-    public static function errorLog(string $message, \Exception $exception)
+    public static function errorLog(string $message, \Exception $exception): void
     {
         $logger = Config::getLogger();
         if ($logger) {
@@ -88,11 +86,11 @@ class Utils
      * Look up the GTyoe from a type name. If the type does not exist,
      * return 0.
      *
-     * @param string     $name   The type name.
+     * @param string $name The type name.
      *
      * @return int
      */
-    public static function typeFromName(string $name)
+    public static function typeFromName(string $name): int
     {
         return vips_type_from_name($name);
     }

@@ -163,9 +163,8 @@ libvips properties as properties of the PHP `Vips\Image` class.
 ### Test and install
 
 ```
-$ phpcs --standard=PSR2 src
 $ composer install
-$ vendor/bin/phpunit
+$ composer test
 $ vendor/bin/phpdoc
 ```
 

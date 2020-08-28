@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+### 1.0.7 - 2020-08-28
+
+### Added
+- use nullable types and void return type were possible
+
+### Deprecated
+- requires php >= 7.1
+
+### Fixed
+- fix autodocs for non-static methods
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ## 1.0.6 - 2020-08-28
 
 ### Added

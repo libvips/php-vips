@@ -3,3 +3,4 @@ vendor
 composer.lock
 /docs
 *.swp
+.phpunit.result.cache
