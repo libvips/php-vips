@@ -1384,6 +1384,30 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Set the type and value for any property on the underlying image.
+     *
+     * This is useful if the type of the property cannot be determined from the
+     * php type of the value.
+     *
+     * Use Utils::typefromName() to look up types by name.
+     *
+     * @param int    $type  The type of the property.
+     * @param string $name  The property name.
+     * @param mixed  $value The value to set for this property.
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public function setType(int $type, string $name, $value)
+    {
+        $result = vips_image_set_type($this->image, $type, $name, $value);
+        if ($result === -1) {
+            self::errorVips();
+        }
+    }
+
+    /**
      * Remove a field from the underlying image.
      *
      * @param string $name The property name.

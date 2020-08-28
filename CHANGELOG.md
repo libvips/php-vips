@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 1.0.6 - 2020-08-28
+
+### Added
+- Image::setType() 
+- Utils::typeFromName() 
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ## 1.0.5 - 2019-09-26
 
 ### Added

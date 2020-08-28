@@ -41,7 +41,7 @@ namespace Jcupitt\Vips;
 use Psr\Log\LoggerInterface;
 
 /**
- * Various utilities. For now, just loggers.
+ * Various utilities.
  *
  * @category  Images
  * @package   Jcupitt\Vips
@@ -82,6 +82,19 @@ class Utils
         if ($logger) {
             $logger->error($message, ['exception' => $exception]);
         }
+    }
+
+    /**
+     * Look up the GTyoe from a type name. If the type does not exist,
+     * return 0.
+     *
+     * @param string     $name   The type name.
+     *
+     * @return int
+     */
+    public static function typeFromName(string $name)
+    {
+        return vips_type_from_name($name);
     }
 }
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 from pyvips import Image, Operation, GValue, Error, \
     ffi, values_for_enum, vips_lib, gobject_lib, \
