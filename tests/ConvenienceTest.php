@@ -17,7 +17,7 @@ class ConvenienceTest extends TestCase
      */
     private $pixel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $filename = __DIR__ . '/images/img_0076.jpg';
         $this->image = Vips\Image::newFromFile($filename);

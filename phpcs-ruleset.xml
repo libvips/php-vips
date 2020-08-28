@@ -9,6 +9,9 @@
     <!-- Ignore Composer dependencies -->
     <exclude-pattern>vendor/</exclude-pattern>
 
+    <!-- Ignore generated docs -->
+    <exclude-pattern>docs/</exclude-pattern>
+
     <!-- Display progress -->
     <arg value="p"/>
 

@@ -772,7 +772,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private static function errorVips()
+    private static function errorVips(): void
     {
         $message = vips_error_buffer();
         $exception = new Exception($message);
@@ -795,7 +795,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private static function errorIsArray($result)
+    private static function errorIsArray($result): void
     {
         if (!is_array($result)) {
             self::errorVips();
@@ -807,8 +807,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * format, try to make it complex by joining adjacant bands as real and
      * imaginary.
      *
-     * @param function $filename The function to run.
-     * @param Image    $image    The image to run the function on.
+     * @param \Closure $func  The function to run.
+     * @param Image    $image The image to run the function on.
      *
      * @throws Exception
      *
@@ -816,7 +816,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private static function runCmplx($func, Image $image): Image
+    private static function runCmplx(\Closure $func, Image $image): Image
     {
         $original_format = $image->format;
 
@@ -893,7 +893,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return string|null The name of the load operation, or null.
      */
-    public static function findLoad(string $filename)
+    public static function findLoad(string $filename): ?string
     {
         Utils::debugLog('findLoad', [
             'instance' => null,
@@ -963,7 +963,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return string|null The name of the load operation, or null.
      */
-    public static function findLoadBuffer(string $buffer)
+    public static function findLoadBuffer(string $buffer): ?string
     {
         Utils::debugLog('findLoadBuffer', [
             'instance' => null,
@@ -1145,7 +1145,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function writeToFile(string $filename, array $options = [])
+    public function writeToFile(string $filename, array $options = []): void
     {
         Utils::debugLog('writeToFile', [
             'instance' => $this,
@@ -1309,7 +1309,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, $value): void
     {
         vips_image_set($this->image, $name, $value);
     }
@@ -1321,7 +1321,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return bool
      */
-    public function __isset(string $name)
+    public function __isset(string $name): bool
     {
         return $this->typeof($name) !== 0;
     }
@@ -1375,7 +1375,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function set(string $name, $value)
+    public function set(string $name, $value): void
     {
         $result = vips_image_set($this->image, $name, $value);
         if ($result === -1) {
@@ -1389,7 +1389,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * This is useful if the type of the property cannot be determined from the
      * php type of the value.
      *
-     * Use Utils::typefromName() to look up types by name.
+     * Use Utils::typeFromName() to look up types by name.
      *
      * @param int    $type  The type of the property.
      * @param string $name  The property name.
@@ -1399,7 +1399,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function setType(int $type, string $name, $value)
+    public function setType(int $type, string $name, $value): void
     {
         $result = vips_image_set_type($this->image, $type, $name, $value);
         if ($result === -1) {
@@ -1416,7 +1416,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function remove(string $name)
+    public function remove(string $name): void
     {
         $result = vips_image_remove($this->image, $name);
         if ($result === -1) {
@@ -1462,7 +1462,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function callBase(
         string $name,
-        $instance,
+        ?Image $instance,
         array $arguments
     ) {
         Utils::debugLog($name, [
@@ -1500,7 +1500,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function call(
         string $name,
-        $instance,
+        ?Image $instance,
         array $arguments,
         array $options = []
     ) {
@@ -1611,9 +1611,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @throws Exception
      *
-     * @return Image the extracted band.
+     * @return Image|null the extracted band or null.
      */
-    public function offsetGet($offset): Image
+    public function offsetGet($offset): ?Image
     {
         return $this->offsetExists($offset) ? $this->extract_band($offset) : null;
     }
@@ -1642,7 +1642,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         // no offset means append
         if ($offset === null) {
@@ -1688,7 +1688,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         if (is_int($offset) && $offset >= 0 && $offset < $this->bands) {
             if ($this->bands === 1) {

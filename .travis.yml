@@ -1,23 +1,17 @@
-sudo: false
-
 language: php
 
-dist: trusty
+dist: bionic
 
 php:
-  - 7.0.13
-  - 7.1
+  - 7.3
+  - 7.4
 
 env:
   global:
-    - VIPS_VERSION_MAJOR=8
-    - VIPS_VERSION_MINOR=6
-    - VIPS_VERSION_MICRO=3
+    - VIPS_VERSION=8.10.0
     - PATH=$HOME/vips/bin:$PATH
     - LD_LIBRARY_PATH=$HOME/vips/lib:$LD_LIBRARY_PATH
     - PKG_CONFIG_PATH=$HOME/vips/lib/pkgconfig:$PKG_CONFIG_PATH
-    - PYTHONPATH=$HOME/vips/lib/python2.7/site-packages:$PYTHONPATH
-    - GI_TYPELIB_PATH=$HOME/vips/lib/girepository-1.0:$GI_TYPELIB_PATH
 
 cache:
   apt: true
@@ -28,30 +22,37 @@ cache:
 addons:
   apt:
     packages:
-      - gobject-introspection
-      - libcfitsio3-dev
+      # main dependencies
+      - libcfitsio-dev
+      - libexif-dev
+      - libexpat1-dev
       - libfftw3-dev
       - libgif-dev
-      - libgs-dev
       - libgsf-1-dev
+      - libgsl-dev
+      - liblcms2-dev
+      - libmagickwand-dev
       - libmatio-dev
+      - libnifti-dev
+      - libopenexr-dev
       - libopenslide-dev
       - liborc-0.4-dev
       - libpango1.0-dev
+      - libpng-dev
       - libpoppler-glib-dev
+      - librsvg2-dev
+      - libtiff5-dev
       - libwebp-dev
+      # needed for building libvips from source
+      - gtk-doc-tools
+      - gobject-introspection
 
 before_install:
-  - bash install-vips.sh 
-    --disable-debug 
-    --disable-dependency-tracking 
-    --disable-introspection 
-    --disable-static 
-    --enable-gtk-doc-html=no 
-    --enable-gtk-doc=no 
-    --enable-pyvips8=no
-    --without-orc 
-    --without-python
+  - bash install-vips.sh
+    --disable-dependency-tracking
+    --disable-introspection
+    --disable-gtk-doc-html
+    --disable-gtk-doc
   - yes '' | pecl install vips
 
 install: composer install --prefer-dist

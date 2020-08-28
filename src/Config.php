@@ -71,7 +71,7 @@ class Config
      *
      * @return void
      */
-    public static function setLogger(LoggerInterface $logger)
+    public static function setLogger(LoggerInterface $logger): void
     {
         self::$logger = $logger;
     }
@@ -79,9 +79,9 @@ class Config
     /**
      * Gets a logger.
      *
-     * @return LoggerInterface $logger|null
+     * @return LoggerInterface|null The logger or null.
      */
-    public static function getLogger()
+    public static function getLogger(): ?LoggerInterface
     {
         return self::$logger;
     }
@@ -94,7 +94,7 @@ class Config
      *
      * @return void
      */
-    public static function cacheSetMax($value)
+    public static function cacheSetMax(int $value): void
     {
         vips_cache_set_max($value);
     }
@@ -103,12 +103,12 @@ class Config
      * Set the maximum amount of memory to allow cached operations to use, in
      * bytes.
      *
-     * @param integer $value The maximum amount of memory cached opertations can
+     * @param integer $value The maximum amount of memory cached operations can
      *     hold, in bytes.
      *
      * @return void
      */
-    public static function cacheSetMaxMem($value)
+    public static function cacheSetMaxMem(int $value): void
     {
         vips_cache_set_max_mem($value);
     }
@@ -121,7 +121,7 @@ class Config
      *
      * @return void
      */
-    public static function cacheSetMaxFiles($value)
+    public static function cacheSetMaxFiles(int $value): void
     {
         vips_cache_set_max_files($value);
     }
@@ -135,13 +135,13 @@ class Config
      *
      * @return void
      */
-    public static function concurrencySet($value)
+    public static function concurrencySet(int $value): void
     {
         vips_concurrency_set($value);
     }
 
     /**
-     * Gets the libvips version number as a atring of the form
+     * Gets the libvips version number as a string of the form
      * MAJOR.MINOR.MICRO, for example "8.6.1".
      *
      * @return string

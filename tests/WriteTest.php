@@ -12,12 +12,12 @@ class WriteTest extends TestCase
      */
     private $tmps;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tmps = [];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->tmps as $tmp) {
             @unlink($tmp);

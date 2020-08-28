@@ -111,7 +111,7 @@ def generate_operation(operation_name):
         result += 'array '
 
     result += '{0}('.format(operation_name)
-    for name in intro.required_input:
+    for name in intro.method_args:
         details = intro.details[name]
         result += '{0} ${1}, '.format(gtype_to_php(details['type']), name)
 
@@ -121,7 +121,7 @@ def generate_operation(operation_name):
     result += description[0].upper() + description[1:] + '.\n'
 
     # find any Enums we've referenced and output @see lines for them
-    for name in intro.required_output + intro.required_input:
+    for name in intro.required_output + intro.method_args:
         details = intro.details[name]
         fundamental = gobject_lib.g_type_fundamental(details['type'])
 
