@@ -30,7 +30,6 @@ addons:
       - libgif-dev
       - libgsf-1-dev
       - libgsl-dev
-      - libheif-dev
       - liblcms2-dev
       - libmagickwand-dev
       - libmatio-dev
