@@ -55,7 +55,7 @@ See the README there, but briefly:
 
    ```
      "require": {
-       "jcupitt/vips" : "1.0.2"
+       "jcupitt/vips" : "1.0.7"
      }
    ```
 
@@ -86,7 +86,7 @@ $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
 See `examples/`. We have a [complete set of formatted API
-docs](https://libvips.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html).
+docs](https://libvips.github.io/php-vips/docs/classes/Jcupitt-Vips-Image.html).
 
 ### Introduction to the API
 
@@ -166,7 +166,7 @@ libvips properties as properties of the PHP `Vips\Image` class.
 ```
 $ phpcs --standard=PSR2 src
 $ composer install
-$ vendor/bin/phpunit
+$ composer test
 $ vendor/bin/phpdoc
 ```
 
