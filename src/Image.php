@@ -1389,17 +1389,18 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * This is useful if the type of the property cannot be determined from the
      * php type of the value.
      *
-     * Use Utils::typeFromName() to look up types by name.
+     * Pass the type name directly, or use Utils::typeFromName() to look up
+     * types by name.
      *
-     * @param int    $type  The type of the property.
-     * @param string $name  The property name.
-     * @param mixed  $value The value to set for this property.
+     * @param string|int $type  The type of the property.
+     * @param string     $name  The property name.
+     * @param mixed      $value The value to set for this property.
      *
      * @throws Exception
      *
      * @return void
      */
-    public function setType(int $type, string $name, $value): void
+    public function setType($type, string $name, $value): void
     {
         $result = vips_image_set_type($this->image, $type, $name, $value);
         if ($result === -1) {

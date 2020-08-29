@@ -1,10 +1,28 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+### 1.0.8 - 2020-08-29
+
+### Added
+- allow type names as type params to Image::setType() -- fixes issue with GType
+  on 32-bit platforms
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ### 1.0.7 - 2020-08-28
 
 ### Added
-- use nullable types and void return type were possible
+- use nullable types and void return type where possible
 
 ### Deprecated
 - requires php >= 7.1
