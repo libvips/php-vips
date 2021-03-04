@@ -32,7 +32,7 @@ See the README there, but briefly:
    binaries on the vips website. For example, on Debian:
 
    ```
-   sudo apt-get install libvips-dev
+   sudo apt-get install libvips-dev php-pear
    ```
 
    Or macOS:
