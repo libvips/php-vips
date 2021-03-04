@@ -32,7 +32,7 @@ See the README there, but briefly:
    binaries on the vips website. For example, on Debian:
 
    ```
-   sudo apt-get install libvips-dev php-pear
+   sudo apt-get install libvips-dev
    ```
 
    Or macOS:
@@ -41,7 +41,15 @@ See the README there, but briefly:
    brew install vips
    ```
 
-2. Install the binary PHP extension:
+2. Install the binary PHP extension. You'll need a PHP development environment
+   for this, since it will download and build the sources for the extension.
+   For example, on Debian:
+
+   ```
+   sudo apt-get install php-pear
+   ```
+
+   Then to download and build the extension it's:
 
    ```
    pecl install vips
