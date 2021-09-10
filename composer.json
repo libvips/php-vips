@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "php-parallel-lint/php-parallel-lint": "^1.2",
-        "phpdocumentor/phpdocumentor": "3.0.0-rc",
+        "phpdocumentor/phpdocumentor": "3.0.0",
         "phpunit/phpunit": "^9.3",
         "squizlabs/php_codesniffer": "^3.5"
     },
