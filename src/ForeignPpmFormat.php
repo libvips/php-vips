@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The ForeignTiffCompression enum.
+ * The ForeignPpmFormat enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,15 +47,10 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ForeignTiffCompression
+abstract class ForeignPpmFormat
 {
-    const NONE = 'none';
-    const JPEG = 'jpeg';
-    const DEFLATE = 'deflate';
-    const PACKBITS = 'packbits';
-    const CCITTFAX4 = 'ccittfax4';
-    const LZW = 'lzw';
-    const WEBP = 'webp';
-    const ZSTD = 'zstd';
-    const JP2K = 'jp2k';
+    const PBM = 'pbm';
+    const PGM = 'pgm';
+    const PPM = 'ppm';
+    const PFM = 'pfm';
 }

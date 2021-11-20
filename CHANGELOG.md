@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+### 1.0.9 - 2021-11-20
+
+### Added
+- update docs for libvips 8.12
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Remove
+- Nothing
+
+### Security
+- Nothing
+
 ### 1.0.8 - 2020-08-29
 
 ### Added

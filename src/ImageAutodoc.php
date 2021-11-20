@@ -227,6 +227,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image fitsload(string $filename, array $options = []) Load a FITS image.
  *     @throws Exception
+ * @method static Image fitsload_source(string $source, array $options = []) Load FITS from a source.
+ *     @throws Exception
  * @method void fitssave(string $filename, array $options = []) Save image to fits file.
  *     @throws Exception
  * @method Image flatten(array $options = []) Flatten alpha out of an image.
@@ -252,11 +254,17 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method array getpoint(integer $x, integer $y, array $options = []) Read a point from an image.
  *     @throws Exception
- * @method static Image gifload(string $filename, array $options = []) Load GIF with giflib.
+ * @method static Image gifload(string $filename, array $options = []) Load GIF with libnsgif.
  *     @throws Exception
- * @method static Image gifload_buffer(string $buffer, array $options = []) Load GIF with giflib.
+ * @method static Image gifload_buffer(string $buffer, array $options = []) Load GIF with libnsgif.
  *     @throws Exception
- * @method static Image gifload_source(string $source, array $options = []) Load GIF with giflib.
+ * @method static Image gifload_source(string $source, array $options = []) Load gif from source.
+ *     @throws Exception
+ * @method void gifsave(string $filename, array $options = []) Save as gif.
+ *     @throws Exception
+ * @method string gifsave_buffer(array $options = []) Save as gif.
+ *     @throws Exception
+ * @method void gifsave_target(string $target, array $options = []) Save as gif.
  *     @throws Exception
  * @method Image globalbalance(array $options = []) Global balance an image mosaic.
  *     @throws Exception
@@ -324,6 +332,18 @@ namespace Jcupitt\Vips;
  * @method Image join(Image $in2, string $direction, array $options = []) Join a pair of images.
  *     @see Direction for possible values for $direction
  *     @throws Exception
+ * @method static Image jp2kload(string $filename, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method static Image jp2kload_buffer(string $buffer, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method static Image jp2kload_source(string $source, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method void jp2ksave(string $filename, array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
+ * @method string jp2ksave_buffer(array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
+ * @method void jp2ksave_target(string $target, array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
  * @method static Image jpegload(string $filename, array $options = []) Load jpeg from file.
  *     @throws Exception
  * @method static Image jpegload_buffer(string $buffer, array $options = []) Load jpeg from buffer.
@@ -338,13 +358,25 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void jpegsave_target(string $target, array $options = []) Save image to jpeg target.
  *     @throws Exception
+ * @method static Image jxlload(string $filename, array $options = []) Load JPEG-XL image.
+ *     @throws Exception
+ * @method static Image jxlload_buffer(string $buffer, array $options = []) Load JPEG-XL image.
+ *     @throws Exception
+ * @method static Image jxlload_source(string $source, array $options = []) Load JPEG-XL image.
+ *     @throws Exception
+ * @method void jxlsave(string $filename, array $options = []) Save image in JPEG-XL format.
+ *     @throws Exception
+ * @method string jxlsave_buffer(array $options = []) Save image in JPEG-XL format.
+ *     @throws Exception
+ * @method void jxlsave_target(string $target, array $options = []) Save image in JPEG-XL format.
+ *     @throws Exception
  * @method Image labelregions(array $options = []) Label regions in an image.
  *     @throws Exception
  * @method Image linear(float[]|float $a, float[]|float $b, array $options = []) Calculate (a * in + b).
  *     @throws Exception
  * @method Image linecache(array $options = []) Cache an image as a set of lines.
  *     @throws Exception
- * @method static Image logmat(float $sigma, float $min_ampl, array $options = []) Make a laplacian of gaussian image.
+ * @method static Image logmat(float $sigma, float $min_ampl, array $options = []) Make a Laplacian of Gaussian image.
  *     @throws Exception
  * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick.
  *     @throws Exception
@@ -423,13 +455,17 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image msb(array $options = []) Pick most-significant byte from an image.
  *     @throws Exception
- * @method static Image niftiload(string $filename, array $options = []) Load a NIFTI image.
+ * @method static Image niftiload(string $filename, array $options = []) Load NIfTI volume.
+ *     @throws Exception
+ * @method static Image niftiload_source(string $source, array $options = []) Load NIfTI volumes.
  *     @throws Exception
  * @method void niftisave(string $filename, array $options = []) Save image to nifti file.
  *     @throws Exception
  * @method static Image openexrload(string $filename, array $options = []) Load an OpenEXR image.
  *     @throws Exception
  * @method static Image openslideload(string $filename, array $options = []) Load file with OpenSlide.
+ *     @throws Exception
+ * @method static Image openslideload_source(string $source, array $options = []) Load source with OpenSlide.
  *     @throws Exception
  * @method static Image pdfload(string $filename, array $options = []) Load PDF from file.
  *     @throws Exception
@@ -617,7 +653,11 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image vipsload(string $filename, array $options = []) Load vips from file.
  *     @throws Exception
- * @method void vipssave(string $filename, array $options = []) Save image to vips file.
+ * @method static Image vipsload_source(string $source, array $options = []) Load vips from source.
+ *     @throws Exception
+ * @method void vipssave(string $filename, array $options = []) Save image to file in vips format.
+ *     @throws Exception
+ * @method void vipssave_target(string $target, array $options = []) Save image to target in vips format.
  *     @throws Exception
  * @method static Image webpload(string $filename, array $options = []) Load webp from file.
  *     @throws Exception
