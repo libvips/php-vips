@@ -57,7 +57,7 @@ function error()
 {
   global $base_ffi;
 
-  throw new Exception("libvips error: $ffi->vips_error_buffer()");
+  throw new Exception("libvips error: $base_ffi->vips_error_buffer()");
 }
 
 $result = $base_ffi->vips_init($argv[0]);
@@ -78,6 +78,11 @@ function at_least($need_major, $need_minor)
 
   return $need_major < $library_major || 
     ($need_major == $library_major && $need_minor <= $library_minor);
+}
+
+if (!at_least(8, 7)) {
+  trace("your libvips is too old -- 8.7 or later required");
+  exit(1);
 }
 
 # largely copied from pyvips
@@ -402,28 +407,16 @@ int vips_cache_get_max();
 int vips_cache_get_size();
 size_t vips_cache_get_max_mem();
 int vips_cache_get_max_files();
-EOS;
 
-if (at_least(8, 5)) {
-  $header = $header . <<<EOS
 char** vips_image_get_fields (VipsImage* image);
 int vips_image_hasalpha (VipsImage* image);
-EOS;
-}
 
-if (at_least(8, 6)) {
-  $header = $header . <<<EOS
 GType vips_blend_mode_get_type (void);
 void vips_value_set_blob_free (GValue* value, void* data, size_t length);
-EOS;
-}
 
-if (at_least(8, 7)) {
-  $header = $header . <<<EOS
 int vips_object_get_args (VipsObject* object,
     const char*** names, int** flags, int* n_args);
 EOS;
-}
 
 if (at_least(8, 8)) {
   $header = $header . <<<EOS
@@ -499,6 +492,232 @@ EOS;
 
 $ffi = FFI::cdef($header, $library);
 
-trace("attempting to open: $argv[1]");
+if (count($argv) < 2) {
+  trace("usage: ./vips-ffi.php <image-file-name>");
+  exit(1);
+}
+$filename = $argv[1];
+
+trace("attempting to open: $filename");
+
+$loader = $ffi->vips_foreign_find_load($filename);
+trace("selected loader: $loader");
+
+$operation = $ffi->vips_operation_new($loader);
+if (FFI::isNull($operation)) {
+  error();
+}
+
+$vipsObject = $ffi->type("VipsObject*");
+$description = $ffi->vips_object_get_description(
+  FFI::cast($vipsObject, $operation));
+trace("description: $description");
+
+$operationFlags = [
+  "NONE" => 0,
+  "SEQUENTIAL" => 1,
+  "NOCACHE" => 4,
+  "DEPRECATED" => 8
+];
+$flags = $ffi->vips_operation_get_flags($operation);
+trace("flags: $flags");
+foreach ($operationFlags as $name => $flag) {
+  if ($flags & $flag) {
+    trace("   $name");
+  }
+}
+
+$argumentFlags = [
+  "REQUIRED" => 1,
+  "CONSTRUCT" => 2,
+  "SET_ONCE" => 4,
+  "SET_ALWAYS" => 8,
+  "INPUT" => 16,
+  "OUTPUT" => 32,
+  "DEPRECATED" => 64,
+  "MODIFY" => 128
+];
+$p_names = $ffi->new("char**[1]");
+$p_flags = $ffi->new("int*[1]");
+$p_n_args = $ffi->new("int[1]");
+$result = $ffi->vips_object_get_args(
+  FFI::cast($vipsObject, $operation),
+  $p_names, 
+  $p_flags, 
+  $p_n_args
+);
+if ($result != 0) {
+  error();
+}
+$p_names = $p_names[0];
+$p_flags = $p_flags[0];
+$n_args = $p_n_args[0];
+
+trace("n_args: $n_args");
+
+# make a hash from arg name to flags
+$arguments = [];
+for ($i = 0; $i < $n_args; $i++) {
+  if (($p_flags[$i] & $argumentFlags["CONSTRUCT"]) != 0) {
+    # libvips uses '-' to separate parts of arg names, but we
+    # need '_' for php
+    $name = FFI::string($p_names[$i]);
+    $name = str_replace("-", "_", $name);
+    $arguments[$name] = $p_flags[$i];
+  }
+}
+
+// get the pspec for a property from a VipsObject 
+// NULL for no such name
+function get_pspec($object, $name) {
+  global $ffi;
+  global $vipsObject;
+
+  $pspec = $ffi->new("GParamSpec*[1]");
+  $argument_class = $ffi->new("VipsArgumentClass*[1]");
+  $argument_instance = $ffi->new("VipsArgumentInstance*[1]");
+  $result = $ffi->vips_object_get_argument(
+    FFI::cast($vipsObject, $object),
+    $name,
+    $pspec, 
+    $argument_class,
+    $argument_instance
+  );
+
+  if ($result != 0) {
+    return FFI::NULL;
+  }
+  else {
+    return $pspec[0];
+  }
+}
+
+// get the type of a property from a VipsObject
+// 0 if no such property
+function get_typeof($object, $name) {
+  global $base_ffi;
+
+  $pspec = get_pspec($object, $name);
+  if (FFI::isNULL($pspec)) {
+    # need to clear any error, this is horrible
+    $base_ffi->vips_error_clear();
+    return 0;
+  }
+  else {
+    return $pspec->value_type;
+  }
+}
+
+function get_blurb($object, $name) {
+  global $ffi;
+
+  $pspec = get_pspec($object, $name);
+  return $ffi->g_param_spec_get_blurb($pspec);
+}
+
+# make a hash from arg name to detailed arg info
+$details = [];
+foreach ($arguments as $name => $flags) {
+  $details[$name] = [
+    "name" => $name,
+    "flags" => $flags,
+    "blurb" => get_blurb($operation, $name),
+    "type" => get_typeof($operation, $name)
+  ];
+}
+
+# split args into categories
+$required_input = [];
+$optional_input = [];
+$required_output = [];
+$optional_output = [];
+
+foreach ($details as $name => $detail) {
+  $flags = $detail["flags"];
+  $blurb = $detail["blurb"];
+  $type = $detail["type"];
+  $typeName = $ffi->g_type_name($type);
+
+  if (($flags & $argumentFlags["INPUT"]) &&
+      ($flags & $argumentFlags["REQUIRED"]) &&
+      !($flags & $argumentFlags["DEPRECATED"])) {
+    $required_input[] = $name;
+
+    # required inputs which we MODIFY are also required outputs
+    if ($flags & $required_input["MODIFY"]) {
+      $required_output[] = $name;
+    }
+  }
+
+  if (($flags & $argumentFlags["OUTPUT"]) &&
+      ($flags & $argumentFlags["REQUIRED"]) &&
+      !($flags & $argumentFlags["DEPRECATED"])) {
+    $required_output[] = $name;
+  }
+
+  # we let deprecated optional args through, but warn about them
+  # if they get used, see below
+  if (($flags & $argumentFlags["INPUT"]) &&
+      !($flags & $argumentFlags["REQUIRED"])) {
+    $optional_input[] = $name;
+  }
+
+  if (($flags & $argumentFlags["OUTPUT"]) &&
+      !($flags & $argumentFlags["REQUIRED"])) {
+    $optional_output[] = $name;
+  }
+}
+
+# find the first required input image arg, if any ... that will be self
+$imageType = $ffi->g_type_from_name("VipsImage");
+$member_x = null;
+foreach ($required_input as $name) {
+  $type = $details[$name]["type"];
+  if ($type == $imageType) {
+    $member_x = $name;
+    break;
+  }
+}
+
+# method args are required args, but without the image they are a
+# method on
+$method_args = $required_input;
+if ($member_x != null) {
+  $index = array_search($member_x, $method_args);
+  array_splice($method_args, $index);
+}
+
+
+# print!
+foreach ($details as $name => $detail) {
+  $flags = $detail["flags"];
+  $blurb = $detail["blurb"];
+  $type = $detail["type"];
+  $typeName = $ffi->g_type_name($type);
+
+  trace("  $name:");
+
+  trace("    flags: $flags");
+  foreach ($argumentFlags as $name => $flag) {
+    if ($flags & $flag) {
+      trace("      $name");
+    }
+  }
+
+  trace("    blurb: $blurb");
+  trace("    type: $typeName");
+}
+
+$info = implode(", ", $required_input);
+trace("required input: $info");
+$info = implode(", ", $required_output);
+trace("required output: $info");
+$info = implode(", ", $optional_input);
+trace("optional input: $info");
+$info = implode(", ", $optional_output);
+trace("optional output: $info");
+trace("member_x: $member_x");
+$info = implode(", ", $method_args);
+trace("method args: $info");
 
 $base_ffi->vips_shutdown();
