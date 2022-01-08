@@ -321,13 +321,12 @@ int vips_object_set_from_string (VipsObject* object,
 
 const char* vips_object_get_description (VipsObject* object);
 
-const char* g_param_spec_get_blurb (GParamSpec* psp
+const char* g_param_spec_get_blurb (GParamSpec* psp);
 
 typedef struct _VipsImage {
     VipsObject parent_instance;
     // more
 } VipsImage;
-
 const char* vips_foreign_find_load (const char* name);
 const char* vips_foreign_find_load_buffer (const void* data,
     size_t size);
@@ -406,29 +405,28 @@ int vips_cache_get_max_files();
 EOS;
 
 if (at_least(8, 5)) {
-  $header = <<<EOS
+  $header = $header . <<<EOS
 char** vips_image_get_fields (VipsImage* image);
 int vips_image_hasalpha (VipsImage* image);
 EOS;
 }
 
 if (at_least(8, 6)) {
-  $header = <<<EOS
+  $header = $header . <<<EOS
 GType vips_blend_mode_get_type (void);
-void vips_value_set_blob_free (GValue* value,
-    void* data, size_t length);
+void vips_value_set_blob_free (GValue* value, void* data, size_t length);
 EOS;
 }
 
 if (at_least(8, 7)) {
-  $header = <<<EOS
+  $header = $header . <<<EOS
 int vips_object_get_args (VipsObject* object,
     const char*** names, int** flags, int* n_args);
 EOS;
 }
 
 if (at_least(8, 8)) {
-  $header = <<<EOS
+  $header = $header . <<<EOS
 char** vips_foreign_get_suffixes (void);
 
 void* vips_region_fetch (VipsRegion*, int, int, int, int,
@@ -441,7 +439,7 @@ EOS;
 }
 
 if (at_least(8, 8)) {
-  $header = <<<EOS
+  $header = $header . <<<EOS
 typedef struct _VipsConnection {
     VipsObject parent_object;
 
@@ -470,10 +468,11 @@ typedef struct _VipsSourceCustom {
 
 VipsSourceCustom* vips_source_custom_new (void);
 
-extern "Python" gint64 _marshal_read (VipsSource*,
-    void*, gint64, void*);
-extern "Python" gint64 _marshal_seek (VipsSource*,
-    gint64, int, void*);
+// FIXME ... these need porting to php-ffi
+// extern "Python" gint64 _marshal_read (VipsSource*,
+//    void*, gint64, void*);
+// extern "Python" gint64 _marshal_seek (VipsSource*,
+//    gint64, int, void*);
 
 typedef struct _VipsTarget {
     VipsConnection parent_object;
