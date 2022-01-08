@@ -644,7 +644,7 @@ foreach ($details as $name => $detail) {
     $required_input[] = $name;
 
     # required inputs which we MODIFY are also required outputs
-    if ($flags & $required_input["MODIFY"]) {
+    if ($flags & $argumentFlags["MODIFY"]) {
       $required_output[] = $name;
     }
   }
