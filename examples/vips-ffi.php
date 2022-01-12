@@ -70,7 +70,7 @@ trace("vips_init: $result");
 $library_major = $base_ffi->vips_version(0);
 $library_minor = $base_ffi->vips_version(1);
 $library_micro = $base_ffi->vips_version(2);
-trace("vips_version: $library_major.$library_minor.$library_micro");
+trace("found libvips version: $library_major.$library_minor.$library_micro");
 
 function at_least($need_major, $need_minor)
 {
@@ -85,6 +85,16 @@ if (!at_least(8, 7)) {
   exit(1);
 }
 
+if (PHP_INT_SIZE != 8) {
+  # we could maybe fix this if it's important ... it's mostly necessary since
+  # GType is the size of a pointer, and there's no easy way to discover if php
+  # is running on a 32 or 64-bit systems (as far as I can see)
+  trace("your php only supports 32-bit ints -- 64 bit ints required");
+  exit(1);
+}
+
+// bind the libvips API to the library binary
+
 # largely copied from pyvips
 $header = <<<EOS
 // we need the glib names for these types
@@ -93,7 +103,8 @@ typedef int32_t gint32;
 typedef uint64_t guint64;
 typedef int64_t gint64;
 
-// FIXME ... need to detect 32/64 bit platform, since GType is an int the size of a pointer 
+// FIXME ... need to detect 32/64 bit platform, since GType is an int 
+// the size of a pointer, see PHP_INT_SIZE above
 typedef guint64 GType;
 
 typedef struct _VipsImage VipsImage;
@@ -492,6 +503,8 @@ EOS;
 
 $ffi = FFI::cdef($header, $library);
 
+// open an image file
+
 if (count($argv) < 2) {
   trace("usage: ./vips-ffi.php <image-file-name>");
   exit(1);
@@ -508,7 +521,11 @@ if (FFI::isNull($operation)) {
   error();
 }
 
+// now introspect $operation and show all the args it wants ... about the next
+// 250 lines of code
+
 $vipsObject = $ffi->type("VipsObject*");
+$gObject = $ffi->type("GObject*");
 $description = $ffi->vips_object_get_description(
   FFI::cast($vipsObject, $operation));
 trace("description: $description");
@@ -687,7 +704,6 @@ if ($member_x != null) {
   array_splice($method_args, $index);
 }
 
-
 # print!
 foreach ($details as $name => $detail) {
   $flags = $detail["flags"];
@@ -720,4 +736,170 @@ trace("member_x: $member_x");
 $info = implode(", ", $method_args);
 trace("method args: $info");
 
+// look these up in advance
+$gtypes = [
+  "gboolean" => $ffi->g_type_from_name("gboolean"),
+  "gchararray" => $ffi->g_type_from_name("gchararray"),
+  "VipsRefString" => $ffi->g_type_from_name("VipsRefString"),
+  "GObject" => $ffi->g_type_from_name("GObject"),
+];
+
+// a tiny class to wrap GValue ... we need to be able to trigger g_value_unset
+// when we are done with one of these, so we need to make a class
+
+class GValue
+{
+  private FFI\CData $struct;
+  public FFI\CData $pointer;
+
+  function __construct() {
+    global $ffi;
+
+    # allocate a gvalue on the heap, and make it persistent between requests
+    $this->struct = $ffi->new("GValue", true, true);
+    $this->pointer = FFI::addr($this->struct);
+
+    # GValue needs to be inited to all zero
+    FFI::memset($this->pointer, 0, FFI::sizeof($this->struct));
+  }
+
+  function __destruct() {
+    global $ffi;
+
+    $ffi->g_value_unset($this->pointer);
+  }
+
+  function set_type(int $gtype) {
+    global $ffi;
+
+    $ffi->g_value_init($this->pointer, $gtype);
+  }
+
+  function get_type(): int {
+    return $this->pointer->g_type;
+  }
+
+  function set($value) {
+    global $ffi, $gtypes;
+
+    $gtype = $this->get_type();
+
+    switch ($gtype) {
+    case $gtypes["gboolean"]:
+      $ffi->g_value_set_boolean($this->pointer, $value);
+      break;
+
+    case $gtypes["gchararray"]:
+      $ffi->g_value_set_string($this->pointer, $value);
+      break;
+
+    case $gtypes["VipsRefString"]:
+      $ffi->vips_value_set_ref_string($this->pointer, $value);
+      break;
+
+    default:
+      $fundamental = $ffi->g_type_fundamental($gtype);
+      switch ($fundamental) {
+      case $gtypes["GObject"]:
+        break;
+
+      default:
+        trace("GValue::set(): gtype $gtype not implemented");
+        exit(1);
+      }
+    }
+  }
+
+  function get() {
+    global $ffi, $gtypes;
+
+    $gtype = $this->get_type();
+    $result = null;
+
+    switch ($gtype) {
+    case $gtypes["gboolean"]:
+      $result = $ffi->g_value_get_boolean($this->pointer);
+      break;
+
+    case $gtypes["gchararray"]:
+      $ffi->g_value_get_string($this->pointer);
+      break;
+
+    case $gtypes["VipsRefString"]:
+      $psize = $ffi->new("size_t*");
+      $result = $ffi->vips_value_get_ref_string($this->pointer, $psize);
+      # $psize[0] will be the string length, but assume it's null terminated
+      break;
+
+    default:
+      $fundamental = $ffi->g_type_fundamental($gtype);
+      switch ($fundamental) {
+      case $gtypes["GObject"]:
+        # we need a class wrapping gobject before we can impement this
+        trace("in get() get object");
+        break;
+
+      default:
+        trace("GValue::get(): gtype $gtype not implemented");
+        exit(1);
+      }
+    }
+
+    return $result;
+  }
+
+}
+
+function gobject_set($object, $name, $value) {
+  global $ffi;
+  global $gObject;
+
+  $gtype = get_typeof($object, $name);
+
+  $gvalue = new GValue();
+  $gvalue->set_type($gtype);
+  $gvalue->set($value);
+
+  $gobject = FFI::cast($gObject, $object);
+  $ffi->g_object_set_property($gobject, $name, $gvalue->pointer);
+}
+
+function gobject_get($object, $name) {
+  global $ffi;
+  global $gObject;
+
+  $gtype = get_typeof($object, $name);
+
+  $gvalue = new GValue();
+  $gvalue->set_type($gtype);
+
+  $gobject = FFI::cast($gObject, $object);
+  $ffi->g_object_get_property($gobject, $name, $gvalue->pointer);
+
+  return $gvalue->get();
+}
+
+// now use the info from introspection to set some parameters on $operation
+
+trace("setting arguments ...");
+gobject_set($operation, "filename", $filename);
+
+// build the operation
+
+trace("building ...");
+$new_operation = $ffi->vips_cache_operation_build($operation);
+if (FFI::isNull($new_operation)) {
+  $ffi->vips_object_unref_outputs($operation);
+  error();
+}
+$operation = $new_operation;
+
+# need to attach input refs to output
+
+// fetch required output args
+
+$image = gobject_get($operation, "out");
+trace("result: " . print_r($image, true));
+
+trace("shutting down ...");
 $base_ffi->vips_shutdown();
