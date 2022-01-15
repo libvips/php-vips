@@ -39,8 +39,8 @@
 namespace Jcupitt\Vips;
 
 /**
- * This class holds a pointer to a VipsOperation (the libvips operation base 
- * class) and manages argument introspection and operation call.
+ * Introspect a VIpsOperation and discover everything we can. This is called
+ * on demand once per operation and the results held in a cache.
  *
  * @category  Images
  * @package   Jcupitt\Vips
@@ -49,23 +49,58 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/libvips/php-vips
  */
-abstract class VipsOperation extends VipsObject
+class Introspection
 {
     /**
-     * A pointer to the underlying VipsOperation. This is the same as the
-     * GObject, just cast to VipsOperation to help FFI.
-     *
-     * @internal
+     * The operation nickname (eg. "add").
      */
-    private FFI\CData $vipsOperation;
+    protected string $name;
 
-    function __construct($pointer)
+    /**
+     * The operation description (eg. "add two images").
+     */
+    protected string $description;
+
+    /**
+     * The operation flags (eg. SEQUENTIAL | DEPRECATED).
+     */
+    protected int $flags;
+
+    function __construct($name)
     {
         global $ffi;
         global $ctypes;
 
-        $this->vipsOperation = $ffi->cast($ctypes["VipsOperation"], $pointer);
-        parent::__construct($pointer);
+        $this->name = $name;
+
+        $operation = $ffi->vips_operation_new($name);
+        if (FFI::isNull($operation)) {
+            error();
+        }
+
+        $this->description = $ffi->vips_object_get_description(
+            FFI::cast($ctypes["VipsObject"], $operation));
+        $flags = $ffi->vips_operation_get_flags($operation);
+
+        $p_names = $ffi->new("char**[1]");
+        $p_flags = $ffi->new("int*[1]");
+        $p_n_args = $ffi->new("int[1]");
+        $result = $ffi->vips_object_get_args(
+            FFI::cast($ctypes["VipsObject"], $operation),
+            $p_names, 
+            $p_flags, 
+            $p_n_args
+        );
+        if ($result != 0) {
+            error();
+        }
+        $p_names = $p_names[0];
+        $p_flags = $p_flags[0];
+        $n_args = $p_n_args[0];
+
+
+
+        $operation = new
     }
 
 
