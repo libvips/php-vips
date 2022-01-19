@@ -43,6 +43,7 @@ $gtypes = [
     "gboolean" => $ffi->g_type_from_name("gboolean"),
     "gchararray" => $ffi->g_type_from_name("gchararray"),
     "VipsRefString" => $ffi->g_type_from_name("VipsRefString"),
+    "VipsImage" => $ffi->g_type_from_name("VipsImage"),
     "GObject" => $ffi->g_type_from_name("GObject"),
 ];
 
@@ -103,7 +104,8 @@ class GValue
                 break;
 
             default:
-                throw new \BadMethodCallException("gtype $gtype not implemented");
+                $typeName = $ffi->g_type_name($gtype)
+                throw new \BadMethodCallException("$typeName not implemented");
                 break;
             }
         }
@@ -139,7 +141,8 @@ class GValue
                 break;
 
             default:
-                throw new \BadMethodCallException("gtype $gtype not implemented");
+                $typeName = $ffi->g_type_name($gtype)
+                throw new \BadMethodCallException("$typeName not implemented");
                 break;
             }
         }

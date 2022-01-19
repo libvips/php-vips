@@ -59,6 +59,11 @@ abstract class VipsOperation extends VipsObject
      */
     private FFI\CData $vipsOperation;
 
+    /**
+     * Cache introsection results here.
+     */
+    private static $introspectionCache[] mixed = [];
+
     function __construct($pointer)
     {
         global $ffi;
@@ -68,6 +73,144 @@ abstract class VipsOperation extends VipsObject
         parent::__construct($pointer);
     }
 
+    function getIntrospection($name) {
+        if (!array_key_exists($introspectionCache, $name)) {
+            $introspectionCache[$name] = new VipsIntrospection($name);
+        }
+
+        return $introspectionCache[$name];
+    }
+
+    /**
+     * Call any vips operation. The final element of $arguments can be
+     * (but doesn't have to be) an array of options to pass to the operation.
+     *
+     * We can't have a separate arg for the options since this will be run from
+     * __call(), which cannot know which args are required and which are
+     * optional. See call() below for a version with the options broken out.
+     *
+     * @param string     $name      The operation name.
+     * @param Image|null $instance  The instance this operation is being invoked
+     *      from.
+     * @param array      $arguments An array of arguments to pass to the
+     *      operation.
+     *
+     * @throws Exception
+     *
+     * @return mixed The result(s) of the operation.
+     */
+    function callBase(
+        string $name,
+        ?Image $instance,
+        array $arguments
+    ) {
+        Utils::debugLog($name, [
+            'instance' => $instance,
+            'arguments' => $arguments
+        ]);
+
+        $introspection = $this->getIntrospection($name);
+
+        $arguments = array_merge([$name, $instance], $arguments);
+
+        $arguments = array_values(self::unwrap($arguments));
+        $result = vips_call(...$arguments);
+        self::errorIsArray($result);
+        $result = self::wrapResult($result);
+
+        Utils::debugLog($name, ['result' => $result]);
+
+        return $result;
+    }
+
+    /**
+     * Call any vips operation, with an explicit set of options. This is more
+     * convenient than callBase() if you have a set of known options.
+     *
+     * @param string     $name      The operation name.
+     * @param Image|null $instance  The instance this operation is being invoked
+     *      from.
+     * @param array      $arguments An array of arguments to pass to the
+     *      operation.
+     * @param array      $options   An array of optional arguments to pass to
+     *      the operation.
+     *
+     * @throws Exception
+     *
+     * @return mixed The result(s) of the operation.
+     */
+    public static function call(
+        string $name,
+        ?Image $instance,
+        array $arguments,
+        array $options = []
+    ) {
+        /*
+        echo "call: $name \n";
+        echo "instance = \n";
+        var_dump($instance);
+        echo "arguments = \n";
+        var_dump($arguments);
+        echo "options = \n";
+        var_dump($options);
+         */
+
+        return self::callBase($name, $instance, 
+            array_merge($arguments, [$options]));
+    }
+
+    /**
+     * Handy for things like self::more. Call a 2-ary vips operator like
+     * 'more', but if the arg is not an image (ie. it's a constant), call
+     * 'more_const' instead.
+     *
+     * @param mixed  $other   The right-hand argument.
+     * @param string $base    The base part of the operation name.
+     * @param string $op      The action to invoke.
+     * @param array  $options An array of options to pass to the operation.
+     *
+     * @throws Exception
+     *
+     * @return mixed The operation result.
+     *
+     * @internal
+     */
+    private function callEnum(
+        $other,
+        string $base,
+        string $op,
+        array $options = []
+    ) {
+        if (self::isImageish($other)) {
+            return self::call($base, $this, [$other, $op], $options);
+        } else {
+            return self::call($base . '_const', $this, [$op, $other], $options);
+        }
+    }
+
+
+
+// now use the info from introspection to set some parameters on $operation
+
+trace("setting arguments ...");
+gobject_set($operation, "filename", $filename);
+
+// build the operation
+
+trace("building ...");
+$new_operation = $ffi->vips_cache_operation_build($operation);
+if (FFI::isNull($new_operation)) {
+  $ffi->vips_object_unref_outputs($operation);
+  error();
+}
+$operation = $new_operation;
+
+# need to attach input refs to output
+
+// fetch required output args
+
+$image = gobject_get($operation, "out");
+trace("result: " . print_r($image, true));
 
 
 

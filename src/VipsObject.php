@@ -75,6 +75,12 @@ abstract class VipsObject extends GObject
         $ffi->vips_object_print_all();
     }
 
+    function getDescription() {
+        global $ffi;
+
+        return $ffi->vips_object_get_description($this->vipsObject);
+    }
+
     // get the pspec for a property 
     // NULL for no such name
     // very slow! avoid if possible
@@ -125,7 +131,7 @@ abstract class VipsObject extends GObject
         return $ffi->g_param_spec_get_blurb($pspec);
     }
 
-    function getDescription($name) {
+    function getArgumentDescription($name) {
         global $ffi;
 
         $pspec = $this->getPspec($name);
