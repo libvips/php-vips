@@ -62,18 +62,23 @@ abstract class VipsOperation extends VipsObject
     /**
      * Cache introsection results here.
      */
-    private static $introspectionCache[] mixed = [];
+    private static $introspectionCache = [];
 
-    function __construct($pointer)
+    function __construct($name)
     {
         global $ffi;
         global $ctypes;
+
+        $pointer = $ffi->vips_operation_new($name);
+        if (FFI::isNull($pointer)) {
+            error();
+        }
 
         $this->vipsOperation = $ffi->cast($ctypes["VipsOperation"], $pointer);
         parent::__construct($pointer);
     }
 
-    function getIntrospection($name) {
+    static function getIntrospection($name) {
         if (!array_key_exists($introspectionCache, $name)) {
             $introspectionCache[$name] = new VipsIntrospection($name);
         }
@@ -99,7 +104,7 @@ abstract class VipsOperation extends VipsObject
      *
      * @return mixed The result(s) of the operation.
      */
-    function callBase(
+    static function callBase(
         string $name,
         ?Image $instance,
         array $arguments
@@ -109,12 +114,38 @@ abstract class VipsOperation extends VipsObject
             'arguments' => $arguments
         ]);
 
+        $arguments = array_merge([$name, $instance], $arguments);
+        $arguments = array_values(self::unwrap($arguments));
+        $operation = new VipsOperation($name);
         $introspection = $this->getIntrospection($name);
 
-        $arguments = array_merge([$name, $instance], $arguments);
+        trace("setting arguments ...");
 
-        $arguments = array_values(self::unwrap($arguments));
+        if (count($introspection->required_input) != count($arguments)) {
+        }
+
+
+        $operation->set("filename", $filename);
+
+        // build the operation
+
+        trace("building ...");
+        $new_operation = $ffi->vips_cache_operation_build($operation);
+        if (FFI::isNull($new_operation)) {
+          $ffi->vips_object_unref_outputs($operation);
+          error();
+        }
+        $operation = $new_operation;
+
+        # need to attach input refs to output
+
+        // fetch required output args
+
+        $image = gobject_get($operation, "out");
+        trace("result: " . print_r($image, true));
+
         $result = vips_call(...$arguments);
+
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
@@ -189,28 +220,6 @@ abstract class VipsOperation extends VipsObject
     }
 
 
-
-// now use the info from introspection to set some parameters on $operation
-
-trace("setting arguments ...");
-gobject_set($operation, "filename", $filename);
-
-// build the operation
-
-trace("building ...");
-$new_operation = $ffi->vips_cache_operation_build($operation);
-if (FFI::isNull($new_operation)) {
-  $ffi->vips_object_unref_outputs($operation);
-  error();
-}
-$operation = $new_operation;
-
-# need to attach input refs to output
-
-// fetch required output args
-
-$image = gobject_get($operation, "out");
-trace("result: " . print_r($image, true));
 
 
 

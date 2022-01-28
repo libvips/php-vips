@@ -104,7 +104,7 @@ class GValue
                 break;
 
             default:
-                $typeName = $ffi->g_type_name($gtype)
+                $typeName = $ffi->g_type_name($gtype);
                 throw new \BadMethodCallException("$typeName not implemented");
                 break;
             }
@@ -141,7 +141,7 @@ class GValue
                 break;
 
             default:
-                $typeName = $ffi->g_type_name($gtype)
+                $typeName = $ffi->g_type_name($gtype);
                 throw new \BadMethodCallException("$typeName not implemented");
                 break;
             }

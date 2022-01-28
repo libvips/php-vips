@@ -1013,20 +1013,41 @@ class Image extends ImageAutodoc implements \ArrayAccess
         float $scale = 1.0,
         float $offset = 0.0
     ): Image {
+        global $ffi;
+
         Utils::debugLog('newFromArray', [
             'instance' => null,
             'arguments' => [$array, $scale, $offset]
         ]);
 
-        $result = vips_image_new_from_array($array, $scale, $offset);
-        if ($result === -1) {
+        if (!self::is2D($array)) {
+            $array = [$array];
+        }
+
+        $height = count($array);
+        $width = count($array[0]);
+
+        $n = $width * $height;
+        $a = $ffi->new("double[]", $n);
+        for($y = 0; $y < $height; $y++) {
+            for($x = 0; $x < $width; $x++) {
+                $a[$x + $y * $width] = $array[y][x];
+            }
+        }
+
+        $result = $ffi->
+            vips_image_new_matrix_from_array($width, $height, $a, $n);
+        if (FFI::isNULL($result)) {
             self::errorVips();
         }
         $result = self::wrapResult($result);
 
+        $image.set_type(GValue::gdouble_type, 'scale', $scale);
+        $image.set_type(GValue::gdouble_type, 'offset', $offset);
+
         Utils::debugLog('newFromArray', ['result' => $result]);
 
-        return $result;
+        return image;
     }
 
     /**
@@ -1054,8 +1075,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$data, $width, $height, $bands, $format]
         ]);
 
-        $result = vips_image_new_from_memory($data, $width, $height, $bands, $format);
-        if ($result === -1) {
+        $result = $ffi->
+            vips_image_new_from_memory($data, $width, $height, $bands, $format);
+        if (FFI::isNULL($result)) {
             self::errorVips();
         }
         $result = self::wrapResult($result);
@@ -1086,8 +1108,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$name]
         ]);
 
-        // added in 1.0.7 of the binary module
-        return vips_interpolate_new($name);
+        return $ffi->vips_interpolate_new($name);
     }
 
     /**

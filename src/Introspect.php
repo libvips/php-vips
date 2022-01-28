@@ -69,16 +69,16 @@ class Introspection
     /**
      * A hash from arg name to a hash of details.
      */
-    protected mixed[] $arguments;
+    protected array $arguments;
 
     /**
      * Arrays of arg names, in order and by category, eg. $this->required_input
      * = ["filename"].
      */
-    protected string[] $required_input;
-    protected string[] $optional_input;
-    protected string[] $required_output;
-    protected string[] $optional_output;
+    protected array $required_input;
+    protected array $optional_input;
+    protected array $required_output;
+    protected array $optional_output;
 
     /** 
      * The name of the arg this operation uses as "this".
@@ -88,7 +88,7 @@ class Introspection
     /**
      * And the required input args, without the "this".
      */
-    protected string[] $method_args;
+    protected array $method_args;
 
     function __construct($name)
     {
@@ -98,11 +98,7 @@ class Introspection
 
         $this->name = $name;
 
-        $pointer = $ffi->vips_operation_new($name);
-        if (FFI::isNull($pointer)) {
-            error();
-        }
-        $operation = new VipsOperation($pointer);
+        $operation = new VipsOperation($name);
 
         $this->description = $operation->getDescription();
         $flags = $ffi->vips_operation_get_flags($operation);

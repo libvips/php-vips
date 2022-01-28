@@ -73,7 +73,7 @@ abstract class GObject
     {
         global $ctypes;
 
-        $this->gObject = FFI::cast($ctypes["GObject"], $pointer),
+        $this->gObject = FFI::cast($ctypes["GObject"], $pointer);
     }
 
     function __destruct() {

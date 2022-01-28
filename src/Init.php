@@ -41,18 +41,6 @@ namespace Jcupitt\Vips;
 /* This file does all the init we need to start up libvips and the binding.
  */
 
-# set TRUE for debug output
-$trace = TRUE;
-
-function trace($message)
-{
-    global $trace;
-
-    if ($trace) {
-        echo "$message\n";
-    }
-}
-
 $library_name = "libvips";
 
 # PHP_OS_FAMILY added in php 7.2
@@ -110,13 +98,13 @@ $result = $base_ffi->vips_init($argv[0]);
 if ($result != 0) {
     error();
 }
-trace("vips_init: $result");
+Utils::debugLog("vips_init: $result");
 
 # get the library version number, then we can build the API
 $library_major = $base_ffi->vips_version(0);
 $library_minor = $base_ffi->vips_version(1);
 $library_micro = $base_ffi->vips_version(2);
-trace("found libvips version: $library_major.$library_minor.$library_micro");
+Utils::debugLog("found libvips version: $library_major.$library_minor.$library_micro");
 
 function at_least($need_major, $need_minor)
 {
