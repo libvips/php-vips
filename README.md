@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/libvips/php-vips.svg?branch=master)](https://travis-ci.org/libvips/php-vips)
 
 `php-vips` is a binding for [libvips](https://github.com/libvips/libvips) for
-PHP 7. 
+PHP 7.4 and later. 
 
 libvips is fast and needs little memory. The
 [`vips-php-bench`](https://github.com/jcupitt/php-vips-bench) repository
@@ -17,54 +17,32 @@ image. When the pipe is connected to a destination, the whole pipeline
 executes at once and in parallel, streaming the image from source to
 destination in a set of small fragments.
 
-This module builds upon the `vips` PHP extension:
+### Install
 
-https://github.com/libvips/php-vips-ext
+You need to [install the libvips
+library](https://libvips.github.io/libvips/install.html). It's in the linux
+package managers, homebrew and MacPorts, and there are Windows binaries on
+the vips website. For example, on Debian:
 
-You'll need to install that first. It's tested on Linux and macOS --- 
-Windows would need some work, but should be possible.  
+```
+sudo apt-get install libvips-dev
+```
 
-See the README there, but briefly:
+Or macOS:
 
-1. [Install the libvips library and
-   headers](https://libvips.github.io/libvips/install.html). It's in
-   the linux package managers, homebrew and MacPorts, and there are Windows
-   binaries on the vips website. For example, on Debian:
+```
+brew install vips
+```
 
-   ```
-   sudo apt-get install libvips-dev
-   ```
+Then add vips to your `composer.json`:
 
-   Or macOS:
-
-   ```
-   brew install vips
-   ```
-
-2. Install the binary PHP extension. You'll need a PHP development environment
-   for this, since it will download and build the sources for the extension.
-   For example, on Debian:
-
-   ```
-   sudo apt-get install php-pear
-   ```
-
-   Then to download and build the extension it's:
-
-   ```
-   pecl install vips
-   ```
-
-   You may need to add `extension=vips.so` or equivalent to `php.ini`, see the
-   output of pecl.
-
-3. Add vips to your `composer.json`:
-
-   ```
-     "require": {
-       "jcupitt/vips" : "1.0.7"
-     }
-   ```
+```
+"require": {
+    "jcupitt/vips" : "dev-switch-to-php-ffi" 
+    # once this is out of beta, switch to
+    # "jcupitt/vips" : "2.0.0"
+}
+```
 
 ### Example
 
@@ -155,18 +133,6 @@ There are around 300 operations in the library, see the vips docs for an
 introduction:
 
 https://libvips.github.io/libvips/API/current
-
-### How it works
-
-The `vips` extension defines a simple but ugly way to call any libvips
-operation from PHP.  It uses libvips' own introspection facilities
-and does not depend on anything else (so no gobject-introspection,
-for example). It's a fairly short 1,600 lines of C.
-
-This module is a PHP layer over the ugly `vips` extension that
-tries to make a nice interface for programmers. It uses `__call()` and
-`__get()` to make all libvips operations appear as methods, and all
-libvips properties as properties of the PHP `Vips\Image` class.
 
 ### Test and install
 

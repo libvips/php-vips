@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to `:vips` will be documented in this file.
 
+## 2.0.0 - 2022-1-20
+
+Rewritten to use PHP FFI to call into the libvips library rather than a binary
+extension.
+
+No API Changes.
+
 ### 1.0.9 - 2021-11-20
 
 ### Added
@@ -18,7 +25,7 @@ All notable changes to `:vips` will be documented in this file.
 ### Security
 - Nothing
 
-### 1.0.8 - 2020-08-29
+## 1.0.8 - 2020-08-29
 
 ### Added
 - allow type names as type params to Image::setType() -- fixes issue with GType
@@ -36,7 +43,7 @@ All notable changes to `:vips` will be documented in this file.
 ### Security
 - Nothing
 
-### 1.0.7 - 2020-08-28
+## 1.0.7 - 2020-08-28
 
 ### Added
 - use nullable types and void return type where possible

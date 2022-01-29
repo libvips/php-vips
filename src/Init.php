@@ -69,6 +69,7 @@ else {
 
 $library = "$library_location$library_name$library_ext";
 
+# FFI added in 7.4
 $base_ffi = FFI::cdef(<<<EOS
 int vips_init (const char *argv0);
 int vips_shutdown (void);
