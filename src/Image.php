@@ -866,16 +866,27 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @return Image A new Image.
      */
     public static function newFromFile(
-        string $filename,
+        string $name,
         array $options = []
     ): Image {
+        global $ffi;
+
         Utils::debugLog('newFromFile', [
             'instance' => null,
-            'arguments' => [$filename, $options]
+            'arguments' => [$name, $options]
         ]);
 
+        $filename = $ffi->vips_lib.vips_filename_get_filename($name);
+        $string_options = $ffi->vips_filename_get_options($name);
         $options = self::unwrap($options);
-        $result = vips_image_new_from_file($filename, $options);
+
+        $loader = $ffi->vips_foreign_find_load($filename);
+        if (FFI::isNULL($loader)) {
+            self::errorVips();
+        }
+
+        $result = self::callBase($loader, $filename, 
+            array_merge(["string_options" => $string_options], $options));
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
@@ -885,50 +896,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Find the name of the load operation vips will use to load a file, for
-     * example "VipsForeignLoadJpegFile". You can use this to work out what
-     * options to pass to newFromFile().
-     *
-     * @param string $filename The file to test.
-     *
-     * @return string|null The name of the load operation, or null.
-     */
-    public static function findLoad(string $filename): ?string
-    {
-        Utils::debugLog('findLoad', [
-            'instance' => null,
-            'arguments' => [$filename]
-        ]);
-
-        // added in 1.0.5 of the binary module
-        if (function_exists('vips_foreign_find_load')) {
-            $result = vips_foreign_find_load($filename);
-        } else {
-            $result = null;
-
-            // fallback: use the vips-loader property ... this can be much slower
-            try {
-                $image = self::newFromFile($filename);
-                // Unfortunately, vips-loader is the operation nickname, rather
-                // than the canonical name returned by vips_foreign_find_load().
-                $loader = $image->get('vips-loader');
-                $result = self::$nicknameToCanonical[$loader];
-            } catch (Exception $ignored) {
-            }
-        }
-
-        Utils::debugLog('findLoad', ['result' => [$result]]);
-
-        return $result;
-    }
-
-    /**
      * Create a new Image from a compressed image held as a string.
      *
      * @param string $buffer        The formatted image to open.
-     * @param string $option_string Any text-style options to pass to the
+     * @param string $string_options Any text-style options to pass to the
      *     selected loader.
-     * @param array  $options       Any options to pass on to the load operation.
+     * @param array  $options       Options to pass on to the load operation.
      *
      * @throws Exception
      *
@@ -936,59 +909,27 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function newFromBuffer(
         string $buffer,
-        string $option_string = '',
+        string $string_options = '',
         array $options = []
     ): Image {
+        global $ffi;
+
         Utils::debugLog('newFromBuffer', [
             'instance' => null,
             'arguments' => [$buffer, $option_string, $options]
         ]);
 
         $options = self::unwrap($options);
-        $result = vips_image_new_from_buffer($buffer, $option_string, $options);
+        $loader = $ffi->vips_foreign_find_load_buffer($buffer);
+        if (FFI::isNULL($loader)) {
+            self::errorVips();
+        }
+        $result = self::callBase($loader, $buffer, 
+            array_merge(["string_options" => $string_options], $options));
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 
         Utils::debugLog('newFromBuffer', ['result' => $result]);
-
-        return $result;
-    }
-
-    /**
-     * Find the name of the load operation vips will use to load a buffer, for
-     * example 'VipsForeignLoadJpegBuffer'. You can use this to work out what
-     * options to pass to newFromBuffer().
-     *
-     * @param string $buffer The formatted image to test.
-     *
-     * @return string|null The name of the load operation, or null.
-     */
-    public static function findLoadBuffer(string $buffer): ?string
-    {
-        Utils::debugLog('findLoadBuffer', [
-            'instance' => null,
-            'arguments' => [$buffer]
-        ]);
-
-        // added in 1.0.5 of the binary module
-        if (function_exists('vips_foreign_find_load_buffer')) {
-            $result = vips_foreign_find_load_buffer($buffer);
-        } else {
-            $result = null;
-
-            // fallback: use the vips-loader property ... this can be much slower
-            try {
-                $image = self::newFromBuffer($buffer);
-                // Unfortunately, vips-loader is the operation nickname, rather
-                // than the canonical name returned by
-                // vips_foreign_find_load_buffer().
-                $loader = $image->get('vips-loader');
-                $result = self::$nicknameToCanonical[$loader];
-            } catch (Exception $ignored) {
-            }
-        }
-
-        Utils::debugLog('findLoadBuffer', ['result' => [$result]]);
 
         return $result;
     }
@@ -1070,6 +1011,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
         int $bands,
         string $format
     ): Image {
+        global $ffi;
+
         Utils::debugLog('newFromMemory', [
             'instance' => null,
             'arguments' => [$data, $width, $height, $bands, $format]
@@ -1103,6 +1046,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function newInterpolator(string $name)
     {
+        global $ffi;
+
         Utils::debugLog('newInterpolator', [
             'instance' => null,
             'arguments' => [$name]
