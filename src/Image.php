@@ -869,18 +869,16 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $name,
         array $options = []
     ): Image {
-        global $ffi;
-
         Utils::debugLog('newFromFile', [
             'instance' => null,
             'arguments' => [$name, $options]
         ]);
 
-        $filename = $ffi->vips_filename_get_filename($name);
-        $string_options = $ffi->vips_filename_get_options($name);
+        $filename = getFfi()->vips_filename_get_filename($name);
+        $string_options = getFfi()->vips_filename_get_options($name);
         $options = self::unwrap($options);
 
-        $loader = $ffi->vips_foreign_find_load($filename);
+        $loader = getFfi()->vips_foreign_find_load($filename);
         if (FFI::isNULL($loader)) {
             self::errorVips();
         }
@@ -912,15 +910,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $string_options = '',
         array $options = []
     ): Image {
-        global $ffi;
-
         Utils::debugLog('newFromBuffer', [
             'instance' => null,
             'arguments' => [$buffer, $option_string, $options]
         ]);
 
         $options = self::unwrap($options);
-        $loader = $ffi->vips_foreign_find_load_buffer($buffer);
+        $loader = getFfi()->vips_foreign_find_load_buffer($buffer);
         if (FFI::isNULL($loader)) {
             self::errorVips();
         }
@@ -954,8 +950,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         float $scale = 1.0,
         float $offset = 0.0
     ): Image {
-        global $ffi;
-
         Utils::debugLog('newFromArray', [
             'instance' => null,
             'arguments' => [$array, $scale, $offset]
@@ -969,14 +963,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $width = count($array[0]);
 
         $n = $width * $height;
-        $a = $ffi->new("double[]", $n);
+        $a = getFfi()->new("double[]", $n);
         for($y = 0; $y < $height; $y++) {
             for($x = 0; $x < $width; $x++) {
                 $a[$x + $y * $width] = $array[y][x];
             }
         }
 
-        $result = $ffi->
+        $result = getFfi()->
             vips_image_new_matrix_from_array($width, $height, $a, $n);
         if (FFI::isNULL($result)) {
             self::errorVips();
@@ -1011,14 +1005,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         int $bands,
         string $format
     ): Image {
-        global $ffi;
-
         Utils::debugLog('newFromMemory', [
             'instance' => null,
             'arguments' => [$data, $width, $height, $bands, $format]
         ]);
 
-        $result = $ffi->
+        $result = getFfi()->
             vips_image_new_from_memory($data, $width, $height, $bands, $format);
         if (FFI::isNULL($result)) {
             self::errorVips();
@@ -1046,14 +1038,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function newInterpolator(string $name)
     {
-        global $ffi;
-
         Utils::debugLog('newInterpolator', [
             'instance' => null,
             'arguments' => [$name]
         ]);
 
-        return $ffi->vips_interpolate_new($name);
+        return getFfi()->vips_interpolate_new($name);
     }
 
     /**

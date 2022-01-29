@@ -38,43 +38,98 @@
 
 namespace Jcupitt\Vips;
 
-/* This file does all the init we need to start up libvips and the binding.
+/**
+ * This singleton class manages the connection to the libvips binary.
+ *
+ * @category  Images
+ * @package   Jcupitt\Vips
+ * @author    John Cupitt <jcupitt@gmail.com>
+ * @copyright 2016 John Cupitt
+ * @license   https://opensource.org/licenses/MIT MIT
+ * @link      https://github.com/jcupitt/php-vips
  */
 
-echo "*** Init.php: startup\n";
+function getFfi()
+{
+    static $instance;
 
-$library_name = "libvips";
+    if (!$instance) {
+       $instance = new Init();
+       $instance->init();
+    }
 
-# PHP_OS_FAMILY added in php 7.2
-switch(PHP_OS_FAMILY) {
-case "Windows":
-    $library_ext = ".dll";
-    break;
-
-case "OSX":
-    $library_ext = ".dylib";
-    break;
-
-default;
-    $library_ext = ".so";
-    break;
+    return $instance;
 }
 
-$vipshome = getenv("VIPSHOME");
-if ($vipshome) {
-    $library_location = $vipshome . "/lib/";
-}
-else {
-    # rely on ffi's search
-    $library_location = "";
-}
+class Init
+{
+    /**
+     * The FFI handle we use for the libvips binary.
+     *
+     * @internal
+     */
+    private static $ffi;
 
-$library = "$library_location$library_name$library_ext";
+    /**
+     * The library version number we detect.
+     *
+     * @internal
+     */
+    private static int $library_major;
+    private static int $library_minor;
+    private static int $library_micro;
 
-echo "*** Init.php: library = $library\n";
+    public function __construct()
+    {
+    }
 
-# FFI added in 7.4
-$base_ffi = FFI::cdef(<<<EOS
+    public function error($message = "")
+    {
+        if ($message == "") {
+            $message = "libvips error: $this->ffi->vips_error_buffer()";
+            $this->ffi->vips_error_clear();
+        }
+        throw new Exception($message);
+    }
+
+    public function atLeast($need_major, $need_minor)
+    {
+        return $need_major < $this->library_major || 
+            ($need_major == $this->library_major && 
+             $need_minor <= $this->library_minor);
+    }
+
+    private function init()
+    {
+        $library_name = "libvips";
+
+        switch(PHP_OS_FAMILY) {
+        case "Windows":
+            $library_ext = ".dll";
+            break;
+
+        case "OSX":
+            $library_ext = ".dylib";
+            break;
+
+        default;
+            $library_ext = ".so";
+            break;
+        }
+
+        $vipshome = getenv("VIPSHOME");
+        if ($vipshome) {
+            $library_location = $vipshome . "/lib/";
+        }
+        else {
+            # rely on ffi's search
+            $library_location = "";
+        }
+
+        $library = "$library_location$library_name$library_ext";
+
+        try {
+            $this->ffi = FFI::cdef(<<<EOS
 int vips_init (const char *argv0);
 int vips_shutdown (void);
 
@@ -86,54 +141,41 @@ void vips_error_thaw (void);
 
 int vips_version(int flag);
 EOS, $library);
+        }
+        catch {
+           echo "some helpful message re. failed ffi init\n";
+           echo "this will be the main point of failure during install\n";
+           throw;
+        }
 
-function error($message = "")
-{
-    if (strlen($message) == 0) {
-        global $base_ffi;
+        $result = $this->ffi->vips_init($argv[0]);
+        if ($result != 0) {
+            $this->error();
+        }
+        Utils::debugLog("vips_init: $result");
 
-        $message = "libvips error: $base_ffi->vips_error_buffer()";
-        $base_ffi->vips_error_clear();
-    }
+        # get the library version number, then we can build the API
+        $this->library_major = $this->ffi->vips_version(0);
+        $this->library_minor = $this->ffi->vips_version(1);
+        $this->library_micro = $this->ffi->vips_version(2);
+        Utils::debugLog("found libvips version: " .
+            "$this->library_major.$this->library_minor.$this->library_micro");
 
-    throw new Exception($message);
-}
+        if (!$this->atLeast(8, 7)) {
+            $this->error("your libvips is too old -- 8.7 or later required");
+        }
 
-$result = $base_ffi->vips_init($argv[0]);
-if ($result != 0) {
-    error();
-}
-Utils::debugLog("vips_init: $result");
+        if (PHP_INT_SIZE != 8) {
+            # we could maybe fix this if it's important ... it's mostly 
+            # necessary since GType is the size of a pointer, and there's no 
+            # easy way to discover if php is running on a 32 or 64-bit 
+            # systems (as far as I can see)
+            $this->error("your php only supports 32-bit ints -- " .
+                "64 bit ints required");
+        }
 
-# get the library version number, then we can build the API
-$library_major = $base_ffi->vips_version(0);
-$library_minor = $base_ffi->vips_version(1);
-$library_micro = $base_ffi->vips_version(2);
-Utils::debugLog("found libvips version: $library_major.$library_minor.$library_micro");
-
-function at_least($need_major, $need_minor)
-{
-    global $library_major, $library_minor;
-
-    return $need_major < $library_major || 
-        ($need_major == $library_major && $need_minor <= $library_minor);
-}
-
-if (!at_least(8, 7)) {
-    error("your libvips is too old -- 8.7 or later required");
-}
-
-if (PHP_INT_SIZE != 8) {
-    # we could maybe fix this if it's important ... it's mostly necessary since
-    # GType is the size of a pointer, and there's no easy way to discover if php
-    # is running on a 32 or 64-bit systems (as far as I can see)
-    error("your php only supports 32-bit ints -- 64 bit ints required");
-}
-
-// bind the libvips API to the library binary
-
-# largely copied from pyvips
-$header = <<<EOS
+        # the whole libvips API, mostly adapted from pyvips
+        $header = <<<EOS
 // we need the glib names for these types
 typedef uint32_t guint32;
 typedef int32_t gint32;
@@ -466,8 +508,8 @@ int vips_object_get_args (VipsObject* object,
 const char*** names, int** flags, int* n_args);
 EOS;
 
-if (at_least(8, 8)) {
-    $header = $header . <<<EOS
+        if ($this->atLeast(8, 8)) {
+            $header = $header . <<<EOS
 char** vips_foreign_get_suffixes (void);
 
 void* vips_region_fetch (VipsRegion*, int, int, int, int,
@@ -477,10 +519,10 @@ int vips_region_height (VipsRegion*);
 int vips_image_get_page_height (VipsImage*);
 int vips_image_get_n_pages (VipsImage*);
 EOS;
-}
+        }
 
-if (at_least(8, 8)) {
-    $header = $header . <<<EOS
+        if ($this->atLeast(8, 8)) {
+            $header = $header . <<<EOS
 typedef struct _VipsConnection {
 VipsObject parent_object;
 
@@ -536,20 +578,22 @@ VipsTargetCustom* vips_target_custom_new (void);
 const char* vips_foreign_find_load_source (VipsSource *source);
 const char* vips_foreign_find_save_target (const char* suffix);
 EOS;
+        }
+
+        Utils::debugLog("building binding ...");
+        $ffi->cdef($header, $library);
+
+        # FIXME make ctypes and gtypes
+
+        Utils::debugLog("done");
+    }
 }
 
-echo "*** Init.php: building binding ...\n";
-
-$ffi = FFI::cdef($header, $library);
-
-# FIXME make ctypes and gtypes
-
 /*
-* Local variables:
-* tab-width: 4
-* c-basic-offset: 4
-* End:
-* vim600: expandtab sw=4 ts=4 fdm=marker
-* vim<600: expandtab sw=4 ts=4
-*/
-
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: expandtab sw=4 ts=4 fdm=marker
+ * vim<600: expandtab sw=4 ts=4
+ */
