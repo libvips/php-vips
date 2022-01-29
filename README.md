@@ -37,10 +37,24 @@ brew install vips
 Then add vips to your `composer.json`:
 
 ```
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/your/local/path/to/php-vips"
+        }
+    ],
+    "require": {
+        "jcupitt/vips": "*"
+    }
+}
+```
+
+Once this is finished, switch to:
+
+```
 "require": {
-    "jcupitt/vips" : "dev-switch-to-php-ffi" 
-    # once this is out of beta, switch to
-    # "jcupitt/vips" : "2.0.0"
+    "jcupitt/vips" : "2.0.0"
 }
 ```
 
