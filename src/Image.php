@@ -876,7 +876,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$name, $options]
         ]);
 
-        $filename = $ffi->vips_lib.vips_filename_get_filename($name);
+        $filename = $ffi->vips_filename_get_filename($name);
         $string_options = $ffi->vips_filename_get_options($name);
         $options = self::unwrap($options);
 

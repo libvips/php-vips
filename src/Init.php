@@ -41,6 +41,8 @@ namespace Jcupitt\Vips;
 /* This file does all the init we need to start up libvips and the binding.
  */
 
+echo "*** Init.php: startup\n";
+
 $library_name = "libvips";
 
 # PHP_OS_FAMILY added in php 7.2
@@ -68,6 +70,8 @@ else {
 }
 
 $library = "$library_location$library_name$library_ext";
+
+echo "*** Init.php: library = $library\n";
 
 # FFI added in 7.4
 $base_ffi = FFI::cdef(<<<EOS
@@ -533,6 +537,8 @@ const char* vips_foreign_find_load_source (VipsSource *source);
 const char* vips_foreign_find_save_target (const char* suffix);
 EOS;
 }
+
+echo "*** Init.php: building binding ...\n";
 
 $ffi = FFI::cdef($header, $library);
 
