@@ -774,7 +774,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     private static function errorVips(): void
     {
-        $message = vips_error_buffer();
+        $message = Init::ffi()->vips_error_buffer();
+        Init::ffi()->vips_error_buffer_clear();
         $exception = new Exception($message);
         Utils::errorLog($message, $exception);
         throw $exception;
@@ -879,7 +880,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $options = self::unwrap($options);
 
         $loader = Init::ffi()->vips_foreign_find_load($filename);
-        if (FFI::isNULL($loader)) {
+        if ($loader == "") {
             self::errorVips();
         }
 
@@ -917,7 +918,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $options = self::unwrap($options);
         $loader = Init::ffi()->vips_foreign_find_load_buffer($buffer);
-        if (FFI::isNULL($loader)) {
+        if (\FFI::isNULL($loader)) {
             self::errorVips();
         }
         $result = self::callBase($loader, $buffer, 
@@ -972,7 +973,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $result = Init::ffi()->
             vips_image_new_matrix_from_array($width, $height, $a, $n);
-        if (FFI::isNULL($result)) {
+        if (\FFI::isNULL($result)) {
             self::errorVips();
         }
         $result = self::wrapResult($result);
@@ -1012,7 +1013,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $result = Init::ffi()->
             vips_image_new_from_memory($data, $width, $height, $bands, $format);
-        if (FFI::isNULL($result)) {
+        if (\FFI::isNULL($result)) {
             self::errorVips();
         }
         $result = self::wrapResult($result);

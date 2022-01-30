@@ -48,7 +48,6 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-
 class Init
 {
     /**
@@ -56,18 +55,18 @@ class Init
      *
      * @internal
      */
-    private static $ffi;
+    private \FFI $ffi;
 
     /**
      * The library version number we detect.
      *
      * @internal
      */
-    private static int $library_major;
-    private static int $library_minor;
-    private static int $library_micro;
+    private int $library_major;
+    private int $library_minor;
+    private int $library_micro;
 
-    public static function ffi()
+    public static function getInit()
     {
         static $instance;
 
@@ -76,20 +75,16 @@ class Init
            $instance->init();
         }
 
-        return $instance->ffi;
+        return $instance;
+    }
+
+    public static function ffi()
+    {
+        return self::getInit()->ffi;
     }
 
     public function __construct()
     {
-    }
-
-    public function error($message = "")
-    {
-        if ($message == "") {
-            $message = "libvips error: $this->ffi->vips_error_buffer()";
-            $this->ffi->vips_error_clear();
-        }
-        throw new Exception($message);
     }
 
     public function atLeast($need_major, $need_minor)
@@ -127,42 +122,36 @@ class Init
         }
 
         $library = "$library_location$library_name$library_ext";
+        Utils::debugLog("init", ["libray", $library]);
 
-        try {
-            $this->ffi = FFI::cdef(<<<EOS
+        // TODO put a try/catch around this and generate a helpful message 
+        // since this is likely to be the main failure point
+        $ffi = \FFI::cdef(<<<EOS
 int vips_init (const char *argv0);
-int vips_shutdown (void);
-
 const char *vips_error_buffer (void);
-char *vips_error_buffer_copy (void);
-void vips_error_clear (void);
-void vips_error_freeze (void);
-void vips_error_thaw (void);
-
 int vips_version(int flag);
 EOS, $library);
-        }
-        catch {
-           echo "some helpful message re. failed ffi init\n";
-           echo "this will be the main point of failure during install\n";
-           throw;
-        }
 
-        $result = $this->ffi->vips_init($argv[0]);
+        $result = $ffi->vips_init("");
         if ($result != 0) {
-            $this->error();
+            throw new Exception("libvips error: $ffi->vips_error_buffer()");
         }
-        Utils::debugLog("vips_init: $result");
+        Utils::debugLog("init", ["vips_init", $result]);
 
         # get the library version number, then we can build the API
-        $this->library_major = $this->ffi->vips_version(0);
-        $this->library_minor = $this->ffi->vips_version(1);
-        $this->library_micro = $this->ffi->vips_version(2);
-        Utils::debugLog("found libvips version: " .
-            "$this->library_major.$this->library_minor.$this->library_micro");
+        $this->library_major = $ffi->vips_version(0);
+        $this->library_minor = $ffi->vips_version(1);
+        $this->library_micro = $ffi->vips_version(2);
+        Utils::debugLog("init", [
+            "libvips version",
+            $this->library_major,
+            $this->library_minor,
+            $this->library_micro
+        ]);
 
         if (!$this->atLeast(8, 7)) {
-            $this->error("your libvips is too old -- 8.7 or later required");
+            throw new Exception("your libvips is too old -- " .
+                "8.7 or later required");
         }
 
         if (PHP_INT_SIZE != 8) {
@@ -170,7 +159,7 @@ EOS, $library);
             # necessary since GType is the size of a pointer, and there's no 
             # easy way to discover if php is running on a 32 or 64-bit 
             # systems (as far as I can see)
-            $this->error("your php only supports 32-bit ints -- " .
+            throw new Exception("your php only supports 32-bit ints -- " .
                 "64 bit ints required");
         }
 
@@ -189,6 +178,17 @@ typedef guint64 GType;
 typedef struct _VipsImage VipsImage;
 typedef struct _VipsProgress VipsProgress;
 typedef struct _GValue GValue;
+
+int vips_init (const char *argv0);
+int vips_shutdown (void);
+
+const char *vips_error_buffer (void);
+char *vips_error_buffer_copy (void);
+void vips_error_clear (void);
+void vips_error_freeze (void);
+void vips_error_thaw (void);
+
+int vips_version(int flag);
 
 void* g_malloc (size_t size);
 void g_free (void* data);
@@ -580,12 +580,12 @@ const char* vips_foreign_find_save_target (const char* suffix);
 EOS;
         }
 
-        Utils::debugLog("building binding ...");
-        $ffi->cdef($header, $library);
+        Utils::debugLog("init", ["binding ..."]);
+        $this->ffi = \FFI::cdef($header, $library); 
 
         # FIXME make ctypes and gtypes
 
-        Utils::debugLog("done");
+        Utils::debugLog("init", ["done"]);
     }
 }
 
