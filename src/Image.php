@@ -874,11 +874,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$name, $options]
         ]);
 
-        $filename = getFfi()->vips_filename_get_filename($name);
-        $string_options = getFfi()->vips_filename_get_options($name);
+        $filename = Init::ffi()->vips_filename_get_filename($name);
+        $string_options = Init::ffi()->vips_filename_get_options($name);
         $options = self::unwrap($options);
 
-        $loader = getFfi()->vips_foreign_find_load($filename);
+        $loader = Init::ffi()->vips_foreign_find_load($filename);
         if (FFI::isNULL($loader)) {
             self::errorVips();
         }
@@ -916,7 +916,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         ]);
 
         $options = self::unwrap($options);
-        $loader = getFfi()->vips_foreign_find_load_buffer($buffer);
+        $loader = Init::ffi()->vips_foreign_find_load_buffer($buffer);
         if (FFI::isNULL($loader)) {
             self::errorVips();
         }
@@ -963,14 +963,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $width = count($array[0]);
 
         $n = $width * $height;
-        $a = getFfi()->new("double[]", $n);
+        $a = Init::ffi()->new("double[]", $n);
         for($y = 0; $y < $height; $y++) {
             for($x = 0; $x < $width; $x++) {
                 $a[$x + $y * $width] = $array[y][x];
             }
         }
 
-        $result = getFfi()->
+        $result = Init::ffi()->
             vips_image_new_matrix_from_array($width, $height, $a, $n);
         if (FFI::isNULL($result)) {
             self::errorVips();
@@ -1010,7 +1010,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$data, $width, $height, $bands, $format]
         ]);
 
-        $result = getFfi()->
+        $result = Init::ffi()->
             vips_image_new_from_memory($data, $width, $height, $bands, $format);
         if (FFI::isNULL($result)) {
             self::errorVips();
@@ -1043,7 +1043,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$name]
         ]);
 
-        return getFfi()->vips_interpolate_new($name);
+        return Init::ffi()->vips_interpolate_new($name);
     }
 
     /**

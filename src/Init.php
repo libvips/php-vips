@@ -49,18 +49,6 @@ namespace Jcupitt\Vips;
  * @link      https://github.com/jcupitt/php-vips
  */
 
-function getFfi()
-{
-    static $instance;
-
-    if (!$instance) {
-       $instance = new Init();
-       $instance->init();
-    }
-
-    return $instance;
-}
-
 class Init
 {
     /**
@@ -78,6 +66,18 @@ class Init
     private static int $library_major;
     private static int $library_minor;
     private static int $library_micro;
+
+    public static function ffi()
+    {
+        static $instance;
+
+        if (!$instance) {
+           $instance = new Init();
+           $instance->init();
+        }
+
+        return $instance->ffi;
+    }
 
     public function __construct()
     {
