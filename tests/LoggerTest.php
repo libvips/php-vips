@@ -33,7 +33,7 @@ class LoggerTest extends TestCase
              *
              * @return void
              */
-            public function log($level, $message, array $context = array())
+            public function log($level, $message, array $context = array()): void
             {
                 // Do logging logic here.
             }

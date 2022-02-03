@@ -69,7 +69,7 @@ class DebugLogger implements LoggerInterface
      *
      * @return void
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         // `Vips\Image` to string convert
         array_walk_recursive($context, function (&$value) {
