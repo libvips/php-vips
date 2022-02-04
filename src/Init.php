@@ -66,6 +66,14 @@ class Init
     private int $library_minor;
     private int $library_micro;
 
+    /**
+     * Look up these once.
+     *
+     * @internal
+     */
+    private array $ctypes;
+    private array $gtypes;
+
     public static function getInit()
     {
         static $instance;
@@ -81,6 +89,54 @@ class Init
     public static function ffi()
     {
         return self::getInit()->ffi;
+    }
+
+    public static function ctypes(string $name)
+    {
+        return self::getInit()->ctypes[$name];
+    }
+
+    public static function gtypes(string $name)
+    {
+        return self::getInit()->gtypes[$name];
+    }
+
+    /**
+     * Throw a vips error as an exception.
+     *
+     * @throws Exception
+     *
+     * @return void
+     *
+     * @internal
+     */
+    public static function error(string $message = "")
+    {
+        if ($message == "") {
+            $message = Init::ffi()->vips_error_buffer();
+            Init::ffi()->vips_error_buffer_clear();
+        }
+        $exception = new Exception($message);
+        Utils::errorLog($message, $exception);
+        throw $exception;
+    }
+
+    public static function filename_get_filename($name)
+    {
+        $pointer = Init::ffi()->vips_filename_get_filename($name);
+        $filename = \FFI::string($pointer);
+        \FFI::free($pointer);
+
+        return $filename;
+    }
+
+    public static function filename_get_options($name)
+    {
+        $pointer = Init::ffi()->vips_filename_get_options($name);
+        $options = \FFI::string($pointer);
+        \FFI::free($pointer);
+
+        return $options;
     }
 
     public function __construct()
@@ -122,7 +178,7 @@ class Init
         }
 
         $library = "$library_location$library_name$library_ext";
-        Utils::debugLog("init", ["libray", $library]);
+        Utils::debugLog("init", ["libray" => $library]);
 
         // TODO put a try/catch around this and generate a helpful message 
         // since this is likely to be the main failure point
@@ -136,17 +192,18 @@ EOS, $library);
         if ($result != 0) {
             throw new Exception("libvips error: $ffi->vips_error_buffer()");
         }
-        Utils::debugLog("init", ["vips_init", $result]);
+        Utils::debugLog("init", ["vips_init" => $result]);
 
         # get the library version number, then we can build the API
         $this->library_major = $ffi->vips_version(0);
         $this->library_minor = $ffi->vips_version(1);
         $this->library_micro = $ffi->vips_version(2);
         Utils::debugLog("init", [
-            "libvips version",
-            $this->library_major,
-            $this->library_minor,
-            $this->library_micro
+            "libvips version" => [
+                $this->library_major,
+                $this->library_minor,
+                $this->library_micro
+            ]
         ]);
 
         if (!$this->atLeast(8, 7)) {
@@ -583,17 +640,23 @@ EOS;
         Utils::debugLog("init", ["binding ..."]);
         $this->ffi = \FFI::cdef($header, $library); 
 
-        # FIXME make ctypes and gtypes
+        // look these up in advance
+        $this->ctypes = [
+            "VipsObject" =>  $this->ffi->type("VipsObject*"),
+            "GObject" =>  $this->ffi->type("GObject*"),
+            "VipsOperation" =>  $this->ffi->type("VipsOperation*"),
+        ];
+
+        $this->gtypes = [
+            "gboolean" => $this->ffi->g_type_from_name("gboolean"),
+            "gchararray" => $this->ffi->g_type_from_name("gchararray"),
+            "VipsRefString" => $this->ffi->g_type_from_name("VipsRefString"),
+            "VipsImage" => $this->ffi->g_type_from_name("VipsImage"),
+            "GObject" => $this->ffi->g_type_from_name("GObject"),
+        ];
 
         Utils::debugLog("init", ["done"]);
     }
+
 }
 
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: expandtab sw=4 ts=4 fdm=marker
- * vim<600: expandtab sw=4 ts=4
- */

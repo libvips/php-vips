@@ -38,25 +38,14 @@
 
 namespace Jcupitt\Vips;
 
-// look these up in advance
-$gtypes = [
-    "gboolean" => $ffi->g_type_from_name("gboolean"),
-    "gchararray" => $ffi->g_type_from_name("gchararray"),
-    "VipsRefString" => $ffi->g_type_from_name("VipsRefString"),
-    "VipsImage" => $ffi->g_type_from_name("VipsImage"),
-    "GObject" => $ffi->g_type_from_name("GObject"),
-];
-
 class GValue
 {
     private FFI\CData $struct;
     public FFI\CData $pointer;
 
     function __construct() {
-        global $ffi;
-
         # allocate a gvalue on the heap, and make it persistent between requests
-        $this->struct = $ffi->new("GValue", true, true);
+        $this->struct = Init::ffi()->new("GValue", true, true);
         $this->pointer = FFI::addr($this->struct);
 
         # GValue needs to be inited to all zero
@@ -64,15 +53,11 @@ class GValue
     }
 
     function __destruct() {
-        global $ffi;
-
-        $ffi->g_value_unset($this->pointer);
+        Init::ffi()->g_value_unset($this->pointer);
     }
 
     function setType(int $gtype) {
-        global $ffi;
-
-        $ffi->g_value_init($this->pointer, $gtype);
+        Init::ffi()->g_value_init($this->pointer, $gtype);
     }
 
     function getType(): int {
@@ -80,31 +65,29 @@ class GValue
     }
 
     function set($value) {
-        global $ffi, $gtypes;
-
         $gtype = $this->get_type();
 
         switch ($gtype) {
-        case $gtypes["gboolean"]:
-            $ffi->g_value_set_boolean($this->pointer, $value);
+        case Init::gtypes("gboolean"):
+            Init::ffi()->g_value_set_boolean($this->pointer, $value);
             break;
 
-        case $gtypes["gchararray"]:
-            $ffi->g_value_set_string($this->pointer, $value);
+        case Init::gtypes("gchararray"):
+            Init::ffi()->g_value_set_string($this->pointer, $value);
             break;
 
-        case $gtypes["VipsRefString"]:
-            $ffi->vips_value_set_ref_string($this->pointer, $value);
+        case Init::gtypes("VipsRefString"):
+            Init::ffi()->vips_value_set_ref_string($this->pointer, $value);
             break;
 
         default:
-            $fundamental = $ffi->g_type_fundamental($gtype);
+            $fundamental = Init::ffi()->g_type_fundamental($gtype);
             switch ($fundamental) {
-            case $gtypes["GObject"]:
+            case Init::gtypes("GObject"):
                 break;
 
             default:
-                $typeName = $ffi->g_type_name($gtype);
+                $typeName = Init::ffi()->g_type_name($gtype);
                 throw new \BadMethodCallException("$typeName not implemented");
                 break;
             }
@@ -112,36 +95,34 @@ class GValue
     }
 
     function get() {
-        global $ffi, $gtypes;
-
         $gtype = $this->get_type();
         $result = null;
 
         switch ($gtype) {
-        case $gtypes["gboolean"]:
-            $result = $ffi->g_value_get_boolean($this->pointer);
+        case Init::gtypes("gboolean"):
+            $result = Init::ffi()->g_value_get_boolean($this->pointer);
             break;
 
-        case $gtypes["gchararray"]:
-            $ffi->g_value_get_string($this->pointer);
+        case Init::gtypes("gchararray"):
+            Init::ffi()->g_value_get_string($this->pointer);
             break;
 
-        case $gtypes["VipsRefString"]:
-            $psize = $ffi->new("size_t*");
-            $result = $ffi->vips_value_get_ref_string($this->pointer, $psize);
+        case Init::gtypes("VipsRefString"):
+            $psize = Init::ffi()->new("size_t*");
+            $result = Init::ffi()->vips_value_get_ref_string($this->pointer, $psize);
             # $psize[0] will be the string length, but assume it's null 
             # terminated
             break;
 
         default:
-            $fundamental = $ffi->g_type_fundamental($gtype);
+            $fundamental = Init::ffi()->g_type_fundamental($gtype);
             switch ($fundamental) {
-            case $gtypes["GObject"]:
+            case Init::gtypes("GObject"):
                 # we need a class wrapping gobject before we can impement this
                 break;
 
             default:
-                $typeName = $ffi->g_type_name($gtype);
+                $typeName = Init::ffi()->g_type_name($gtype);
                 throw new \BadMethodCallException("$typeName not implemented");
                 break;
             }

@@ -57,28 +57,22 @@ abstract class VipsObject extends GObject
      *
      * @internal
      */
-    private FFI\CData $vipsObject;
+    private \FFI\CData $vipsObject;
 
     function __construct($pointer)
     {
-        global $ffi;
-        global $ctypes;
-
-        $this->vipsObject = $ffi->cast($ctypes["VipsObject"], $pointer);
+        $this->vipsObject = Init::ffi()->
+            cast(Init::ctypes("VipsObject"), $pointer);
         parent::__construct($pointer);
     }
 
     // print a table of all active vipsobjects ... handy for debugging
     static function printAll() {
-        global $ffi;
-
-        $ffi->vips_object_print_all();
+        Init::ffi()->vips_object_print_all();
     }
 
     function getDescription() {
-        global $ffi;
-
-        return $ffi->vips_object_get_description($this->vipsObject);
+        return Init::ffi()->vips_object_get_description($this->vipsObject);
     }
 
     // get the pspec for a property 
@@ -86,13 +80,10 @@ abstract class VipsObject extends GObject
     // very slow! avoid if possible
     // FIXME add a cache for this thing
     function getPspec($name) {
-        global $ffi;
-        global $ctypes;
-
-        $pspec = $ffi->new("GParamSpec*[1]");
-        $argument_class = $ffi->new("VipsArgumentClass*[1]");
-        $argument_instance = $ffi->new("VipsArgumentInstance*[1]");
-        $result = $ffi->vips_object_get_argument(
+        $pspec = Init::ffi()->new("GParamSpec*[1]");
+        $argument_class = Init::ffi()->new("VipsArgumentClass*[1]");
+        $argument_instance = Init::ffi()->new("VipsArgumentInstance*[1]");
+        $result = Init::ffi()->vips_object_get_argument(
             $this->vipsObject,
             $name,
             $pspec, 
@@ -111,12 +102,10 @@ abstract class VipsObject extends GObject
     // get the type of a property from a VipsObject
     // 0 if no such property
     function getType($name) {
-        global $base_ffi;
-
         $pspec = $this->getPspec($name);
-        if (FFI::isNULL($pspec)) {
+        if (FFI::isNull($pspec)) {
             # need to clear any error, this is horrible
-            $base_ffi->vips_error_clear();
+            Init::ffi()->vips_error_clear();
             return 0;
         }
         else {
@@ -124,46 +113,37 @@ abstract class VipsObject extends GObject
         }
     }
 
-    function getBlurb($name) {
-        global $ffi;
-
+    function getBlurb(string $name) {
         $pspec = $this->getPspec($name);
-        return $ffi->g_param_spec_get_blurb($pspec);
+        return Init::ffi()->g_param_spec_get_blurb($pspec);
     }
 
-    function getArgumentDescription($name) {
-        global $ffi;
-
+    function getArgumentDescription(string $name) {
         $pspec = $this->getPspec($name);
-        return $ffi->g_param_spec_get_description($pspec);
+        return Init::ffi()->g_param_spec_get_description($pspec);
     }
 
-    function get($name) {
-        global $ffi;
-        global $ctypes;
-
+    function get(string $name) {
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
 
-        $ffi->g_object_get_property($this->gObject, $name, $gvalue->pointer);
+        Init::ffi()->
+            g_object_get_property($this->gObject, $name, $gvalue->pointer);
 
         return $gvalue->get();
     }
 
-    function set($name, $value) {
-        global $ffi;
-
+    function set(string $name, $value) {
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
         $gvalue->set($value);
 
-        $ffi->g_object_set_property($this->gObject, $name, $gvalue->pointer);
+        Init::ffi()->
+            g_object_set_property($this->gObject, $name, $gvalue->pointer);
     }
 
     function setString($string_options) {
-        global $ffi;
-
-        $result = $ffi->vips_object_set_from_string(
+        $result = Init::ffi()->vips_object_set_from_string(
             $this->vipsObject, 
             $string_options
         );

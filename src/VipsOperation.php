@@ -49,7 +49,7 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/libvips/php-vips
  */
-abstract class VipsOperation extends VipsObject
+class VipsOperation extends VipsObject
 {
     /**
      * A pointer to the underlying VipsOperation. This is the same as the
@@ -57,33 +57,126 @@ abstract class VipsOperation extends VipsObject
      *
      * @internal
      */
-    private FFI\CData $vipsOperation;
+    private \FFI\CData $vipsOperation;
 
     /**
-     * Cache introsection results here.
+     * Cache introspection results here.
      */
     private static $introspectionCache = [];
 
-    function __construct($name)
-    {
-        global $ffi;
-        global $ctypes;
-
-        $pointer = $ffi->vips_operation_new($name);
-        if (FFI::isNull($pointer)) {
-            error();
+    static function getIntrospection($name) {
+        if (!array_key_exists(self::introspectionCache, $name)) {
+            self::introspectionCache[$name] = new VipsIntrospection($name);
         }
 
-        $this->vipsOperation = $ffi->cast($ctypes["VipsOperation"], $pointer);
-        parent::__construct($pointer);
+        return self::introspectionCache[$name];
     }
 
-    static function getIntrospection($name) {
-        if (!array_key_exists($introspectionCache, $name)) {
-            $introspectionCache[$name] = new VipsIntrospection($name);
+    function __construct($name)
+    {
+        Utils::debugLog("VipsOperation", ["name" => $name]);
+        $this->vipsOperation = Init::ffi()->vips_operation_new($name);
+        if (\FFI::isNull($this->vipsOperation)) {
+            Init::error();
         }
 
-        return $introspectionCache[$name];
+        parent::__construct($this->vipsOperation);
+    }
+
+    /**
+     * Unwrap an array of stuff ready to pass down to the vips_ layer. We
+     * swap instances of Image for the ffi pointer.
+     *
+     * @param array $result Unwrap this.
+     *
+     * @return array $result unwrapped, ready for vips.
+     *
+     * @internal
+     */
+    private static function unwrap(array $result): array
+    {
+        array_walk_recursive($result, function (&$value) {
+            if ($value instanceof Image) {
+                $value = $value->image;
+            }
+        });
+
+        return $result;
+    }
+
+    /**
+     * Is $value a VipsImage.
+     *
+     * @param mixed $value The thing to test.
+     *
+     * @return bool true if this is a ffi VipsImage*.
+     *
+     * @internal
+     */
+    private static function isImagePointer($value): bool
+    {
+        # wat
+        # return $value instanceof \FFI::CData &&
+        #     \FFI::typeof($value) === Init::ctypes("VipsImage");
+
+        return \FFI::typeof($value) === Init::ctypes("VipsImage");
+    }
+
+    /**
+     * Wrap up the result of a vips_ call ready to return it to PHP. We do
+     * two things:
+     *
+     * - If the array is a singleton, we strip it off. For example, many
+     *   operations return a single result and there's no sense handling
+     *   this as an array of values, so we transform ['out' => x] -> x.
+     *
+     * - Any VipsImage resources are rewrapped as instances of Image.
+     *
+     * @param mixed $result Wrap this up.
+     *
+     * @return mixed $result, but wrapped up as a php class.
+     *
+     * @internal
+     */
+    private static function wrapResult($result)
+    {
+        if (!is_array($result)) {
+            $result = ['x' => $result];
+        }
+
+        array_walk_recursive($result, function (&$item) {
+            if (self::isImagePointer($item)) {
+                $item = new Image($item);
+            }
+        });
+
+        if (count($result) === 1) {
+            $result = array_shift($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Check the result of a vips_ call for an error, and throw an exception
+     * if we see one.
+     *
+     * This won't work for things like __get where a non-array return can be
+     * a valid return.
+     *
+     * @param mixed $result Test this.
+     *
+     * @throws Exception
+     *
+     * @return void
+     *
+     * @internal
+     */
+    private static function errorIsArray($result): void
+    {
+        if (!is_array($result)) {
+            Init::error();
+        }
     }
 
     /**
@@ -117,9 +210,9 @@ abstract class VipsOperation extends VipsObject
         $arguments = array_merge([$name, $instance], $arguments);
         $arguments = array_values(self::unwrap($arguments));
         $operation = new VipsOperation($name);
-        $introspection = $this->getIntrospection($name);
+        $introspection = self::getIntrospection($name);
 
-        trace("setting arguments ...");
+        Utils::debugLog("callBase", ["setting arguments ..."]);
 
         if (count($introspection->required_input) != count($arguments)) {
         }
@@ -129,10 +222,10 @@ abstract class VipsOperation extends VipsObject
 
         // build the operation
 
-        trace("building ...");
-        $new_operation = $ffi->vips_cache_operation_build($operation);
+        Utils::debugLog("callBase", ["building ..."]);
+        $new_operation = Init::ffi()->vips_cache_operation_build($operation);
         if (FFI::isNull($new_operation)) {
-          $ffi->vips_object_unref_outputs($operation);
+          Init::ffi()->vips_object_unref_outputs($operation);
           error();
         }
         $operation = $new_operation;
@@ -141,11 +234,7 @@ abstract class VipsOperation extends VipsObject
 
         // fetch required output args
 
-        $image = gobject_get($operation, "out");
-        trace("result: " . print_r($image, true));
-
-        $result = vips_call(...$arguments);
-
+        $result = $operation->get("out");
         self::errorIsArray($result);
         $result = self::wrapResult($result);
 

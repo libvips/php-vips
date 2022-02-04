@@ -55,7 +55,7 @@ abstract class GObject
      *
      * @internal
      */
-    private FFI\CData $gObject;
+    private \FFI\CData $gObject;
 
     /**
      * Wrap a GObject around an underlying vips resource. The GObject takes
@@ -73,13 +73,11 @@ abstract class GObject
     {
         global $ctypes;
 
-        $this->gObject = FFI::cast($ctypes["GObject"], $pointer);
+        $this->gObject = \FFI::cast(Init::ctypes("GObject"), $pointer);
     }
 
     function __destruct() {
-        global $ffi;
-
-        $ffi->g_object_unref($this->gObject);
+        Init::ffi()->g_object_unref($this->gObject);
     }
 
     // TODO signal marshalling to go in
