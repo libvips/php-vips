@@ -92,7 +92,7 @@ abstract class VipsObject extends GObject
         );
 
         if ($result != 0) {
-            return FFI::NULL;
+            return null;
         }
         else {
             return $pspec[0];
@@ -103,7 +103,7 @@ abstract class VipsObject extends GObject
     // 0 if no such property
     function getType($name) {
         $pspec = $this->getPspec($name);
-        if (FFI::isNull($pspec)) {
+        if (\FFI::isNull($pspec)) {
             # need to clear any error, this is horrible
             Init::ffi()->vips_error_clear();
             return 0;

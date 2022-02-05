@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * Introspect a VIpsOperation and discover everything we can. This is called
+ * Introspect a VipsOperation and discover everything we can. This is called
  * on demand once per operation and the results held in a cache.
  *
  * @category  Images
@@ -49,65 +49,61 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/libvips/php-vips
  */
-class Introspection
+class Introspect
 {
     /**
      * The operation nickname (eg. "add").
      */
-    protected string $name;
+    public string $name;
 
     /**
      * The operation description (eg. "add two images").
      */
-    protected string $description;
+    public string $description;
 
     /**
      * The operation flags (eg. SEQUENTIAL | DEPRECATED).
      */
-    protected int $flags;
+    public int $flags;
 
     /**
      * A hash from arg name to a hash of details.
      */
-    protected array $arguments;
+    public array $arguments;
 
     /**
      * Arrays of arg names, in order and by category, eg. $this->required_input
      * = ["filename"].
      */
-    protected array $required_input;
-    protected array $optional_input;
-    protected array $required_output;
-    protected array $optional_output;
+    public array $required_input;
+    public array $optional_input;
+    public array $required_output;
+    public array $optional_output;
 
     /** 
      * The name of the arg this operation uses as "this".
      */
-    protected string $member_this;
+    public string $member_this;
 
     /**
      * And the required input args, without the "this".
      */
-    protected array $method_args;
+    public array $method_args;
 
     function __construct($name)
     {
-        global $ffi;
-        global $ctypes;
-        global $gtypes;
-
         $this->name = $name;
 
         $operation = new VipsOperation($name);
 
         $this->description = $operation->getDescription();
-        $flags = $ffi->vips_operation_get_flags($operation);
+        $flags = Init::ffi()->vips_operation_get_flags($operation->pointer);
 
-        $p_names = $ffi->new("char**[1]");
-        $p_flags = $ffi->new("int*[1]");
-        $p_n_args = $ffi->new("int[1]");
-        $result = $ffi->vips_object_get_args(
-            FFI::cast($ctypes["VipsObject"], $operation),
+        $p_names = Init::ffi()->new("char**[1]");
+        $p_flags = Init::ffi()->new("int*[1]");
+        $p_n_args = Init::ffi()->new("int[1]");
+        $result = Init::ffi()->vips_object_get_args(
+            \FFI::cast(Init::ctypes("VipsObject"), $operation->pointer),
             $p_names, 
             $p_flags, 
             $p_n_args
@@ -122,10 +118,10 @@ class Introspection
         # make a hash from arg name to flags
         $argumentFlags = [];
         for ($i = 0; $i < $n_args; $i++) {
-            if (($p_flags[$i] & $argumentFlags["CONSTRUCT"]) != 0) {
+            if (($p_flags[$i] & ArgumentFlags::CONSTRUCT) != 0) {
                 # libvips uses '-' to separate parts of arg names, but we
                 # need '_' for php
-                $name = FFI::string($p_names[$i]);
+                $name = \FFI::string($p_names[$i]);
                 $name = str_replace("-", "_", $name);
                 $argumentFlags[$name] = $p_flags[$i];
             }
@@ -137,8 +133,8 @@ class Introspection
             $this->arguments[$name] = [
                 "name" => $name,
                 "flags" => $flags,
-                "blurb" => $operation->getBlurb($operation, $name),
-                "type" => $operation->getType($operation, $name)
+                "blurb" => $operation->getBlurb($name),
+                "type" => $operation->getType($name)
             ];
         }
 
@@ -152,43 +148,43 @@ class Introspection
             $flags = $details["flags"];
             $blurb = $details["blurb"];
             $type = $details["type"];
-            $typeName = $ffi->g_type_name($type);
+            $typeName = Init::ffi()->g_type_name($type);
 
-            if (($flags & $argumentFlags["INPUT"]) &&
-                ($flags & $argumentFlags["REQUIRED"]) &&
-                !($flags & $argumentFlags["DEPRECATED"])) {
+            if (($flags & ArgumentFlags::INPUT) &&
+                ($flags & ArgumentFlags::REQUIRED) &&
+                !($flags & ArgumentFlags::DEPRECATED)) {
                 $this->required_input[] = $name;
 
                 # required inputs which we MODIFY are also required outputs
-                if ($flags & $argumentFlags["MODIFY"]) {
+                if ($flags & ArgumentFlags::MODIFY) {
                     $this->required_output[] = $name;
                 }
             }
 
-            if (($flags & $argumentFlags["OUTPUT"]) &&
-                ($flags & $argumentFlags["REQUIRED"]) &&
-                !($flags & $argumentFlags["DEPRECATED"])) {
+            if (($flags & ArgumentFlags::OUTPUT) &&
+                ($flags & ArgumentFlags::REQUIRED) &&
+                !($flags & ArgumentFlags::DEPRECATED)) {
                 $this->required_output[] = $name;
             }
   
             # we let deprecated optional args through, but warn about them
             # if they get used, see below
-            if (($flags & $argumentFlags["INPUT"]) &&
-                !($flags & $argumentFlags["REQUIRED"])) {
+            if (($flags & ArgumentFlags::INPUT) &&
+                !($flags & ArgumentFlags::REQUIRED)) {
                 $this->optional_input[] = $name;
             }
   
-            if (($flags & $argumentFlags["OUTPUT"]) &&
-                !($flags & $argumentFlags["REQUIRED"])) {
+            if (($flags & ArgumentFlags::OUTPUT) &&
+                !($flags & ArgumentFlags::REQUIRED)) {
                 $this->optional_output[] = $name;
             }
         }
 
         # find the first required input image arg, if any ... that will be self
-        $this->member_this = null;
-        foreach ($required_input as $name) {
-            $type = $details[$name]["type"];
-            if ($type == $gtypes["VipsImage"]) {
+        $this->member_this = "";
+        foreach ($this->required_input as $name) {
+            $type = $this->arguments[$name]["type"];
+            if ($type == Init::gtypes("VipsImage")) {
                 $this->member_this = $name;
                 break;
             }
@@ -197,10 +193,12 @@ class Introspection
         # method args are required args, but without the image they are a
         # method on
         $this->method_args = $this->required_input;
-        if ($this->member_this != null) {
+        if ($this->member_this != "") {
             $index = array_search($this->member_this, $this->method_args);
             array_splice($this->method_args, $index);
         }
+
+        Utils::debugLog($name, ['introspect' => strval($this)]);
     }
 
     public function __toString() {
@@ -212,14 +210,14 @@ class Introspection
             $flags = $details["flags"];
             $blurb = $details["blurb"];
             $type = $details["type"];
-            $typeName = $ffi->g_type_name($type);
+            $typeName = Init::ffi()->g_type_name($type);
 
             $result .= "  $name:\n";
 
             $result .= "    flags: $flags\n";
-            foreach ($argumentFlags as $name => $flag) {
+            foreach (ArgumentFlags::NAMES as $name => $flag) {
                 if ($flags & $flag) {
-                    $resut .= "      $name\n";
+                    $result .= "      $name\n";
                 }
             }
 

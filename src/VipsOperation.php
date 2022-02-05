@@ -57,30 +57,27 @@ class VipsOperation extends VipsObject
      *
      * @internal
      */
-    private \FFI\CData $vipsOperation;
-
-    /**
-     * Cache introspection results here.
-     */
-    private static $introspectionCache = [];
-
-    static function getIntrospection($name) {
-        if (!array_key_exists(self::introspectionCache, $name)) {
-            self::introspectionCache[$name] = new VipsIntrospection($name);
-        }
-
-        return self::introspectionCache[$name];
-    }
+    public \FFI\CData $pointer;
 
     function __construct($name)
     {
         Utils::debugLog("VipsOperation", ["name" => $name]);
-        $this->vipsOperation = Init::ffi()->vips_operation_new($name);
-        if (\FFI::isNull($this->vipsOperation)) {
+        $this->pointer = Init::ffi()->vips_operation_new($name);
+        if (\FFI::isNull($this->pointer)) {
             Init::error();
         }
 
-        parent::__construct($this->vipsOperation);
+        parent::__construct($this->pointer);
+    }
+
+    private static function introspect($name) {
+        static $cache = [];
+
+        if (!array_key_exists($name, $cache)) {
+            $cache[$name] = new Introspect($name);
+        }
+
+        return $cache[$name];
     }
 
     /**
@@ -210,11 +207,11 @@ class VipsOperation extends VipsObject
         $arguments = array_merge([$name, $instance], $arguments);
         $arguments = array_values(self::unwrap($arguments));
         $operation = new VipsOperation($name);
-        $introspection = self::getIntrospection($name);
+        $introspect = self::introspect($name);
 
         Utils::debugLog("callBase", ["setting arguments ..."]);
 
-        if (count($introspection->required_input) != count($arguments)) {
+        if (count($introspect->required_input) != count($arguments)) {
         }
 
 
