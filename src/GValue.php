@@ -40,16 +40,16 @@ namespace Jcupitt\Vips;
 
 class GValue
 {
-    private FFI\CData $struct;
-    public FFI\CData $pointer;
+    private \FFI\CData $struct;
+    public \FFI\CData $pointer;
 
     function __construct() {
         # allocate a gvalue on the heap, and make it persistent between requests
         $this->struct = Init::ffi()->new("GValue", true, true);
-        $this->pointer = FFI::addr($this->struct);
+        $this->pointer = \FFI::addr($this->struct);
 
         # GValue needs to be inited to all zero
-        FFI::memset($this->pointer, 0, FFI::sizeof($this->struct));
+        \FFI::memset($this->pointer, 0, \FFI::sizeof($this->struct));
     }
 
     function __destruct() {
@@ -65,7 +65,7 @@ class GValue
     }
 
     function set($value) {
-        $gtype = $this->get_type();
+        $gtype = $this->getType();
 
         switch ($gtype) {
         case Init::gtypes("gboolean"):
@@ -95,7 +95,7 @@ class GValue
     }
 
     function get() {
-        $gtype = $this->get_type();
+        $gtype = $this->getType();
         $result = null;
 
         switch ($gtype) {

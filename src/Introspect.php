@@ -94,7 +94,7 @@ class Introspect
     {
         $this->name = $name;
 
-        $operation = new VipsOperation($name);
+        $operation = VipsOperation::newFromName($name);
 
         $this->description = $operation->getDescription();
         $flags = Init::ffi()->vips_operation_get_flags($operation->pointer);

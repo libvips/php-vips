@@ -59,15 +59,23 @@ class VipsOperation extends VipsObject
      */
     public \FFI\CData $pointer;
 
-    function __construct($name)
+    function __construct($pointer)
+    {
+        $this->pointer = Init::ffi()->
+            cast(Init::ctypes("VipsOperation"), $pointer);
+
+        parent::__construct($pointer);
+    }
+
+    public static function newFromName($name)
     {
         Utils::debugLog("VipsOperation", ["name" => $name]);
-        $this->pointer = Init::ffi()->vips_operation_new($name);
-        if (\FFI::isNull($this->pointer)) {
+        $pointer = Init::ffi()->vips_operation_new($name);
+        if (\FFI::isNull($pointer)) {
             Init::error();
         }
 
-        parent::__construct($this->pointer);
+        return new VipsOperation($pointer);
     }
 
     private static function introspect($name) {
@@ -204,35 +212,72 @@ class VipsOperation extends VipsObject
             'arguments' => $arguments
         ]);
 
-        $arguments = array_merge([$name, $instance], $arguments);
-        $arguments = array_values(self::unwrap($arguments));
-        $operation = new VipsOperation($name);
+        $operation = self::newFromName($name);
         $introspect = self::introspect($name);
+
+        /* Take any optional args off the end.
+         */
+        $n_required = count($introspect->required_input);
+        $n_supplied = count($arguments);
+        $options = [];
+        if ($instance) {
+            $n_supplied += 1;
+        }
+        if ($n_supplied - 1 == $n_required && 
+            is_array(end(array_values($arguments)))) {
+            $options = array_pop($arguments);
+            $n_supplied -= 1;
+        }
+        if ($n_required != $n_supplied) {
+            Init::error("$n_required arguments required, " .
+                "but $n_supplied supplied");
+        }
 
         Utils::debugLog("callBase", ["setting arguments ..."]);
 
-        if (count($introspect->required_input) != count($arguments)) {
+        /* Set required.
+         */
+        $i = 0;
+        foreach ($introspect->required_input as $name) {
+            if ($name == $introspect->member_this) {
+                if (!$instance) {
+                    Init::error("instance argument not supplied");
+                }
+                $operation->set($name, $instance);
+            }
+            else {
+                $operation->set($name, $arguments[$i]);
+            }
+
+            $i += 1;
         }
 
+        /* Set optional.
+         */
+        foreach ($options as $name => $value) {
+            if (!array_key_exists($name, $introspect->optional_input)) {
+                Init::error("optional argument $name does not exist");
+            }
 
-        $operation->set("filename", $filename);
+            $operation->set($name, $value);
+        }
 
-        // build the operation
-
+        /* Build the operation
+         */
         Utils::debugLog("callBase", ["building ..."]);
-        $new_operation = Init::ffi()->vips_cache_operation_build($operation);
-        if (FFI::isNull($new_operation)) {
+        $new_operation = Init::ffi()->
+            vips_cache_operation_build($operation->pointer);
+        if (\FFI::isNull($new_operation)) {
           Init::ffi()->vips_object_unref_outputs($operation);
-          error();
+          Init::error();
         }
-        $operation = $new_operation;
+        $operation = new VipsOperation($new_operation);
 
         # need to attach input refs to output
 
-        // fetch required output args
-
+        /* Fetch required output args.
+         */
         $result = $operation->get("out");
-        self::errorIsArray($result);
         $result = self::wrapResult($result);
 
         Utils::debugLog($name, ['result' => $result]);

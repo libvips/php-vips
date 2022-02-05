@@ -771,10 +771,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
             Init::error();
         }
 
-        $result = VipsOperation::callBase($loader, null, array_merge([
-            "filename" => $filename,
-            "string_options" => $string_options,
-        ], $options));
+        $result = VipsOperation::callBase($loader, null, [$filename], 
+            array_merge([
+                "string_options" => $string_options,
+            ], $options
+        ));
 
         Utils::debugLog('newFromFile', ['result' => $result]);
 

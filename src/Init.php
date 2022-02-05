@@ -114,7 +114,7 @@ class Init
     {
         if ($message == "") {
             $message = Init::ffi()->vips_error_buffer();
-            Init::ffi()->vips_error_buffer_clear();
+            Init::ffi()->vips_error_clear();
         }
         $exception = new Exception($message);
         Utils::errorLog($message, $exception);

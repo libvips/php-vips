@@ -52,17 +52,27 @@ namespace Jcupitt\Vips;
 abstract class VipsObject extends GObject
 {
     /**
-     * A pointer to the underlying VipsObject. This is the same as the
-     * GObject, just cast to VipsObject to help FFI.
+     * A pointer to the underlying VipsObject.
      *
      * @internal
      */
-    private \FFI\CData $vipsObject;
+    private \FFI\CData $pointer;
+
+    /**
+     * A pointer to the underlying GObject. This is the same as the
+     * VipsObject, just cast.
+     *
+     * @internal
+     */
+    private \FFI\CData $gObject;
 
     function __construct($pointer)
     {
-        $this->vipsObject = Init::ffi()->
+        $this->pointer = Init::ffi()->
             cast(Init::ctypes("VipsObject"), $pointer);
+        $this->gObject = Init::ffi()->
+            cast(Init::ctypes("GObject"), $pointer);
+
         parent::__construct($pointer);
     }
 
@@ -72,7 +82,7 @@ abstract class VipsObject extends GObject
     }
 
     function getDescription() {
-        return Init::ffi()->vips_object_get_description($this->vipsObject);
+        return Init::ffi()->vips_object_get_description($this->pointer);
     }
 
     // get the pspec for a property 
@@ -84,7 +94,7 @@ abstract class VipsObject extends GObject
         $argument_class = Init::ffi()->new("VipsArgumentClass*[1]");
         $argument_instance = Init::ffi()->new("VipsArgumentInstance*[1]");
         $result = Init::ffi()->vips_object_get_argument(
-            $this->vipsObject,
+            $this->pointer,
             $name,
             $pspec, 
             $argument_class,
@@ -129,11 +139,16 @@ abstract class VipsObject extends GObject
 
         Init::ffi()->
             g_object_get_property($this->gObject, $name, $gvalue->pointer);
+        $value = $gvalue->get();
 
-        return $gvalue->get();
+        Utils::debugLog("get", [$name => $value]);
+
+        return $value;
     }
 
     function set(string $name, $value) {
+        Utils::debugLog("set", [$name => $value]);
+
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
         $gvalue->set($value);
@@ -143,10 +158,8 @@ abstract class VipsObject extends GObject
     }
 
     function setString($string_options) {
-        $result = Init::ffi()->vips_object_set_from_string(
-            $this->vipsObject, 
-            $string_options
-        );
+        $result = Init::ffi()->
+            vips_object_set_from_string($this->pointer, $string_options);
 
         return $result == 0;
     }
