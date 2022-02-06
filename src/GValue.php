@@ -104,12 +104,13 @@ class GValue
             break;
 
         case Init::gtypes("gchararray"):
-            Init::ffi()->g_value_get_string($this->pointer);
+            $result = Init::ffi()->g_value_get_string($this->pointer);
             break;
 
         case Init::gtypes("VipsRefString"):
             $psize = Init::ffi()->new("size_t*");
-            $result = Init::ffi()->vips_value_get_ref_string($this->pointer, $psize);
+            $result = Init::ffi()->
+                vips_value_get_ref_string($this->pointer, $psize);
             # $psize[0] will be the string length, but assume it's null 
             # terminated
             break;
@@ -118,7 +119,7 @@ class GValue
             $fundamental = Init::ffi()->g_type_fundamental($gtype);
             switch ($fundamental) {
             case Init::gtypes("GObject"):
-                # we need a class wrapping gobject before we can impement this
+                $result = Init::ffi()->g_value_get_object($this->pointer);
                 break;
 
             default:

@@ -141,7 +141,7 @@ abstract class VipsObject extends GObject
             g_object_get_property($this->gObject, $name, $gvalue->pointer);
         $value = $gvalue->get();
 
-        Utils::debugLog("get", [$name => $value]);
+        Utils::debugLog("get", [$name => var_export($value, true)]);
 
         return $value;
     }

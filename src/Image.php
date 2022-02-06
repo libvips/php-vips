@@ -581,7 +581,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private FFI\CData $image;
+    private \FFI\CData $pointer;
 
     /**
      * Wrap an Image around an underlying CData pointer.
@@ -593,7 +593,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __construct($pointer)
     {
-        $this->image = Init::ffi()->cast(Init::ctypes("VipsImage"), $pointer);
+        $this->pointer = Init::ffi()->cast(Init::ctypes("VipsImage"), $pointer);
         parent::__construct($pointer);
     }
 
@@ -993,7 +993,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$filename, $options]
         ]);
 
-        $result = Init::ffi()->vips_image_write_to_file($this->image, $filename, $options);
+        $result = Init::ffi()->
+            vips_image_write_to_file($this->pointer, $filename, $options);
         if ($result === -1) {
             Init::error();
         }
@@ -1017,7 +1018,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$suffix, $options]
         ]);
 
-        $result = Init::ffi()->vips_image_write_to_buffer($this->image, $suffix, $options);
+        $result = Init::ffi()->
+            vips_image_write_to_buffer($this->pointer, $suffix, $options);
         if ($result === -1) {
             Init::error();
         }
@@ -1041,7 +1043,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $result = Init::ffi()->vips_image_write_to_memory($this->image);
+        $result = Init::ffi()->vips_image_write_to_memory($this->pointer);
         if ($result === -1) {
             Init::error();
         }
@@ -1081,7 +1083,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $result = Init::ffi()->vips_image_write_to_array($this->image);
+        $result = Init::ffi()->vips_image_write_to_array($this->pointer);
         if ($result === -1) {
             Init::error();
         }
@@ -1112,7 +1114,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $result = Init::ffi()->vips_image_copy_memory($this->image);
+        $result = Init::ffi()->vips_image_copy_memory($this->pointer);
         if ($result === -1) {
             Init::error();
         }
@@ -1133,7 +1135,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __get(string $name)
     {
-        return Init::ffi()->vips_image_get($this->image, $name);
+        $value = new GValue();
+        $result = Init::ffi()->
+            vips_image_get($this->pointer, $name, $value->pointer);
+        if ($result != 0) {
+            Init::error();
+        }
+
+        return $value->get();
     }
 
     /**
@@ -1146,7 +1155,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __set(string $name, $value): void
     {
-        Init::ffi()->vips_image_set($this->image, $name, $value);
+        Init::ffi()->vips_image_set($this->pointer, $name, $value);
     }
 
     /**
@@ -1178,7 +1187,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function get(string $name)
     {
-        return Init::ffi()->vips_image_get($this->image, $name);
+        return Init::ffi()->vips_image_get($this->pointer, $name);
     }
 
     /**
@@ -1192,7 +1201,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function typeof(string $name): int
     {
-        return Init::ffi()->vips_image_get_typeof($this->image, $name);
+        return Init::ffi()->vips_image_get_typeof($this->pointer, $name);
     }
 
     /**
@@ -1210,7 +1219,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function set(string $name, $value): void
     {
-        $result = Init::ffi()->vips_image_set($this->image, $name, $value);
+        $result = Init::ffi()->vips_image_set($this->pointer, $name, $value);
         if ($result === -1) {
             Init::error();
         }
@@ -1235,7 +1244,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function setType($type, string $name, $value): void
     {
-        $result = Init::ffi()->vips_image_set_type($this->image, $type, $name, $value);
+        $result = Init::ffi()->
+            vips_image_set_type($this->pointer, $type, $name, $value);
         if ($result === -1) {
             Init::error();
         }
@@ -1252,7 +1262,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function remove(string $name): void
     {
-        $result = Init::ffi()->vips_image_remove($this->image, $name);
+        $result = Init::ffi()->vips_image_remove($this->pointer, $name);
         if ($result === -1) {
             Init::error();
         }
@@ -1380,7 +1390,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         if (!is_int($offset)) {
-            throw new \BadMethodCallException('Image::offsetSet: offset is not integer or null');
+            throw new \BadMethodCallException('Image::offsetSet: ' .
+                'offset is not integer or null');
         }
 
         // number of bands to the left and right of $value
@@ -1404,7 +1415,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         $head = array_shift($components);
-        $this->image = $head->bandjoin($components)->image;
+        $this->pointer = $head->bandjoin($components)->pointer;
     }
 
     /**
@@ -1422,7 +1433,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (is_int($offset) && $offset >= 0 && $offset < $this->bands) {
             if ($this->bands === 1) {
-                throw new \BadMethodCallException('Image::offsetUnset: cannot delete final band');
+                throw new \BadMethodCallException('Image::offsetUnset: ' .
+                    'cannot delete final band');
             }
 
             $components = [];
@@ -1438,9 +1450,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
             $head = array_shift($components);
             if (empty($components)) {
-                $this->image = $head->image;
+                $this->pointer = $head->pointer;
             } else {
-                $this->image = $head->bandjoin($components)->image;
+                $this->pointer = $head->bandjoin($components)->pointer;
             }
         }
     }

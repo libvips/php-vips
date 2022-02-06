@@ -120,11 +120,8 @@ class VipsOperation extends VipsObject
      */
     private static function isImagePointer($value): bool
     {
-        # wat
-        # return $value instanceof \FFI::CData &&
-        #     \FFI::typeof($value) === Init::ctypes("VipsImage");
-
-        return \FFI::typeof($value) === Init::ctypes("VipsImage");
+        return $value instanceof \FFI\CData &&
+            \FFI::typeof($value) == Init::ctypes("VipsImage");
     }
 
     /**
@@ -265,22 +262,23 @@ class VipsOperation extends VipsObject
         /* Build the operation
          */
         Utils::debugLog("callBase", ["building ..."]);
-        $new_operation = Init::ffi()->
+        $pointer = Init::ffi()->
             vips_cache_operation_build($operation->pointer);
-        if (\FFI::isNull($new_operation)) {
-          Init::ffi()->vips_object_unref_outputs($operation);
+        if (\FFI::isNull($pointer)) {
+          Init::ffi()->vips_object_unref_outputs($operation->pointer);
           Init::error();
         }
-        $operation = new VipsOperation($new_operation);
+        $operation = new VipsOperation($pointer);
 
         # need to attach input refs to output
 
         /* Fetch required output args.
          */
         $result = $operation->get("out");
+
         $result = self::wrapResult($result);
 
-        Utils::debugLog($name, ['result' => $result]);
+        Utils::debugLog($name, ['result' => var_export($result, true)]);
 
         return $result;
     }
