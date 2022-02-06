@@ -274,12 +274,13 @@ void g_value_unset (GValue* value);
 GType g_type_fundamental (GType gtype);
 
 int vips_enum_from_nick (const char* domain,
-GType gtype, const char* str);
+    GType gtype, const char* str);
 const char *vips_enum_nick (GType gtype, int value);
 
 void g_value_set_boolean (GValue* value, bool v_boolean);
 void g_value_set_int (GValue* value, int i);
 void g_value_set_uint64 (GValue* value, guint64 ull);
+void g_value_set_int64 (GValue* value, guint64 ull);
 void g_value_set_double (GValue* value, double d);
 void g_value_set_enum (GValue* value, int e);
 void g_value_set_flags (GValue* value, unsigned int f);
@@ -298,6 +299,7 @@ void vips_value_set_blob (GValue* value,
 bool g_value_get_boolean (const GValue* value);
 int g_value_get_int (GValue* value);
 guint64 g_value_get_uint64 (GValue* value);
+gint64 g_value_get_int64 (GValue* value);
 double g_value_get_double (GValue* value);
 int g_value_get_enum (GValue* value);
 unsigned int g_value_get_flags (GValue* value);
@@ -651,10 +653,24 @@ EOS;
 
         $this->gtypes = [
             "gboolean" => $this->ffi->g_type_from_name("gboolean"),
+            "gint" => $this->ffi->g_type_from_name("gint"),
+            "gint64" => $this->ffi->g_type_from_name("gint64"),
+            "gdouble" => $this->ffi->g_type_from_name("gdouble"),
             "gchararray" => $this->ffi->g_type_from_name("gchararray"),
             "VipsRefString" => $this->ffi->g_type_from_name("VipsRefString"),
-            "VipsImage" => $this->ffi->g_type_from_name("VipsImage"),
+
+            "GEnum" => $this->ffi->g_type_from_name("GEnum"),
+            "GFlags" => $this->ffi->g_type_from_name("GFlags"),
+            "VipsBandFormat" => $this->ffi->g_type_from_name("VipsBandFormat"),
+            "VipsBlendMode" => $this->ffi->g_type_from_name("VipsBlendMode"),
+            "VipsArrayInt" => $this->ffi->g_type_from_name("VipsArrayInt"),
+            "VipsArrayDouble" => 
+                $this->ffi->g_type_from_name("VipsArrayDouble"),
+            "VipsArrayImage" => $this->ffi->g_type_from_name("VipsArrayImage"),
+            "VipsBlob" => $this->ffi->g_type_from_name("VipsBlob"),
+
             "GObject" => $this->ffi->g_type_from_name("GObject"),
+            "VipsImage" => $this->ffi->g_type_from_name("VipsImage"),
         ];
 
         Utils::debugLog("init", ["done"]);

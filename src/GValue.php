@@ -52,6 +52,32 @@ class GValue
         \FFI::memset($this->pointer, 0, \FFI::sizeof($this->struct));
     }
 
+    /* Turn a string into an enum value, if possible
+     */
+    static function toEnum($gtype, $value) {
+        if (is_string($value)) {
+            $enum_value = Init::ffi()->
+                vips_enum_from_nick("php-vips", $gtype, $value);
+            if ($enum_value < 0) {
+                Init::error();
+            }
+        }
+        else {
+            $enum_value = $value.
+        }
+
+        return $enum_value;
+    }
+
+    static function fromEnum($gtype, $value) {
+        $pointer = Init::ffi()->vips_enum_nick($gtype, $value);
+        if (\FFI::isNull($pointer)) {
+            Init::error("value not in enum");
+        }
+
+        return \FFI::string($pointer);
+    }
+
     function __destruct() {
         Init::ffi()->g_value_unset($this->pointer);
     }
@@ -72,6 +98,22 @@ class GValue
             Init::ffi()->g_value_set_boolean($this->pointer, $value);
             break;
 
+        case Init::gtypes("gint"):
+            Init::ffi()->g_value_set_int($this->pointer, $value);
+            break;
+
+        case Init::gtypes("gint64"):
+            Init::ffi()->g_value_set_int64($this->pointer, $value);
+            break;
+
+        case Init::gtypes("guint64"):
+            Init::ffi()->g_value_set_uint64($this->pointer, $value);
+            break;
+
+        case Init::gtypes("gdouble"):
+            Init::ffi()->g_value_set_double($this->pointer, $value);
+            break;
+
         case Init::gtypes("gchararray"):
             Init::ffi()->g_value_set_string($this->pointer, $value);
             break;
@@ -80,10 +122,78 @@ class GValue
             Init::ffi()->vips_value_set_ref_string($this->pointer, $value);
             break;
 
+        case Init::gtypes("VipsArrayInt"):
+            if (!is_array($value)) {
+                $value = [$value];
+            }
+            $n = count($value);
+            $ctype = \FFI::arrayType(\FFI::type("int"), $n);
+            $array = \FFI::new($ctype, true, true);
+            for ($i = 0; $i < $n; $i++) {
+                $array[$i] = $value[$i];
+            }
+            Init::ffi()->vips_value_set_array_int($this->pointer, $array, $n);
+            break;
+
+        case Init::gtypes("VipsArrayDouble"):
+            if (!is_array($value)) {
+                $value = [$value];
+            }
+            $n = count($value);
+            $ctype = \FFI::arrayType(\FFI::type("double"), $n);
+            $array = \FFI::new($ctype, true, true);
+            for ($i = 0; $i < $n; $i++) {
+                $array[$i] = $value[$i];
+            }
+            Init::ffi()->
+                vips_value_set_array_double($this->pointer, $array, $n);
+            break;
+
+        case Init::gtypes("VipsArrayImage"):
+            if (!is_array($value)) {
+                $value = [$value];
+            }
+            $n = count($value);
+            Init::ffi()->vips_value_set_array_image($this->pointer, $n);
+            $array = Init::ffi()->
+                vips_value_get_array_image($this->pointer, NULL);
+            for ($i = 0; $i < $n; $i++) {
+                $image = $value[$i]->pointer;
+                $array[$i] = $pointer;
+                Init::ffi()->g_object_ref($pointer);
+            }
+            break;
+
+        case Init::gtypes("VipsBlob"):
+            # we need to set the blob to a copy of the data that vips_lib
+            # can own
+            $n = strlen($value);
+            $ctype = \FFI::arrayType(\FFI::type("char"), $n);
+            $memory = \FFI::new($ctype, true, true);
+            for ($i = 0; $i < $n; $i++) {
+                $memory[$i] = $value[$i];
+            }
+            Init::ffi()->
+                vips_value_set_blob_free($this->pointer, $memory, $n)
+            break;
+
         default:
             $fundamental = Init::ffi()->g_type_fundamental($gtype);
             switch ($fundamental) {
             case Init::gtypes("GObject"):
+                Init::ffi()->
+                    g_value_set_object($this->pointer, $value->pointer);
+                break;
+
+            case Init::gtypes("GEnum"):
+                Init::ffi()->g_value_set_enum($this->pointer, 
+                    self::toEnum($gtype, $value));
+                break;
+
+            case Init::gtypes("GFlags"):
+                /* Just set as int.
+                 */
+                Init::ffi()->g_value_set_flags($this->pointer, $value);
                 break;
 
             default:
@@ -103,6 +213,22 @@ class GValue
             $result = Init::ffi()->g_value_get_boolean($this->pointer);
             break;
 
+        case Init::gtypes("gint"):
+            $result = Init::ffi()->g_value_get_int($this->pointer);
+            break;
+
+        case Init::gtypes("gint64"):
+            $result = Init::ffi()->g_value_get_int64($this->pointer);
+            break;
+
+        case Init::gtypes("guint64"):
+            $result = Init::ffi()->g_value_get_uint64($this->pointer);
+            break;
+
+        case Init::gtypes("gdouble"):
+            $result = Init::ffi()->g_value_get_double($this->pointer);
+            break;
+
         case Init::gtypes("gchararray"):
             $result = Init::ffi()->g_value_get_string($this->pointer);
             break;
@@ -120,6 +246,17 @@ class GValue
             switch ($fundamental) {
             case Init::gtypes("GObject"):
                 $result = Init::ffi()->g_value_get_object($this->pointer);
+                break;
+
+            case Init::gtypes("GEnum"):
+                $result = Init::ffi()->g_value_get_enum($this->pointer); 
+                $result = self::fromEnum($gtype, $result);
+                break;
+
+            case Init::gtypes("GFlags"):
+                /* Just get as int.
+                 */
+                $result = Init::ffi()->g_value_get_flags($this->pointer);
                 break;
 
             default:
