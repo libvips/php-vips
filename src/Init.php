@@ -655,6 +655,7 @@ EOS;
             "gboolean" => $this->ffi->g_type_from_name("gboolean"),
             "gint" => $this->ffi->g_type_from_name("gint"),
             "gint64" => $this->ffi->g_type_from_name("gint64"),
+            "guint64" => $this->ffi->g_type_from_name("guint64"),
             "gdouble" => $this->ffi->g_type_from_name("gdouble"),
             "gchararray" => $this->ffi->g_type_from_name("gchararray"),
             "VipsRefString" => $this->ffi->g_type_from_name("VipsRefString"),

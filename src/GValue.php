@@ -63,19 +63,19 @@ class GValue
             }
         }
         else {
-            $enum_value = $value.
+            $enum_value = $value;
         }
 
         return $enum_value;
     }
 
     static function fromEnum($gtype, $value) {
-        $pointer = Init::ffi()->vips_enum_nick($gtype, $value);
-        if (\FFI::isNull($pointer)) {
+        $result = Init::ffi()->vips_enum_nick($gtype, $value);
+        if ($result === null) {
             Init::error("value not in enum");
         }
 
-        return \FFI::string($pointer);
+        return $result;
     }
 
     function __destruct() {
@@ -140,7 +140,7 @@ class GValue
                 $value = [$value];
             }
             $n = count($value);
-            $ctype = \FFI::arrayType(\FFI::type("double"), $n);
+            $ctype = \FFI::arrayType(\FFI::type("double"), [$n]);
             $array = \FFI::new($ctype, true, true);
             for ($i = 0; $i < $n; $i++) {
                 $array[$i] = $value[$i];
@@ -158,7 +158,7 @@ class GValue
             $array = Init::ffi()->
                 vips_value_get_array_image($this->pointer, NULL);
             for ($i = 0; $i < $n; $i++) {
-                $image = $value[$i]->pointer;
+                $pointer = $value[$i]->pointer;
                 $array[$i] = $pointer;
                 Init::ffi()->g_object_ref($pointer);
             }
@@ -174,7 +174,7 @@ class GValue
                 $memory[$i] = $value[$i];
             }
             Init::ffi()->
-                vips_value_set_blob_free($this->pointer, $memory, $n)
+                vips_value_set_blob_free($this->pointer, $memory, $n);
             break;
 
         default:

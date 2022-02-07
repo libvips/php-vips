@@ -220,8 +220,8 @@ class VipsOperation extends VipsObject
         if ($instance) {
             $n_supplied += 1;
         }
-        if ($n_supplied - 1 == $n_required && 
-            is_array(end(array_values($arguments)))) {
+        $values = array_values($arguments);
+        if ($n_supplied - 1 == $n_required && is_array(end($values))) {
             $options = array_pop($arguments);
             $n_supplied -= 1;
         }
@@ -244,16 +244,15 @@ class VipsOperation extends VipsObject
             }
             else {
                 $operation->set($name, $arguments[$i]);
+                $i += 1;
             }
-
-            $i += 1;
         }
 
         /* Set optional.
          */
         foreach ($options as $name => $value) {
-            if (!array_key_exists($name, $introspect->optional_input)) {
-                Init::error("optional argument $name does not exist");
+            if (!in_array($name, $introspect->optional_input)) {
+                Init::error("optional argument '$name' does not exist");
             }
 
             $operation->set($name, $value);

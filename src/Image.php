@@ -581,7 +581,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private \FFI\CData $pointer;
+     public \FFI\CData $pointer;
 
     /**
      * Wrap an Image around an underlying CData pointer.
