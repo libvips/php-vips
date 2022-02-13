@@ -264,16 +264,32 @@ class VipsOperation extends VipsObject
         $pointer = Init::ffi()->
             vips_cache_operation_build($operation->pointer);
         if (\FFI::isNull($pointer)) {
-          Init::ffi()->vips_object_unref_outputs($operation->pointer);
-          Init::error();
+            $operation->unrefOutputs();
+            Init::error();
         }
         $operation = new VipsOperation($pointer);
 
-        # need to attach input refs to output
+        # TODO .. need to attach input refs to output, see _find_inside in
+        # pyvips
 
-        /* Fetch required output args.
+        /* Fetch required output args (and modified input args).
          */
-        $result = $operation->get("out");
+        $result = [];
+        foreach ($introspect->required_output as $name) {
+            $result[] = $operation->get($name);
+        }
+
+        /* Any optional output args.
+         */
+        foreach ($introspect->optional_output as $name) {
+            if (in_array($name, $options)) {
+                $result[$name] = $operation->get($name);
+            }
+        }
+
+        /* Free any outputs we've not used. 
+         */
+        $operation->unrefOutputs();
 
         $result = self::wrapResult($result);
 

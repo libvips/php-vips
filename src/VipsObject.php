@@ -164,6 +164,10 @@ abstract class VipsObject extends GObject
         return $result == 0;
     }
 
+    function unrefOutputs()
+    {
+        Init::ffi()->vips_object_unref_outputs($this->pointer);
+    }
 }
 
 /*

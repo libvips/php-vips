@@ -986,15 +986,29 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return void
      */
-    public function writeToFile(string $filename, array $options = []): void
+    public function writeToFile(string $name, array $options = []): void
     {
         Utils::debugLog('writeToFile', [
             'instance' => $this,
             'arguments' => [$filename, $options]
         ]);
 
-        $result = Init::ffi()->
-            vips_image_write_to_file($this->pointer, $filename, $options);
+        $filename = Init::filename_get_filename($name);
+        $string_options = Init::filename_get_options($name);
+
+        $saver = Init::ffi()->vips_foreign_find_save($filename);
+        if ($saver == "") {
+            Init::error();
+        }
+
+        $result = VipsOperation::callBase($saver, $this, [$filename], 
+            array_merge([
+                "string_options" => $string_options,
+            ], $options
+        ));
+
+        Utils::debugLog('writeToFile', ['result' => $result]);
+
         if ($result === -1) {
             Init::error();
         }
