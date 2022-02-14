@@ -180,7 +180,6 @@ class GValue
         default:
             $fundamental = Init::ffi()->g_type_fundamental($gtype);
             switch ($fundamental) {
-
             case Init::gtypes("GObject"):
                 Init::ffi()->
                     g_value_set_object($this->pointer, $value->pointer);

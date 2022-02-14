@@ -857,25 +857,27 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $width = count($array[0]);
 
         $n = $width * $height;
-        $a = Init::ffi()->new("double[]", $n);
+        $ctype = \FFI::arrayType(\FFI::type("double"), [$n]);
+        $a = \FFI::new($ctype, true, true);
         for($y = 0; $y < $height; $y++) {
             for($x = 0; $x < $width; $x++) {
-                $a[$x + $y * $width] = $array[y][x];
+                $a[$x + $y * $width] = $array[$y][$x];
             }
         }
 
-        $result = Init::ffi()->
+        $pointer = Init::ffi()->
             vips_image_new_matrix_from_array($width, $height, $a, $n);
-        if (\FFI::isNull($result)) {
+        if (\FFI::isNull($pointer)) {
             Init::error();
         }
+        $result = new Image($pointer);
 
-        $image.set_type(GValue::gdouble_type, 'scale', $scale);
-        $image.set_type(GValue::gdouble_type, 'offset', $offset);
+        $result->setType(Init::gtypes("gdouble"), 'scale', $scale);
+        $result->setType(Init::gtypes("gdouble"), 'offset', $offset);
 
         Utils::debugLog('newFromArray', ['result' => $result]);
 
-        return image;
+        return $result;
     }
 
     /**
@@ -1184,7 +1186,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __isset(string $name): bool
     {
-        return $this->typeof($name) !== 0;
+        return $this->typeof($name) != 0;
     }
 
     /**
@@ -1245,10 +1247,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $gvalue = new GValue();
         $gvalue->setType($this->typeof($name));
         $gvalue->set($value);
-        if (Init::ffi()->
-            vips_image_set($this->pointer, $name, $gvalue) != 0) {
-            Init::error();
-        }
+        Init::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
     }
 
     /**
@@ -1273,10 +1272,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $gvalue = new GValue();
         $gvalue->setType($type);
         $gvalue->set($value);
-        if (Init::ffi()->
-            vips_image_set($this->pointer, $name, $gvalue) != 0) {
-            Init::error();
-        }
+        Init::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
     }
 
     /**

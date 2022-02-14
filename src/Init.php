@@ -116,7 +116,7 @@ class Init
             $message = Init::ffi()->vips_error_buffer();
             Init::ffi()->vips_error_clear();
         }
-        $exception = new Exception($message);
+        $exception = new Vips\Exception($message);
         Utils::errorLog($message, $exception);
         throw $exception;
     }
@@ -190,7 +190,7 @@ EOS, $library);
 
         $result = $ffi->vips_init("");
         if ($result != 0) {
-            throw new Exception("libvips error: $ffi->vips_error_buffer()");
+            throw new Vips\Exception("libvips error: $ffi->vips_error_buffer()");
         }
         Utils::debugLog("init", ["vips_init" => $result]);
 
@@ -207,7 +207,7 @@ EOS, $library);
         ]);
 
         if (!$this->atLeast(8, 7)) {
-            throw new Exception("your libvips is too old -- " .
+            throw new Vips\Exception("your libvips is too old -- " .
                 "8.7 or later required");
         }
 
@@ -216,7 +216,7 @@ EOS, $library);
             # necessary since GType is the size of a pointer, and there's no 
             # easy way to discover if php is running on a 32 or 64-bit 
             # systems (as far as I can see)
-            throw new Exception("your php only supports 32-bit ints -- " .
+            throw new Vips\Exception("your php only supports 32-bit ints -- " .
                 "64 bit ints required");
         }
 
