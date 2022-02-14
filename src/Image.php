@@ -961,7 +961,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$value]
         ]);
 
-        $pixel = self::black(1, 1)->add($value)->cast($this->format);
+        $pixel = static::black(1, 1)->add($value)->cast($this->format);
+
+        exit;
+
         $image = $pixel->embed(
             0,
             0,
@@ -1325,6 +1328,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __call(string $name, array $arguments)
     {
+        echo "** Calling $name in object context\n";
+
         return VipsOperation::callBase($name, $this, $arguments);
     }
 
@@ -1340,6 +1345,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function __callStatic(string $name, array $arguments)
     {
+        echo "** Calling $name in static context\n";
+
         return VipsOperation::callBase($name, null, $arguments);
     }
 
