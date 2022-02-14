@@ -771,11 +771,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
             Init::error();
         }
 
-        $result = VipsOperation::callBase($loader, null, [$filename], 
-            array_merge([
+        if (strlen($string_options) != 0) {
+            $options = array_merge([
                 "string_options" => $string_options,
-            ], $options
-        ));
+            ], $options);
+        }
+
+        $result = VipsOperation::call($loader, null, [$filename], $options);
 
         Utils::debugLog('newFromFile', ['result' => $result]);
 
@@ -808,9 +810,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if (\FFI::isNull($loader)) {
             Init::error();
         }
-        $result = VipsOperation::callBase($loader, $buffer, array_merge([
-            "string_options" => $string_options
-        ], $options));
+
+        if (strlen($string_options) != 0) {
+            $options = array_merge([
+                "string_options" => $string_options,
+            ], $options);
+        }
+
+        $result = VipsOperation::call($loader, null, [$buffer], $options);
 
         Utils::debugLog('newFromBuffer', ['result' => $result]);
 
@@ -1001,11 +1008,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
             Init::error();
         }
 
-        $result = VipsOperation::callBase($saver, $this, [$filename], 
-            array_merge([
+        if (strlen($string_options) != 0) {
+            $options = array_merge([
                 "string_options" => $string_options,
-            ], $options
-        ));
+            ], $options);
+        }
+
+        $result = VipsOperation::call($saver, $this, [$filename], $options);
 
         Utils::debugLog('writeToFile', ['result' => $result]);
 
@@ -1200,7 +1209,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             Init::error();
         }
 
-        return $gvalue.get();
+        return $gvalue->get();
     }
 
     /**

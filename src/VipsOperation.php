@@ -216,10 +216,11 @@ class VipsOperation extends VipsObject
          */
         $n_required = count($introspect->required_input);
         $n_supplied = count($arguments);
-        $options = [];
         if ($instance) {
             $n_supplied += 1;
         }
+
+        $options = [];
         $values = array_values($arguments);
         if ($n_supplied - 1 == $n_required && is_array(end($values))) {
             $options = array_pop($arguments);
