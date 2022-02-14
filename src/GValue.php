@@ -180,6 +180,7 @@ class GValue
         default:
             $fundamental = Init::ffi()->g_type_fundamental($gtype);
             switch ($fundamental) {
+
             case Init::gtypes("GObject"):
                 Init::ffi()->
                     g_value_set_object($this->pointer, $value->pointer);
@@ -234,20 +235,62 @@ class GValue
             break;
 
         case Init::gtypes("VipsRefString"):
-            $psize = Init::ffi()->new("size_t*");
+            $p_size = Init::ffi()->new("size_t[1]");
             $result = Init::ffi()->
-                vips_value_get_ref_string($this->pointer, $psize);
-            # $psize[0] will be the string length, but assume it's null 
+                vips_value_get_ref_string($this->pointer, $p_size);
+            # $p_size[0] will be the string length, but assume it's null 
             # terminated
+            break;
+
+        case Init::gtypes("VipsImage"):
+            $pointer = Init::ffi()->g_value_get_object($this->pointer);
+            // get_object does not increment the ref count 
+            Init::ffi()->g_object_ref($pointer);
+            $result = new Image($pointer);
+            break;
+
+        case Init::gtypes("VipsArrayInt"):
+            $p_len = Init::ffi()->new("int[1]");
+            $pointer = Init::ffi()->
+                vips_value_get_array_int($this->pointer, $p_len);
+            $result = [];
+            for ($i = 0; $i < $p_len[0]; $i++) {
+                $result[] = $pointer[$i];
+            }
+            break;
+
+        case Init::gtypes("VipsArrayDouble"):
+            $p_len = Init::ffi()->new("int[1]");
+            $pointer = Init::ffi()->
+                vips_value_get_array_double($this->pointer, $p_len);
+            $result = [];
+            for ($i = 0; $i < $p_len[0]; $i++) {
+                $result[] = $pointer[$i];
+            }
+            break;
+
+        case Init::gtypes("VipsArrayImage"):
+            $p_len = Init::ffi()->new("int[1]");
+            $pointer = Init::ffi()->
+                vips_value_get_array_image($this->pointer, $p_len);
+            $result = [];
+            for ($i = 0; $i < $p_len[0]; $i++) {
+                $image_pointer = $pointer[$i];
+                Init::ffi()->g_object_ref($image_pointer);
+                $result[] = new Image($image_pointer);
+            }
+            break;
+
+        case Init::gtypes("VipsBlob"):
+            $p_len = Init::ffi()->new("size_t[1]");
+            $pointer = Init::ffi()->
+                vips_value_get_blob($this->pointer, $p_len);
+            $result = \FFI::string($pointer, $p_len[0]);
             break;
 
         default:
             $fundamental = Init::ffi()->g_type_fundamental($gtype);
             switch ($fundamental) {
-            case Init::gtypes("GObject"):
-                $result = Init::ffi()->g_value_get_object($this->pointer);
-                break;
-
             case Init::gtypes("GEnum"):
                 $result = Init::ffi()->g_value_get_enum($this->pointer); 
                 $result = self::fromEnum($gtype, $result);

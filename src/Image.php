@@ -997,7 +997,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         Utils::debugLog('writeToFile', [
             'instance' => $this,
-            'arguments' => [$filename, $options]
+            'name' => $name,
+            'options' => $options
         ]);
 
         $filename = Init::filename_get_filename($name);

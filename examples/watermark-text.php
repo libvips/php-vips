@@ -17,6 +17,16 @@ $image = Vips\Image::newFromFile($argv[1], [
   'n' => -1
 ]);
 
+echo "width = $image->width \n";
+echo "height = $image->height \n";
+echo "page_height = $image->page_height \n";
+
+
+exit;
+
+
+$image->writeToFile("x.v");
+
 $output_filename = $argv[2];
 $text = $argv[3];
 
