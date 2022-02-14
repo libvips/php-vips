@@ -212,47 +212,56 @@ class VipsOperation extends VipsObject
         $operation = self::newFromName($name);
         $introspect = self::introspect($name);
 
-        /* Take any optional args off the end.
+        /* Because of the way php callStatic works, we can sometimes be given
+         * an instance even when no instance was given. 
+         *
+         * We must loop over the required args and set them from the supplied 
+         * args, using instance if required, and only check the nargs after
+         * this pass.
          */
         $n_required = count($introspect->required_input);
         $n_supplied = count($arguments);
-        if ($instance) {
-            $n_supplied += 1;
-        }
-
-        $options = [];
-        $values = array_values($arguments);
-        if ($n_supplied - 1 == $n_required && is_array(end($values))) {
-            $options = array_pop($arguments);
-            $n_supplied -= 1;
-        }
-        if ($n_required != $n_supplied) {
-            Init::error("$n_required arguments required, " .
-                "but $n_supplied supplied");
-        }
-
-        Utils::debugLog("callBase", ["setting arguments ..."]);
-
-        /* Set required.
-         */
-        $i = 0;
+        $used_instance = false;
+        $n_used = 0;
         foreach ($introspect->required_input as $name) {
             if ($name == $introspect->member_this) {
                 if (!$instance) {
+                    $operation->unrefOutputs();
                     Init::error("instance argument not supplied");
                 }
                 $operation->set($name, $instance);
+                $used_instance = true;
+            }
+            else if ($n_used < $n_supplied) {
+                $operation->set($name, $arguments[$n_used]);
+                $n_used += 1;
             }
             else {
-                $operation->set($name, $arguments[$i]);
-                $i += 1;
+                $operation->unrefOutputs();
+                Init::error("$n_required arguments required, " .
+                    "but $n_supplied supplied");
             }
+        }
+
+        /* If there's one extra arg and it's an array, use it as our options.
+         */
+        $options = [];
+        if ($n_supplied == $n_used + 1 && is_array($arguments[$n_used])) {
+            $options = array_pop($arguments);
+            $n_supplied -= 1;
+        }
+
+        if ($n_supplied != $n_used) {
+            $operation->unrefOutputs();
+            Init::error("$n_required arguments required, " .
+                "but $n_supplied supplied");
         }
 
         /* Set optional.
          */
         foreach ($options as $name => $value) {
             if (!in_array($name, $introspect->optional_input)) {
+                $operation->unrefOutputs();
                 Init::error("optional argument '$name' does not exist");
             }
 
