@@ -1149,14 +1149,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __get(string $name)
     {
-        $value = new GValue();
-        $result = Init::ffi()->
-            vips_image_get($this->pointer, $name, $value->pointer);
-        if ($result != 0) {
-            Init::error();
-        }
-
-        return $value->get();
+        return $this->get($name);
     }
 
     /**
@@ -1169,7 +1162,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __set(string $name, $value): void
     {
-        Init::ffi()->vips_image_set($this->pointer, $name, $value);
+        $this->set($name, $value);
     }
 
     /**
@@ -1201,7 +1194,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function get(string $name)
     {
-        return Init::ffi()->vips_image_get($this->pointer, $name);
+        $gvalue = new GValue();
+        if (Init::ffi()->
+            vips_image_get($this->pointer, $name, $gvalue->pointer) != 0) {
+            Init::error();
+        }
+
+        return $gvalue.get();
     }
 
     /**
@@ -1233,8 +1232,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function set(string $name, $value): void
     {
-        $result = Init::ffi()->vips_image_set($this->pointer, $name, $value);
-        if ($result === -1) {
+        $gvalue = new GValue();
+        $gvalue->setType($this->typeof($name));
+        $gvalue->set($value);
+        if (Init::ffi()->
+            vips_image_set($this->pointer, $name, $gvalue) != 0) {
             Init::error();
         }
     }
@@ -1258,9 +1260,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function setType($type, string $name, $value): void
     {
-        $result = Init::ffi()->
-            vips_image_set_type($this->pointer, $type, $name, $value);
-        if ($result === -1) {
+        $gvalue = new GValue();
+        $gvalue->setType($type);
+        $gvalue->set($value);
+        if (Init::ffi()->
+            vips_image_set($this->pointer, $name, $gvalue) != 0) {
             Init::error();
         }
     }
@@ -1276,8 +1280,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function remove(string $name): void
     {
-        $result = Init::ffi()->vips_image_remove($this->pointer, $name);
-        if ($result === -1) {
+        if (Init::ffi()->vips_image_remove($this->pointer, $name) != 0) {
             Init::error();
         }
     }
