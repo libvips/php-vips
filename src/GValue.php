@@ -127,8 +127,8 @@ class GValue
                 $value = [$value];
             }
             $n = count($value);
-            $ctype = \FFI::arrayType(\FFI::type("int"), $n);
-            $array = \FFI::new($ctype, true, true);
+            $ctype = \FFI::arrayType(\FFI::type("int"), [$n]);
+            $array = \FFI::new($ctype);
             for ($i = 0; $i < $n; $i++) {
                 $array[$i] = $value[$i];
             }
@@ -141,7 +141,7 @@ class GValue
             }
             $n = count($value);
             $ctype = \FFI::arrayType(\FFI::type("double"), [$n]);
-            $array = \FFI::new($ctype, true, true);
+            $array = \FFI::new($ctype);
             for ($i = 0; $i < $n; $i++) {
                 $array[$i] = $value[$i];
             }
@@ -166,10 +166,10 @@ class GValue
 
         case Init::gtypes("VipsBlob"):
             # we need to set the blob to a copy of the data that vips_lib
-            # can own
+            # can own and free
             $n = strlen($value);
-            $ctype = \FFI::arrayType(\FFI::type("char"), $n);
-            $memory = \FFI::new($ctype, true, true);
+            $ctype = \FFI::arrayType(\FFI::type("char"), [$n]);
+            $memory = \FFI::new($ctype, false, true);
             for ($i = 0; $i < $n; $i++) {
                 $memory[$i] = $value[$i];
             }
@@ -198,7 +198,7 @@ class GValue
 
             default:
                 $typeName = Init::ffi()->g_type_name($gtype);
-                throw new \BadMethodCallException("$typeName not implemented");
+                throw new \BadMethodCallException("gtype $gtype not implemented");
                 break;
             }
         }

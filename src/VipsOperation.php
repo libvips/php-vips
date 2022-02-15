@@ -74,7 +74,6 @@ class VipsOperation extends VipsObject
 
     public static function newFromName($name)
     {
-        Utils::debugLog("VipsOperation", ["name" => $name]);
         $pointer = Init::ffi()->vips_operation_new($name);
         if ($pointer == null) {
             Init::error();
@@ -91,7 +90,8 @@ class VipsOperation extends VipsObject
             if ($gtype == Init::gtypes("VipsImage")) {
                 $value = $match_image->imageize($value);
             }
-            else if ($gtype == Init::gtypes("VipsArrayImage")) {
+            else if ($gtype == Init::gtypes("VipsArrayImage") && 
+                is_array($value)) {
                 array_map(fn($x) => $match_image->imageize($x), $value);
             }
         }
@@ -272,10 +272,6 @@ class VipsOperation extends VipsObject
             );
         }
 
-        Utils::debugLog($operation_name, [
-            'match_image' => $match_image
-        ]);
-
         /* Because of the way php callStatic works, we can sometimes be given
          * an instance even when no instance was given. 
          *
@@ -356,6 +352,7 @@ class VipsOperation extends VipsObject
 
         /* Any optional output args.
          */
+        Utils::debugLog("callBase", ["fetching result ..."]);
         foreach ($operation->introspect->optional_output as $name) {
             if (in_array($name, $options)) {
                 $result[$name] = $operation->get($name);

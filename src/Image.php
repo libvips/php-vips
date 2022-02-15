@@ -683,9 +683,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if (self::is2D($value)) {
             $value = self::newFromArray($value);
-        } else if (is_array($value)) {
+        } 
+        else if (is_array($value)) {
             $value = $this->newFromImage($value);
-        }
+        } 
 
         return $value;
     }
