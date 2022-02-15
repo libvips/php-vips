@@ -662,7 +662,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private static function isImageish($value): bool
+    public static function isImageish($value): bool
     {
         return self::is2D($value) || $value instanceof Image;
     }
@@ -682,12 +682,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function imageize($value): Image
     {
         if (self::is2D($value)) {
-            $result = self::newFromArray($value);
-        } else {
-            $result = $this->newFromImage($value);
+            $value = self::newFromArray($value);
+        } else if (is_array($value)) {
+            $value = $this->newFromImage($value);
         }
 
-        return $result;
+        return $value;
     }
 
     /**
@@ -741,6 +741,35 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         return $image;
+    }
+
+    /**
+     * Handy for things like self::more. Call a 2-ary vips operator like
+     * 'more', but if the arg is not an image (ie. it's a constant), call
+     * 'more_const' instead.
+     *
+     * @param mixed  $other   The right-hand argument.
+     * @param string $base    The base part of the operation name.
+     * @param string $op      The action to invoke.
+     * @param array  $options An array of options to pass to the operation.
+     *
+     * @throws Exception
+     *
+     * @return mixed The operation result.
+     *
+     * @internal
+     */
+    private function callEnum(
+        $other,
+        string $base,
+        string $op,
+        array $options = []
+    ) {
+        if (self::isImageish($other)) {
+            return VipsOperation::call($base, $this, [$other, $op], $options);
+        } else {
+            return VipsOperation::call($base . '_const', $this, [$op, $other], $options);
+        }
     }
 
     /**
@@ -802,11 +831,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
     ): Image {
         Utils::debugLog('newFromBuffer', [
             'instance' => null,
-            'arguments' => [$buffer, $option_string, $options]
+            'arguments' => [$buffer, $string_options, $options]
         ]);
 
-        $loader = Init::ffi()->vips_foreign_find_load_buffer($buffer);
-        if (\FFI::isNull($loader)) {
+        $loader = Init::ffi()->
+            vips_foreign_find_load_buffer($buffer, strlen($buffer));
+        if ($loader == null) {
             Init::error();
         }
 
@@ -866,7 +896,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $pointer = Init::ffi()->
             vips_image_new_matrix_from_array($width, $height, $a, $n);
-        if (\FFI::isNull($pointer)) {
+        if ($pointer == null) {
             Init::error();
         }
         $result = new Image($pointer);
@@ -904,11 +934,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$data, $width, $height, $bands, $format]
         ]);
 
-        $result = Init::ffi()->
-            vips_image_new_from_memory($data, $width, $height, $bands, $format);
-        if (\FFI::isNull($result)) {
+        $pointer = Init::ffi()->vips_image_new_from_memory(
+            $data, 
+            strlen($data), 
+            $width, 
+            $height, 
+            $bands, 
+            $format
+        );
+        if ($pointer == null) {
             Init::error();
         }
+
+        $result = new Image($pointer);
 
         Utils::debugLog('newFromMemory', ['result' => $result]);
 
@@ -1043,11 +1081,21 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$suffix, $options]
         ]);
 
-        $result = Init::ffi()->
-            vips_image_write_to_buffer($this->pointer, $suffix, $options);
-        if ($result === -1) {
+        $filename = Init::filename_get_filename($suffix);
+        $string_options = Init::filename_get_options($suffix);
+
+        $saver = Init::ffi()->vips_foreign_find_save_buffer($filename);
+        if ($saver == "") {
             Init::error();
         }
+
+        if (strlen($string_options) != 0) {
+            $options = array_merge([
+                "string_options" => $string_options,
+            ], $options);
+        }
+
+        $result = VipsOperation::call($saver, $this, $options);
 
         Utils::debugLog('writeToBuffer', ['result' => $result]);
 
@@ -1068,10 +1116,16 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $result = Init::ffi()->vips_image_write_to_memory($this->pointer);
-        if ($result === -1) {
+        $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
+        $p_size = \FFI::new($ctype);
+
+        $pointer = Init::ffi()->
+            vips_image_write_to_memory($this->pointer, $p_size);
+        if ($pointer == null) {
             Init::error();
         }
+
+       $result = \FFI::string($pointer, $p_size[0]);
 
         Utils::debugLog('writeToMemory', ['result' => $result]);
 
@@ -1139,10 +1193,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $result = Init::ffi()->vips_image_copy_memory($this->pointer);
-        if ($result === -1) {
+        $pointer = Init::ffi()->vips_image_copy_memory($this->pointer);
+        if ($pointer == null) {
             Init::error();
         }
+        $result = new Image($pointer);
 
         Utils::debugLog('copyMemory', ['result' => $result]);
 
@@ -1592,7 +1647,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function pow($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'math2', OperationMath2::POW, $options);
+        return self::callEnum($other, 'math2', OperationMath2::POW, $options);
     }
 
     /**
@@ -1607,7 +1662,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function wop($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'math2', OperationMath2::WOP, $options);
+        return self::callEnum($other, 'math2', OperationMath2::WOP, $options);
     }
 
     /**
@@ -1622,7 +1677,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lshift($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'boolean', OperationBoolean::LSHIFT, $options);
+        return self::callEnum($other, 'boolean', OperationBoolean::LSHIFT, $options);
     }
 
     /**
@@ -1637,7 +1692,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rshift($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'boolean', OperationBoolean::RSHIFT, $options);
+        return self::callEnum($other, 'boolean', OperationBoolean::RSHIFT, $options);
     }
 
     /**
@@ -1654,7 +1709,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function andimage($other, array $options = []): Image
     {
         // phpdoc hates OperationBoolean::AND, so use the string form here
-        return VipsOperation::callEnum($other, 'boolean', 'and', $options);
+        return self::callEnum($other, 'boolean', 'and', $options);
     }
 
     /**
@@ -1670,7 +1725,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function orimage($other, array $options = []): Image
     {
         // phpdoc hates OperationBoolean::OR, so use the string form here
-        return VipsOperation::callEnum($other, 'boolean', 'or', $options);
+        return self::callEnum($other, 'boolean', 'or', $options);
     }
 
     /**
@@ -1685,7 +1740,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function eorimage($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'boolean', OperationBoolean::EOR, $options);
+        return self::callEnum($other, 'boolean', OperationBoolean::EOR, $options);
     }
 
     /**
@@ -1700,7 +1755,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function more($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'relational', OperationRelational::MORE, $options);
+        return self::callEnum($other, 'relational', OperationRelational::MORE, $options);
     }
 
     /**
@@ -1715,7 +1770,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function moreEq($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'relational', OperationRelational::MOREEQ, $options);
+        return self::callEnum($other, 'relational', OperationRelational::MOREEQ, $options);
     }
 
     /**
@@ -1730,7 +1785,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function less($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'relational', OperationRelational::LESS, $options);
+        return self::callEnum($other, 'relational', OperationRelational::LESS, $options);
     }
 
     /**
@@ -1745,7 +1800,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lessEq($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'relational', OperationRelational::LESSEQ, $options);
+        return self::callEnum($other, 'relational', OperationRelational::LESSEQ, $options);
     }
 
     /**
@@ -1760,7 +1815,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function equal($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'relational', OperationRelational::EQUAL, $options);
+        return self::callEnum($other, 'relational', OperationRelational::EQUAL, $options);
     }
 
     /**
@@ -1775,7 +1830,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function notEq($other, array $options = []): Image
     {
-        return VipsOperation::callEnum($other, 'relational', OperationRelational::NOTEQ, $options);
+        return self::callEnum($other, 'relational', OperationRelational::NOTEQ, $options);
     }
 
     /**
@@ -1897,10 +1952,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $mode = [$mode];
         }
 
-        $mode = array_map(function ($x) {
+        $mode = array_map(
             // Use BlendMode::OVER if a non-existent value is given.
-            return self::$blendModeToInt[$x] ?? BlendMode::OVER;
-        }, $mode);
+            fn($x) => self::$blendModeToInt[$x] ?? BlendMode::OVER,
+            $mode);
 
         return VipsOperation::call(
             'composite',

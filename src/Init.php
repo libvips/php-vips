@@ -116,7 +116,7 @@ class Init
             $message = Init::ffi()->vips_error_buffer();
             Init::ffi()->vips_error_clear();
         }
-        $exception = new Vips\Exception($message);
+        $exception = new Exception($message);
         Utils::errorLog($message, $exception);
         throw $exception;
     }

@@ -59,6 +59,11 @@ class VipsOperation extends VipsObject
      */
     public \FFI\CData $pointer;
 
+    /**
+     * Introspection data for this operation.
+     */
+    public Introspect $introspect;
+
     function __construct($pointer)
     {
         $this->pointer = Init::ffi()->
@@ -71,14 +76,37 @@ class VipsOperation extends VipsObject
     {
         Utils::debugLog("VipsOperation", ["name" => $name]);
         $pointer = Init::ffi()->vips_operation_new($name);
-        if (\FFI::isNull($pointer)) {
+        if ($pointer == null) {
             Init::error();
         }
 
         return new VipsOperation($pointer);
     }
 
-    private static function introspect($name) {
+    public function setMatch($name, $match_image, $value) {
+        $flags = $this->introspect->arguments[$name]["flags"];
+        $gtype = $this->introspect->arguments[$name]["type"];
+
+        if ($match_image != null) {
+            if ($gtype == Init::gtypes("VipsImage")) {
+                $value = $match_image->imageize($value);
+            }
+            else if ($gtype == Init::gtypes("VipsArrayImage")) {
+                array_map(fn($x) => $match_image->imageize($x), $value);
+            }
+        }
+
+        # MODIFY args need to be copied before they are set
+        if (($flags & ArgumentFlags::MODIFY) != 0) {
+            # logger.debug('copying MODIFY arg %s', name)
+            # make sure we have a unique copy
+            $value = $value->copyMemory();
+        }
+
+        parent::set($name, $value);
+    }
+
+    private static function introspect($name): Introspect {
         static $cache = [];
 
         if (!array_key_exists($name, $cache)) {
@@ -86,6 +114,24 @@ class VipsOperation extends VipsObject
         }
 
         return $cache[$name];
+    }
+
+    private static function findInside($predicate, $x) {
+        if ($predicate($x)) {
+            return $x;
+        }
+
+        if (is_array($x)) {
+            foreach ($x as $y) {
+                $result = self::findInside($predicate, $y);
+
+                if ($result != null) {
+                    return $result;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -189,7 +235,7 @@ class VipsOperation extends VipsObject
      * __call(), which cannot know which args are required and which are
      * optional. See call() below for a version with the options broken out.
      *
-     * @param string     $name      The operation name.
+     * @param string     $operation_name      The operation name.
      * @param Image|null $instance  The instance this operation is being invoked
      *      from.
      * @param array      $arguments An array of arguments to pass to the
@@ -200,17 +246,35 @@ class VipsOperation extends VipsObject
      * @return mixed The result(s) of the operation.
      */
     static function callBase(
-        string $name,
+        string $operation_name,
         ?Image $instance,
         array $arguments
     ) {
-        Utils::debugLog($name, [
+        Utils::debugLog($operation_name, [
             'instance' => $instance,
             'arguments' => $arguments
         ]);
 
-        $operation = self::newFromName($name);
-        $introspect = self::introspect($name);
+        $operation = self::newFromName($operation_name);
+        $operation->introspect = self::introspect($operation_name);
+
+        /* the first image argument is the thing we expand constants to
+         * match ... look inside tables for images, since we may be passing
+         * an array of images as a single param.
+         */
+        if ($instance != null) {
+            $match_image = $instance;
+        }
+        else {
+            $match_image = self::findInside(
+                fn($x) => $x instanceof Image, 
+                $arguments
+            );
+        }
+
+        Utils::debugLog($operation_name, [
+            'match_image' => $match_image
+        ]);
 
         /* Because of the way php callStatic works, we can sometimes be given
          * an instance even when no instance was given. 
@@ -219,21 +283,21 @@ class VipsOperation extends VipsObject
          * args, using instance if required, and only check the nargs after
          * this pass.
          */
-        $n_required = count($introspect->required_input);
+        $n_required = count($operation->introspect->required_input);
         $n_supplied = count($arguments);
         $used_instance = false;
         $n_used = 0;
-        foreach ($introspect->required_input as $name) {
-            if ($name == $introspect->member_this) {
+        foreach ($operation->introspect->required_input as $name) {
+            if ($name == $operation->introspect->member_this) {
                 if (!$instance) {
                     $operation->unrefOutputs();
                     Init::error("instance argument not supplied");
                 }
-                $operation->set($name, $instance);
+                $operation->setMatch($name, $match_image, $instance);
                 $used_instance = true;
             }
             else if ($n_used < $n_supplied) {
-                $operation->set($name, $arguments[$n_used]);
+                $operation->setMatch($name, $match_image, $arguments[$n_used]);
                 $n_used += 1;
             }
             else {
@@ -260,12 +324,12 @@ class VipsOperation extends VipsObject
         /* Set optional.
          */
         foreach ($options as $name => $value) {
-            if (!in_array($name, $introspect->optional_input)) {
+            if (!in_array($name, $operation->introspect->optional_input)) {
                 $operation->unrefOutputs();
                 Init::error("optional argument '$name' does not exist");
             }
 
-            $operation->set($name, $value);
+            $operation->setMatch($name, $match_image, $value);
         }
 
         /* Build the operation
@@ -273,11 +337,12 @@ class VipsOperation extends VipsObject
         Utils::debugLog("callBase", ["building ..."]);
         $pointer = Init::ffi()->
             vips_cache_operation_build($operation->pointer);
-        if (\FFI::isNull($pointer)) {
+        if ($pointer == null) {
             $operation->unrefOutputs();
             Init::error();
         }
         $operation = new VipsOperation($pointer);
+        $operation->introspect = self::introspect($operation_name);
 
         # TODO .. need to attach input refs to output, see _find_inside in
         # pyvips
@@ -285,13 +350,13 @@ class VipsOperation extends VipsObject
         /* Fetch required output args (and modified input args).
          */
         $result = [];
-        foreach ($introspect->required_output as $name) {
+        foreach ($operation->introspect->required_output as $name) {
             $result[] = $operation->get($name);
         }
 
         /* Any optional output args.
          */
-        foreach ($introspect->optional_output as $name) {
+        foreach ($operation->introspect->optional_output as $name) {
             if (in_array($name, $options)) {
                 $result[$name] = $operation->get($name);
             }
@@ -343,39 +408,6 @@ class VipsOperation extends VipsObject
         return self::callBase($name, $instance, 
             array_merge($arguments, [$options]));
     }
-
-    /**
-     * Handy for things like self::more. Call a 2-ary vips operator like
-     * 'more', but if the arg is not an image (ie. it's a constant), call
-     * 'more_const' instead.
-     *
-     * @param mixed  $other   The right-hand argument.
-     * @param string $base    The base part of the operation name.
-     * @param string $op      The action to invoke.
-     * @param array  $options An array of options to pass to the operation.
-     *
-     * @throws Exception
-     *
-     * @return mixed The operation result.
-     *
-     * @internal
-     */
-    private function callEnum(
-        $other,
-        string $base,
-        string $op,
-        array $options = []
-    ) {
-        if (self::isImageish($other)) {
-            return self::call($base, $this, [$other, $op], $options);
-        } else {
-            return self::call($base . '_const', $this, [$op, $other], $options);
-        }
-    }
-
-
-
-
 
 }
 
