@@ -6,6 +6,12 @@ use Jcupitt\Vips;
 
 Vips\Config::setLogger(new Vips\DebugLogger());
 
+$image = Vips\Image::black(2, 2);
+$image = $image->add([[1, 2], [3, 4]]);
+
+exit;
+
+
 if(count($argv) != 4) {
     echo("usage: ./watermark.php input-image output-image watermark-image\n");
     exit(1);

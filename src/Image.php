@@ -669,9 +669,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Turn a constant (eg. 1, '12', [1, 2, 3], [[1]]) into an image using
-     * match_image as a guide.
+     * this as a guide.
      *
-     * @param Image $match_image Use this image as a guide.
      * @param mixed $value       Turn this into an image.
      *
      * @throws Exception
@@ -680,12 +679,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    private static function imageize(Image $match_image, $value): Image
+    public function imageize($value): Image
     {
         if (self::is2D($value)) {
             $result = self::newFromArray($value);
         } else {
-            $result = $match_image->newFromImage($value);
+            $result = $this->newFromImage($value);
         }
 
         return $result;
@@ -1425,7 +1424,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         // if we are setting a constant as the first element, we must expand it
         // to an image, since bandjoin must have an image as the first argument
         if ($n_left === 0 && !($value instanceof Image)) {
-            $value = self::imageize($this, $value);
+            $value = $this->imageize($value);
         }
 
         $components = [];
@@ -1973,11 +1972,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         if (!($then instanceof Image)) {
-            $then = self::imageize($match_image, $then);
+            $then = $match_image->imageize($then);
         }
 
         if (!($else instanceof Image)) {
-            $else = self::imageize($match_image, $else);
+            $else = $match_image->imageize($else);
         }
 
         return VipsOperation::call('ifthenelse', $this, [$then, $else], $options);
