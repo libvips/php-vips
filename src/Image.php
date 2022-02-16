@@ -681,14 +681,15 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function imageize($value): Image
     {
+        if ($value instanceof Image) {
+            return $value;
+        }
         if (self::is2D($value)) {
-            $value = self::newFromArray($value);
+            return self::newFromArray($value);
         } 
-        else if (is_array($value)) {
-            $value = $this->newFromImage($value);
+        else {
+            return $this->newFromImage($value);
         } 
-
-        return $value;
     }
 
     /**
@@ -1341,7 +1342,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function remove(string $name): void
     {
-        if (Init::ffi()->vips_image_remove($this->pointer, $name) != 0) {
+        if (!Init::ffi()->vips_image_remove($this->pointer, $name)) {
             Init::error();
         }
     }

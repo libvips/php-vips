@@ -57,14 +57,6 @@ class NewTest extends TestCase
         $this->assertEquals($image2->avg(), 2);
     }
 
-    public function testVipsFindLoad()
-    {
-        $filename = __DIR__ . '/images/img_0076.jpg';
-        $loader = Vips\Image::findLoad($filename);
-
-        $this->assertEquals($loader, 'VipsForeignLoadJpegFile');
-    }
-
     public function testVipsNewFromBuffer()
     {
         $filename = __DIR__ . '/images/img_0076.jpg';
@@ -74,15 +66,6 @@ class NewTest extends TestCase
         $this->assertEquals($image->width, 1600);
         $this->assertEquals($image->height, 1200);
         $this->assertEquals($image->bands, 3);
-    }
-
-    public function testVipsFindLoadBuffer()
-    {
-        $filename = __DIR__ . '/images/img_0076.jpg';
-        $buffer = file_get_contents($filename);
-        $loader = Vips\Image::findLoadBuffer($buffer);
-
-        $this->assertEquals($loader, 'VipsForeignLoadJpegBuffer');
     }
 
     public function testVipsCopyMemory()
