@@ -89,7 +89,7 @@ abstract class VipsObject extends GObject
     // NULL for no such name
     // very slow! avoid if possible
     // FIXME add a cache for this thing
-    function getPspec($name) {
+    function getPspec(string $name) {
         $pspec = Init::ffi()->new("GParamSpec*[1]");
         $argument_class = Init::ffi()->new("VipsArgumentClass*[1]");
         $argument_instance = Init::ffi()->new("VipsArgumentInstance*[1]");
@@ -111,7 +111,7 @@ abstract class VipsObject extends GObject
 
     // get the type of a property from a VipsObject
     // 0 if no such property
-    function getType($name) {
+    function getType(string $name) {
         $pspec = $this->getPspec($name);
         if (\FFI::isNull($pspec)) {
             # need to clear any error, this is horrible
@@ -123,12 +123,12 @@ abstract class VipsObject extends GObject
         }
     }
 
-    function getBlurb(string $name) {
+    function getBlurb(string $name): string {
         $pspec = $this->getPspec($name);
         return Init::ffi()->g_param_spec_get_blurb($pspec);
     }
 
-    function getArgumentDescription(string $name) {
+    function getArgumentDescription(string $name): string {
         $pspec = $this->getPspec($name);
         return Init::ffi()->g_param_spec_get_description($pspec);
     }
@@ -157,7 +157,7 @@ abstract class VipsObject extends GObject
             g_object_set_property($this->gObject, $name, $gvalue->pointer);
     }
 
-    function setString($string_options) {
+    function setString(string $string_options) {
         $result = Init::ffi()->
             vips_object_set_from_string($this->pointer, $string_options);
 

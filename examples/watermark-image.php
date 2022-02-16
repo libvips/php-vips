@@ -7,10 +7,10 @@ use Jcupitt\Vips;
 Vips\Config::setLogger(new Vips\DebugLogger());
 
 $image = Vips\Image::newFromFile($argv[1], ['access' => 'sequential']);
-$overlay = $image->add(20)->bandjoin(128);
-$overlay = $overlay->cast(Vips\BandFormat::UCHAR);
-$comp = $image->composite($overlay, Vips\BlendMode::OVER);
-$comp->writeToFile($argv[2]);
+
+$result = $image->maxpos();
+
+
 
 exit;
 

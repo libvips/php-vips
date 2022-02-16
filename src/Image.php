@@ -1242,7 +1242,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __isset(string $name): bool
     {
-        return $this->typeof($name) != 0;
+        return $this->getType($name) != 0;
     }
 
     /**
@@ -1251,7 +1251,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * This is handy for fields whose name
      * does not match PHP's variable naming conventions, like `'exif-data'`.
      *
-     * It will throw an exception if $name does not exist. Use Image::typeof()
+     * It will throw an exception if $name does not exist. Use Image::getType()
      * to test for the existence of a field.
      *
      * @param string $name The property name.
@@ -1280,9 +1280,21 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return integer
      */
-    public function typeof(string $name): int
+    public function getType(string $name): int
     {
         return Init::ffi()->vips_image_get_typeof($this->pointer, $name);
+    }
+
+    /**
+     * A deprecated synonym for getType().
+     *
+     * @param string $name The property name.
+     *
+     * @return integer
+     */
+    public function typeOf(string $name): int
+    {
+        return $this->getType($name);
     }
 
     /**
@@ -1301,8 +1313,39 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function set(string $name, $value): void
     {
         $gvalue = new GValue();
-        $gvalue->setType($this->typeof($name));
+        $gtype = $this->getType($name);
+
+        /* If this is not a known field, guess a sensible type from the value.
+         */
+        if ($gtype == 0) {
+            if (is_array($value)) {
+                if (is_int($value[0])) {
+                    $gtype = Init::gtypes("VipsArrayInt");
+                }
+                else if (is_float($value[0])) {
+                    $gtype = Init::gtypes("VipsArrayDouble");
+                }
+                else {
+                    $gtype = Init::gtypes("VipsArrayImage");
+                }
+            }
+            else if (is_int($value)) {
+                $gtype = Init::gtypes("gint");
+            }
+            else if (is_float($value)) {
+                $gtype = Init::gtypes("gdouble");
+            }
+            else if (is_string($value)) {
+                $gtype = Init::gtypes("VipsRefString");
+            }
+            else {
+                $gtype = Init::gtypes("VipsImage");
+            }
+        }
+
+        $gvalue->setType($gtype);
         $gvalue->set($value);
+
         Init::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
     }
 
@@ -1434,7 +1477,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function offsetGet($offset): ?Image
     {
-        return $this->offsetExists($offset) ? $this->extract_band($offset) : null;
+        return $this->offsetExists($offset) ? 
+            $this->extract_band($offset) : null;
     }
 
     /**

@@ -320,7 +320,8 @@ class VipsOperation extends VipsObject
         /* Set optional.
          */
         foreach ($options as $name => $value) {
-            if (!in_array($name, $operation->introspect->optional_input)) {
+            if (!in_array($name, $operation->introspect->optional_input) &&
+                !in_array($name, $operation->introspect->optional_output)) {
                 $operation->unrefOutputs();
                 Init::error("optional argument '$name' does not exist");
             }
@@ -347,14 +348,15 @@ class VipsOperation extends VipsObject
          */
         $result = [];
         foreach ($operation->introspect->required_output as $name) {
-            $result[] = $operation->get($name);
+            $result[$name] = $operation->get($name);
         }
 
         /* Any optional output args.
          */
         Utils::debugLog("callBase", ["fetching result ..."]);
+        $option_keys = array_keys($options);
         foreach ($operation->introspect->optional_output as $name) {
-            if (in_array($name, $options)) {
+            if (in_array($name, $option_keys)) {
                 $result[$name] = $operation->get($name);
             }
         }
