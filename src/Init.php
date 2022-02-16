@@ -649,6 +649,7 @@ EOS;
             "VipsObject" =>  $this->ffi->type("VipsObject*"),
             "VipsOperation" =>  $this->ffi->type("VipsOperation*"),
             "VipsImage" =>  $this->ffi->type("VipsImage*"),
+            "VipsInterpolate" =>  $this->ffi->type("VipsInterpolate*"),
         ];
 
         $this->gtypes = [

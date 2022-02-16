@@ -956,27 +956,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
-     * Make an interpolator from a name.
+     * Deprecated thing to make an interpolator.
      *
-     * @param string $name Name of the interpolator.
-     * Possible interpolators are:
-     *  - `'nearest'`: Use nearest neighbour interpolation.
-     *  - `'bicubic'`: Use bicubic interpolation.
-     *  - `'bilinear'`: Use bilinear interpolation (the default).
-     *  - `'nohalo'`: Use Nohalo interpolation.
-     *  - `'lbb'`: Use LBB interpolation.
-     *  - `'vsqbs'`: Use the VSQBS interpolation.
-     *
-     * @return resource|null The interpolator, or null on error.
+     * See Interpolator::newFromName() for the new thing.
      */
     public static function newInterpolator(string $name)
     {
-        Utils::debugLog('newInterpolator', [
-            'instance' => null,
-            'arguments' => [$name]
-        ]);
-
-        return Init::ffi()->vips_interpolate_new($name);
+        return Interpolate::newFromName($name);
     }
 
     /**

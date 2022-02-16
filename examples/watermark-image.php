@@ -6,10 +6,7 @@ use Jcupitt\Vips;
 
 Vips\Config::setLogger(new Vips\DebugLogger());
 
-$image = Vips\Image::newFromFile($argv[1], ['access' => 'sequential']);
-
-$result = $image->maxpos();
-
+$inter = Vips\Interpolate::newFromName("bicubic");
 
 
 exit;
