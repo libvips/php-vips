@@ -92,7 +92,11 @@ class VipsOperation extends VipsObject
             }
             else if ($gtype == Init::gtypes("VipsArrayImage") && 
                 is_array($value)) {
-                array_map(fn($x) => $match_image->imageize($x), $value);
+                $new_value = [];
+                foreach ($value as $x) {
+                    $new_value[] = $match_image->imageize($x);
+                }
+                $value = $new_value;
             }
         }
 

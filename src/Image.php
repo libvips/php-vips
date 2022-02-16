@@ -684,7 +684,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if ($value instanceof Image) {
             return $value;
         }
-        if (self::is2D($value)) {
+        else if (self::is2D($value)) {
             return self::newFromArray($value);
         } 
         else {
@@ -1524,7 +1524,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         $head = array_shift($components);
-        $this->pointer = $head->bandjoin($components)->pointer;
+        $joined = $head->bandjoin($components);
+        $this->pointer = $joined->pointer;
     }
 
     /**
