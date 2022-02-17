@@ -121,6 +121,20 @@ class Init
         throw $exception;
     }
 
+    /**
+     * Shut down libvips. Call this just before process exit.
+     *
+     * @throws Exception
+     *
+     * @return void
+     *
+     * @internal
+     */
+    public static function shutDown()
+    {
+        Init::ffi()->vips_shutdown();
+    }
+
     public static function filenameGetFilename($name)
     {
         $pointer = Init::ffi()->vips_filename_get_filename($name);
@@ -673,6 +687,8 @@ EOS;
             "GObject" => $this->ffi->g_type_from_name("GObject"),
             "VipsImage" => $this->ffi->g_type_from_name("VipsImage"),
         ];
+
+        $this->ffi->vips_leak_set(true);
 
         Utils::debugLog("init", ["done"]);
     }

@@ -11,29 +11,35 @@ if (count($argv) != 4) {
     exit(1);
 }
 
-// we can stream the main image
-$image = Vips\Image::newFromFile($argv[1], ['access' => 'sequential']);
+for ($i = 0; $i < 10000; $i++) {
+    echo "loop $i ...\n";
 
-// we'll read the watermark image many times, so we need random access for this
-$watermark = Vips\Image::newFromFile($argv[3]);
+    // we can stream the main image
+    $image = Vips\Image::newFromFile($argv[1], ['access' => 'sequential']);
 
-// the watermark image needs to have an alpha channel
-if (!$watermark->hasAlpha() || $watermark->bands != 4) {
-    echo("watermark image is not RGBA\n");
-    exit(1);
+    // we'll read the watermark image many times, so we need random access for this
+    $watermark = Vips\Image::newFromFile($argv[3]);
+
+    // the watermark image needs to have an alpha channel
+    if (!$watermark->hasAlpha() || $watermark->bands != 4) {
+        echo("watermark image is not RGBA\n");
+        exit(1);
+    }
+
+    // make the watermark semi-transparent
+    $watermark = $watermark->multiply([1, 1, 1, 0.3])->cast("uchar");
+
+    // repeat the watermark to the size of the image
+    $watermark = $watermark->replicate(
+        1 + $image->width / $watermark->width,
+        1 + $image->height / $watermark->height
+    );
+    $watermark = $watermark->crop(0, 0, $image->width, $image->height);
+
+    // composite the watermark over the main image
+    $image = $image->composite2($watermark, 'over');
+
+    $image->writeToFile($argv[2]);
 }
 
-// make the watermark semi-transparent
-$watermark = $watermark->multiply([1, 1, 1, 0.3])->cast("uchar");
-
-// repeat the watermark to the size of the image
-$watermark = $watermark->replicate(
-    1 + $image->width / $watermark->width,
-    1 + $image->height / $watermark->height
-);
-$watermark = $watermark->crop(0, 0, $image->width, $image->height);
-
-// composite the watermark over the main image
-$image = $image->composite2($watermark, 'over');
-
-$image->writeToFile($argv[2]);
+Vips\Init::shutDown();
