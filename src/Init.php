@@ -79,8 +79,8 @@ class Init
         static $instance;
 
         if (!$instance) {
-           $instance = new Init();
-           $instance->init();
+            $instance = new Init();
+            $instance->init();
         }
 
         return $instance;
@@ -121,7 +121,7 @@ class Init
         throw $exception;
     }
 
-    public static function filename_get_filename($name)
+    public static function filenameGetFilename($name)
     {
         $pointer = Init::ffi()->vips_filename_get_filename($name);
         $filename = \FFI::string($pointer);
@@ -130,7 +130,7 @@ class Init
         return $filename;
     }
 
-    public static function filename_get_options($name)
+    public static function filenameGetOptions($name)
     {
         $pointer = Init::ffi()->vips_filename_get_options($name);
         $options = \FFI::string($pointer);
@@ -145,8 +145,8 @@ class Init
 
     public function atLeast($need_major, $need_minor)
     {
-        return $need_major < $this->library_major || 
-            ($need_major == $this->library_major && 
+        return $need_major < $this->library_major ||
+            ($need_major == $this->library_major &&
              $need_minor <= $this->library_minor);
     }
 
@@ -154,25 +154,24 @@ class Init
     {
         $library_name = "libvips";
 
-        switch(PHP_OS_FAMILY) {
-        case "Windows":
-            $library_ext = ".dll";
-            break;
+        switch (PHP_OS_FAMILY) {
+            case "Windows":
+                $library_ext = ".dll";
+                break;
 
-        case "OSX":
-            $library_ext = ".dylib";
-            break;
+            case "OSX":
+                $library_ext = ".dylib";
+                break;
 
-        default;
-            $library_ext = ".so";
-            break;
+            default:
+                $library_ext = ".so";
+                break;
         }
 
         $vipshome = getenv("VIPSHOME");
         if ($vipshome) {
             $library_location = $vipshome . "/lib/";
-        }
-        else {
+        } else {
             # rely on ffi's search
             $library_location = "";
         }
@@ -180,7 +179,7 @@ class Init
         $library = "$library_location$library_name$library_ext";
         Utils::debugLog("init", ["libray" => $library]);
 
-        // TODO put a try/catch around this and generate a helpful message 
+        // TODO put a try/catch around this and generate a helpful message
         // since this is likely to be the main failure point
         $ffi = \FFI::cdef(<<<EOS
 int vips_init (const char *argv0);
@@ -212,9 +211,9 @@ EOS, $library);
         }
 
         if (PHP_INT_SIZE != 8) {
-            # we could maybe fix this if it's important ... it's mostly 
-            # necessary since GType is the size of a pointer, and there's no 
-            # easy way to discover if php is running on a 32 or 64-bit 
+            # we could maybe fix this if it's important ... it's mostly
+            # necessary since GType is the size of a pointer, and there's no
+            # easy way to discover if php is running on a 32 or 64-bit
             # systems (as far as I can see)
             throw new Vips\Exception("your php only supports 32-bit ints -- " .
                 "64 bit ints required");
@@ -228,7 +227,7 @@ typedef int32_t gint32;
 typedef uint64_t guint64;
 typedef int64_t gint64;
 
-// FIXME ... need to detect 32/64 bit platform, since GType is an int 
+// FIXME ... need to detect 32/64 bit platform, since GType is an int
 // the size of a pointer, see PHP_INT_SIZE above
 typedef guint64 GType;
 
@@ -641,7 +640,7 @@ EOS;
         }
 
         Utils::debugLog("init", ["binding ..."]);
-        $this->ffi = \FFI::cdef($header, $library); 
+        $this->ffi = \FFI::cdef($header, $library);
 
         // look these up in advance
         $this->ctypes = [
@@ -666,7 +665,7 @@ EOS;
             "VipsBandFormat" => $this->ffi->g_type_from_name("VipsBandFormat"),
             "VipsBlendMode" => $this->ffi->g_type_from_name("VipsBlendMode"),
             "VipsArrayInt" => $this->ffi->g_type_from_name("VipsArrayInt"),
-            "VipsArrayDouble" => 
+            "VipsArrayDouble" =>
                 $this->ffi->g_type_from_name("VipsArrayDouble"),
             "VipsArrayImage" => $this->ffi->g_type_from_name("VipsArrayImage"),
             "VipsBlob" => $this->ffi->g_type_from_name("VipsBlob"),
@@ -678,4 +677,3 @@ EOS;
         Utils::debugLog("init", ["done"]);
     }
 }
-

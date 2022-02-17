@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * This class holds a pointer to a VipsObject (the libvips base class) and 
+ * This class holds a pointer to a VipsObject (the libvips base class) and
  * manages properties.
  *
  * @category  Images
@@ -66,7 +66,7 @@ abstract class VipsObject extends GObject
      */
     private \FFI\CData $gObject;
 
-    function __construct($pointer)
+    public function __construct($pointer)
     {
         $this->pointer = Init::ffi()->
             cast(Init::ctypes("VipsObject"), $pointer);
@@ -77,63 +77,68 @@ abstract class VipsObject extends GObject
     }
 
     // print a table of all active vipsobjects ... handy for debugging
-    static function printAll() {
+    public static function printAll()
+    {
         Init::ffi()->vips_object_print_all();
     }
 
-    function getDescription() {
+    public function getDescription()
+    {
         return Init::ffi()->vips_object_get_description($this->pointer);
     }
 
-    // get the pspec for a property 
+    // get the pspec for a property
     // NULL for no such name
     // very slow! avoid if possible
     // FIXME add a cache for this thing
-    function getPspec(string $name) {
+    public function getPspec(string $name)
+    {
         $pspec = Init::ffi()->new("GParamSpec*[1]");
         $argument_class = Init::ffi()->new("VipsArgumentClass*[1]");
         $argument_instance = Init::ffi()->new("VipsArgumentInstance*[1]");
         $result = Init::ffi()->vips_object_get_argument(
             $this->pointer,
             $name,
-            $pspec, 
+            $pspec,
             $argument_class,
             $argument_instance
         );
 
         if ($result != 0) {
             return null;
-        }
-        else {
+        } else {
             return $pspec[0];
         }
     }
 
     // get the type of a property from a VipsObject
     // 0 if no such property
-    function getType(string $name) {
+    public function getType(string $name)
+    {
         $pspec = $this->getPspec($name);
         if (\FFI::isNull($pspec)) {
             # need to clear any error, this is horrible
             Init::ffi()->vips_error_clear();
             return 0;
-        }
-        else {
+        } else {
             return $pspec->value_type;
         }
     }
 
-    function getBlurb(string $name): string {
+    public function getBlurb(string $name): string
+    {
         $pspec = $this->getPspec($name);
         return Init::ffi()->g_param_spec_get_blurb($pspec);
     }
 
-    function getArgumentDescription(string $name): string {
+    public function getArgumentDescription(string $name): string
+    {
         $pspec = $this->getPspec($name);
         return Init::ffi()->g_param_spec_get_description($pspec);
     }
 
-    function get(string $name) {
+    public function get(string $name)
+    {
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
 
@@ -146,7 +151,8 @@ abstract class VipsObject extends GObject
         return $value;
     }
 
-    function set(string $name, $value) {
+    public function set(string $name, $value)
+    {
         Utils::debugLog("set", [$name => $value]);
 
         $gvalue = new GValue();
@@ -157,14 +163,15 @@ abstract class VipsObject extends GObject
             g_object_set_property($this->gObject, $name, $gvalue->pointer);
     }
 
-    function setString(string $string_options) {
+    public function setString(string $string_options)
+    {
         $result = Init::ffi()->
             vips_object_set_from_string($this->pointer, $string_options);
 
         return $result == 0;
     }
 
-    function unrefOutputs()
+    public function unrefOutputs()
     {
         Init::ffi()->vips_object_unref_outputs($this->pointer);
     }

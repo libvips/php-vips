@@ -581,7 +581,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-     public \FFI\CData $pointer;
+    public \FFI\CData $pointer;
 
     /**
      * Wrap an Image around an underlying CData pointer.
@@ -683,13 +683,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
     {
         if ($value instanceof Image) {
             return $value;
-        }
-        else if (self::is2D($value)) {
+        } elseif (self::is2D($value)) {
             return self::newFromArray($value);
-        } 
-        else {
+        } else {
             return $this->newFromImage($value);
-        } 
+        }
     }
 
     /**
@@ -793,8 +791,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$name, $options]
         ]);
 
-        $filename = Init::filename_get_filename($name);
-        $string_options = Init::filename_get_options($name);
+        $filename = Init::filenameGetFilename($name);
+        $string_options = Init::filenameGetOptions($name);
 
         $loader = Init::ffi()->vips_foreign_find_load($filename);
         if ($loader == "") {
@@ -890,8 +888,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $n = $width * $height;
         $ctype = \FFI::arrayType(\FFI::type("double"), [$n]);
         $a = \FFI::new($ctype, true, true);
-        for($y = 0; $y < $height; $y++) {
-            for($x = 0; $x < $width; $x++) {
+        for ($y = 0; $y < $height; $y++) {
+            for ($x = 0; $x < $width; $x++) {
                 $a[$x + $y * $width] = $array[$y][$x];
             }
         }
@@ -937,11 +935,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
         ]);
 
         $pointer = Init::ffi()->vips_image_new_from_memory(
-            $data, 
-            strlen($data), 
-            $width, 
-            $height, 
-            $bands, 
+            $data,
+            strlen($data),
+            $width,
+            $height,
+            $bands,
             $format
         );
         if ($pointer == null) {
@@ -1028,8 +1026,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'options' => $options
         ]);
 
-        $filename = Init::filename_get_filename($name);
-        $string_options = Init::filename_get_options($name);
+        $filename = Init::filenameGetFilename($name);
+        $string_options = Init::filenameGetOptions($name);
 
         $saver = Init::ffi()->vips_foreign_find_save($filename);
         if ($saver == "") {
@@ -1069,8 +1067,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$suffix, $options]
         ]);
 
-        $filename = Init::filename_get_filename($suffix);
-        $string_options = Init::filename_get_options($suffix);
+        $filename = Init::filenameGetFilename($suffix);
+        $string_options = Init::filenameGetOptions($suffix);
 
         $saver = Init::ffi()->vips_foreign_find_save_buffer($filename);
         if ($saver == "") {
@@ -1113,7 +1111,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             Init::error();
         }
 
-       $result = \FFI::string($pointer, $p_size[0]);
+        $result = \FFI::string($pointer, $p_size[0]);
 
         Utils::debugLog('writeToMemory', ['result' => $result]);
 
@@ -1307,24 +1305,18 @@ class Image extends ImageAutodoc implements \ArrayAccess
             if (is_array($value)) {
                 if (is_int($value[0])) {
                     $gtype = Init::gtypes("VipsArrayInt");
-                }
-                else if (is_float($value[0])) {
+                } elseif (is_float($value[0])) {
                     $gtype = Init::gtypes("VipsArrayDouble");
-                }
-                else {
+                } else {
                     $gtype = Init::gtypes("VipsArrayImage");
                 }
-            }
-            else if (is_int($value)) {
+            } elseif (is_int($value)) {
                 $gtype = Init::gtypes("gint");
-            }
-            else if (is_float($value)) {
+            } elseif (is_float($value)) {
                 $gtype = Init::gtypes("gdouble");
-            }
-            else if (is_string($value)) {
+            } elseif (is_string($value)) {
                 $gtype = Init::gtypes("VipsRefString");
-            }
-            else {
+            } else {
                 $gtype = Init::gtypes("VipsImage");
             }
         }
@@ -1463,7 +1455,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function offsetGet($offset): ?Image
     {
-        return $this->offsetExists($offset) ? 
+        return $this->offsetExists($offset) ?
             $this->extract_band($offset) : null;
     }
 
@@ -1994,7 +1986,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $mode = array_map(
             // Use BlendMode::OVER if a non-existent value is given.
             fn($x) => self::$blendModeToInt[$x] ?? BlendMode::OVER,
-            $mode);
+            $mode
+        );
 
         return VipsOperation::call(
             'composite',

@@ -80,7 +80,7 @@ class Introspect
     public array $required_output;
     public array $optional_output;
 
-    /** 
+    /**
      * The name of the arg this operation uses as "this".
      */
     public string $member_this;
@@ -90,7 +90,7 @@ class Introspect
      */
     public array $method_args;
 
-    function __construct($name)
+    public function __construct($name)
     {
         $this->name = $name;
 
@@ -104,8 +104,8 @@ class Introspect
         $p_n_args = Init::ffi()->new("int[1]");
         $result = Init::ffi()->vips_object_get_args(
             \FFI::cast(Init::ctypes("VipsObject"), $operation->pointer),
-            $p_names, 
-            $p_flags, 
+            $p_names,
+            $p_flags,
             $p_n_args
         );
         if ($result != 0) {
@@ -166,14 +166,14 @@ class Introspect
                 !($flags & ArgumentFlags::DEPRECATED)) {
                 $this->required_output[] = $name;
             }
-  
+ 
             # we let deprecated optional args through, but warn about them
             # if they get used, see below
             if (($flags & ArgumentFlags::INPUT) &&
                 !($flags & ArgumentFlags::REQUIRED)) {
                 $this->optional_input[] = $name;
             }
-  
+ 
             if (($flags & ArgumentFlags::OUTPUT) &&
                 !($flags & ArgumentFlags::REQUIRED)) {
                 $this->optional_output[] = $name;
@@ -201,7 +201,8 @@ class Introspect
         Utils::debugLog($name, ['introspect' => strval($this)]);
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         $result = "";
 
         $result .= "$this->name:\n";

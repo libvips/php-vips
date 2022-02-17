@@ -39,8 +39,8 @@
 namespace Jcupitt\Vips;
 
 /**
- * This class holds a pointer to a VipsInterpolate (the libvips 
- * base class for interpolators) and manages argument introspection and 
+ * This class holds a pointer to a VipsInterpolate (the libvips
+ * base class for interpolators) and manages argument introspection and
  * operation call.
  *
  * @category  Images
@@ -60,7 +60,7 @@ class Interpolate extends VipsObject
      */
     public \FFI\CData $pointer;
 
-    function __construct($pointer)
+    public function __construct($pointer)
     {
         $this->pointer = Init::ffi()->
             cast(Init::ctypes("VipsInterpolate"), $pointer);
@@ -96,7 +96,6 @@ class Interpolate extends VipsObject
 
         return new Interpolate($pointer);
     }
-
 }
 
 /*

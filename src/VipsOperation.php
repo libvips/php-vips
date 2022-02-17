@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * This class holds a pointer to a VipsOperation (the libvips operation base 
+ * This class holds a pointer to a VipsOperation (the libvips operation base
  * class) and manages argument introspection and operation call.
  *
  * @category  Images
@@ -64,7 +64,7 @@ class VipsOperation extends VipsObject
      */
     public Introspect $introspect;
 
-    function __construct($pointer)
+    public function __construct($pointer)
     {
         $this->pointer = Init::ffi()->
             cast(Init::ctypes("VipsOperation"), $pointer);
@@ -82,15 +82,15 @@ class VipsOperation extends VipsObject
         return new VipsOperation($pointer);
     }
 
-    public function setMatch($name, $match_image, $value) {
+    public function setMatch($name, $match_image, $value)
+    {
         $flags = $this->introspect->arguments[$name]["flags"];
         $gtype = $this->introspect->arguments[$name]["type"];
 
         if ($match_image != null) {
             if ($gtype == Init::gtypes("VipsImage")) {
                 $value = $match_image->imageize($value);
-            }
-            else if ($gtype == Init::gtypes("VipsArrayImage") && 
+            } elseif ($gtype == Init::gtypes("VipsArrayImage") &&
                 is_array($value)) {
                 $new_value = [];
                 foreach ($value as $x) {
@@ -110,7 +110,8 @@ class VipsOperation extends VipsObject
         parent::set($name, $value);
     }
 
-    private static function introspect($name): Introspect {
+    private static function introspect($name): Introspect
+    {
         static $cache = [];
 
         if (!array_key_exists($name, $cache)) {
@@ -120,7 +121,8 @@ class VipsOperation extends VipsObject
         return $cache[$name];
     }
 
-    private static function findInside($predicate, $x) {
+    private static function findInside($predicate, $x)
+    {
         if ($predicate($x)) {
             return $x;
         }
@@ -249,7 +251,7 @@ class VipsOperation extends VipsObject
      *
      * @return mixed The result(s) of the operation.
      */
-    static function callBase(
+    public static function callBase(
         string $operation_name,
         ?Image $instance,
         array $arguments
@@ -268,18 +270,17 @@ class VipsOperation extends VipsObject
          */
         if ($instance != null) {
             $match_image = $instance;
-        }
-        else {
+        } else {
             $match_image = self::findInside(
-                fn($x) => $x instanceof Image, 
+                fn($x) => $x instanceof Image,
                 $arguments
             );
         }
 
         /* Because of the way php callStatic works, we can sometimes be given
-         * an instance even when no instance was given. 
+         * an instance even when no instance was given.
          *
-         * We must loop over the required args and set them from the supplied 
+         * We must loop over the required args and set them from the supplied
          * args, using instance if required, and only check the nargs after
          * this pass.
          */
@@ -295,12 +296,10 @@ class VipsOperation extends VipsObject
                 }
                 $operation->setMatch($name, $match_image, $instance);
                 $used_instance = true;
-            }
-            else if ($n_used < $n_supplied) {
+            } elseif ($n_used < $n_supplied) {
                 $operation->setMatch($name, $match_image, $arguments[$n_used]);
                 $n_used += 1;
-            }
-            else {
+            } else {
                 $operation->unrefOutputs();
                 Init::error("$n_required arguments required, " .
                     "but $n_supplied supplied");
@@ -365,7 +364,7 @@ class VipsOperation extends VipsObject
             }
         }
 
-        /* Free any outputs we've not used. 
+        /* Free any outputs we've not used.
          */
         $operation->unrefOutputs();
 
@@ -398,20 +397,12 @@ class VipsOperation extends VipsObject
         array $arguments,
         array $options = []
     ) {
-        /*
-        echo "call: $name \n";
-        echo "instance = \n";
-        var_dump($instance);
-        echo "arguments = \n";
-        var_dump($arguments);
-        echo "options = \n";
-        var_dump($options);
-         */
-
-        return self::callBase($name, $instance, 
-            array_merge($arguments, [$options]));
+        return self::callBase(
+            $name,
+            $instance,
+            array_merge($arguments, [$options])
+        );
     }
-
 }
 
 /*

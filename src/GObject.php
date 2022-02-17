@@ -48,7 +48,7 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/libvips/php-vips
  */
-abstract class GObject 
+abstract class GObject
 {
     /**
      * A pointer to the underlying GObject.
@@ -64,30 +64,32 @@ abstract class GObject
      * Don't call this yourself, users should stick to (for example)
      * Image::newFromFile().
      *
-     * @param FFI\CData $pointer The underlying pointer that this 
+     * @param FFI\CData $pointer The underlying pointer that this
      *  object should wrap.
      *
      * @internal
      */
-    function __construct($pointer)
+    public function __construct($pointer)
     {
         $this->pointer = \FFI::cast(Init::ctypes("GObject"), $pointer);
     }
 
-    function __destruct() {
+    public function __destruct()
+    {
         $this->unref();
     }
 
-    function ref() {
+    public function ref()
+    {
         Init::ffi()->g_object_ref($this->pointer);
     }
 
-    function unref() {
+    public function unref()
+    {
         Init::ffi()->g_object_unref($this->pointer);
     }
 
     // TODO signal marshalling to go in
-
 }
 
 /*
