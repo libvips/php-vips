@@ -1525,6 +1525,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $head = array_shift($components);
         $joined = $head->bandjoin($components);
+
+        /* Overwrite our pointer with the pointer from the new, joined object.
+         * We have to adjust the refs, yuk!
+         */
+        $joined->ref();
+        $this->unref();
         $this->pointer = $joined->pointer;
     }
 

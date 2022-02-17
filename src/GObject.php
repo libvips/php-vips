@@ -75,6 +75,14 @@ abstract class GObject
     }
 
     function __destruct() {
+        $this->unref();
+    }
+
+    function ref() {
+        Init::ffi()->g_object_ref($this->pointer);
+    }
+
+    function unref() {
         Init::ffi()->g_object_unref($this->pointer);
     }
 

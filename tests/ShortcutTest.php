@@ -207,6 +207,13 @@ class ShortcutTest extends TestCase
         // replace band with image
         $test = $image->copy();
         $test[1] = $base;
+
+        $avg = $test->avg();
+
+        exit;
+        $this->assertEquals($avg, 2.666);
+
+
         $this->assertEquals($test->bands, 3);
         $this->assertEquals($test[0]->avg(), 2);
         $this->assertEquals($test[1]->avg(), 2);

@@ -158,9 +158,9 @@ class GValue
             $array = Init::ffi()->
                 vips_value_get_array_image($this->pointer, NULL);
             for ($i = 0; $i < $n; $i++) {
-                $pointer = $value[$i]->pointer;
-                $array[$i] = $pointer;
-                Init::ffi()->g_object_ref($pointer);
+                $image = $value[$i];
+                $array[$i] = $image->pointer;
+                $image->ref();
             }
             break;
 
@@ -243,9 +243,9 @@ class GValue
 
         case Init::gtypes("VipsImage"):
             $pointer = Init::ffi()->g_value_get_object($this->pointer);
-            // get_object does not increment the ref count 
-            Init::ffi()->g_object_ref($pointer);
             $result = new Image($pointer);
+            // get_object does not increment the ref count 
+            $result->ref();
             break;
 
         case Init::gtypes("VipsArrayInt"):
@@ -274,9 +274,9 @@ class GValue
                 vips_value_get_array_image($this->pointer, $p_len);
             $result = [];
             for ($i = 0; $i < $p_len[0]; $i++) {
-                $image_pointer = $pointer[$i];
-                Init::ffi()->g_object_ref($image_pointer);
-                $result[] = new Image($image_pointer);
+                $image = new Image($pointer[$i]);
+                $image->ref();
+                $result[] = $image;
             }
             break;
 
