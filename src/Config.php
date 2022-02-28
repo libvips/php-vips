@@ -96,7 +96,7 @@ class Config
      */
     public static function cacheSetMax(int $value): void
     {
-        vips_cache_set_max($value);
+        Init::ffi()->vips_cache_set_max($value);
     }
 
     /**
@@ -110,7 +110,7 @@ class Config
      */
     public static function cacheSetMaxMem(int $value): void
     {
-        vips_cache_set_max_mem($value);
+        Init::ffi()->vips_cache_set_max_mem($value);
     }
 
     /**
@@ -123,7 +123,7 @@ class Config
      */
     public static function cacheSetMaxFiles(int $value): void
     {
-        vips_cache_set_max_files($value);
+        Init::ffi()->vips_cache_set_max_files($value);
     }
 
     /**
@@ -137,7 +137,7 @@ class Config
      */
     public static function concurrencySet(int $value): void
     {
-        vips_concurrency_set($value);
+        Init::ffi()->vips_concurrency_set($value);
     }
 
     /**
@@ -148,7 +148,15 @@ class Config
      */
     public static function version(): string
     {
-        return vips_version();
+        return Init::ffi()->vips_version();
+    }
+
+    /**
+     * Handy for debugging.
+     */
+    public static function printAll()
+    {
+        Init::ffi()->vips_object_print_all();
     }
 }
 

@@ -139,7 +139,10 @@ class Init
     {
         $pointer = Init::ffi()->vips_filename_get_filename($name);
         $filename = \FFI::string($pointer);
-        \FFI::free($pointer);
+
+        // You'[d think we should free this pointer, but php starts failing
+        // under load if you do :(
+        // \FFI::free($pointer);
 
         return $filename;
     }
@@ -148,7 +151,10 @@ class Init
     {
         $pointer = Init::ffi()->vips_filename_get_options($name);
         $options = \FFI::string($pointer);
-        \FFI::free($pointer);
+
+        // You'[d think we should free this pointer, but php starts failing
+        // under load if you do :(
+        // \FFI::free($pointer);
 
         return $options;
     }
@@ -570,6 +576,12 @@ int vips_cache_get_max();
 int vips_cache_get_size();
 size_t vips_cache_get_max_mem();
 int vips_cache_get_max_files();
+
+size_t vips_tracked_get_mem_highwater();
+size_t vips_tracked_get_mem();
+int vips_tracked_get_allocs();
+int vips_tracked_get_files();
+void vips_object_print_all();
 
 char** vips_image_get_fields (VipsImage* image);
 int vips_image_hasalpha (VipsImage* image);
