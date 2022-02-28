@@ -242,15 +242,17 @@ class GValue
                 break;
 
             case Init::gtypes("gchararray"):
-                $result = Init::ffi()->g_value_get_string($this->pointer);
+                $c_string = Init::ffi()->g_value_get_string($this->pointer);
+                $result = \FFI::string($c_string);
                 break;
 
             case Init::gtypes("VipsRefString"):
                 $p_size = Init::ffi()->new("size_t[1]");
-                $result = Init::ffi()->
+                $c_string = Init::ffi()->
                     vips_value_get_ref_string($this->pointer, $p_size);
                 # $p_size[0] will be the string length, but assume it's null
                 # terminated
+                $result = \FFI::string($c_string);
                 break;
 
             case Init::gtypes("VipsImage"):
@@ -310,7 +312,8 @@ class GValue
                     case Init::gtypes("GFlags"):
                         /* Just get as int.
                          */
-                        $result = Init::ffi()->g_value_get_flags($this->pointer);
+                        $result = Init::ffi()->
+                            g_value_get_flags($this->pointer);
                         break;
 
                     default:

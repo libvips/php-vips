@@ -139,10 +139,7 @@ class Init
     {
         $pointer = Init::ffi()->vips_filename_get_filename($name);
         $filename = \FFI::string($pointer);
-
-        // You'[d think we should free this pointer, but php starts failing
-        // under load if you do :(
-        // \FFI::free($pointer);
+        Init::ffi()->g_free($pointer);
 
         return $filename;
     }
@@ -151,13 +148,11 @@ class Init
     {
         $pointer = Init::ffi()->vips_filename_get_options($name);
         $options = \FFI::string($pointer);
-
-        // You'[d think we should free this pointer, but php starts failing
-        // under load if you do :(
-        // \FFI::free($pointer);
+        Init::ffi()->g_free($pointer);
 
         return $options;
     }
+
 
     public function __construct()
     {

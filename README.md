@@ -17,6 +17,29 @@ image. When the pipe is connected to a destination, the whole pipeline
 executes at once and in parallel, streaming the image from source to
 destination in a set of small fragments.
 
+## TODO
+
+- Needs a refs system for newFromMemory etc.
+
+- More robust startup, and a better error message for lib not found or FFI
+  disabled.
+
+- Move some stuff from Init to Config or Utils.
+
+- Read and check the whole diff.
+
+- Rewrite the enum generator in php.
+
+- Check docs.
+
+### After merge
+
+- Add source/target API
+
+- Add progress callbacks etc.
+
+- Add mutable.
+
 ### Install
 
 You need to [install the libvips

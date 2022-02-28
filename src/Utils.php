@@ -92,7 +92,7 @@ class Utils
      */
     public static function typeFromName(string $name): int
     {
-        return vips_type_from_name($name);
+        return Init::ffi()->g_type_from_name($name); 
     }
 }
 
