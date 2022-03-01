@@ -66,17 +66,17 @@ class VipsOperation extends VipsObject
 
     public function __construct($pointer)
     {
-        $this->pointer = Init::ffi()->
-            cast(Init::ctypes("VipsOperation"), $pointer);
+        $this->pointer = Config::ffi()->
+            cast(Config::ctypes("VipsOperation"), $pointer);
 
         parent::__construct($pointer);
     }
 
     public static function newFromName($name)
     {
-        $pointer = Init::ffi()->vips_operation_new($name);
+        $pointer = Config::ffi()->vips_operation_new($name);
         if ($pointer == null) {
-            Init::error();
+            Config::error();
         }
 
         return new VipsOperation($pointer);
@@ -88,9 +88,9 @@ class VipsOperation extends VipsObject
         $gtype = $this->introspect->arguments[$name]["type"];
 
         if ($match_image != null) {
-            if ($gtype == Init::gtypes("VipsImage")) {
+            if ($gtype == Config::gtypes("VipsImage")) {
                 $value = $match_image->imageize($value);
-            } elseif ($gtype == Init::gtypes("VipsArrayImage") &&
+            } elseif ($gtype == Config::gtypes("VipsArrayImage") &&
                 is_array($value)) {
                 $new_value = [];
                 foreach ($value as $x) {
@@ -173,7 +173,7 @@ class VipsOperation extends VipsObject
     private static function isImagePointer($value): bool
     {
         return $value instanceof \FFI\CData &&
-            \FFI::typeof($value) == Init::ctypes("VipsImage");
+            \FFI::typeof($value) == Config::ctypes("VipsImage");
     }
 
     /**
@@ -229,7 +229,7 @@ class VipsOperation extends VipsObject
     private static function errorIsArray($result): void
     {
         if (!is_array($result)) {
-            Init::error();
+            Config::error();
         }
     }
 
@@ -292,7 +292,7 @@ class VipsOperation extends VipsObject
             if ($name == $operation->introspect->member_this) {
                 if (!$instance) {
                     $operation->unrefOutputs();
-                    Init::error("instance argument not supplied");
+                    Config::error("instance argument not supplied");
                 }
                 $operation->setMatch($name, $match_image, $instance);
                 $used_instance = true;
@@ -301,7 +301,7 @@ class VipsOperation extends VipsObject
                 $n_used += 1;
             } else {
                 $operation->unrefOutputs();
-                Init::error("$n_required arguments required, " .
+                Config::error("$n_required arguments required, " .
                     "but $n_supplied supplied");
             }
         }
@@ -316,7 +316,7 @@ class VipsOperation extends VipsObject
 
         if ($n_supplied != $n_used) {
             $operation->unrefOutputs();
-            Init::error("$n_required arguments required, " .
+            Config::error("$n_required arguments required, " .
                 "but $n_supplied supplied");
         }
 
@@ -326,7 +326,7 @@ class VipsOperation extends VipsObject
             if (!in_array($name, $operation->introspect->optional_input) &&
                 !in_array($name, $operation->introspect->optional_output)) {
                 $operation->unrefOutputs();
-                Init::error("optional argument '$name' does not exist");
+                Config::error("optional argument '$name' does not exist");
             }
 
             $operation->setMatch($name, $match_image, $value);
@@ -335,11 +335,11 @@ class VipsOperation extends VipsObject
         /* Build the operation
          */
         Utils::debugLog("callBase", ["building ..."]);
-        $pointer = Init::ffi()->
+        $pointer = Config::ffi()->
             vips_cache_operation_build($operation->pointer);
         if ($pointer == null) {
             $operation->unrefOutputs();
-            Init::error();
+            Config::error();
         }
         $operation = new VipsOperation($pointer);
         $operation->introspect = self::introspect($operation_name);

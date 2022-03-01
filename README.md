@@ -21,9 +21,9 @@ destination in a set of small fragments.
 
 - Needs a refs system for newFromMemory etc.
 
-- Move some stuff from Init to Config or Utils.
+- nicknameToCanonical needs redoing for FFI
 
-      Put the whole of init inside config?
+- blendModeToInt needs redoing for FFI
 
 - Read and check the whole diff.
 

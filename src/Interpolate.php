@@ -62,8 +62,8 @@ class Interpolate extends VipsObject
 
     public function __construct($pointer)
     {
-        $this->pointer = Init::ffi()->
-            cast(Init::ctypes("VipsInterpolate"), $pointer);
+        $this->pointer = Config::ffi()->
+            cast(Config::ctypes("VipsInterpolate"), $pointer);
 
         parent::__construct($pointer);
     }
@@ -89,9 +89,9 @@ class Interpolate extends VipsObject
             'arguments' => [$name]
         ]);
 
-        $pointer = Init::ffi()->vips_interpolate_new($name);
+        $pointer = Config::ffi()->vips_interpolate_new($name);
         if ($pointer == null) {
-            Init::error();
+            Config::error();
         }
 
         return new Interpolate($pointer);

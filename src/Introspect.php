@@ -97,13 +97,13 @@ class Introspect
         $operation = VipsOperation::newFromName($name);
 
         $this->description = $operation->getDescription();
-        $flags = Init::ffi()->vips_operation_get_flags($operation->pointer);
+        $flags = Config::ffi()->vips_operation_get_flags($operation->pointer);
 
-        $p_names = Init::ffi()->new("char**[1]");
-        $p_flags = Init::ffi()->new("int*[1]");
-        $p_n_args = Init::ffi()->new("int[1]");
-        $result = Init::ffi()->vips_object_get_args(
-            \FFI::cast(Init::ctypes("VipsObject"), $operation->pointer),
+        $p_names = Config::ffi()->new("char**[1]");
+        $p_flags = Config::ffi()->new("int*[1]");
+        $p_n_args = Config::ffi()->new("int[1]");
+        $result = Config::ffi()->vips_object_get_args(
+            \FFI::cast(Config::ctypes("VipsObject"), $operation->pointer),
             $p_names,
             $p_flags,
             $p_n_args
@@ -148,7 +148,7 @@ class Introspect
             $flags = $details["flags"];
             $blurb = $details["blurb"];
             $type = $details["type"];
-            $typeName = Init::ffi()->g_type_name($type);
+            $typeName = Config::ffi()->g_type_name($type);
 
             if (($flags & ArgumentFlags::INPUT) &&
                 ($flags & ArgumentFlags::REQUIRED) &&
@@ -184,7 +184,7 @@ class Introspect
         $this->member_this = "";
         foreach ($this->required_input as $name) {
             $type = $this->arguments[$name]["type"];
-            if ($type == Init::gtypes("VipsImage")) {
+            if ($type == Config::gtypes("VipsImage")) {
                 $this->member_this = $name;
                 break;
             }
@@ -211,7 +211,7 @@ class Introspect
             $flags = $details["flags"];
             $blurb = $details["blurb"];
             $type = $details["type"];
-            $typeName = Init::ffi()->g_type_name($type);
+            $typeName = Config::ffi()->g_type_name($type);
 
             $result .= "  $name:\n";
 

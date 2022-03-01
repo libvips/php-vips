@@ -540,7 +540,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Combine takes an array of blend modes, passed to libvips as an array of
-     * int. Because libvips does now know they should be enums, we have to do
+     * int. Because libvips does not know they should be enums, we have to do
      * the string->int conversion ourselves. We ought to introspect to find the
      * mapping, but until we have the machinery for that, we just hardwire the
      * mapping here.
@@ -593,7 +593,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __construct($pointer)
     {
-        $this->pointer = Init::ffi()->cast(Init::ctypes("VipsImage"), $pointer);
+        $this->pointer = Config::ffi()->
+            cast(Config::ctypes("VipsImage"), $pointer);
         parent::__construct($pointer);
     }
 
@@ -768,7 +769,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if (self::isImageish($other)) {
             return VipsOperation::call($base, $this, [$other, $op], $options);
         } else {
-            return VipsOperation::call($base . '_const', $this, [$op, $other], $options);
+            return VipsOperation::call(
+                $base . '_const', 
+                $this, 
+                [$op, $other], 
+                $options
+            );
         }
     }
 
@@ -791,12 +797,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$name, $options]
         ]);
 
-        $filename = Init::filenameGetFilename($name);
-        $string_options = Init::filenameGetOptions($name);
+        $filename = Config::filenameGetFilename($name);
+        $string_options = Config::filenameGetOptions($name);
 
-        $loader = Init::ffi()->vips_foreign_find_load($filename);
+        $loader = Config::ffi()->vips_foreign_find_load($filename);
         if ($loader == "") {
-            Init::error();
+            Config::error();
         }
 
         if (strlen($string_options) != 0) {
@@ -834,10 +840,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$buffer, $string_options, $options]
         ]);
 
-        $loader = Init::ffi()->
+        $loader = Config::ffi()->
             vips_foreign_find_load_buffer($buffer, strlen($buffer));
         if ($loader == null) {
-            Init::error();
+            Config::error();
         }
 
         if (strlen($string_options) != 0) {
@@ -894,15 +900,15 @@ class Image extends ImageAutodoc implements \ArrayAccess
             }
         }
 
-        $pointer = Init::ffi()->
+        $pointer = Config::ffi()->
             vips_image_new_matrix_from_array($width, $height, $a, $n);
         if ($pointer == null) {
-            Init::error();
+            Config::error();
         }
         $result = new Image($pointer);
 
-        $result->setType(Init::gtypes("gdouble"), 'scale', $scale);
-        $result->setType(Init::gtypes("gdouble"), 'offset', $offset);
+        $result->setType(Config::gtypes("gdouble"), 'scale', $scale);
+        $result->setType(Config::gtypes("gdouble"), 'offset', $offset);
 
         Utils::debugLog('newFromArray', ['result' => $result]);
 
@@ -934,7 +940,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$data, $width, $height, $bands, $format]
         ]);
 
-        $pointer = Init::ffi()->vips_image_new_from_memory(
+        $pointer = Config::ffi()->vips_image_new_from_memory(
             $data,
             strlen($data),
             $width,
@@ -943,7 +949,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $format
         );
         if ($pointer == null) {
-            Init::error();
+            Config::error();
         }
 
         $result = new Image($pointer);
@@ -1026,12 +1032,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'options' => $options
         ]);
 
-        $filename = Init::filenameGetFilename($name);
-        $string_options = Init::filenameGetOptions($name);
+        $filename = Config::filenameGetFilename($name);
+        $string_options = Config::filenameGetOptions($name);
 
-        $saver = Init::ffi()->vips_foreign_find_save($filename);
+        $saver = Config::ffi()->vips_foreign_find_save($filename);
         if ($saver == "") {
-            Init::error();
+            Config::error();
         }
 
         if (strlen($string_options) != 0) {
@@ -1045,7 +1051,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         Utils::debugLog('writeToFile', ['result' => $result]);
 
         if ($result === -1) {
-            Init::error();
+            Config::error();
         }
     }
 
@@ -1067,12 +1073,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$suffix, $options]
         ]);
 
-        $filename = Init::filenameGetFilename($suffix);
-        $string_options = Init::filenameGetOptions($suffix);
+        $filename = Config::filenameGetFilename($suffix);
+        $string_options = Config::filenameGetOptions($suffix);
 
-        $saver = Init::ffi()->vips_foreign_find_save_buffer($filename);
+        $saver = Config::ffi()->vips_foreign_find_save_buffer($filename);
         if ($saver == "") {
-            Init::error();
+            Config::error();
         }
 
         if (strlen($string_options) != 0) {
@@ -1105,10 +1111,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
         $p_size = \FFI::new($ctype);
 
-        $pointer = Init::ffi()->
+        $pointer = Config::ffi()->
             vips_image_write_to_memory($this->pointer, $p_size);
         if ($pointer == null) {
-            Init::error();
+            Config::error();
         }
 
         $result = \FFI::string($pointer, $p_size[0]);
@@ -1148,9 +1154,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $result = Init::ffi()->vips_image_write_to_array($this->pointer);
+        $result = Config::ffi()->vips_image_write_to_array($this->pointer);
         if ($result === -1) {
-            Init::error();
+            Config::error();
         }
 
         Utils::debugLog('writeToArray', ['result' => $result]);
@@ -1179,9 +1185,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $pointer = Init::ffi()->vips_image_copy_memory($this->pointer);
+        $pointer = Config::ffi()->vips_image_copy_memory($this->pointer);
         if ($pointer == null) {
-            Init::error();
+            Config::error();
         }
         $result = new Image($pointer);
 
@@ -1247,9 +1253,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function get(string $name)
     {
         $gvalue = new GValue();
-        if (Init::ffi()->
+        if (Config::ffi()->
             vips_image_get($this->pointer, $name, $gvalue->pointer) != 0) {
-            Init::error();
+            Config::error();
         }
 
         return $gvalue->get();
@@ -1266,7 +1272,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function getType(string $name): int
     {
-        return Init::ffi()->vips_image_get_typeof($this->pointer, $name);
+        return Config::ffi()->vips_image_get_typeof($this->pointer, $name);
     }
 
     /**
@@ -1304,27 +1310,27 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if ($gtype == 0) {
             if (is_array($value)) {
                 if (is_int($value[0])) {
-                    $gtype = Init::gtypes("VipsArrayInt");
+                    $gtype = Config::gtypes("VipsArrayInt");
                 } elseif (is_float($value[0])) {
-                    $gtype = Init::gtypes("VipsArrayDouble");
+                    $gtype = Config::gtypes("VipsArrayDouble");
                 } else {
-                    $gtype = Init::gtypes("VipsArrayImage");
+                    $gtype = Config::gtypes("VipsArrayImage");
                 }
             } elseif (is_int($value)) {
-                $gtype = Init::gtypes("gint");
+                $gtype = Config::gtypes("gint");
             } elseif (is_float($value)) {
-                $gtype = Init::gtypes("gdouble");
+                $gtype = Config::gtypes("gdouble");
             } elseif (is_string($value)) {
-                $gtype = Init::gtypes("VipsRefString");
+                $gtype = Config::gtypes("VipsRefString");
             } else {
-                $gtype = Init::gtypes("VipsImage");
+                $gtype = Config::gtypes("VipsImage");
             }
         }
 
         $gvalue->setType($gtype);
         $gvalue->set($value);
 
-        Init::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
+        Config::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
     }
 
     /**
@@ -1349,7 +1355,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $gvalue = new GValue();
         $gvalue->setType($type);
         $gvalue->set($value);
-        Init::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
+        Config::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
     }
 
     /**
@@ -1363,8 +1369,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function remove(string $name): void
     {
-        if (!Init::ffi()->vips_image_remove($this->pointer, $name)) {
-            Init::error();
+        if (!Config::ffi()->vips_image_remove($this->pointer, $name)) {
+            Config::error();
         }
     }
 
@@ -1662,7 +1668,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if (self::isImageish($other)) {
             return VipsOperation::call('remainder', $this, [$other], $options);
         } else {
-            return VipsOperation::call('remainder_const', $this, [$other], $options);
+            return VipsOperation::call(
+                'remainder_const', 
+                $this, 
+                [$other], 
+                $options
+            );
         }
     }
 
@@ -1723,7 +1734,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function rshift($other, array $options = []): Image
     {
-        return self::callEnum($other, 'boolean', OperationBoolean::RSHIFT, $options);
+        return self::callEnum(
+            $other, 
+            'boolean', 
+            OperationBoolean::RSHIFT, 
+            $options
+        );
     }
 
     /**
@@ -1771,7 +1787,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function eorimage($other, array $options = []): Image
     {
-        return self::callEnum($other, 'boolean', OperationBoolean::EOR, $options);
+        return self::callEnum(
+            $other, 
+            'boolean', 
+            OperationBoolean::EOR, 
+            $options
+        );
     }
 
     /**
@@ -1786,7 +1807,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function more($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::MORE, $options);
+        return self::callEnum(
+            $other, 
+            'relational', 
+            OperationRelational::MORE, 
+            $options
+        );
     }
 
     /**
@@ -1801,7 +1827,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function moreEq($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::MOREEQ, $options);
+        return self::callEnum(
+            $other, 
+            'relational', 
+            OperationRelational::MOREEQ, 
+            $options
+        );
     }
 
     /**
@@ -1816,7 +1847,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function less($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::LESS, $options);
+        return self::callEnum(
+            $other, 
+            'relational', 
+            OperationRelational::LESS, 
+            $options
+        );
     }
 
     /**
@@ -1831,7 +1867,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function lessEq($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::LESSEQ, $options);
+        return self::callEnum(
+            $other, 
+            'relational', 
+            OperationRelational::LESSEQ, 
+            $options
+        );
     }
 
     /**
@@ -1846,7 +1887,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function equal($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::EQUAL, $options);
+        return self::callEnum(
+            $other, 
+            'relational', 
+            OperationRelational::EQUAL, 
+            $options
+        );
     }
 
     /**
@@ -1861,7 +1907,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function notEq($other, array $options = []): Image
     {
-        return self::callEnum($other, 'relational', OperationRelational::NOTEQ, $options);
+        return self::callEnum(
+            $other, 
+            'relational', 
+            OperationRelational::NOTEQ, 
+            $options
+        );
     }
 
     /**
@@ -1897,7 +1948,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         /* We can't use self::bandjoin(), that would just recurse.
          */
         if ($is_const) {
-            return VipsOperation::call('bandjoin_const', $this, [$other], $options);
+            return VipsOperation::call(
+                'bandjoin_const', 
+                $this, 
+                [$other], 
+                $options
+            );
         } else {
             return VipsOperation::call(
                 'bandjoin',
@@ -2049,7 +2105,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
          * match each other first, and only if they are both constants do we
          * match to $this.
          */
-
         $match_image = null;
         foreach ([$then, $else, $this] as $item) {
             if ($item instanceof Image) {
@@ -2066,7 +2121,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $else = $match_image->imageize($else);
         }
 
-        return VipsOperation::call('ifthenelse', $this, [$then, $else], $options);
+        return VipsOperation::call(
+            'ifthenelse', 
+            $this, 
+            [$then, $else], 
+            $options
+        );
     }
 
     /**
