@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/libvips/php-vips.svg?branch=master)](https://travis-ci.org/libvips/php-vips)
 
-`php-vips` is a binding for [libvips](https://github.com/libvips/libvips) for
-PHP 7.4 and later, and libvips 8.7 and later.
+`php-vips` is a binding for [libvips](https://github.com/libvips/libvips) 8.7
+and later for PHP 7.4 and later.
 
 libvips is fast and needs little memory. The
 [`vips-php-bench`](https://github.com/jcupitt/php-vips-bench) repository
@@ -16,24 +16,6 @@ create pipelines of image processing operations starting from a source
 image. When the pipe is connected to a destination, the whole pipeline
 executes at once and in parallel, streaming the image from source to
 destination in a set of small fragments.
-
-## TODO
-
-- Read and check the whole diff.
-
-- Review docs.
-
-### After merge
-
-- Support preloading, see https://www.php.net/manual/en/class.ffi.php
-
-- Rewrite the enum generator in php.
-
-- Add source/target API
-
-- Add progress callbacks etc.
-
-- Add mutable.
 
 ### Install
 
@@ -53,22 +35,6 @@ brew install vips
 ```
 
 Then add vips to your `composer.json`:
-
-```
-{
-    "repositories": [
-        {
-            "type": "path",
-            "url": "/your/local/path/to/php-vips"
-        }
-    ],
-    "require": {
-        "jcupitt/vips": "*"
-    }
-}
-```
-
-Once this is finished, switch to:
 
 ```
 "require": {
@@ -165,6 +131,18 @@ There are around 300 operations in the library, see the vips docs for an
 introduction:
 
 https://libvips.github.io/libvips/API/current
+
+### TODO after merge
+
+- Support preloading, see https://www.php.net/manual/en/class.ffi.php
+
+- Rewrite the enum and doc generator in php.
+
+- Add source/target API
+
+- Add progress callbacks etc.
+
+- Add mutable.
 
 ### Test and install
 

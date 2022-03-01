@@ -42,11 +42,8 @@ namespace Jcupitt\Vips;
  * This class represents a Vips image object.
  *
  * This module provides a binding for the [vips image processing
- * library](https://jcupitt.github.io/libvips/).
- *
- * It needs libvips 8.0 or later to be installed, and it needs the binary
- * [`vips` extension](https://github.com/jcupitt/php-vips-ext) to be added to
- * your PHP.
+ * library](https://libvips.org) version 8.7 and later, and required PHP 7.4 
+ * and later.
  *
  * # Example
  *
@@ -213,26 +210,6 @@ namespace Jcupitt\Vips;
  * Use `$image->get('ipct-data')` for property names which are not valid under
  * PHP syntax.
  *
- * # How it works
- *
- * The binary
- * [`vips` extension](https://github.com/jcupitt/php-vips-ext) adds a few extra
- * functions to PHP to let you call anything in the libvips library. The API
- * it provides is simple, but horrible.
- *
- * This module is pure PHP and builds on the binary extension to provide a
- * convenient interface for programmers. It uses the PHP magic methods
- * `__call()`, `__callStatic()`, `__get()` and `__set()` to make vips operators
- * appear as methods on the `Image` class, and vips properties as PHP
- * properties.
- *
- * The API you end up with is a object-oriented version of the [VIPS C
- * API](https://jcupitt.github.io/libvips/API/current).
- * Full documentation
- * on the operations and what they do is there, you can use it directly. This
- * document explains the extra features of the PHP API and lists the available
- * operations very briefly.
- *
  * # Automatic wrapping
  *
  * This binding has a `__call()` method and uses
@@ -249,8 +226,8 @@ namespace Jcupitt\Vips;
  * produces several results.
  *
  * For example, `Image::min`, the vips operation that searches an image for
- * the minimum value, has a large number of optional arguments. You can use it to
- * find the minimum value like this:
+ * the minimum value, has a large number of optional arguments. You can use it 
+ * to find the minimum value like this:
  *
  * ```php
  * $min_value = $image->min();
