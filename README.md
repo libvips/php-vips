@@ -21,16 +21,15 @@ destination in a set of small fragments.
 
 - Needs a refs system for newFromMemory etc.
 
-- More robust startup, and a better error message for lib not found or FFI
-  disabled.
-
 - Move some stuff from Init to Config or Utils.
+
+      Put the whole of init inside config?
 
 - Read and check the whole diff.
 
 - Rewrite the enum generator in php.
 
-- Check docs.
+- Revise docs.
 
 ### After merge
 

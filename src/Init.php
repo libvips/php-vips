@@ -194,17 +194,19 @@ class Init
         $library = "$library_location$library_name$library_ext";
         Utils::debugLog("init", ["libray" => $library]);
 
-        // TODO put a try/catch around this and generate a helpful message
-        // since this is likely to be the main failure point
+        /* FIXME ... maybe display a helpful message on failure? This will
+         * probably be the main point of failure.
+         */
         $ffi = \FFI::cdef(<<<EOS
-int vips_init (const char *argv0);
-const char *vips_error_buffer (void);
-int vips_version(int flag);
-EOS, $library);
+            int vips_init (const char *argv0);
+            const char *vips_error_buffer (void);
+            int vips_version(int flag);
+            EOS, $library);
 
         $result = $ffi->vips_init("");
         if ($result != 0) {
-            throw new Vips\Exception("libvips error: $ffi->vips_error_buffer()");
+            $msg = $ffi->vips_error_buffer();
+            throw new Vips\Exception("libvips error: $msg");
         }
         Utils::debugLog("init", ["vips_init" => $result]);
 
