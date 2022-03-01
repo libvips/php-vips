@@ -842,7 +842,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * Wraps an Image around an area of memory containing a C-style array.
      *
-     * @param string $data   C-style array.
+     * @param mixed  $data   C-style array.
      * @param int    $width  Image width in pixels.
      * @param int    $height Image height in pixels.
      * @param int    $bands  Number of bands.
@@ -853,7 +853,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @return Image A new Image.
      */
     public static function newFromMemory(
-        string $data,
+        mixed  $data,
         int $width,
         int $height,
         int $bands,
@@ -864,7 +864,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$data, $width, $height, $bands, $format]
         ]);
 
-        $pointer = Config::ffi()->vips_image_new_from_memory(
+        /* Take a copy of the memory area to avoid lifetime issues.
+         *
+         * TODO add a references system instead, see pyvips.
+         */
+        $pointer = Config::ffi()->vips_image_new_from_memory_copy(
             $data,
             strlen($data),
             $width,

@@ -614,6 +614,8 @@ VipsImage* vips_image_new_matrix_from_array (int width, int height,
     const double* array, int size);
 VipsImage* vips_image_new_from_memory (const void* data, size_t size,
     int width, int height, int bands, int format);
+VipsImage* vips_image_new_from_memory_copy (const void *data, size_t size,
+    int width, int height, int bands, int format);
 
 VipsImage* vips_image_copy_memory (VipsImage* image);
 

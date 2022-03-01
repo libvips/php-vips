@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/libvips/php-vips.svg?branch=master)](https://travis-ci.org/libvips/php-vips)
 
 `php-vips` is a binding for [libvips](https://github.com/libvips/libvips) for
-PHP 7.4 and later. 
+PHP 7.4 and later, and libvips 8.7 and later.
 
 libvips is fast and needs little memory. The
 [`vips-php-bench`](https://github.com/jcupitt/php-vips-bench) repository
@@ -19,17 +19,15 @@ destination in a set of small fragments.
 
 ## TODO
 
-- Needs a refs system for newFromMemory etc.
+- Read and check the whole diff.
+
+- Review docs.
+
+### After merge
 
 - Support preloading, see https://www.php.net/manual/en/class.ffi.php
 
-- Read and check the whole diff.
-
 - Rewrite the enum generator in php.
-
-- Revise docs.
-
-### After merge
 
 - Add source/target API
 
