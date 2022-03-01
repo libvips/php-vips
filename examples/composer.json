@@ -1,12 +1,5 @@
 {
-    "minimum-stability": "dev",
-    "repositories": [
-        {
-            "type": "path",
-            "url": "/home/john/GIT/php-vips"
-        }
-    ],
     "require": {
-        "jcupitt/vips": "*"
+        "jcupitt/vips": "2.0.0"
     }
 }
