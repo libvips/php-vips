@@ -61,6 +61,8 @@ class GValue
             $enum_value = Config::ffi()->
                 vips_enum_from_nick("php-vips", $gtype, $value);
             if ($enum_value < 0) {
+                echo "gtype = " . $gtype . "\n";
+                echo "value = " . $value . "\n";
                 Config::error();
             }
         } else {
@@ -244,17 +246,15 @@ class GValue
                 break;
 
             case Config::gtypes("gchararray"):
-                $c_string = Config::ffi()->g_value_get_string($this->pointer);
-                $result = \FFI::string($c_string);
+                $result = Config::ffi()->g_value_get_string($this->pointer);
                 break;
 
             case Config::gtypes("VipsRefString"):
                 $p_size = Config::ffi()->new("size_t[1]");
-                $c_string = Config::ffi()->
+                $result = Config::ffi()->
                     vips_value_get_ref_string($this->pointer, $p_size);
                 # $p_size[0] will be the string length, but assume it's null
                 # terminated
-                $result = \FFI::string($c_string);
                 break;
 
             case Config::gtypes("VipsImage"):

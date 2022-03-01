@@ -21,9 +21,7 @@ destination in a set of small fragments.
 
 - Needs a refs system for newFromMemory etc.
 
-- nicknameToCanonical needs redoing for FFI
-
-- blendModeToInt needs redoing for FFI
+- Support preloading, see https://www.php.net/manual/en/class.ffi.php
 
 - Read and check the whole diff.
 

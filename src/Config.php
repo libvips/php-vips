@@ -175,8 +175,8 @@ class Config
     {
         Config::ffi();
 
-        return self::$library_major . "." . 
-            self::$library_minor . ".". 
+        return self::$library_major . "." .
+            self::$library_minor . ".".
             self::$library_micro;
     }
 
@@ -772,6 +772,15 @@ EOS;
 
         Utils::debugLog("init", ["binding ..."]);
         self::$ffi = \FFI::cdef($header, $library);
+
+        # force the creation of some types we need
+        self::$ffi->vips_blend_mode_get_type();
+        self::$ffi->vips_interpretation_get_type();
+        self::$ffi->vips_operation_flags_get_type();
+        self::$ffi->vips_band_format_get_type();
+        self::$ffi->vips_token_get_type();
+        self::$ffi->vips_saveable_get_type();
+        self::$ffi->vips_image_type_get_type();
 
         // look these up in advance
         self::$ctypes = [

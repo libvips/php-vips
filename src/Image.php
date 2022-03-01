@@ -1488,9 +1488,14 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
             $head = array_shift($components);
             if (empty($components)) {
+                $head->ref();
+                $this->unref();
                 $this->pointer = $head->pointer;
             } else {
-                $this->pointer = $head->bandjoin($components)->pointer;
+                $new_image = $head->bandjoin($components);
+                $new_image->ref();
+                $this->unref();
+                $this->pointer = $new_image->pointer;
             }
         }
     }
@@ -1959,9 +1964,16 @@ class Image extends ImageAutodoc implements \ArrayAccess
         } else {
             $other = (array) $other;
         }
+
         if (!is_array($mode)) {
             $mode = [$mode];
         }
+
+        # composite takes an arrayint, but it's really an array of blend modes
+        # gvalue doesn't know this, so we must do name -> enum value mapping
+        $mode = array_map(function ($x) {
+            return GValue::toEnum(Config::gtypes("VipsBlendMode"), $x);
+        }, $mode);
 
         return VipsOperation::call(
             'composite',
