@@ -500,82 +500,6 @@ namespace Jcupitt\Vips;
 class Image extends ImageAutodoc implements \ArrayAccess
 {
     /**
-     * Map load nicknames to canonical names. Regenerate this table with
-     * something like:
-     *
-     * $ vips -l foreign | grep -i load | awk '{ print $2, $1; }'
-     *
-     * Plus a bit of editing.
-     *
-     * @internal
-     */
-    private static $nicknameToCanonical = [
-        'csvload' => 'VipsForeignLoadCsv',
-        'matrixload' => 'VipsForeignLoadMatrix',
-        'rawload' => 'VipsForeignLoadRaw',
-        'vipsload' => 'VipsForeignLoadVips',
-        'analyzeload' => 'VipsForeignLoadAnalyze',
-        'ppmload' => 'VipsForeignLoadPpm',
-        'radload' => 'VipsForeignLoadRad',
-        'pdfload' => 'VipsForeignLoadPdfFile',
-        'pdfload_buffer' => 'VipsForeignLoadPdfBuffer',
-        'svgload' => 'VipsForeignLoadSvgFile',
-        'svgload_buffer' => 'VipsForeignLoadSvgBuffer',
-        'gifload' => 'VipsForeignLoadGifFile',
-        'gifload_buffer' => 'VipsForeignLoadGifBuffer',
-        'pngload' => 'VipsForeignLoadPng',
-        'pngload_buffer' => 'VipsForeignLoadPngBuffer',
-        'matload' => 'VipsForeignLoadMat',
-        'jpegload' => 'VipsForeignLoadJpegFile',
-        'jpegload_buffer' => 'VipsForeignLoadJpegBuffer',
-        'webpload' => 'VipsForeignLoadWebpFile',
-        'webpload_buffer' => 'VipsForeignLoadWebpBuffer',
-        'tiffload' => 'VipsForeignLoadTiffFile',
-        'tiffload_buffer' => 'VipsForeignLoadTiffBuffer',
-        'magickload' => 'VipsForeignLoadMagickFile',
-        'magickload_buffer' => 'VipsForeignLoadMagickBuffer',
-        'fitsload' => 'VipsForeignLoadFits',
-        'openexrload' => 'VipsForeignLoadOpenexr'
-    ];
-
-    /**
-     * Combine takes an array of blend modes, passed to libvips as an array of
-     * int. Because libvips does not know they should be enums, we have to do
-     * the string->int conversion ourselves. We ought to introspect to find the
-     * mapping, but until we have the machinery for that, we just hardwire the
-     * mapping here.
-     *
-     * @internal
-     */
-    private static $blendModeToInt = [
-        BlendMode::CLEAR => 0,
-        BlendMode::SOURCE => 1,
-        BlendMode::OVER => 2,
-        BlendMode::IN => 3,
-        BlendMode::OUT => 4,
-        BlendMode::ATOP => 5,
-        BlendMode::DEST => 6,
-        BlendMode::DEST_OVER => 7,
-        BlendMode::DEST_IN => 8,
-        BlendMode::DEST_OUT => 9,
-        BlendMode::DEST_ATOP => 10,
-        BlendMode::XOR1 => 11,
-        BlendMode::ADD => 12,
-        BlendMode::SATURATE => 13,
-        BlendMode::MULTIPLY => 14,
-        BlendMode::SCREEN => 15,
-        BlendMode::OVERLAY => 16,
-        BlendMode::DARKEN => 17,
-        BlendMode::LIGHTEN => 18,
-        BlendMode::COLOUR_DODGE => 19,
-        BlendMode::COLOUR_BURN => 20,
-        BlendMode::HARD_LIGHT => 21,
-        BlendMode::SOFT_LIGHT => 22,
-        BlendMode::DIFFERENCE => 23,
-        BlendMode::EXCLUSION => 24
-    ];
-
-    /**
      * A pointer to the underlying VipsImage. This is the same as the
      * GObject, just cast to VipsImage to help FFI.
      *
@@ -770,9 +694,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
             return VipsOperation::call($base, $this, [$other, $op], $options);
         } else {
             return VipsOperation::call(
-                $base . '_const', 
-                $this, 
-                [$op, $other], 
+                $base . '_const',
+                $this,
+                [$op, $other],
                 $options
             );
         }
@@ -1669,9 +1593,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
             return VipsOperation::call('remainder', $this, [$other], $options);
         } else {
             return VipsOperation::call(
-                'remainder_const', 
-                $this, 
-                [$other], 
+                'remainder_const',
+                $this,
+                [$other],
                 $options
             );
         }
@@ -1735,9 +1659,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function rshift($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'boolean', 
-            OperationBoolean::RSHIFT, 
+            $other,
+            'boolean',
+            OperationBoolean::RSHIFT,
             $options
         );
     }
@@ -1788,9 +1712,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function eorimage($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'boolean', 
-            OperationBoolean::EOR, 
+            $other,
+            'boolean',
+            OperationBoolean::EOR,
             $options
         );
     }
@@ -1808,9 +1732,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function more($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'relational', 
-            OperationRelational::MORE, 
+            $other,
+            'relational',
+            OperationRelational::MORE,
             $options
         );
     }
@@ -1828,9 +1752,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function moreEq($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'relational', 
-            OperationRelational::MOREEQ, 
+            $other,
+            'relational',
+            OperationRelational::MOREEQ,
             $options
         );
     }
@@ -1848,9 +1772,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function less($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'relational', 
-            OperationRelational::LESS, 
+            $other,
+            'relational',
+            OperationRelational::LESS,
             $options
         );
     }
@@ -1868,9 +1792,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function lessEq($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'relational', 
-            OperationRelational::LESSEQ, 
+            $other,
+            'relational',
+            OperationRelational::LESSEQ,
             $options
         );
     }
@@ -1888,9 +1812,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function equal($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'relational', 
-            OperationRelational::EQUAL, 
+            $other,
+            'relational',
+            OperationRelational::EQUAL,
             $options
         );
     }
@@ -1908,9 +1832,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function notEq($other, array $options = []): Image
     {
         return self::callEnum(
-            $other, 
-            'relational', 
-            OperationRelational::NOTEQ, 
+            $other,
+            'relational',
+            OperationRelational::NOTEQ,
             $options
         );
     }
@@ -1949,9 +1873,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
          */
         if ($is_const) {
             return VipsOperation::call(
-                'bandjoin_const', 
-                $this, 
-                [$other], 
+                'bandjoin_const',
+                $this,
+                [$other],
                 $options
             );
         } else {
@@ -2039,12 +1963,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $mode = [$mode];
         }
 
-        $mode = array_map(
-            // Use BlendMode::OVER if a non-existent value is given.
-            fn($x) => self::$blendModeToInt[$x] ?? BlendMode::OVER,
-            $mode
-        );
-
         return VipsOperation::call(
             'composite',
             null,
@@ -2122,9 +2040,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         return VipsOperation::call(
-            'ifthenelse', 
-            $this, 
-            [$then, $else], 
+            'ifthenelse',
+            $this,
+            [$then, $else],
             $options
         );
     }

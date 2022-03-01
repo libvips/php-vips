@@ -173,7 +173,11 @@ class Config
      */
     public static function version(): string
     {
-        return Config::ffi()->vips_version();
+        Config::ffi();
+
+        return self::$library_major . "." . 
+            self::$library_minor . ".". 
+            self::$library_micro;
     }
 
     /**
@@ -665,6 +669,8 @@ VipsOperation* vips_cache_operation_build (VipsOperation* operation);
 void vips_object_unref_outputs (VipsObject* object);
 
 int vips_operation_get_flags (VipsOperation* operation);
+
+void vips_concurrency_set( int concurrency );
 
 void vips_cache_set_max (int max);
 void vips_cache_set_max_mem (size_t max_mem);
