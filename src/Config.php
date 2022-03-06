@@ -816,8 +816,6 @@ EOS;
             "VipsImage" => self::$ffi->g_type_from_name("VipsImage"),
         ];
 
-        self::$ffi->vips_leak_set(true);
-
         Utils::debugLog("init", ["done"]);
     }
 }

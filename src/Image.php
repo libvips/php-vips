@@ -680,6 +680,29 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Find the name of the load operation vips will use to load a file, for
+     * example "VipsForeignLoadJpegFile". You can use this to work out what
+     * options to pass to newFromFile().
+     *
+     * @param string $filename The file to test.
+     *
+     * @return string|null The name of the load operation, or null.
+     */
+    public static function findLoad(string $filename): ?string
+    {
+        Utils::debugLog('findLoad', [
+            'instance' => null,
+            'arguments' => [$filename]
+        ]);
+
+        $result = Config::ffi()->vips_foreign_find_load($filename);
+
+        Utils::debugLog('findLoad', ['result' => [$result]]);
+
+        return $result;
+    }
+
+    /**
      * Create a new Image from a file on disc.
      *
      * @param string $filename The file to open.
@@ -701,8 +724,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $filename = Config::filenameGetFilename($name);
         $string_options = Config::filenameGetOptions($name);
 
-        $loader = Config::ffi()->vips_foreign_find_load($filename);
-        if ($loader == "") {
+        $loader = self::findLoad($filename);
+        if ($loader == null) {
             Config::error();
         }
 
@@ -715,6 +738,30 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $result = VipsOperation::call($loader, null, [$filename], $options);
 
         Utils::debugLog('newFromFile', ['result' => $result]);
+
+        return $result;
+    }
+
+    /**
+     * Find the name of the load operation vips will use to load a buffer, for
+     * example 'VipsForeignLoadJpegBuffer'. You can use this to work out what
+     * options to pass to newFromBuffer().
+     *
+     * @param string $buffer The formatted image to test.
+     *
+     * @return string|null The name of the load operation, or null.
+     */
+    public static function findLoadBuffer(string $buffer): ?string
+    {
+        Utils::debugLog('findLoadBuffer', [
+            'instance' => null,
+            'arguments' => [$buffer]
+        ]);
+
+        $result = Config::ffi()->
+            vips_foreign_find_load_buffer($buffer, strlen($buffer));
+
+        Utils::debugLog('findLoadBuffer', ['result' => [$result]]);
 
         return $result;
     }
@@ -741,8 +788,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => [$buffer, $string_options, $options]
         ]);
 
-        $loader = Config::ffi()->
-            vips_foreign_find_load_buffer($buffer, strlen($buffer));
+        $loader = self::findLoadBuffer($buffer);
         if ($loader == null) {
             Config::error();
         }
