@@ -279,28 +279,24 @@ class Config
              $need_minor <= self::$library_minor);
     }
 
-    private static function init()
+    private static function libraryName($name, $abi)
     {
-        $library_name = "libvips";
-
         switch (PHP_OS_FAMILY) {
             case "Windows":
-                // win needs the ABI number before the .dll
-                $library_ext = "42.dll";
-                break;
+                return "$name-$abi.dll";
 
             case "OSX":
-                $library_ext = ".dylib";
-                break;
+                return "$name.$abi.dylib";
 
             default:
-                // many *nix distributions only add the "libvips.so" symlink
-                // if the dev package is installed
-                $library_ext = ".so.42";
-                break;
+                // most *nix
+                return "$name.so.$abi";
         }
+    }
 
-        $library = "$library_name$library_ext";
+    private static function init()
+    {
+        $library = self::libraryName("libvips", 42);
 
         Utils::debugLog("init", ["libray" => $library]);
 
