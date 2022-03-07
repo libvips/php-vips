@@ -1038,7 +1038,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             ], $options);
         }
 
-        $result = VipsOperation::call($saver, $this, $options);
+        $result = VipsOperation::call($saver, $this, [], $options);
 
         Utils::debugLog('writeToBuffer', ['result' => $result]);
 

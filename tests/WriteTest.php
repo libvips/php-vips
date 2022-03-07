@@ -52,7 +52,7 @@ class WriteTest extends TestCase
         $filename = __DIR__ . '/images/img_0076.jpg';
         $image = Vips\Image::newFromFile($filename, ['shrink' => 8]);
 
-        $buffer1 = $image->writeToBuffer('.jpg');
+        $buffer1 = $image->writeToBuffer('.jpg', ['Q' => 75]);
         $output_filename = $this->tmp('.jpg');
         $image->writeToFile($output_filename);
         $buffer2 = file_get_contents($output_filename);
