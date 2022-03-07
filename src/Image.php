@@ -42,7 +42,7 @@ namespace Jcupitt\Vips;
  * This class represents a Vips image object.
  *
  * This module provides a binding for the [vips image processing
- * library](https://libvips.org) version 8.7 and later, and required PHP 7.4 
+ * library](https://libvips.org) version 8.7 and later, and required PHP 7.4
  * and later.
  *
  * # Example
@@ -226,7 +226,7 @@ namespace Jcupitt\Vips;
  * produces several results.
  *
  * For example, `Image::min`, the vips operation that searches an image for
- * the minimum value, has a large number of optional arguments. You can use it 
+ * the minimum value, has a large number of optional arguments. You can use it
  * to find the minimum value like this:
  *
  * ```php
@@ -1068,7 +1068,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
             Config::error();
         }
 
+        // string() takes a copy
         $result = \FFI::string($pointer, $p_size[0]);
+
+        Config::ffi()->g_free($pointer);
 
         Utils::debugLog('writeToMemory', ['result' => $result]);
 
@@ -1105,10 +1108,29 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'arguments' => []
         ]);
 
-        $result = Config::ffi()->vips_image_write_to_array($this->pointer);
-        if ($result === -1) {
+        $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
+        $p_size = \FFI::new($ctype);
+
+        $pointer = Config::ffi()->
+            vips_image_write_to_memory($this->pointer, $p_size);
+        if ($pointer == null) {
             Config::error();
         }
+
+        // wrap pointer up as a C array of the right type
+        $n = $this->width * $this->height * $this->bands;
+        $type_name = Config::ftypes($this->format);
+        $ctype = \FFI::arrayType(\FFI::type($type_name), [$n]);
+        $array = \FFI::cast($ctype, $pointer);
+
+        // copy to PHP memory as a flat array
+        $result = [];
+        for ($i = 0; $i < $n; $i++) {
+            $result[] = $array[$i];
+        }
+
+        // the vips result is not PHP memory, so we must free it
+        Config::ffi()->g_free($pointer);
 
         Utils::debugLog('writeToArray', ['result' => $result]);
 

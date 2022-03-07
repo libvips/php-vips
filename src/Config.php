@@ -84,6 +84,7 @@ class Config
      */
     private static array $ctypes;
     private static array $gtypes;
+    private static array $ftypes;
 
     /**
      * Sets a logger. This can be handy for debugging. For example:
@@ -210,6 +211,13 @@ class Config
         Config::ffi();
 
         return self::$gtypes[$name];
+    }
+
+    public static function ftypes(string $name)
+    {
+        Config::ffi();
+
+        return self::$ftypes[$name];
     }
 
     /**
@@ -814,6 +822,20 @@ EOS;
 
             "GObject" => self::$ffi->g_type_from_name("GObject"),
             "VipsImage" => self::$ffi->g_type_from_name("VipsImage"),
+        ];
+
+        // map vips format names to c type names
+        self::$ftypes = [
+            "char" => "char",
+            "uchar" => "unsigned char",
+            "short" => "short",
+            "ushort" => "unsigned short",
+            "int" => "int",
+            "uint" => "unsigned int",
+            "float" => "float",
+            "double" => "double",
+            "complex" => "float",
+            "dpcomplex" => "double",
         ];
 
         Utils::debugLog("init", ["done"]);

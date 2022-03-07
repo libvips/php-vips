@@ -36,4 +36,9 @@ $watermark = $watermark->crop(0, 0, $image->width, $image->height);
 // composite the watermark over the main image
 $image = $image->composite2($watermark, 'over');
 
+$image->writeToFile($argv[2]);
+
+$image = null;
+$watermark = null;
+
 Vips\Config::shutDown();
