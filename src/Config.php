@@ -382,9 +382,6 @@ void g_free (void* data);
 
 void vips_leak_set (int leak);
 
-char* vips_path_filename7 (const char* path);
-char* vips_path_mode7 (const char* path);
-
 GType vips_type_find (const char* basename, const char* nickname);
 const char* vips_nickname_find (GType type);
 
