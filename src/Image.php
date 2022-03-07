@@ -690,14 +690,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoad(string $filename): ?string
     {
-        Utils::debugLog('findLoad', [
-            'instance' => null,
-            'arguments' => [$filename]
-        ]);
-
         $result = Config::ffi()->vips_foreign_find_load($filename);
-
-        Utils::debugLog('findLoad', ['result' => [$result]]);
 
         return $result;
     }
@@ -716,11 +709,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $name,
         array $options = []
     ): Image {
-        Utils::debugLog('newFromFile', [
-            'instance' => null,
-            'arguments' => [$name, $options]
-        ]);
-
         $filename = Config::filenameGetFilename($name);
         $string_options = Config::filenameGetOptions($name);
 
@@ -737,8 +725,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $result = VipsOperation::call($loader, null, [$filename], $options);
 
-        Utils::debugLog('newFromFile', ['result' => $result]);
-
         return $result;
     }
 
@@ -753,15 +739,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoadBuffer(string $buffer): ?string
     {
-        Utils::debugLog('findLoadBuffer', [
-            'instance' => null,
-            'arguments' => [$buffer]
-        ]);
-
         $result = Config::ffi()->
             vips_foreign_find_load_buffer($buffer, strlen($buffer));
-
-        Utils::debugLog('findLoadBuffer', ['result' => [$result]]);
 
         return $result;
     }
@@ -783,11 +762,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $string_options = '',
         array $options = []
     ): Image {
-        Utils::debugLog('newFromBuffer', [
-            'instance' => null,
-            'arguments' => [$buffer, $string_options, $options]
-        ]);
-
         $loader = self::findLoadBuffer($buffer);
         if ($loader == null) {
             Config::error();
@@ -800,8 +774,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         $result = VipsOperation::call($loader, null, [$buffer], $options);
-
-        Utils::debugLog('newFromBuffer', ['result' => $result]);
 
         return $result;
     }
@@ -826,11 +798,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         float $scale = 1.0,
         float $offset = 0.0
     ): Image {
-        Utils::debugLog('newFromArray', [
-            'instance' => null,
-            'arguments' => [$array, $scale, $offset]
-        ]);
-
         if (!self::is2D($array)) {
             $array = [$array];
         }
@@ -857,8 +824,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $result->setType(Config::gtypes("gdouble"), 'scale', $scale);
         $result->setType(Config::gtypes("gdouble"), 'offset', $offset);
 
-        Utils::debugLog('newFromArray', ['result' => $result]);
-
         return $result;
     }
 
@@ -882,11 +847,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         int $bands,
         string $format
     ): Image {
-        Utils::debugLog('newFromMemory', [
-            'instance' => null,
-            'arguments' => [$data, $width, $height, $bands, $format]
-        ]);
-
         /* Take a copy of the memory area to avoid lifetime issues.
          *
          * TODO add a references system instead, see pyvips.
@@ -904,8 +864,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         $result = new Image($pointer);
-
-        Utils::debugLog('newFromMemory', ['result' => $result]);
 
         return $result;
     }
@@ -938,11 +896,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function newFromImage($value): Image
     {
-        Utils::debugLog('newFromImage', [
-            'instance' => $this,
-            'arguments' => [$value]
-        ]);
-
         $pixel = static::black(1, 1)->add($value)->cast($this->format);
         $image = $pixel->embed(
             0,
@@ -958,8 +911,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'xoffset' => $this->xoffset,
             'yoffset' => $this->yoffset
         ]);
-
-        Utils::debugLog('newFromImage', ['result' => $image]);
 
         return $image;
     }
@@ -977,12 +928,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToFile(string $name, array $options = []): void
     {
-        Utils::debugLog('writeToFile', [
-            'instance' => $this,
-            'name' => $name,
-            'options' => $options
-        ]);
-
         $filename = Config::filenameGetFilename($name);
         $string_options = Config::filenameGetOptions($name);
 
@@ -998,8 +943,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         $result = VipsOperation::call($saver, $this, [$filename], $options);
-
-        Utils::debugLog('writeToFile', ['result' => $result]);
 
         if ($result === -1) {
             Config::error();
@@ -1019,11 +962,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToBuffer(string $suffix, array $options = []): string
     {
-        Utils::debugLog('writeToBuffer', [
-            'instance' => $this,
-            'arguments' => [$suffix, $options]
-        ]);
-
         $filename = Config::filenameGetFilename($suffix);
         $string_options = Config::filenameGetOptions($suffix);
 
@@ -1040,8 +978,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
         $result = VipsOperation::call($saver, $this, [], $options);
 
-        Utils::debugLog('writeToBuffer', ['result' => $result]);
-
         return $result;
     }
 
@@ -1054,11 +990,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToMemory(): string
     {
-        Utils::debugLog('writeToMemory', [
-            'instance' => $this,
-            'arguments' => []
-        ]);
-
         $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
         $p_size = \FFI::new($ctype);
 
@@ -1072,8 +1003,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $result = \FFI::string($pointer, $p_size[0]);
 
         Config::ffi()->g_free($pointer);
-
-        Utils::debugLog('writeToMemory', ['result' => $result]);
 
         return $result;
     }
@@ -1103,11 +1032,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToArray(): array
     {
-        Utils::debugLog('writeToArray', [
-            'instance' => $this,
-            'arguments' => []
-        ]);
-
         $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
         $p_size = \FFI::new($ctype);
 
@@ -1132,8 +1056,6 @@ class Image extends ImageAutodoc implements \ArrayAccess
         // the vips result is not PHP memory, so we must free it
         Config::ffi()->g_free($pointer);
 
-        Utils::debugLog('writeToArray', ['result' => $result]);
-
         return $result;
     }
 
@@ -1153,18 +1075,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function copyMemory(): Image
     {
-        Utils::debugLog('copyMemory', [
-            'instance' => $this,
-            'arguments' => []
-        ]);
-
         $pointer = Config::ffi()->vips_image_copy_memory($this->pointer);
         if ($pointer == null) {
             Config::error();
         }
         $result = new Image($pointer);
-
-        Utils::debugLog('copyMemory', ['result' => $result]);
 
         return $result;
     }

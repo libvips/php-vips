@@ -85,10 +85,6 @@ class Interpolate extends VipsObject
      */
     public static function newFromName($name)
     {
-        Utils::debugLog('newFromName', [
-            'arguments' => [$name]
-        ]);
-
         $pointer = Config::ffi()->vips_interpolate_new($name);
         if ($pointer == null) {
             Config::error();

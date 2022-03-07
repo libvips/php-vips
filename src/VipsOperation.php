@@ -334,7 +334,6 @@ class VipsOperation extends VipsObject
 
         /* Build the operation
          */
-        Utils::debugLog("callBase", ["building ..."]);
         $pointer = Config::ffi()->
             vips_cache_operation_build($operation->pointer);
         if ($pointer == null) {
@@ -356,7 +355,6 @@ class VipsOperation extends VipsObject
 
         /* Any optional output args.
          */
-        Utils::debugLog("callBase", ["fetching result ..."]);
         $option_keys = array_keys($options);
         foreach ($operation->introspect->optional_output as $name) {
             if (in_array($name, $option_keys)) {
