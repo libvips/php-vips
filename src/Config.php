@@ -285,7 +285,8 @@ class Config
 
         switch (PHP_OS_FAMILY) {
             case "Windows":
-                $library_ext = ".dll";
+                // win needs the ABI number before the .dll
+                $library_ext = "42.dll";
                 break;
 
             case "OSX":
@@ -293,19 +294,14 @@ class Config
                 break;
 
             default:
-                $library_ext = ".so";
+                // many *nix distributions only add the "libvips.so" symlink
+                // if the dev package is installed
+                $library_ext = ".so.42";
                 break;
         }
 
-        $vipshome = getenv("VIPSHOME");
-        if ($vipshome) {
-            $library_location = $vipshome . "/lib/";
-        } else {
-            # rely on ffi's search
-            $library_location = "";
-        }
+        $library = "$library_name$library_ext";
 
-        $library = "$library_location$library_name$library_ext";
         Utils::debugLog("init", ["libray" => $library]);
 
         /* FIXME ... maybe display a helpful message on failure? This will
