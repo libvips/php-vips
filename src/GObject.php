@@ -79,6 +79,11 @@ abstract class GObject
         $this->unref();
     }
 
+    public function __clone()
+    {
+        $this->ref();
+    }
+
     public function ref()
     {
         Config::ffi()->g_object_ref($this->pointer);
