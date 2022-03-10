@@ -42,7 +42,7 @@ namespace Jcupitt\Vips;
  * This class represents a Vips image object.
  *
  * This module provides a binding for the [vips image processing
- * library](https://libvips.org) version 8.7 and later, and required PHP 7.4
+ * library](https://libvips.org) version 8.7 and later, and requires PHP 7.4
  * and later.
  *
  * # Example
@@ -66,7 +66,7 @@ namespace Jcupitt\Vips;
  *
  * ```
  *     "require": {
- *         "jcupitt/vips" : "@dev"
+ *         "jcupitt/vips" : "2.0.0"
  *     }
  * ```
  *
