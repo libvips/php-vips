@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Vips is a php binding for the vips image processing library
- *
  * PHP version 7
  *
  * LICENSE:
@@ -39,8 +37,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * Various utilities.
- *
+ * The ArgumentFlags enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -48,59 +45,25 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-class Utils
+abstract class ArgumentFlags
 {
-    /**
-     * Log a debug message.
-     *
-     * @param string $name      The method creating the messages.
-     * @param array  $arguments The method arguments.
-     *
-     * @return void
-     */
-    public static function debugLog(string $name, array $arguments): void
-    {
-        $logger = Config::getLogger();
-        if ($logger) {
-            $logger->debug($name, $arguments);
-        }
-    }
+    const REQUIRED = 1;
+    const CONSTRUCT = 2;
+    const SET_ONCE = 4;
+    const SET_ALWAYS = 8;
+    const INPUT = 16;
+    const OUTPUT = 32;
+    const DEPRECATED = 64;
+    const MODIFY = 128;
 
-    /**
-     * Log an error message.
-     *
-     * @param string     $message   The error message.
-     * @param \Exception $exception The exception.
-     *
-     * @return void
-     */
-    public static function errorLog(string $message, \Exception $exception): void
-    {
-        $logger = Config::getLogger();
-        if ($logger) {
-            $logger->error($message, ['exception' => $exception]);
-        }
-    }
-
-    /**
-     * Look up the GTyoe from a type name. If the type does not exist,
-     * return 0.
-     *
-     * @param string $name The type name.
-     *
-     * @return int
-     */
-    public static function typeFromName(string $name): int
-    {
-        return Config::ffi()->g_type_from_name($name);
-    }
+    const NAMES = [
+        "REQUIRED" => self::REQUIRED,
+        "CONSTRUCT" => self::CONSTRUCT,
+        "SET_ONCE" => self::SET_ONCE,
+        "SET_ALWAYS" => self::SET_ALWAYS,
+        "INPUT" => self::INPUT,
+        "OUTPUT" => self::OUTPUT,
+        "DEPRECATED" => self::DEPRECATED,
+        "MODIFY" => self::MODIFY,
+    ];
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: expandtab sw=4 ts=4 fdm=marker
- * vim<600: expandtab sw=4 ts=4
- */

@@ -697,6 +697,6 @@ namespace Jcupitt\Vips;
  * @property float $yres Vertical resolution in pixels/mm
  * @property string $filename Image filename
  */
-abstract class ImageAutodoc
+abstract class ImageAutodoc extends VipsObject
 {
 }

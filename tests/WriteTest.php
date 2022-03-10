@@ -52,7 +52,7 @@ class WriteTest extends TestCase
         $filename = __DIR__ . '/images/img_0076.jpg';
         $image = Vips\Image::newFromFile($filename, ['shrink' => 8]);
 
-        $buffer1 = $image->writeToBuffer('.jpg');
+        $buffer1 = $image->writeToBuffer('.jpg', ['Q' => 75]);
         $output_filename = $this->tmp('.jpg');
         $image->writeToFile($output_filename);
         $buffer2 = file_get_contents($output_filename);
@@ -67,6 +67,18 @@ class WriteTest extends TestCase
         $memStr = $image->writeToMemory();
 
         $this->assertEquals($binaryStr, $memStr);
+    }
+
+    public function testVipsWriteToArray()
+    {
+        $filename = __DIR__ . '/images/img_0076.jpg';
+        $image = Vips\Image::newFromFile($filename, ['shrink' => 8]);
+        $array = $image->crop(0, 0, 2, 2)->writeToArray();
+
+        $this->assertEquals(
+            $array,
+            [34, 39, 35, 44, 49, 45, 67, 52, 49, 120, 105, 102]
+        );
     }
 }
 

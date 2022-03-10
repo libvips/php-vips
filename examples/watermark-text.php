@@ -4,6 +4,8 @@
 require __DIR__ . '/vendor/autoload.php';
 use Jcupitt\Vips;
 
+#Vips\Config::setLogger(new Vips\DebugLogger());
+
 if (count($argv) != 4) {
     echo("usage: ./watermark-text.php input output \"some text\"\n");
     exit(1);
@@ -30,7 +32,7 @@ $text_mask = Vips\Image::text($text, [
 $foreground = [255, 255, 255, 50];
 $background = [0, 0, 255, 50];
 
-// and a 10-pixel marghin
+// and a 10-pixel margin
 $margin = 10;
 
 $overlay = $text_mask->ifthenelse($foreground, $background, [

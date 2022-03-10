@@ -33,66 +33,64 @@
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @link      https://github.com/jcupitt/php-vips
+ * @link      https://github.com/libvips/php-vips
  */
 
 namespace Jcupitt\Vips;
 
 /**
- * Various utilities.
+ * This class holds a pointer to a VipsInterpolate (the libvips
+ * base class for interpolators) and manages argument introspection and
+ * operation call.
  *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @link      https://github.com/jcupitt/php-vips
+ * @link      https://github.com/libvips/php-vips
  */
-class Utils
+class Interpolate extends VipsObject
 {
     /**
-     * Log a debug message.
+     * A pointer to the underlying Interpolate. This is the same as the
+     * GObject, just cast to Interpolate to help FFI.
      *
-     * @param string $name      The method creating the messages.
-     * @param array  $arguments The method arguments.
-     *
-     * @return void
+     * @internal
      */
-    public static function debugLog(string $name, array $arguments): void
+    public \FFI\CData $pointer;
+
+    public function __construct($pointer)
     {
-        $logger = Config::getLogger();
-        if ($logger) {
-            $logger->debug($name, $arguments);
-        }
+        $this->pointer = Config::ffi()->
+            cast(Config::ctypes("VipsInterpolate"), $pointer);
+
+        parent::__construct($pointer);
     }
 
     /**
-     * Log an error message.
+     * Make an interpolator from a name.
      *
-     * @param string     $message   The error message.
-     * @param \Exception $exception The exception.
+     * @param string $name Name of the interpolator.
      *
-     * @return void
+     * Possible interpolators are:
+     *  - `'nearest'`: Use nearest neighbour interpolation.
+     *  - `'bicubic'`: Use bicubic interpolation.
+     *  - `'bilinear'`: Use bilinear interpolation (the default).
+     *  - `'nohalo'`: Use Nohalo interpolation.
+     *  - `'lbb'`: Use LBB interpolation.
+     *  - `'vsqbs'`: Use the VSQBS interpolation.
+     *
+     * @return resource|null The interpolator, or null on error.
      */
-    public static function errorLog(string $message, \Exception $exception): void
+    public static function newFromName($name)
     {
-        $logger = Config::getLogger();
-        if ($logger) {
-            $logger->error($message, ['exception' => $exception]);
+        $pointer = Config::ffi()->vips_interpolate_new($name);
+        if ($pointer == null) {
+            Config::error();
         }
-    }
 
-    /**
-     * Look up the GTyoe from a type name. If the type does not exist,
-     * return 0.
-     *
-     * @param string $name The type name.
-     *
-     * @return int
-     */
-    public static function typeFromName(string $name): int
-    {
-        return Config::ffi()->g_type_from_name($name);
+        return new Interpolate($pointer);
     }
 }
 

@@ -33,67 +33,68 @@
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @link      https://github.com/jcupitt/php-vips
+ * @link      https://github.com/libvips/php-vips
  */
 
 namespace Jcupitt\Vips;
 
 /**
- * Various utilities.
+ * This class holds a pointer to a GObject and manages object lifetime.
  *
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
  * @copyright 2016 John Cupitt
  * @license   https://opensource.org/licenses/MIT MIT
- * @link      https://github.com/jcupitt/php-vips
+ * @link      https://github.com/libvips/php-vips
  */
-class Utils
+abstract class GObject
 {
     /**
-     * Log a debug message.
+     * A pointer to the underlying GObject.
      *
-     * @param string $name      The method creating the messages.
-     * @param array  $arguments The method arguments.
-     *
-     * @return void
+     * @internal
      */
-    public static function debugLog(string $name, array $arguments): void
-    {
-        $logger = Config::getLogger();
-        if ($logger) {
-            $logger->debug($name, $arguments);
-        }
-    }
+    private \FFI\CData $pointer;
 
     /**
-     * Log an error message.
+     * Wrap a GObject around an underlying vips resource. The GObject takes
+     * ownership of the pointer and will unref it on finalize.
      *
-     * @param string     $message   The error message.
-     * @param \Exception $exception The exception.
+     * Don't call this yourself, users should stick to (for example)
+     * Image::newFromFile().
      *
-     * @return void
+     * @param FFI\CData $pointer The underlying pointer that this
+     *  object should wrap.
+     *
+     * @internal
      */
-    public static function errorLog(string $message, \Exception $exception): void
+    public function __construct($pointer)
     {
-        $logger = Config::getLogger();
-        if ($logger) {
-            $logger->error($message, ['exception' => $exception]);
-        }
+        $this->pointer = \FFI::cast(Config::ctypes("GObject"), $pointer);
     }
 
-    /**
-     * Look up the GTyoe from a type name. If the type does not exist,
-     * return 0.
-     *
-     * @param string $name The type name.
-     *
-     * @return int
-     */
-    public static function typeFromName(string $name): int
+    public function __destruct()
     {
-        return Config::ffi()->g_type_from_name($name);
+        $this->unref();
     }
+
+    public function __clone()
+    {
+        $this->ref();
+    }
+
+    public function ref()
+    {
+        Config::ffi()->g_object_ref($this->pointer);
+    }
+
+    public function unref()
+    {
+        Config::ffi()->g_object_unref($this->pointer);
+    }
+
+    // TODO signal marshalling to go in
 }
 
 /*
