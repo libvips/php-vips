@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/libvips/php-vips.svg?branch=master)](https://travis-ci.org/libvips/php-vips)
 
 `php-vips` is a binding for [libvips](https://github.com/libvips/libvips) 8.7
-and later for PHP 7.4 and later.
+and later that runs on PHP 7.4 and later.
 
 libvips is fast and needs little memory. The
 [`vips-php-bench`](https://github.com/jcupitt/php-vips-bench) repository
@@ -20,7 +20,7 @@ destination in a set of small fragments.
 ### Install
 
 You need to [install the libvips
-library](https://libvips.github.io/libvips/install.html). It's in the linux
+library](https://www.libvips.org/install.html). It's in the linux
 package managers, homebrew and MacPorts, and there are Windows binaries on
 the vips website. For example, on Debian:
 
@@ -34,7 +34,9 @@ Or macOS:
 brew install vips
 ```
 
-Then add vips to your `composer.json`:
+You'll need to [enable FFI in your
+PHP](https://www.php.net/manual/en/ffi.configuration.php), then add vips
+to your `composer.json`:
 
 ```
 "require": {
@@ -70,6 +72,21 @@ $ ./try1.php ~/pics/k2.jpg x.tif
 
 See `examples/`. We have a [complete set of formatted API
 docs](https://libvips.github.io/php-vips/docs/classes/Jcupitt-Vips-Image.html).
+
+
+### How it works
+
+php-vips uses [php-ffi](https://www.php.net/manual/en/book.ffi.php) to
+call directly into the libvips binary. It introspects the library binary
+and presents the methods it finds as members of the `Image` class.
+
+This means that the API you see depends on the version of libvips that
+php-vips finds at runtime, and not on php-vips. php-vips documentation assumes
+you are using the latest stable version of the libvips library.
+
+The previous php-vips version that relied on a binary extension
+and not on php-ffi is still available and supported in [the 1.x
+branch](https://github.com/libvips/php-vips/tree/1.x).
 
 ### Introduction to the API
 
@@ -130,19 +147,7 @@ And look in `docs/`.
 There are around 300 operations in the library, see the vips docs for an
 introduction:
 
-https://libvips.github.io/libvips/API/current
-
-### TODO after merge
-
-- Support preloading, see https://www.php.net/manual/en/class.ffi.php
-
-- Rewrite the enum and doc generator in php.
-
-- Add source/target API
-
-- Add progress callbacks etc.
-
-- Add mutable.
+https://libvips.org/API/current
 
 ### Test and install
 
