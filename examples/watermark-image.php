@@ -4,7 +4,7 @@
 require __DIR__ . '/vendor/autoload.php';
 use Jcupitt\Vips;
 
-Vips\Config::setLogger(new Vips\DebugLogger());
+#Vips\Config::setLogger(new Vips\DebugLogger());
 
 if (count($argv) != 4) {
     echo("usage: ./watermark.php input-image output-image watermark-image\n");
