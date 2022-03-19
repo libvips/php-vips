@@ -11,17 +11,24 @@ if (count($argv) != 4) {
     exit(1);
 }
 
-// we can stream the main image, and we want all frames
 $image = Vips\Image::newFromFile($argv[1], [
   'access' => 'sequential',
-  'n' => -1
 ]);
+$page_height = $image->height;
+
+// is this an animated image? open all pages
+if ($image->getType("n-pages") != 0) {
+    $image = Vips\Image::newFromFile($argv[1], [
+      'access' => 'sequential',
+      'n' => -1
+    ]);
+
+    // the size of each frame
+    $page_height = $image->get('page-height');
+}
 
 $output_filename = $argv[2];
 $text = $argv[3];
-
-// the size of each frame
-$page_height = $image->get('page-height');
 
 $text_mask = Vips\Image::text($text, [
   'width' => $image->width,
