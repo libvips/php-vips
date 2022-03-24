@@ -71,7 +71,7 @@ $ ./try1.php ~/pics/k2.jpg x.tif
 ```
 
 See `examples/`. We have a [complete set of formatted API
-docs](https://libvips.github.io/php-vips/docs/classes/Jcupitt-Vips-Image.html).
+docs](https://libvips.github.io/php-vips/classes/Jcupitt-Vips-Image.html).
 
 
 ### How it works
@@ -136,7 +136,9 @@ For example:
 $image->writeToFile("fred.jpg", ["Q" => 90]);
 ```
 
-`php-vips` comes [with full API docs](https://libvips.github.io/php-vips/docs/classes/Jcupitt.Vips.Image.html). To regenerate these from your sources, type:
+`php-vips` comes [with full API
+docs](https://libvips.github.io/php-vips/classes/Jcupitt-Vips-Image.html).
+To regenerate these from your sources, type:
 
 ```
 $ vendor/bin/phpdoc
