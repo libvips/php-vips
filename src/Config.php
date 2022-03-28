@@ -286,6 +286,7 @@ class Config
                 return "$name-$abi.dll";
 
             case "OSX":
+            case "Darwin":
                 return "$name.$abi.dylib";
 
             default:

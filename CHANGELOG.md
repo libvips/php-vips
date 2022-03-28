@@ -2,6 +2,10 @@
 
 All notable changes to `:vips` will be documented in this file.
 
+## 2.0.1 - 2022-1-20
+
+- Fix library name on macOS [andrefelipe]
+
 ## 2.0.0 - 2022-1-20
 
 Rewritten to use PHP FFI to call into the libvips library rather than a binary
