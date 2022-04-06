@@ -25,8 +25,10 @@ package managers, homebrew and MacPorts, and there are Windows binaries on
 the vips website. For example, on Debian:
 
 ```
-sudo apt-get install libvips-dev
+sudo apt-get install --no-install-recommends libvips42
 ```
+
+(`--no-install-recommends` stops Debian installing a *lot* of extra packages)
 
 Or macOS:
 
