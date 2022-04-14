@@ -2,6 +2,10 @@
 
 All notable changes to `:vips` will be documented in this file.
 
+## 2.0.2 - 2022-4-14
+
+- Fix extra optional string args on file open
+
 ## 2.0.1 - 2022-1-20
 
 - Fix library name on macOS [andrefelipe]

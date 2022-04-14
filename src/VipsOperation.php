@@ -320,6 +320,15 @@ class VipsOperation extends VipsObject
                 "but $n_supplied supplied");
         }
 
+        /* set any string options before any args so they can't be
+         * overridden.
+         */
+        if (array_key_exists("string_options", $options)) {
+            $string_options = $options["string_options"];
+            unset($options["string_options"]);
+            $operation->setString($string_options);
+        }
+
         /* Set optional.
          */
         foreach ($options as $name => $value) {
