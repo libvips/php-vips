@@ -46,6 +46,13 @@ to your `composer.json`:
 }
 ```
 
+php-vips does not yet support preloading, so you need to enable FFI globally.
+This has some security implications, since anyone who can run php on your
+server can use it to make calls off into any native library they can find.
+
+Of course if attackers are running their own PHP code on your webserver you
+are probably already toast, unfortunately.
+
 ### Example
 
 ```php
