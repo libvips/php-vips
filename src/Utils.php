@@ -69,16 +69,16 @@ class Utils
     /**
      * Log an error message.
      *
-     * @param string     $message   The error message.
-     * @param \Exception $exception The exception.
+     * @param string          $message   The error message.
+     * @param \Exception|null $exception The exception, if any.
      *
      * @return void
      */
-    public static function errorLog(string $message, \Exception $exception): void
+    public static function errorLog(string $message, ?\Exception $exception = null): void
     {
         $logger = Config::getLogger();
         if ($logger) {
-            $logger->error($message, ['exception' => $exception]);
+            $logger->error($message, $exception == null ? [] : ['exception' => $exception]);
         }
     }
 

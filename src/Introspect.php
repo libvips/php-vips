@@ -57,12 +57,12 @@ class Introspect
     public string $name;
 
     /**
-     * The operation description (eg. "add two images").
+     * The operation description (e.g. "add two images").
      */
     public string $description;
 
     /**
-     * The operation flags (eg. SEQUENTIAL | DEPRECATED).
+     * The operation flags (e.g. SEQUENTIAL | DEPRECATED).
      */
     public int $flags;
 
@@ -90,11 +90,14 @@ class Introspect
      */
     public array $method_args;
 
-    public function __construct($name)
+    /**
+     * @throws Exception
+     */
+    public function __construct($operation_name)
     {
-        $this->name = $name;
+        $this->name = $operation_name;
 
-        $operation = VipsOperation::newFromName($name);
+        $operation = VipsOperation::newFromName($operation_name);
 
         $this->description = $operation->getDescription();
 
@@ -108,7 +111,7 @@ class Introspect
             $p_n_args
         );
         if ($result != 0) {
-            error();
+            throw new Exception();
         }
         $p_names = $p_names[0];
         $p_flags = $p_flags[0];
@@ -194,14 +197,12 @@ class Introspect
             array_splice($this->method_args, $index);
         }
 
-        Utils::debugLog($name, ['introspect' => strval($this)]);
+        Utils::debugLog($operation_name, ['introspect' => strval($this)]);
     }
 
     public function __toString()
     {
-        $result = "";
-
-        $result .= "$this->name:\n";
+        $result = "$this->name:\n";
 
         foreach ($this->arguments as $name => $details) {
             $flags = $details["flags"];
@@ -212,9 +213,9 @@ class Introspect
             $result .= "  $name:\n";
 
             $result .= "    flags: $flags\n";
-            foreach (ArgumentFlags::NAMES as $name => $flag) {
+            foreach (ArgumentFlags::NAMES as $flag_name => $flag) {
                 if ($flags & $flag) {
-                    $result .= "      $name\n";
+                    $result .= "      $flag_name\n";
                 }
             }
 

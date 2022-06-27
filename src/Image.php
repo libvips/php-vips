@@ -492,7 +492,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @internal
      */
-    public function __construct($pointer)
+    public function __construct(\FFI\CData $pointer)
     {
         $this->pointer = \FFI::cast(FFI::ctypes("VipsImage"), $pointer);
         parent::__construct($pointer);
@@ -646,7 +646,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Handy for things like self::more. Call a 2-ary vips operator like
-     * 'more', but if the arg is not an image (ie. it's a constant), call
+     * 'more', but if the arg is not an image (i.e. it's a constant), call
      * 'more_const' instead.
      *
      * @param mixed  $other   The right-hand argument.
@@ -689,15 +689,13 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoad(string $filename): ?string
     {
-        $result = FFI::vips()->vips_foreign_find_load($filename);
-
-        return $result;
+        return FFI::vips()->vips_foreign_find_load($filename);
     }
 
     /**
      * Create a new Image from a file on disc.
      *
-     * @param string $filename The file to open.
+     * @param string $name The file to open.
      * @param array  $options  Any options to pass on to the load operation.
      *
      * @throws Exception
@@ -722,9 +720,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             ], $options);
         }
 
-        $result = VipsOperation::call($loader, null, [$filename], $options);
-
-        return $result;
+        return VipsOperation::call($loader, null, [$filename], $options);
     }
 
     /**
@@ -738,10 +734,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoadBuffer(string $buffer): ?string
     {
-        $result = FFI::vips()->
+        return FFI::vips()->
             vips_foreign_find_load_buffer($buffer, strlen($buffer));
-
-        return $result;
     }
 
     /**
@@ -772,9 +766,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             ], $options);
         }
 
-        $result = VipsOperation::call($loader, null, [$buffer], $options);
-
-        return $result;
+        return VipsOperation::call($loader, null, [$buffer], $options);
     }
 
     /**
@@ -862,9 +854,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             throw new Exception();
         }
 
-        $result = new Image($pointer);
-
-        return $result;
+        return new Image($pointer);
     }
 
     /**
@@ -872,7 +862,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * See Interpolator::newFromName() for the new thing.
      */
-    public static function newInterpolator(string $name)
+    public static function newInterpolator(string $name): Interpolate
     {
         return Interpolate::newFromName($name);
     }
@@ -903,21 +893,19 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $this->height,
             ['extend' => Extend::COPY]
         );
-        $image = $image->copy([
+        return $image->copy([
             'interpretation' => $this->interpretation,
             'xres' => $this->xres,
             'yres' => $this->yres,
             'xoffset' => $this->xoffset,
             'yoffset' => $this->yoffset
         ]);
-
-        return $image;
     }
 
     /**
      * Write an image to a file.
      *
-     * @param string $filename The file to write the image to.
+     * @param string $name The file to write the image to.
      * @param array  $options  Any options to pass on to the selected save
      *     operation.
      *
@@ -975,9 +963,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             ], $options);
         }
 
-        $result = VipsOperation::call($saver, $this, [], $options);
-
-        return $result;
+        return VipsOperation::call($saver, $this, [], $options);
     }
 
     /**
@@ -1078,9 +1064,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if ($pointer == null) {
             throw new Exception();
         }
-        $result = new Image($pointer);
-
-        return $result;
+        return new Image($pointer);
     }
 
     /**
@@ -1104,6 +1088,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param mixed  $value The value to set for this property.
      *
      * @return void
+     * @throws Exception
      */
     public function __set(string $name, $value): void
     {

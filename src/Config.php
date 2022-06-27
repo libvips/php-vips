@@ -55,10 +55,8 @@ class Config
 
     /**
      * The logger instance.
-     *
-     * @var LoggerInterface
      */
-    private static $logger;
+    private static ?LoggerInterface $logger = null;
 
     /**
      * Sets a logger. This can be handy for debugging. For example:
@@ -151,9 +149,16 @@ class Config
         return FFI::version();
     }
 
-    public static function atLeast(int $need_major, int $need_minor): bool
+    /**
+     * Is this at least libvips major.minor[.patch]?
+     * @param int $x Major component.
+     * @param int $y Minor component.
+     * @param int $z Patch component.
+     * @return bool `true` if at least libvips major.minor[.patch]; otherwise, `false`.
+     */
+    public static function atLeast(int $x, int $y, int $z = 0): bool
     {
-        return FFI::atLeast($need_major, $need_minor);
+        return FFI::atLeast($x, $y, $z);
     }
 }
 

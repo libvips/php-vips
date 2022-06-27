@@ -66,7 +66,7 @@ abstract class VipsObject extends GObject
      */
     private \FFI\CData $gObject;
 
-    public function __construct($pointer)
+    public function __construct(\FFI\CData $pointer)
     {
         $this->pointer = \FFI::cast(FFI::ctypes("VipsObject"), $pointer);
         $this->gObject = \FFI::cast(FFI::ctypes("GObject"), $pointer);
@@ -111,7 +111,7 @@ abstract class VipsObject extends GObject
 
     // get the type of a property from a VipsObject
     // 0 if no such property
-    public function getType(string $name)
+    public function getType(string $name): int
     {
         $pspec = $this->getPspec($name);
         if (\FFI::isNull($pspec)) {
@@ -135,6 +135,9 @@ abstract class VipsObject extends GObject
         return FFI::gobject()->g_param_spec_get_description($pspec);
     }
 
+    /**
+     * @throws Exception
+     */
     public function get(string $name)
     {
         $gvalue = new GValue();
@@ -149,6 +152,9 @@ abstract class VipsObject extends GObject
         return $value;
     }
 
+    /**
+     * @throws Exception
+     */
     public function set(string $name, $value)
     {
         Utils::debugLog("set", [$name => $value]);
@@ -161,7 +167,7 @@ abstract class VipsObject extends GObject
             g_object_set_property($this->gObject, $name, $gvalue->pointer);
     }
 
-    public function setString(string $string_options)
+    public function setString(string $string_options): bool
     {
         $result = FFI::vips()->
             vips_object_set_from_string($this->pointer, $string_options);

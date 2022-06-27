@@ -58,7 +58,7 @@ class Exception extends \Exception
             FFI::vips()->vips_error_clear();
         }
 
-        // Utils::errorLog($message, self);
+        Utils::errorLog($message);
 
         parent::__construct($message, $code, $previous);
     }

@@ -64,7 +64,7 @@ class VipsOperation extends VipsObject
      */
     public Introspect $introspect;
 
-    public function __construct($pointer)
+    public function __construct(\FFI\CData $pointer)
     {
         $this->pointer = FFI::vips()->
             cast(FFI::ctypes("VipsOperation"), $pointer);
@@ -72,7 +72,10 @@ class VipsOperation extends VipsObject
         parent::__construct($pointer);
     }
 
-    public static function newFromName($name)
+    /**
+     * @throws Exception
+     */
+    public static function newFromName($name): VipsOperation
     {
         $pointer = FFI::vips()->vips_operation_new($name);
         if ($pointer == null) {
@@ -141,27 +144,6 @@ class VipsOperation extends VipsObject
     }
 
     /**
-     * Unwrap an array of stuff ready to pass down to the vips_ layer. We
-     * swap instances of Image for the ffi pointer.
-     *
-     * @param array $result Unwrap this.
-     *
-     * @return array $result unwrapped, ready for vips.
-     *
-     * @internal
-     */
-    private static function unwrap(array $result): array
-    {
-        array_walk_recursive($result, function (&$value) {
-            if ($value instanceof Image) {
-                $value = $value->image;
-            }
-        });
-
-        return $result;
-    }
-
-    /**
      * Is $value a VipsImage.
      *
      * @param mixed $value The thing to test.
@@ -209,28 +191,6 @@ class VipsOperation extends VipsObject
         }
 
         return $result;
-    }
-
-    /**
-     * Check the result of a vips_ call for an error, and throw an exception
-     * if we see one.
-     *
-     * This won't work for things like __get where a non-array return can be
-     * a valid return.
-     *
-     * @param mixed $result Test this.
-     *
-     * @throws Exception
-     *
-     * @return void
-     *
-     * @internal
-     */
-    private static function errorIsArray($result): void
-    {
-        if (!is_array($result)) {
-            throw new Exception();
-        }
     }
 
     /**
@@ -375,7 +335,7 @@ class VipsOperation extends VipsObject
 
         $result = self::wrapResult($result);
 
-        Utils::debugLog($name, ['result' => var_export($result, true)]);
+        Utils::debugLog($operation_name, ['result' => var_export($result, true)]);
 
         return $result;
     }

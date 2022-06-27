@@ -69,7 +69,7 @@ abstract class GObject
      *
      * @internal
      */
-    public function __construct($pointer)
+    public function __construct(\FFI\CData $pointer)
     {
         $this->pointer = \FFI::cast(FFI::ctypes("GObject"), $pointer);
     }

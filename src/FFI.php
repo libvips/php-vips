@@ -77,7 +77,7 @@ class FFI
      *
      * @internal
      */
-    private static $ffi_inited = false;
+    private static bool $ffi_inited = false;
 
     /**
      * Look up these once.
@@ -97,21 +97,21 @@ class FFI
     private static int $library_minor;
     private static int $library_micro;
 
-    public static function glib()
+    public static function glib(): \FFI
     {
         self::init();
 
         return self::$glib;
     }
 
-    public static function gobject()
+    public static function gobject(): \FFI
     {
         self::init();
 
         return self::$gobject;
     }
 
-    public static function vips()
+    public static function vips(): \FFI
     {
         self::init();
 
@@ -155,11 +155,18 @@ class FFI
             self::$library_micro;
     }
 
-    public static function atLeast(int $need_major, int $need_minor): bool
+    /**
+     * Is this at least libvips major.minor[.patch]?
+     * @param int $x Major component.
+     * @param int $y Minor component.
+     * @param int $z Patch component.
+     * @return bool `true` if at least libvips major.minor[.patch]; otherwise, `false`.
+     */
+    public static function atLeast(int $x, int $y, int $z = 0): bool
     {
-        return $need_major < self::$library_major ||
-            ($need_major == self::$library_major &&
-                $need_minor <= self::$library_minor);
+        return self::$library_major > $x ||
+            self::$library_major == $x && self::$library_minor > $y ||
+            self::$library_major == $x && self::$library_minor == $y && self::$library_micro >= $z;
     }
 
     /**
@@ -167,7 +174,7 @@ class FFI
      *
      * @throws Exception
      *
-     * @internal
+     * @return void
      */
     public static function shutDown()
     {
@@ -219,7 +226,7 @@ class FFI
 
         $result = $vips->vips_init("");
         if ($result != 0) {
-            throw new Vips\Exception();
+            throw new Exception();
         }
         Utils::debugLog("init", ["vips_init" => $result]);
 
@@ -236,7 +243,7 @@ class FFI
         ]);
 
         if (!self::atLeast(8, 7)) {
-            throw new Vips\Exception("your libvips is too old -- " .
+            throw new Exception("your libvips is too old -- " .
                 "8.7 or later required");
         }
 
