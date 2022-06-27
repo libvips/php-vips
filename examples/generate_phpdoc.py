@@ -263,7 +263,7 @@ def generate_auto_doc(filename):
                 f.write(' *     @see {0} for possible values\n'.format(remove_prefix(type_name(gtype))))
 
         f.write(' */\n')
-        f.write('abstract class ImageAutodoc\n')
+        f.write('abstract class ImageAutodoc extends VipsObject\n')
         f.write('{\n')
         f.write('}\n')
 

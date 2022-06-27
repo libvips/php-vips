@@ -51,6 +51,17 @@ namespace Jcupitt\Vips;
  */
 class Exception extends \Exception
 {
+    public function __construct($message = "", $code = 0, \Throwable $previous = null)
+    {
+        if ($message == "") {
+            $message = "libvips error: " . FFI::vips()->vips_error_buffer();
+            FFI::vips()->vips_error_clear();
+        }
+
+        // Utils::errorLog($message, self);
+
+        parent::__construct($message, $code, $previous);
+    }
 }
 
 /*

@@ -494,8 +494,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __construct($pointer)
     {
-        $this->pointer = Config::ffi()->
-            cast(Config::ctypes("VipsImage"), $pointer);
+        $this->pointer = \FFI::cast(FFI::ctypes("VipsImage"), $pointer);
         parent::__construct($pointer);
     }
 
@@ -690,7 +689,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoad(string $filename): ?string
     {
-        $result = Config::ffi()->vips_foreign_find_load($filename);
+        $result = FFI::vips()->vips_foreign_find_load($filename);
 
         return $result;
     }
@@ -709,12 +708,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
         string $name,
         array $options = []
     ): Image {
-        $filename = Config::filenameGetFilename($name);
-        $string_options = Config::filenameGetOptions($name);
+        $filename = Utils::filenameGetFilename($name);
+        $string_options = Utils::filenameGetOptions($name);
 
         $loader = self::findLoad($filename);
         if ($loader == null) {
-            Config::error();
+            throw new Exception();
         }
 
         if (strlen($string_options) != 0) {
@@ -739,7 +738,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoadBuffer(string $buffer): ?string
     {
-        $result = Config::ffi()->
+        $result = FFI::vips()->
             vips_foreign_find_load_buffer($buffer, strlen($buffer));
 
         return $result;
@@ -764,7 +763,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     ): Image {
         $loader = self::findLoadBuffer($buffer);
         if ($loader == null) {
-            Config::error();
+            throw new Exception();
         }
 
         if (strlen($string_options) != 0) {
@@ -814,15 +813,15 @@ class Image extends ImageAutodoc implements \ArrayAccess
             }
         }
 
-        $pointer = Config::ffi()->
+        $pointer = FFI::vips()->
             vips_image_new_matrix_from_array($width, $height, $a, $n);
         if ($pointer == null) {
-            Config::error();
+            throw new Exception();
         }
         $result = new Image($pointer);
 
-        $result->setType(Config::gtypes("gdouble"), 'scale', $scale);
-        $result->setType(Config::gtypes("gdouble"), 'offset', $offset);
+        $result->setType(FFI::gtypes("gdouble"), 'scale', $scale);
+        $result->setType(FFI::gtypes("gdouble"), 'offset', $offset);
 
         return $result;
     }
@@ -851,7 +850,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
          *
          * TODO add a references system instead, see pyvips.
          */
-        $pointer = Config::ffi()->vips_image_new_from_memory_copy(
+        $pointer = FFI::vips()->vips_image_new_from_memory_copy(
             $data,
             strlen($data),
             $width,
@@ -860,7 +859,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $format
         );
         if ($pointer == null) {
-            Config::error();
+            throw new Exception();
         }
 
         $result = new Image($pointer);
@@ -928,12 +927,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToFile(string $name, array $options = []): void
     {
-        $filename = Config::filenameGetFilename($name);
-        $string_options = Config::filenameGetOptions($name);
+        $filename = Utils::filenameGetFilename($name);
+        $string_options = Utils::filenameGetOptions($name);
 
-        $saver = Config::ffi()->vips_foreign_find_save($filename);
+        $saver = FFI::vips()->vips_foreign_find_save($filename);
         if ($saver == "") {
-            Config::error();
+            throw new Exception();
         }
 
         if (strlen($string_options) != 0) {
@@ -945,7 +944,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $result = VipsOperation::call($saver, $this, [$filename], $options);
 
         if ($result === -1) {
-            Config::error();
+            throw new Exception();
         }
     }
 
@@ -962,12 +961,12 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToBuffer(string $suffix, array $options = []): string
     {
-        $filename = Config::filenameGetFilename($suffix);
-        $string_options = Config::filenameGetOptions($suffix);
+        $filename = Utils::filenameGetFilename($suffix);
+        $string_options = Utils::filenameGetOptions($suffix);
 
-        $saver = Config::ffi()->vips_foreign_find_save_buffer($filename);
+        $saver = FFI::vips()->vips_foreign_find_save_buffer($filename);
         if ($saver == "") {
-            Config::error();
+            throw new Exception();
         }
 
         if (strlen($string_options) != 0) {
@@ -993,16 +992,16 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
         $p_size = \FFI::new($ctype);
 
-        $pointer = Config::ffi()->
+        $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
         if ($pointer == null) {
-            Config::error();
+            throw new Exception();
         }
 
         // string() takes a copy
         $result = \FFI::string($pointer, $p_size[0]);
 
-        Config::ffi()->g_free($pointer);
+        FFI::glib()->g_free($pointer);
 
         return $result;
     }
@@ -1035,15 +1034,15 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
         $p_size = \FFI::new($ctype);
 
-        $pointer = Config::ffi()->
+        $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
         if ($pointer == null) {
-            Config::error();
+            throw new Exception();
         }
 
         // wrap pointer up as a C array of the right type
         $n = $this->width * $this->height * $this->bands;
-        $type_name = Config::ftypes($this->format);
+        $type_name = FFI::ftypes($this->format);
         $ctype = \FFI::arrayType(\FFI::type($type_name), [$n]);
         $array = \FFI::cast($ctype, $pointer);
 
@@ -1054,7 +1053,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         // the vips result is not PHP memory, so we must free it
-        Config::ffi()->g_free($pointer);
+        FFI::glib()->g_free($pointer);
 
         return $result;
     }
@@ -1075,9 +1074,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function copyMemory(): Image
     {
-        $pointer = Config::ffi()->vips_image_copy_memory($this->pointer);
+        $pointer = FFI::vips()->vips_image_copy_memory($this->pointer);
         if ($pointer == null) {
-            Config::error();
+            throw new Exception();
         }
         $result = new Image($pointer);
 
@@ -1141,9 +1140,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function get(string $name)
     {
         $gvalue = new GValue();
-        if (Config::ffi()->
+        if (FFI::vips()->
             vips_image_get($this->pointer, $name, $gvalue->pointer) != 0) {
-            Config::error();
+            throw new Exception();
         }
 
         return $gvalue->get();
@@ -1160,7 +1159,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function getType(string $name): int
     {
-        return Config::ffi()->vips_image_get_typeof($this->pointer, $name);
+        return FFI::vips()->vips_image_get_typeof($this->pointer, $name);
     }
 
     /**
@@ -1198,27 +1197,27 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if ($gtype == 0) {
             if (is_array($value)) {
                 if (is_int($value[0])) {
-                    $gtype = Config::gtypes("VipsArrayInt");
+                    $gtype = FFI::gtypes("VipsArrayInt");
                 } elseif (is_float($value[0])) {
-                    $gtype = Config::gtypes("VipsArrayDouble");
+                    $gtype = FFI::gtypes("VipsArrayDouble");
                 } else {
-                    $gtype = Config::gtypes("VipsArrayImage");
+                    $gtype = FFI::gtypes("VipsArrayImage");
                 }
             } elseif (is_int($value)) {
-                $gtype = Config::gtypes("gint");
+                $gtype = FFI::gtypes("gint");
             } elseif (is_float($value)) {
-                $gtype = Config::gtypes("gdouble");
+                $gtype = FFI::gtypes("gdouble");
             } elseif (is_string($value)) {
-                $gtype = Config::gtypes("VipsRefString");
+                $gtype = FFI::gtypes("VipsRefString");
             } else {
-                $gtype = Config::gtypes("VipsImage");
+                $gtype = FFI::gtypes("VipsImage");
             }
         }
 
         $gvalue->setType($gtype);
         $gvalue->set($value);
 
-        Config::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
+        FFI::vips()->vips_image_set($this->pointer, $name, $gvalue->pointer);
     }
 
     /**
@@ -1243,7 +1242,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $gvalue = new GValue();
         $gvalue->setType($type);
         $gvalue->set($value);
-        Config::ffi()->vips_image_set($this->pointer, $name, $gvalue->pointer);
+        FFI::vips()->vips_image_set($this->pointer, $name, $gvalue->pointer);
     }
 
     /**
@@ -1257,8 +1256,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function remove(string $name): void
     {
-        if (!Config::ffi()->vips_image_remove($this->pointer, $name)) {
-            Config::error();
+        if (!FFI::vips()->vips_image_remove($this->pointer, $name)) {
+            throw new Exception();
         }
     }
 
@@ -1936,7 +1935,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         # composite takes an arrayint, but it's really an array of blend modes
         # gvalue doesn't know this, so we must do name -> enum value mapping
         $mode = array_map(function ($x) {
-            return GValue::toEnum(Config::gtypes("VipsBlendMode"), $x);
+            return GValue::toEnum(FFI::gtypes("VipsBlendMode"), $x);
         }, $mode);
 
         return VipsOperation::call(

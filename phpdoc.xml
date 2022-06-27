@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor>
-
+    <title>php-vips</title>
     <parser>
+        <default-package-name>php-vips</default-package-name>
         <target>docs</target>
     </parser>
-
     <transformer>
         <target>docs</target>
     </transformer>
-
     <files>
         <directory>src</directory>
     </files>
-
 </phpdocumentor>

@@ -92,7 +92,25 @@ class Utils
      */
     public static function typeFromName(string $name): int
     {
-        return Config::ffi()->g_type_from_name($name);
+        return FFI::gobject()->g_type_from_name($name);
+    }
+
+    public static function filenameGetFilename(string $name)
+    {
+        $pointer = FFI::vips()->vips_filename_get_filename($name);
+        $filename = \FFI::string($pointer);
+        FFI::glib()->g_free($pointer);
+
+        return $filename;
+    }
+
+    public static function filenameGetOptions(string $name)
+    {
+        $pointer = FFI::vips()->vips_filename_get_options($name);
+        $options = \FFI::string($pointer);
+        FFI::glib()->g_free($pointer);
+
+        return $options;
     }
 }
 

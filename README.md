@@ -174,4 +174,3 @@ $ vendor/bin/phpdoc
 $ cd src
 $ ../examples/generate_phpdoc.py
 ```
-
