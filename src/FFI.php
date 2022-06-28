@@ -181,7 +181,7 @@ class FFI
         self::vips()->vips_shutdown();
     }
 
-    private static function libraryName(string $name, $abi): string
+    private static function libraryName(string $name, int $abi): string
     {
         switch (PHP_OS_FAMILY) {
             case "Windows":
@@ -206,8 +206,8 @@ class FFI
 
         $vips_libname = self::libraryName("libvips", 42);
         if (PHP_OS_FAMILY === "Windows") {
-            $glib_libname = self::libraryName("libglib", "2.0-0");
-            $gobject_libname = self::libraryName("libgobject", "2.0-0");
+            $glib_libname = self::libraryName("libglib-2.0", 0);
+            $gobject_libname = self::libraryName("libgobject-2.0", 0);
         } else {
             $glib_libname = $vips_libname;
             $gobject_libname = $vips_libname;
