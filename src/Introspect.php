@@ -101,11 +101,11 @@ class Introspect
 
         $this->description = $operation->getDescription();
 
-        $p_names = FFI::vips()->new("char**[1]");
-        $p_flags = FFI::vips()->new("int*[1]");
-        $p_n_args = FFI::vips()->new("int[1]");
-        $result = FFI::vips()->vips_object_get_args(
-            \FFI::cast(FFI::ctypes("VipsObject"), $operation->pointer),
+        $p_names = Config::vips()->new("char**[1]");
+        $p_flags = Config::vips()->new("int*[1]");
+        $p_n_args = Config::vips()->new("int[1]");
+        $result = Config::vips()->vips_object_get_args(
+            \FFI::cast(Config::ctypes("VipsObject"), $operation->pointer),
             $p_names,
             $p_flags,
             $p_n_args
@@ -183,7 +183,7 @@ class Introspect
         $this->member_this = "";
         foreach ($this->required_input as $name) {
             $type = $this->arguments[$name]["type"];
-            if ($type == FFI::gtypes("VipsImage")) {
+            if ($type == Config::gtypes("VipsImage")) {
                 $this->member_this = $name;
                 break;
             }
@@ -208,7 +208,7 @@ class Introspect
             $flags = $details["flags"];
             $blurb = $details["blurb"];
             $type = $details["type"];
-            $typeName = FFI::gobject()->g_type_name($type);
+            $typeName = Config::gobject()->g_type_name($type);
 
             $result .= "  $name:\n";
 
