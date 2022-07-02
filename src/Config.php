@@ -311,7 +311,7 @@ class Config
 
         $result = $vips->vips_init("");
         if ($result != 0) {
-            throw new Exception();
+            throw new Exception("libvips error: " . $vips->vips_error_buffer());
         }
         Utils::debugLog("init", ["vips_init" => $result]);
 
