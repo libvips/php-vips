@@ -200,7 +200,7 @@ class Introspect
         Utils::debugLog($operation_name, ['introspect' => strval($this)]);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $result = "$this->name:\n";
 

@@ -76,7 +76,7 @@ class GValue
      * Turn an enum into a string, if possible
      * @throws Exception
      */
-    public static function fromEnum(int $gtype, int $value)
+    public static function fromEnum(int $gtype, int $value): string
     {
         $result = FFI::vips()->vips_enum_nick($gtype, $value);
         if ($result === null) {
@@ -91,7 +91,7 @@ class GValue
         FFI::gobject()->g_value_unset($this->pointer);
     }
 
-    public function setType(int $gtype)
+    public function setType(int $gtype): void
     {
         FFI::gobject()->g_value_init($this->pointer, $gtype);
     }

@@ -1251,7 +1251,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $array = [
             'width' => $this->width,

@@ -85,7 +85,7 @@ class VipsOperation extends VipsObject
         return new VipsOperation($pointer);
     }
 
-    public function setMatch($name, $match_image, $value)
+    public function setMatch($name, $match_image, $value): void
     {
         $flags = $this->introspect->arguments[$name]["flags"];
         $gtype = $this->introspect->arguments[$name]["type"];

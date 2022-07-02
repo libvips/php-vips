@@ -75,12 +75,12 @@ abstract class VipsObject extends GObject
     }
 
     // print a table of all active vipsobjects ... handy for debugging
-    public static function printAll()
+    public static function printAll(): void
     {
         FFI::vips()->vips_object_print_all();
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return FFI::vips()->vips_object_get_description($this->pointer);
     }
@@ -89,7 +89,7 @@ abstract class VipsObject extends GObject
     // NULL for no such name
     // very slow! avoid if possible
     // FIXME add a cache for this thing
-    public function getPspec(string $name)
+    public function getPspec(string $name): ?\FFI\CData
     {
         $pspec = FFI::gobject()->new("GParamSpec*[1]");
         $argument_class = FFI::vips()->new("VipsArgumentClass*[1]");
@@ -155,7 +155,7 @@ abstract class VipsObject extends GObject
     /**
      * @throws Exception
      */
-    public function set(string $name, $value)
+    public function set(string $name, $value): void
     {
         Utils::debugLog("set", [$name => $value]);
 
@@ -175,7 +175,7 @@ abstract class VipsObject extends GObject
         return $result == 0;
     }
 
-    public function unrefOutputs()
+    public function unrefOutputs(): void
     {
         FFI::vips()->vips_object_unref_outputs($this->pointer);
     }

@@ -84,12 +84,12 @@ abstract class GObject
         $this->ref();
     }
 
-    public function ref()
+    public function ref(): void
     {
         FFI::gobject()->g_object_ref($this->pointer);
     }
 
-    public function unref()
+    public function unref(): void
     {
         FFI::gobject()->g_object_unref($this->pointer);
     }

@@ -118,22 +118,21 @@ class FFI
         return self::$vips;
     }
 
-
-    public static function ctypes(string $name)
+    public static function ctypes(string $name): \FFI\CType
     {
         self::init();
 
         return self::$ctypes[$name];
     }
 
-    public static function gtypes(string $name)
+    public static function gtypes(string $name): int
     {
         self::init();
 
         return self::$gtypes[$name];
     }
 
-    public static function ftypes(string $name)
+    public static function ftypes(string $name): string
     {
         self::init();
 
@@ -172,11 +171,9 @@ class FFI
     /**
      * Shut down libvips. Call this just before process exit.
      *
-     * @throws Exception
-     *
      * @return void
      */
-    public static function shutDown()
+    public static function shutDown(): void
     {
         self::vips()->vips_shutdown();
     }
@@ -197,7 +194,7 @@ class FFI
         }
     }
 
-    private static function init()
+    private static function init(): void
     {
         // Already initialized.
         if (self::$ffi_inited) {

@@ -95,7 +95,7 @@ class Utils
         return FFI::gobject()->g_type_from_name($name);
     }
 
-    public static function filenameGetFilename(string $name)
+    public static function filenameGetFilename(string $name): string
     {
         $pointer = FFI::vips()->vips_filename_get_filename($name);
         $filename = \FFI::string($pointer);
@@ -104,7 +104,7 @@ class Utils
         return $filename;
     }
 
-    public static function filenameGetOptions(string $name)
+    public static function filenameGetOptions(string $name): string
     {
         $pointer = FFI::vips()->vips_filename_get_options($name);
         $options = \FFI::string($pointer);
