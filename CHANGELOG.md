@@ -2,6 +2,12 @@
 
 All notable changes to `:vips` will be documented in this file.
 
+## 2.0.3 - 2022-07-04
+
+- Fix on Windows [kleisauke]
+- Fix 32-bit support [kleisauke]
+- Code cleanups [kleisauke]
+
 ## 2.0.2 - 2022-4-14
 
 - Fix extra optional string args on file open
