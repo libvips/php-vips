@@ -66,8 +66,8 @@ class VipsOperation extends VipsObject
 
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = Config::vips()->
-            cast(Config::ctypes("VipsOperation"), $pointer);
+        $this->pointer = FFI::vips()->
+            cast(FFI::ctypes("VipsOperation"), $pointer);
 
         parent::__construct($pointer);
     }
@@ -77,7 +77,7 @@ class VipsOperation extends VipsObject
      */
     public static function newFromName($name): VipsOperation
     {
-        $pointer = Config::vips()->vips_operation_new($name);
+        $pointer = FFI::vips()->vips_operation_new($name);
         if ($pointer == null) {
             throw new Exception();
         }
@@ -91,9 +91,9 @@ class VipsOperation extends VipsObject
         $gtype = $this->introspect->arguments[$name]["type"];
 
         if ($match_image != null) {
-            if ($gtype == Config::gtypes("VipsImage")) {
+            if ($gtype == FFI::gtypes("VipsImage")) {
                 $value = $match_image->imageize($value);
-            } elseif ($gtype == Config::gtypes("VipsArrayImage") &&
+            } elseif ($gtype == FFI::gtypes("VipsArrayImage") &&
                 is_array($value)) {
                 $new_value = [];
                 foreach ($value as $x) {
@@ -155,7 +155,7 @@ class VipsOperation extends VipsObject
     private static function isImagePointer($value): bool
     {
         return $value instanceof \FFI\CData &&
-            \FFI::typeof($value) == Config::ctypes("VipsImage");
+            \FFI::typeof($value) == FFI::ctypes("VipsImage");
     }
 
     /**
@@ -301,7 +301,7 @@ class VipsOperation extends VipsObject
 
         /* Build the operation
          */
-        $pointer = Config::vips()->
+        $pointer = FFI::vips()->
             vips_cache_operation_build($operation->pointer);
         if ($pointer == null) {
             $operation->unrefOutputs();

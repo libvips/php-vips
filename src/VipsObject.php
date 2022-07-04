@@ -68,8 +68,8 @@ abstract class VipsObject extends GObject
 
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(Config::ctypes("VipsObject"), $pointer);
-        $this->gObject = \FFI::cast(Config::ctypes("GObject"), $pointer);
+        $this->pointer = \FFI::cast(FFI::ctypes("VipsObject"), $pointer);
+        $this->gObject = \FFI::cast(FFI::ctypes("GObject"), $pointer);
 
         parent::__construct($pointer);
     }
@@ -77,12 +77,12 @@ abstract class VipsObject extends GObject
     // print a table of all active vipsobjects ... handy for debugging
     public static function printAll(): void
     {
-        Config::vips()->vips_object_print_all();
+        FFI::vips()->vips_object_print_all();
     }
 
     public function getDescription(): string
     {
-        return Config::vips()->vips_object_get_description($this->pointer);
+        return FFI::vips()->vips_object_get_description($this->pointer);
     }
 
     // get the pspec for a property
@@ -91,10 +91,10 @@ abstract class VipsObject extends GObject
     // FIXME add a cache for this thing
     public function getPspec(string $name): ?\FFI\CData
     {
-        $pspec = Config::gobject()->new("GParamSpec*[1]");
-        $argument_class = Config::vips()->new("VipsArgumentClass*[1]");
-        $argument_instance = Config::vips()->new("VipsArgumentInstance*[1]");
-        $result = Config::vips()->vips_object_get_argument(
+        $pspec = FFI::gobject()->new("GParamSpec*[1]");
+        $argument_class = FFI::vips()->new("VipsArgumentClass*[1]");
+        $argument_instance = FFI::vips()->new("VipsArgumentInstance*[1]");
+        $result = FFI::vips()->vips_object_get_argument(
             $this->pointer,
             $name,
             $pspec,
@@ -116,7 +116,7 @@ abstract class VipsObject extends GObject
         $pspec = $this->getPspec($name);
         if (\FFI::isNull($pspec)) {
             # need to clear any error, this is horrible
-            Config::vips()->vips_error_clear();
+            FFI::vips()->vips_error_clear();
             return 0;
         } else {
             return $pspec->value_type;
@@ -126,13 +126,13 @@ abstract class VipsObject extends GObject
     public function getBlurb(string $name): string
     {
         $pspec = $this->getPspec($name);
-        return Config::gobject()->g_param_spec_get_blurb($pspec);
+        return FFI::gobject()->g_param_spec_get_blurb($pspec);
     }
 
     public function getArgumentDescription(string $name): string
     {
         $pspec = $this->getPspec($name);
-        return Config::gobject()->g_param_spec_get_description($pspec);
+        return FFI::gobject()->g_param_spec_get_description($pspec);
     }
 
     /**
@@ -143,7 +143,7 @@ abstract class VipsObject extends GObject
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
 
-        Config::gobject()->
+        FFI::gobject()->
             g_object_get_property($this->gObject, $name, $gvalue->pointer);
         $value = $gvalue->get();
 
@@ -163,13 +163,13 @@ abstract class VipsObject extends GObject
         $gvalue->setType($this->getType($name));
         $gvalue->set($value);
 
-        Config::gobject()->
+        FFI::gobject()->
             g_object_set_property($this->gObject, $name, $gvalue->pointer);
     }
 
     public function setString(string $string_options): bool
     {
-        $result = Config::vips()->
+        $result = FFI::vips()->
             vips_object_set_from_string($this->pointer, $string_options);
 
         return $result == 0;
@@ -177,7 +177,7 @@ abstract class VipsObject extends GObject
 
     public function unrefOutputs(): void
     {
-        Config::vips()->vips_object_unref_outputs($this->pointer);
+        FFI::vips()->vips_object_unref_outputs($this->pointer);
     }
 }
 
