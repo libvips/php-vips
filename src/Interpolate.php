@@ -60,10 +60,9 @@ class Interpolate extends VipsObject
      */
     public \FFI\CData $pointer;
 
-    public function __construct($pointer)
+    public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = Config::ffi()->
-            cast(Config::ctypes("VipsInterpolate"), $pointer);
+        $this->pointer = \FFI::cast(Config::ctypes("VipsInterpolate"), $pointer);
 
         parent::__construct($pointer);
     }
@@ -81,13 +80,14 @@ class Interpolate extends VipsObject
      *  - `'lbb'`: Use LBB interpolation.
      *  - `'vsqbs'`: Use the VSQBS interpolation.
      *
-     * @return resource|null The interpolator, or null on error.
+     * @return Interpolate The interpolator.
+     * @throws Exception If unable to make a new interpolator from $name.
      */
-    public static function newFromName($name)
+    public static function newFromName(string $name): Interpolate
     {
-        $pointer = Config::ffi()->vips_interpolate_new($name);
+        $pointer = Config::vips()->vips_interpolate_new($name);
         if ($pointer == null) {
-            Config::error();
+            throw new Exception();
         }
 
         return new Interpolate($pointer);

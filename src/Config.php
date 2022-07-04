@@ -55,18 +55,37 @@ class Config
 
     /**
      * The logger instance.
-     *
-     * @var LoggerInterface
      */
-    private static $logger;
+    private static ?LoggerInterface $logger = null;
+
+    /**
+     * The FFI handle we use for the glib binary.
+     *
+     * @internal
+     */
+    private static \FFI $glib;
+
+
+    /**
+     * The FFI handle we use for the gobject binary.
+     *
+     * @internal
+     */
+    private static \FFI $gobject;
 
     /**
      * The FFI handle we use for the libvips binary.
      *
      * @internal
      */
-    private static \FFI $ffi;
-    private static $ffi_inited = false;
+    private static \FFI $vips;
+
+    /**
+     * Are the above FFI handles initialized?
+     *
+     * @internal
+     */
+    private static bool $ffi_inited = false;
 
     /**
      * The library version number we detect.
@@ -122,7 +141,7 @@ class Config
      */
     public static function cacheSetMax(int $value): void
     {
-        Config::ffi()->vips_cache_set_max($value);
+        self::vips()->vips_cache_set_max($value);
     }
 
     /**
@@ -136,7 +155,7 @@ class Config
      */
     public static function cacheSetMaxMem(int $value): void
     {
-        Config::ffi()->vips_cache_set_max_mem($value);
+        self::vips()->vips_cache_set_max_mem($value);
     }
 
     /**
@@ -149,7 +168,7 @@ class Config
      */
     public static function cacheSetMaxFiles(int $value): void
     {
-        Config::ffi()->vips_cache_set_max_files($value);
+        self::vips()->vips_cache_set_max_files($value);
     }
 
     /**
@@ -163,7 +182,49 @@ class Config
      */
     public static function concurrencySet(int $value): void
     {
-        Config::ffi()->vips_concurrency_set($value);
+        self::vips()->vips_concurrency_set($value);
+    }
+
+    public static function glib(): \FFI
+    {
+        self::init();
+
+        return self::$glib;
+    }
+
+    public static function gobject(): \FFI
+    {
+        self::init();
+
+        return self::$gobject;
+    }
+
+    public static function vips(): \FFI
+    {
+        self::init();
+
+        return self::$vips;
+    }
+
+    public static function ctypes(string $name): \FFI\CType
+    {
+        self::init();
+
+        return self::$ctypes[$name];
+    }
+
+    public static function gtypes(string $name): int
+    {
+        self::init();
+
+        return self::$gtypes[$name];
+    }
+
+    public static function ftypes(string $name): string
+    {
+        self::init();
+
+        return self::$ftypes[$name];
     }
 
     /**
@@ -174,112 +235,38 @@ class Config
      */
     public static function version(): string
     {
-        Config::ffi();
+        self::init();
 
         return self::$library_major . "." .
-            self::$library_minor . ".".
+            self::$library_minor . "." .
             self::$library_micro;
-    }
-
-    /**
-     * Handy for debugging.
-     */
-    public static function printAll()
-    {
-        Config::ffi()->vips_object_print_all();
-    }
-
-    public static function ffi()
-    {
-        if (!self::$ffi_inited) {
-            self::init();
-            self::$ffi_inited = true;
-        }
-
-        return self::$ffi;
-    }
-
-    public static function ctypes(string $name)
-    {
-        Config::ffi();
-
-        return self::$ctypes[$name];
-    }
-
-    public static function gtypes(string $name)
-    {
-        Config::ffi();
-
-        return self::$gtypes[$name];
-    }
-
-    public static function ftypes(string $name)
-    {
-        Config::ffi();
-
-        return self::$ftypes[$name];
-    }
-
-    /**
-     * Throw a vips error as an exception.
-     *
-     * @throws Exception
-     *
-     * @return void
-     *
-     * @internal
-     */
-    public static function error(string $message = "")
-    {
-        if ($message == "") {
-            $message = Config::ffi()->vips_error_buffer();
-            Config::ffi()->vips_error_clear();
-        }
-        $exception = new Exception($message);
-        Utils::errorLog($message, $exception);
-        throw $exception;
     }
 
     /**
      * Shut down libvips. Call this just before process exit.
      *
-     * @throws Exception
-     *
      * @return void
-     *
-     * @internal
      */
-    public static function shutDown()
+    public static function shutDown(): void
     {
-        Config::ffi()->vips_shutdown();
+        self::vips()->vips_shutdown();
     }
 
-    public static function filenameGetFilename($name)
+    /**
+     * Is this at least libvips major.minor[.patch]?
+     * @param int $x Major component.
+     * @param int $y Minor component.
+     * @param int $z Patch component.
+     * @return bool `true` if at least libvips major.minor[.patch]; otherwise, `false`.
+     */
+    public static function atLeast(int $x, int $y, int $z = 0): bool
     {
-        $pointer = Config::ffi()->vips_filename_get_filename($name);
-        $filename = \FFI::string($pointer);
-        Config::ffi()->g_free($pointer);
-
-        return $filename;
+        return self::$library_major > $x ||
+            self::$library_major == $x && self::$library_minor > $y ||
+            self::$library_major == $x && self::$library_minor == $y && self::$library_micro >= $z;
     }
 
-    public static function filenameGetOptions($name)
-    {
-        $pointer = Config::ffi()->vips_filename_get_options($name);
-        $options = \FFI::string($pointer);
-        Config::ffi()->g_free($pointer);
-
-        return $options;
-    }
-
-    public static function atLeast($need_major, $need_minor)
-    {
-        return $need_major < self::$library_major ||
-            ($need_major == self::$library_major &&
-             $need_minor <= self::$library_minor);
-    }
-
-    private static function libraryName($name, $abi)
+    private static function libraryName(string $name, int $abi): string
     {
         switch (PHP_OS_FAMILY) {
             case "Windows":
@@ -295,32 +282,43 @@ class Config
         }
     }
 
-    private static function init()
+    private static function init(): void
     {
-        $library = self::libraryName("libvips", 42);
+        // Already initialized.
+        if (self::$ffi_inited) {
+            return;
+        }
 
-        Utils::debugLog("init", ["libray" => $library]);
+        $vips_libname = self::libraryName("libvips", 42);
+        if (PHP_OS_FAMILY === "Windows") {
+            $glib_libname = self::libraryName("libglib-2.0", 0);
+            $gobject_libname = self::libraryName("libgobject-2.0", 0);
+        } else {
+            $glib_libname = $vips_libname;
+            $gobject_libname = $vips_libname;
+        }
+
+        Utils::debugLog("init", ["library" => $vips_libname]);
 
         /* FIXME ... maybe display a helpful message on failure? This will
          * probably be the main point of failure.
          */
-        $ffi = \FFI::cdef(<<<EOS
+        $vips = \FFI::cdef(<<<EOS
             int vips_init (const char *argv0);
             const char *vips_error_buffer (void);
             int vips_version(int flag);
-            EOS, $library);
+            EOS, $vips_libname);
 
-        $result = $ffi->vips_init("");
+        $result = $vips->vips_init("");
         if ($result != 0) {
-            $msg = $ffi->vips_error_buffer();
-            throw new Vips\Exception("libvips error: $msg");
+            throw new Exception("libvips error: " . $vips->vips_error_buffer());
         }
         Utils::debugLog("init", ["vips_init" => $result]);
 
         # get the library version number, then we can build the API
-        self::$library_major = $ffi->vips_version(0);
-        self::$library_minor = $ffi->vips_version(1);
-        self::$library_micro = $ffi->vips_version(2);
+        self::$library_major = $vips->vips_version(0);
+        self::$library_minor = $vips->vips_version(1);
+        self::$library_micro = $vips->vips_version(2);
         Utils::debugLog("init", [
             "libvips version" => [
                 self::$library_major,
@@ -330,115 +328,38 @@ class Config
         ]);
 
         if (!self::atLeast(8, 7)) {
-            throw new Vips\Exception("your libvips is too old -- " .
+            throw new Exception("your libvips is too old -- " .
                 "8.7 or later required");
         }
 
-        if (PHP_INT_SIZE != 8) {
-            # we could maybe fix this if it's important ... it's mostly
-            # necessary since GType is the size of a pointer, and there's no
-            # easy way to discover if php is running on a 32 or 64-bit
-            # systems (as far as I can see)
-            throw new Vips\Exception("your php only supports 32-bit ints -- " .
-                "64 bit ints required");
-        }
+        $is_64bits = PHP_INT_SIZE === 8;
 
-        # the whole libvips API, mostly adapted from pyvips
-        $header = <<<EOS
+        // GType is the size of a pointer
+        $gtype = $is_64bits ? "guint64" : "guint32";
+
+        // Typedefs shared across the libvips, GLib and GObject declarations
+        $typedefs = <<<EOS
 // we need the glib names for these types
 typedef uint32_t guint32;
 typedef int32_t gint32;
 typedef uint64_t guint64;
 typedef int64_t gint64;
 
-// FIXME ... need to detect 32/64 bit platform, since GType is an int
-// the size of a pointer, see PHP_INT_SIZE above
-typedef guint64 GType;
+typedef $gtype GType;
+EOS;
 
-typedef struct _VipsImage VipsImage;
-typedef struct _VipsProgress VipsProgress;
-typedef struct _GValue GValue;
-
-int vips_init (const char *argv0);
-int vips_shutdown (void);
-
-const char *vips_error_buffer (void);
-char *vips_error_buffer_copy (void);
-void vips_error_clear (void);
-void vips_error_freeze (void);
-void vips_error_thaw (void);
-
-int vips_version(int flag);
-
+        // GLib declarations
+        $glib_decls = $typedefs . <<<EOS
 void* g_malloc (size_t size);
 void g_free (void* data);
+EOS;
 
-void vips_leak_set (int leak);
-
-GType vips_type_find (const char* basename, const char* nickname);
-const char* vips_nickname_find (GType type);
-
-const char* g_type_name (GType gtype);
-GType g_type_from_name (const char* name);
-
-typedef void* (*VipsTypeMap2Fn) (GType type, void* a, void* b);
-void* vips_type_map (GType base, VipsTypeMap2Fn fn, void* a, void* b);
-
+        // GObject declarations
+        $gobject_decls = $typedefs . <<<EOS
 typedef struct _GValue {
     GType g_type;
     guint64 data[2];
 } GValue;
-
-void g_value_init (GValue* value, GType gtype);
-void g_value_unset (GValue* value);
-GType g_type_fundamental (GType gtype);
-
-int vips_enum_from_nick (const char* domain,
-    GType gtype, const char* str);
-const char *vips_enum_nick (GType gtype, int value);
-
-void g_value_set_boolean (GValue* value, bool v_boolean);
-void g_value_set_int (GValue* value, int i);
-void g_value_set_uint64 (GValue* value, guint64 ull);
-void g_value_set_int64 (GValue* value, guint64 ull);
-void g_value_set_double (GValue* value, double d);
-void g_value_set_enum (GValue* value, int e);
-void g_value_set_flags (GValue* value, unsigned int f);
-void g_value_set_string (GValue* value, const char* str);
-void vips_value_set_ref_string (GValue* value, const char* str);
-void g_value_set_object (GValue* value, void* object);
-void vips_value_set_array_double (GValue* value,
-const double* array, int n );
-void vips_value_set_array_int (GValue* value,
-const int* array, int n );
-void vips_value_set_array_image (GValue *value, int n);
-typedef void (*FreeFn)(void* a);
-void vips_value_set_blob (GValue* value,
-    FreeFn free_fn, void* data, size_t length);
-
-bool g_value_get_boolean (const GValue* value);
-int g_value_get_int (GValue* value);
-guint64 g_value_get_uint64 (GValue* value);
-gint64 g_value_get_int64 (GValue* value);
-double g_value_get_double (GValue* value);
-int g_value_get_enum (GValue* value);
-unsigned int g_value_get_flags (GValue* value);
-const char* g_value_get_string (GValue* value);
-const char* vips_value_get_ref_string (const GValue* value,
-    size_t* length);
-void* g_value_get_object (GValue* value);
-double* vips_value_get_array_double (const GValue* value, int* n);
-int* vips_value_get_array_int (const GValue* value, int* n);
-VipsImage** vips_value_get_array_image (const GValue* value, int* n);
-void* vips_value_get_blob (const GValue* value, size_t* length);
-
-// need to make some of these by hand
-GType vips_interpretation_get_type (void);
-GType vips_operation_flags_get_type (void);
-GType vips_band_format_get_type (void);
-GType vips_token_get_type (void);
-GType vips_saveable_get_type (void);
-GType vips_image_type_get_type (void);
 
 typedef struct _GData GData;
 
@@ -447,12 +368,6 @@ typedef struct _GTypeClass GTypeClass;
 typedef struct _GTypeInstance {
     GTypeClass *g_class;
 } GTypeInstance;
-
-typedef struct _GObject {
-    GTypeInstance g_type_instance;
-    unsigned int ref_count;
-    GData *qdata;
-} GObject;
 
 typedef struct _GParamSpec {
     GTypeInstance g_type_instance;
@@ -470,6 +385,39 @@ typedef struct _GParamSpec {
     unsigned int ref_count;
     unsigned int param_id;
 } GParamSpec;
+
+typedef struct _GObject {
+    GTypeInstance g_type_instance;
+    unsigned int ref_count;
+    GData *qdata;
+} GObject;
+
+const char* g_type_name (GType gtype);
+GType g_type_from_name (const char* name);
+
+void g_value_init (GValue* value, GType gtype);
+void g_value_unset (GValue* value);
+GType g_type_fundamental (GType gtype);
+
+void g_value_set_boolean (GValue* value, bool v_boolean);
+void g_value_set_int (GValue* value, int i);
+void g_value_set_uint64 (GValue* value, guint64 ull);
+void g_value_set_int64 (GValue* value, guint64 ull);
+void g_value_set_double (GValue* value, double d);
+void g_value_set_enum (GValue* value, int e);
+void g_value_set_flags (GValue* value, unsigned int f);
+void g_value_set_string (GValue* value, const char* str);
+void g_value_set_object (GValue* value, void* object);
+
+bool g_value_get_boolean (const GValue* value);
+int g_value_get_int (GValue* value);
+guint64 g_value_get_uint64 (GValue* value);
+gint64 g_value_get_int64 (GValue* value);
+double g_value_get_double (GValue* value);
+int g_value_get_enum (GValue* value);
+unsigned int g_value_get_flags (GValue* value);
+const char* g_value_get_string (GValue* value);
+void* g_value_get_object (GValue* value);
 
 typedef struct _GEnumValue {
     int value;
@@ -509,9 +457,9 @@ void g_object_ref (void* object);
 void g_object_unref (void* object);
 
 void g_object_set_property (GObject* object,
-const char *name, GValue* value);
+    const char *name, GValue* value);
 void g_object_get_property (GObject* object,
-const char* name, GValue* value);
+    const char* name, GValue* value);
 
 typedef void (*GCallback)(void);
 typedef void (*GClosureNotify)(void* data, struct _GClosure *);
@@ -521,6 +469,67 @@ long g_signal_connect_data (GObject* object,
     void* data,
     GClosureNotify destroy_data,
     int connect_flags);
+
+const char* g_param_spec_get_blurb (GParamSpec* psp);
+EOS;
+
+        # the whole libvips API, mostly adapted from pyvips
+        $vips_decls = $typedefs . <<<EOS
+typedef struct _VipsImage VipsImage;
+typedef struct _VipsProgress VipsProgress;
+
+// Defined in GObject, just typedef to void*
+typedef void* GObject;
+typedef void GParamSpec;
+typedef void GValue;
+
+int vips_init (const char *argv0);
+int vips_shutdown (void);
+
+const char *vips_error_buffer (void);
+char *vips_error_buffer_copy (void);
+void vips_error_clear (void);
+void vips_error_freeze (void);
+void vips_error_thaw (void);
+
+int vips_version(int flag);
+
+void vips_leak_set (int leak);
+
+GType vips_type_find (const char* basename, const char* nickname);
+const char* vips_nickname_find (GType type);
+
+typedef void* (*VipsTypeMap2Fn) (GType type, void* a, void* b);
+void* vips_type_map (GType base, VipsTypeMap2Fn fn, void* a, void* b);
+
+int vips_enum_from_nick (const char* domain,
+    GType gtype, const char* str);
+const char *vips_enum_nick (GType gtype, int value);
+
+void vips_value_set_ref_string (GValue* value, const char* str);
+void vips_value_set_array_double (GValue* value,
+const double* array, int n );
+void vips_value_set_array_int (GValue* value,
+const int* array, int n );
+void vips_value_set_array_image (GValue *value, int n);
+typedef void (*FreeFn)(void* a);
+void vips_value_set_blob (GValue* value,
+    FreeFn free_fn, void* data, size_t length);
+
+const char* vips_value_get_ref_string (const GValue* value,
+    size_t* length);
+double* vips_value_get_array_double (const GValue* value, int* n);
+int* vips_value_get_array_int (const GValue* value, int* n);
+VipsImage** vips_value_get_array_image (const GValue* value, int* n);
+void* vips_value_get_blob (const GValue* value, size_t* length);
+
+// need to make some of these by hand
+GType vips_interpretation_get_type (void);
+GType vips_operation_flags_get_type (void);
+GType vips_band_format_get_type (void);
+GType vips_token_get_type (void);
+GType vips_saveable_get_type (void);
+GType vips_image_type_get_type (void);
 
 void vips_image_set_progress (VipsImage* image, bool progress);
 void vips_image_set_kill (VipsImage* image, bool kill);
@@ -594,8 +603,6 @@ int vips_object_set_from_string (VipsObject* object,
     const char* options);
 
 const char* vips_object_get_description (VipsObject* object);
-
-const char* g_param_spec_get_blurb (GParamSpec* psp);
 
 typedef struct _VipsImage {
     VipsObject parent_instance;
@@ -686,7 +693,6 @@ size_t vips_tracked_get_mem_highwater();
 size_t vips_tracked_get_mem();
 int vips_tracked_get_allocs();
 int vips_tracked_get_files();
-void vips_object_print_all();
 
 char** vips_image_get_fields (VipsImage* image);
 int vips_image_hasalpha (VipsImage* image);
@@ -699,7 +705,7 @@ int vips_object_get_args (VipsObject* object,
 EOS;
 
         if (self::atLeast(8, 8)) {
-            $header = $header . <<<EOS
+            $vips_decls = $vips_decls . <<<EOS
 char** vips_foreign_get_suffixes (void);
 
 void* vips_region_fetch (VipsRegion*, int, int, int, int,
@@ -712,7 +718,7 @@ EOS;
         }
 
         if (self::atLeast(8, 8)) {
-            $header = $header . <<<EOS
+            $vips_decls = $vips_decls . <<<EOS
 typedef struct _VipsConnection {
     VipsObject parent_object;
 
@@ -771,47 +777,50 @@ EOS;
         }
 
         Utils::debugLog("init", ["binding ..."]);
-        self::$ffi = \FFI::cdef($header, $library);
+        self::$glib = \FFI::cdef($glib_decls, $glib_libname);
+        self::$gobject = \FFI::cdef($gobject_decls, $gobject_libname);
+        self::$vips = \FFI::cdef($vips_decls, $vips_libname);
 
         # force the creation of some types we need
-        self::$ffi->vips_blend_mode_get_type();
-        self::$ffi->vips_interpretation_get_type();
-        self::$ffi->vips_operation_flags_get_type();
-        self::$ffi->vips_band_format_get_type();
-        self::$ffi->vips_token_get_type();
-        self::$ffi->vips_saveable_get_type();
-        self::$ffi->vips_image_type_get_type();
+        self::$vips->vips_blend_mode_get_type();
+        self::$vips->vips_interpretation_get_type();
+        self::$vips->vips_operation_flags_get_type();
+        self::$vips->vips_band_format_get_type();
+        self::$vips->vips_token_get_type();
+        self::$vips->vips_saveable_get_type();
+        self::$vips->vips_image_type_get_type();
 
         // look these up in advance
         self::$ctypes = [
-            "GObject" =>  self::$ffi->type("GObject*"),
-            "VipsObject" =>  self::$ffi->type("VipsObject*"),
-            "VipsOperation" =>  self::$ffi->type("VipsOperation*"),
-            "VipsImage" =>  self::$ffi->type("VipsImage*"),
-            "VipsInterpolate" =>  self::$ffi->type("VipsInterpolate*"),
+            "GObject" => self::$gobject->type("GObject*"),
+            "GParamSpec" => self::$gobject->type("GParamSpec*"),
+            "VipsObject" => self::$vips->type("VipsObject*"),
+            "VipsOperation" => self::$vips->type("VipsOperation*"),
+            "VipsImage" => self::$vips->type("VipsImage*"),
+            "VipsInterpolate" => self::$vips->type("VipsInterpolate*"),
         ];
 
         self::$gtypes = [
-            "gboolean" => self::$ffi->g_type_from_name("gboolean"),
-            "gint" => self::$ffi->g_type_from_name("gint"),
-            "gint64" => self::$ffi->g_type_from_name("gint64"),
-            "guint64" => self::$ffi->g_type_from_name("guint64"),
-            "gdouble" => self::$ffi->g_type_from_name("gdouble"),
-            "gchararray" => self::$ffi->g_type_from_name("gchararray"),
-            "VipsRefString" => self::$ffi->g_type_from_name("VipsRefString"),
+            "gboolean" => self::$gobject->g_type_from_name("gboolean"),
+            "gint" => self::$gobject->g_type_from_name("gint"),
+            "gint64" => self::$gobject->g_type_from_name("gint64"),
+            "guint64" => self::$gobject->g_type_from_name("guint64"),
+            "gdouble" => self::$gobject->g_type_from_name("gdouble"),
+            "gchararray" => self::$gobject->g_type_from_name("gchararray"),
+            "VipsRefString" => self::$gobject->g_type_from_name("VipsRefString"),
 
-            "GEnum" => self::$ffi->g_type_from_name("GEnum"),
-            "GFlags" => self::$ffi->g_type_from_name("GFlags"),
-            "VipsBandFormat" => self::$ffi->g_type_from_name("VipsBandFormat"),
-            "VipsBlendMode" => self::$ffi->g_type_from_name("VipsBlendMode"),
-            "VipsArrayInt" => self::$ffi->g_type_from_name("VipsArrayInt"),
+            "GEnum" => self::$gobject->g_type_from_name("GEnum"),
+            "GFlags" => self::$gobject->g_type_from_name("GFlags"),
+            "VipsBandFormat" => self::$gobject->g_type_from_name("VipsBandFormat"),
+            "VipsBlendMode" => self::$gobject->g_type_from_name("VipsBlendMode"),
+            "VipsArrayInt" => self::$gobject->g_type_from_name("VipsArrayInt"),
             "VipsArrayDouble" =>
-                self::$ffi->g_type_from_name("VipsArrayDouble"),
-            "VipsArrayImage" => self::$ffi->g_type_from_name("VipsArrayImage"),
-            "VipsBlob" => self::$ffi->g_type_from_name("VipsBlob"),
+                self::$gobject->g_type_from_name("VipsArrayDouble"),
+            "VipsArrayImage" => self::$gobject->g_type_from_name("VipsArrayImage"),
+            "VipsBlob" => self::$gobject->g_type_from_name("VipsBlob"),
 
-            "GObject" => self::$ffi->g_type_from_name("GObject"),
-            "VipsImage" => self::$ffi->g_type_from_name("VipsImage"),
+            "GObject" => self::$gobject->g_type_from_name("GObject"),
+            "VipsImage" => self::$gobject->g_type_from_name("VipsImage"),
         ];
 
         // map vips format names to c type names
@@ -829,6 +838,7 @@ EOS;
         ];
 
         Utils::debugLog("init", ["done"]);
+        self::$ffi_inited = true;
     }
 }
 

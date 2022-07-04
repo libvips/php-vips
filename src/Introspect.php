@@ -57,12 +57,12 @@ class Introspect
     public string $name;
 
     /**
-     * The operation description (eg. "add two images").
+     * The operation description (e.g. "add two images").
      */
     public string $description;
 
     /**
-     * The operation flags (eg. SEQUENTIAL | DEPRECATED).
+     * The operation flags (e.g. SEQUENTIAL | DEPRECATED).
      */
     public int $flags;
 
@@ -90,26 +90,28 @@ class Introspect
      */
     public array $method_args;
 
-    public function __construct($name)
+    /**
+     * @throws Exception
+     */
+    public function __construct($operation_name)
     {
-        $this->name = $name;
+        $this->name = $operation_name;
 
-        $operation = VipsOperation::newFromName($name);
+        $operation = VipsOperation::newFromName($operation_name);
 
         $this->description = $operation->getDescription();
-        $flags = Config::ffi()->vips_operation_get_flags($operation->pointer);
 
-        $p_names = Config::ffi()->new("char**[1]");
-        $p_flags = Config::ffi()->new("int*[1]");
-        $p_n_args = Config::ffi()->new("int[1]");
-        $result = Config::ffi()->vips_object_get_args(
+        $p_names = Config::vips()->new("char**[1]");
+        $p_flags = Config::vips()->new("int*[1]");
+        $p_n_args = Config::vips()->new("int[1]");
+        $result = Config::vips()->vips_object_get_args(
             \FFI::cast(Config::ctypes("VipsObject"), $operation->pointer),
             $p_names,
             $p_flags,
             $p_n_args
         );
         if ($result != 0) {
-            error();
+            throw new Exception();
         }
         $p_names = $p_names[0];
         $p_flags = $p_flags[0];
@@ -146,9 +148,6 @@ class Introspect
 
         foreach ($this->arguments as $name => $details) {
             $flags = $details["flags"];
-            $blurb = $details["blurb"];
-            $type = $details["type"];
-            $typeName = Config::ffi()->g_type_name($type);
 
             if (($flags & ArgumentFlags::INPUT) &&
                 ($flags & ArgumentFlags::REQUIRED) &&
@@ -198,27 +197,25 @@ class Introspect
             array_splice($this->method_args, $index);
         }
 
-        Utils::debugLog($name, ['introspect' => strval($this)]);
+        Utils::debugLog($operation_name, ['introspect' => strval($this)]);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        $result = "";
-
-        $result .= "$this->name:\n";
+        $result = "$this->name:\n";
 
         foreach ($this->arguments as $name => $details) {
             $flags = $details["flags"];
             $blurb = $details["blurb"];
             $type = $details["type"];
-            $typeName = Config::ffi()->g_type_name($type);
+            $typeName = Config::gobject()->g_type_name($type);
 
             $result .= "  $name:\n";
 
             $result .= "    flags: $flags\n";
-            foreach (ArgumentFlags::NAMES as $name => $flag) {
+            foreach (ArgumentFlags::NAMES as $flag_name => $flag) {
                 if ($flags & $flag) {
-                    $result .= "      $name\n";
+                    $result .= "      $flag_name\n";
                 }
             }
 

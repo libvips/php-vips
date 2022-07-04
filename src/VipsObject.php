@@ -66,37 +66,35 @@ abstract class VipsObject extends GObject
      */
     private \FFI\CData $gObject;
 
-    public function __construct($pointer)
+    public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = Config::ffi()->
-            cast(Config::ctypes("VipsObject"), $pointer);
-        $this->gObject = Config::ffi()->
-            cast(Config::ctypes("GObject"), $pointer);
+        $this->pointer = \FFI::cast(Config::ctypes("VipsObject"), $pointer);
+        $this->gObject = \FFI::cast(Config::ctypes("GObject"), $pointer);
 
         parent::__construct($pointer);
     }
 
     // print a table of all active vipsobjects ... handy for debugging
-    public static function printAll()
+    public static function printAll(): void
     {
-        Config::ffi()->vips_object_print_all();
+        Config::vips()->vips_object_print_all();
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
-        return Config::ffi()->vips_object_get_description($this->pointer);
+        return Config::vips()->vips_object_get_description($this->pointer);
     }
 
     // get the pspec for a property
     // NULL for no such name
     // very slow! avoid if possible
     // FIXME add a cache for this thing
-    public function getPspec(string $name)
+    public function getPspec(string $name): ?\FFI\CData
     {
-        $pspec = Config::ffi()->new("GParamSpec*[1]");
-        $argument_class = Config::ffi()->new("VipsArgumentClass*[1]");
-        $argument_instance = Config::ffi()->new("VipsArgumentInstance*[1]");
-        $result = Config::ffi()->vips_object_get_argument(
+        $pspec = Config::gobject()->new("GParamSpec*[1]");
+        $argument_class = Config::vips()->new("VipsArgumentClass*[1]");
+        $argument_instance = Config::vips()->new("VipsArgumentInstance*[1]");
+        $result = Config::vips()->vips_object_get_argument(
             $this->pointer,
             $name,
             $pspec,
@@ -113,12 +111,12 @@ abstract class VipsObject extends GObject
 
     // get the type of a property from a VipsObject
     // 0 if no such property
-    public function getType(string $name)
+    public function getType(string $name): int
     {
         $pspec = $this->getPspec($name);
         if (\FFI::isNull($pspec)) {
             # need to clear any error, this is horrible
-            Config::ffi()->vips_error_clear();
+            Config::vips()->vips_error_clear();
             return 0;
         } else {
             return $pspec->value_type;
@@ -128,21 +126,24 @@ abstract class VipsObject extends GObject
     public function getBlurb(string $name): string
     {
         $pspec = $this->getPspec($name);
-        return Config::ffi()->g_param_spec_get_blurb($pspec);
+        return Config::gobject()->g_param_spec_get_blurb($pspec);
     }
 
     public function getArgumentDescription(string $name): string
     {
         $pspec = $this->getPspec($name);
-        return Config::ffi()->g_param_spec_get_description($pspec);
+        return Config::gobject()->g_param_spec_get_description($pspec);
     }
 
+    /**
+     * @throws Exception
+     */
     public function get(string $name)
     {
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
 
-        Config::ffi()->
+        Config::gobject()->
             g_object_get_property($this->gObject, $name, $gvalue->pointer);
         $value = $gvalue->get();
 
@@ -151,7 +152,10 @@ abstract class VipsObject extends GObject
         return $value;
     }
 
-    public function set(string $name, $value)
+    /**
+     * @throws Exception
+     */
+    public function set(string $name, $value): void
     {
         Utils::debugLog("set", [$name => $value]);
 
@@ -159,21 +163,21 @@ abstract class VipsObject extends GObject
         $gvalue->setType($this->getType($name));
         $gvalue->set($value);
 
-        Config::ffi()->
+        Config::gobject()->
             g_object_set_property($this->gObject, $name, $gvalue->pointer);
     }
 
-    public function setString(string $string_options)
+    public function setString(string $string_options): bool
     {
-        $result = Config::ffi()->
+        $result = Config::vips()->
             vips_object_set_from_string($this->pointer, $string_options);
 
         return $result == 0;
     }
 
-    public function unrefOutputs()
+    public function unrefOutputs(): void
     {
-        Config::ffi()->vips_object_unref_outputs($this->pointer);
+        Config::vips()->vips_object_unref_outputs($this->pointer);
     }
 }
 

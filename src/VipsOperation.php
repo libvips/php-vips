@@ -64,25 +64,28 @@ class VipsOperation extends VipsObject
      */
     public Introspect $introspect;
 
-    public function __construct($pointer)
+    public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = Config::ffi()->
+        $this->pointer = Config::vips()->
             cast(Config::ctypes("VipsOperation"), $pointer);
 
         parent::__construct($pointer);
     }
 
-    public static function newFromName($name)
+    /**
+     * @throws Exception
+     */
+    public static function newFromName($name): VipsOperation
     {
-        $pointer = Config::ffi()->vips_operation_new($name);
+        $pointer = Config::vips()->vips_operation_new($name);
         if ($pointer == null) {
-            Config::error();
+            throw new Exception();
         }
 
         return new VipsOperation($pointer);
     }
 
-    public function setMatch($name, $match_image, $value)
+    public function setMatch($name, $match_image, $value): void
     {
         $flags = $this->introspect->arguments[$name]["flags"];
         $gtype = $this->introspect->arguments[$name]["type"];
@@ -141,27 +144,6 @@ class VipsOperation extends VipsObject
     }
 
     /**
-     * Unwrap an array of stuff ready to pass down to the vips_ layer. We
-     * swap instances of Image for the ffi pointer.
-     *
-     * @param array $result Unwrap this.
-     *
-     * @return array $result unwrapped, ready for vips.
-     *
-     * @internal
-     */
-    private static function unwrap(array $result): array
-    {
-        array_walk_recursive($result, function (&$value) {
-            if ($value instanceof Image) {
-                $value = $value->image;
-            }
-        });
-
-        return $result;
-    }
-
-    /**
      * Is $value a VipsImage.
      *
      * @param mixed $value The thing to test.
@@ -209,28 +191,6 @@ class VipsOperation extends VipsObject
         }
 
         return $result;
-    }
-
-    /**
-     * Check the result of a vips_ call for an error, and throw an exception
-     * if we see one.
-     *
-     * This won't work for things like __get where a non-array return can be
-     * a valid return.
-     *
-     * @param mixed $result Test this.
-     *
-     * @throws Exception
-     *
-     * @return void
-     *
-     * @internal
-     */
-    private static function errorIsArray($result): void
-    {
-        if (!is_array($result)) {
-            Config::error();
-        }
     }
 
     /**
@@ -286,22 +246,20 @@ class VipsOperation extends VipsObject
          */
         $n_required = count($operation->introspect->required_input);
         $n_supplied = count($arguments);
-        $used_instance = false;
         $n_used = 0;
         foreach ($operation->introspect->required_input as $name) {
             if ($name == $operation->introspect->member_this) {
                 if (!$instance) {
                     $operation->unrefOutputs();
-                    Config::error("instance argument not supplied");
+                    throw new Exception("instance argument not supplied");
                 }
                 $operation->setMatch($name, $match_image, $instance);
-                $used_instance = true;
             } elseif ($n_used < $n_supplied) {
                 $operation->setMatch($name, $match_image, $arguments[$n_used]);
                 $n_used += 1;
             } else {
                 $operation->unrefOutputs();
-                Config::error("$n_required arguments required, " .
+                throw new Exception("$n_required arguments required, " .
                     "but $n_supplied supplied");
             }
         }
@@ -316,7 +274,7 @@ class VipsOperation extends VipsObject
 
         if ($n_supplied != $n_used) {
             $operation->unrefOutputs();
-            Config::error("$n_required arguments required, " .
+            throw new Exception("$n_required arguments required, " .
                 "but $n_supplied supplied");
         }
 
@@ -335,7 +293,7 @@ class VipsOperation extends VipsObject
             if (!in_array($name, $operation->introspect->optional_input) &&
                 !in_array($name, $operation->introspect->optional_output)) {
                 $operation->unrefOutputs();
-                Config::error("optional argument '$name' does not exist");
+                throw new Exception("optional argument '$name' does not exist");
             }
 
             $operation->setMatch($name, $match_image, $value);
@@ -343,11 +301,11 @@ class VipsOperation extends VipsObject
 
         /* Build the operation
          */
-        $pointer = Config::ffi()->
+        $pointer = Config::vips()->
             vips_cache_operation_build($operation->pointer);
         if ($pointer == null) {
             $operation->unrefOutputs();
-            Config::error();
+            throw new Exception();
         }
         $operation = new VipsOperation($pointer);
         $operation->introspect = self::introspect($operation_name);
@@ -377,7 +335,7 @@ class VipsOperation extends VipsObject
 
         $result = self::wrapResult($result);
 
-        Utils::debugLog($name, ['result' => var_export($result, true)]);
+        Utils::debugLog($operation_name, ['result' => var_export($result, true)]);
 
         return $result;
     }

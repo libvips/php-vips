@@ -69,16 +69,16 @@ class Utils
     /**
      * Log an error message.
      *
-     * @param string     $message   The error message.
-     * @param \Exception $exception The exception.
+     * @param string          $message   The error message.
+     * @param \Exception|null $exception The exception, if any.
      *
      * @return void
      */
-    public static function errorLog(string $message, \Exception $exception): void
+    public static function errorLog(string $message, ?\Exception $exception = null): void
     {
         $logger = Config::getLogger();
         if ($logger) {
-            $logger->error($message, ['exception' => $exception]);
+            $logger->error($message, $exception == null ? [] : ['exception' => $exception]);
         }
     }
 
@@ -92,7 +92,25 @@ class Utils
      */
     public static function typeFromName(string $name): int
     {
-        return Config::ffi()->g_type_from_name($name);
+        return Config::gobject()->g_type_from_name($name);
+    }
+
+    public static function filenameGetFilename(string $name): string
+    {
+        $pointer = Config::vips()->vips_filename_get_filename($name);
+        $filename = \FFI::string($pointer);
+        Config::glib()->g_free($pointer);
+
+        return $filename;
+    }
+
+    public static function filenameGetOptions(string $name): string
+    {
+        $pointer = Config::vips()->vips_filename_get_options($name);
+        $options = \FFI::string($pointer);
+        Config::glib()->g_free($pointer);
+
+        return $options;
     }
 }
 
