@@ -37,6 +37,12 @@ class ShortcutTest extends TestCase
         $this->pixel = $this->image->getpoint(0, 0);
     }
 
+    protected function tearDown(): void
+    {
+        unset($this->image);
+        unset($this->pixel);
+    }
+
     public function testVipsPow()
     {
         $real = self::mapNumeric($this->pixel, function ($value) {
