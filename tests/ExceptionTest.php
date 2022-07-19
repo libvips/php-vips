@@ -12,16 +12,15 @@ class ExceptionTest extends TestCase
      */
     private $image;
 
-    /**
-     * The original value of pixel (0, 0).
-     */
-    private $pixel;
-
     protected function setUp(): void
     {
         $filename = __DIR__ . '/images/img_0076.jpg';
         $this->image = Vips\Image::newFromFile($filename);
-        $this->pixel = $this->image->getpoint(0, 0);
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->image);
     }
 
     public function testVipsNewFromFileException()

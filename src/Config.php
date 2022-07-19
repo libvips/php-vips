@@ -781,6 +781,9 @@ EOS;
         self::$gobject = \FFI::cdef($gobject_decls, $gobject_libname);
         self::$vips = \FFI::cdef($vips_decls, $vips_libname);
 
+        # Useful for debugging
+        # self::$vips->vips_leak_set(1);
+
         # force the creation of some types we need
         self::$vips->vips_blend_mode_get_type();
         self::$vips->vips_interpretation_get_type();
