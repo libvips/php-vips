@@ -346,6 +346,20 @@ typedef uint64_t guint64;
 typedef int64_t gint64;
 
 typedef $gtype GType;
+
+typedef struct _GData GData;
+
+typedef struct _GTypeClass GTypeClass;
+
+typedef struct _GTypeInstance {
+    GTypeClass *g_class;
+} GTypeInstance;
+
+typedef struct _GObject {
+    GTypeInstance g_type_instance;
+    unsigned int ref_count;
+    GData *qdata;
+} GObject;
 EOS;
 
         // GLib declarations
@@ -360,14 +374,6 @@ typedef struct _GValue {
     GType g_type;
     guint64 data[2];
 } GValue;
-
-typedef struct _GData GData;
-
-typedef struct _GTypeClass GTypeClass;
-
-typedef struct _GTypeInstance {
-    GTypeClass *g_class;
-} GTypeInstance;
 
 typedef struct _GParamSpec {
     GTypeInstance g_type_instance;
@@ -385,12 +391,6 @@ typedef struct _GParamSpec {
     unsigned int ref_count;
     unsigned int param_id;
 } GParamSpec;
-
-typedef struct _GObject {
-    GTypeInstance g_type_instance;
-    unsigned int ref_count;
-    GData *qdata;
-} GObject;
 
 const char* g_type_name (GType gtype);
 GType g_type_from_name (const char* name);
@@ -478,8 +478,7 @@ EOS;
 typedef struct _VipsImage VipsImage;
 typedef struct _VipsProgress VipsProgress;
 
-// Defined in GObject, just typedef to void*
-typedef void* GObject;
+// Defined in GObject, just typedef to void
 typedef void GParamSpec;
 typedef void GValue;
 
@@ -780,6 +779,9 @@ EOS;
         self::$glib = \FFI::cdef($glib_decls, $glib_libname);
         self::$gobject = \FFI::cdef($gobject_decls, $gobject_libname);
         self::$vips = \FFI::cdef($vips_decls, $vips_libname);
+
+        # Useful for debugging
+        # self::$vips->vips_leak_set(1);
 
         # force the creation of some types we need
         self::$vips->vips_blend_mode_get_type();

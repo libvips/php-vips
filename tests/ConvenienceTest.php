@@ -24,6 +24,12 @@ class ConvenienceTest extends TestCase
         $this->pixel = $this->image->getpoint(0, 0);
     }
 
+    protected function tearDown(): void
+    {
+        unset($this->image);
+        unset($this->pixel);
+    }
+
     public function testVipsBandjoin()
     {
         $image = Vips\Image::newFromArray([[1, 2, 3], [4, 5, 6]]);
