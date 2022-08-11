@@ -290,6 +290,7 @@ class VipsOperation extends VipsObject
         /* Set optional.
          */
         foreach ($options as $name => $value) {
+            $name = str_replace("-", "_", $name);
             if (!in_array($name, $operation->introspect->optional_input) &&
                 !in_array($name, $operation->introspect->optional_output)) {
                 $operation->unrefOutputs();
@@ -324,6 +325,7 @@ class VipsOperation extends VipsObject
          */
         $option_keys = array_keys($options);
         foreach ($operation->introspect->optional_output as $name) {
+            $name = str_replace("-", "_", $name);
             if (in_array($name, $option_keys)) {
                 $result[$name] = $operation->get($name);
             }
@@ -335,7 +337,9 @@ class VipsOperation extends VipsObject
 
         $result = self::wrapResult($result);
 
-        Utils::debugLog($operation_name, ['result' => var_export($result, true)]);
+        Utils::debugLog($operation_name, [
+            'result' => var_export($result, true)
+        ]);
 
         return $result;
     }
