@@ -10,10 +10,24 @@ class CallTest extends TestCase
     public function testVipsCall()
     {
         $image = Vips\Image::newFromArray([1, 2, 3]);
-        $image = $image->embed(10, 20, 3000, 2000, ['extend' => Vips\Extend::COPY]);
+        $image = $image->embed(10, 20, 3000, 2000, [
+            'extend' => Vips\Extend::COPY
+        ]);
 
         $this->assertEquals($image->width, 3000);
         $this->assertEquals($image->height, 2000);
+        $this->assertEquals($image->bands, 1);
+    }
+
+    public function testVipsCallHyphen()
+    {
+        # should work with "-" as well as "_"
+        $image = Vips\Image::worley(64, 64, [
+            "cell-size" => 8
+        ]);
+
+        $this->assertEquals($image->width, 64);
+        $this->assertEquals($image->height, 64);
         $this->assertEquals($image->bands, 1);
     }
 

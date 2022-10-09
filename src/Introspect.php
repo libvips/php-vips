@@ -121,8 +121,8 @@ class Introspect
         $argumentFlags = [];
         for ($i = 0; $i < $n_args; $i++) {
             if (($p_flags[$i] & ArgumentFlags::CONSTRUCT) != 0) {
-                # libvips uses '-' to separate parts of arg names, but we
-                # need '_' for php
+                # make sure we're using "_" to separate arg components, though
+                # I think libvips is "_" everywhere now
                 $name = \FFI::string($p_names[$i]);
                 $name = str_replace("-", "_", $name);
                 $argumentFlags[$name] = $p_flags[$i];

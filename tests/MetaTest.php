@@ -26,6 +26,12 @@ class MetaTest extends TestCase
         $this->png_image = Vips\Image::newFromFile($png_filename);
     }
 
+    protected function tearDown(): void
+    {
+        unset($this->image);
+        unset($this->png_image);
+    }
+
     public function testVipsSetGet()
     {
         $this->image->poop = 'banana';

@@ -91,6 +91,7 @@ abstract class VipsObject extends GObject
     // FIXME add a cache for this thing
     public function getPspec(string $name): ?\FFI\CData
     {
+        $name = str_replace("-", "_", $name);
         $pspec = FFI::gobject()->new("GParamSpec*[1]");
         $argument_class = FFI::vips()->new("VipsArgumentClass*[1]");
         $argument_instance = FFI::vips()->new("VipsArgumentInstance*[1]");
@@ -140,6 +141,7 @@ abstract class VipsObject extends GObject
      */
     public function get(string $name)
     {
+        $name = str_replace("-", "_", $name);
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
 
@@ -159,6 +161,7 @@ abstract class VipsObject extends GObject
     {
         Utils::debugLog("set", [$name => $value]);
 
+        $name = str_replace("-", "_", $name);
         $gvalue = new GValue();
         $gvalue->setType($this->getType($name));
         $gvalue->set($value);

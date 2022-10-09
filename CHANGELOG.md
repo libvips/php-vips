@@ -2,6 +2,10 @@
 
 All notable changes to `:vips` will be documented in this file.
 
+## master
+
+- allow "-" as a name component separator [andrews05]
+
 ## 2.0.3 - 2022-07-04
 
 - Fix on Windows [kleisauke]
