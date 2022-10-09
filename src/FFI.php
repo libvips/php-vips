@@ -212,14 +212,54 @@ class FFI
 
         Utils::debugLog("init", ["library" => $vips_libname]);
 
-        /* FIXME ... maybe display a helpful message on failure? This will
-         * probably be the main point of failure.
-         */
-        $vips = \FFI::cdef(<<<EOS
-            int vips_init (const char *argv0);
-            const char *vips_error_buffer (void);
-            int vips_version(int flag);
-            EOS, $vips_libname);
+        $is_64bits = PHP_INT_SIZE === 8;
+
+        $libraryPaths = [
+            "" // system library
+        ];
+
+        $vipshome = getenv("VIPSHOME");
+        if ($vipshome) {
+            // lib<qual>/ predicates lib/
+            $libraryPaths[] = $vipshome . ($is_64bits ? "/lib64/" : "/lib32/");
+            // lib/ is always searched
+            $libraryPaths[] = $vipshome . "/lib/";
+        }
+
+        if (PHP_OS_FAMILY == "OSX" ||
+            PHP_OS_FAMILY == "Darwin") {
+            $libraryPaths[] = "/opt/homebrew/lib/"; // Homebrew on Apple Silicon
+        }
+
+        // attempt to open libraries using the system library search method
+        // (no prefix) and a couple of fallback paths, if any
+        $vips = null;
+        foreach ($libraryPaths as $path) {
+            Utils::debugLog("init", ["path" => $path]);
+
+            try {
+                $vips = \FFI::cdef(<<<EOS
+                    int vips_init (const char *argv0);
+                    const char *vips_error_buffer (void);
+                    int vips_version(int flag);
+                EOS, $path . $vips_libname);
+                break;
+            } catch (\FFI\Exception $e) {
+                Utils::debugLog("init", ["msg" => "library load failed", "exception" => $e]);
+            }
+        }
+
+        if ($vips == null) {
+            array_shift($libraryPaths);
+
+            $msg = "Unable to find library '$vips_libname'";
+            if (!empty($libraryPaths)) {
+                $msg .= " in any of ['" . implode("', '", $libraryPaths) . "']";
+            }
+            $msg .= ". Make sure that you've installed libvips and that '$vips_libname'";
+            $msg .= " is on your system's library search path.";
+            throw new Exception($msg);
+        }
 
         $result = $vips->vips_init("");
         if ($result != 0) {
@@ -243,8 +283,6 @@ class FFI
             throw new Exception("your libvips is too old -- " .
                 "8.7 or later required");
         }
-
-        $is_64bits = PHP_INT_SIZE === 8;
 
         // GType is the size of a pointer
         $gtype = $is_64bits ? "guint64" : "guint32";
