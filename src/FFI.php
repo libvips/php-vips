@@ -226,8 +226,8 @@ class FFI
             $libraryPaths[] = $vipshome . "/lib/";
         }
 
-        if (PHP_OS_FAMILY == "OSX" ||
-            PHP_OS_FAMILY == "Darwin") {
+        if (PHP_OS_FAMILY === "OSX" ||
+            PHP_OS_FAMILY === "Darwin") {
             $libraryPaths[] = "/opt/homebrew/lib/"; // Homebrew on Apple Silicon
         }
 
@@ -249,7 +249,7 @@ class FFI
             }
         }
 
-        if ($vips == null) {
+        if ($vips === null) {
             array_shift($libraryPaths);
 
             $msg = "Unable to find library '$vips_libname'";
