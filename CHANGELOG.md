@@ -2,9 +2,11 @@
 
 All notable changes to `:vips` will be documented in this file.
 
-## master
+## 2.1.0 - 2022-10-11
 
 - allow "-" as a name component separator [andrews05]
+- split FFI into a separate class [kleisauke]
+- improve finding of library binary [jcupitt]
 
 ## 2.0.3 - 2022-07-04
 

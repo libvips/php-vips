@@ -42,7 +42,7 @@ to your `composer.json`:
 
 ```
 "require": {
-    "jcupitt/vips" : "2.0.0"
+    "jcupitt/vips" : "2.1.0"
 }
 ```
 
@@ -112,7 +112,7 @@ either 255 or the original image.
 Note that libvips operators always make new images, they don't modify existing
 images, so after the line above, `$image` is unchanged.
 
-You use long, double, array and image as parameters. For example:
+You can use long, double, array and image as parameters. For example:
 
 ```php
 $image = $image->add(2);
@@ -136,7 +136,7 @@ to add two images. Or:
 $image = $image->add([[1, 2, 3], [4, 5, 6]]);
 ```
 
-To make a 2 x 3 image from the array, then add that image to the original.
+To make a 3 x 2 image from the array, then add that image to the original.
 
 Almost all methods can take an extra final argument: an array of options.
 For example:
@@ -145,7 +145,7 @@ For example:
 $image->writeToFile("fred.jpg", ["Q" => 90]);
 ```
 
-`php-vips` comes [with full API
+`php-vips` comes [with API
 docs](https://libvips.github.io/php-vips/classes/Jcupitt-Vips-Image.html).
 To regenerate these from your sources, type:
 
@@ -155,8 +155,9 @@ $ vendor/bin/phpdoc
 
 And look in `docs/`.
 
-There are around 300 operations in the library, see the vips docs for an
-introduction:
+Unfortunatly, due to php-doc limitations, these do not list every option
+to every operation. For a full API description you need to see the main
+libvips documentation:
 
 https://libvips.org/API/current
 
