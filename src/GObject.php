@@ -71,7 +71,7 @@ abstract class GObject
      */
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(Config::ctypes("GObject"), $pointer);
+        $this->pointer = \FFI::cast(FFI::ctypes("GObject"), $pointer);
     }
 
     public function __destruct()
@@ -86,12 +86,12 @@ abstract class GObject
 
     public function ref(): void
     {
-        Config::gobject()->g_object_ref($this->pointer);
+        FFI::gobject()->g_object_ref($this->pointer);
     }
 
     public function unref(): void
     {
-        Config::gobject()->g_object_unref($this->pointer);
+        FFI::gobject()->g_object_unref($this->pointer);
     }
 
     // TODO signal marshalling to go in
