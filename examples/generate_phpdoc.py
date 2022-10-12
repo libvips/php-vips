@@ -265,6 +265,8 @@ def generate_auto_doc(filename):
         f.write(' */\n')
         f.write('abstract class ImageAutodoc extends VipsObject\n')
         f.write('{\n')
+        f.write('    abstract public function __set(string $name, $value);\n')
+        f.write('    abstract public function __get(string $name);\n')
         f.write('}\n')
 
 
