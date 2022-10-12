@@ -699,4 +699,6 @@ namespace Jcupitt\Vips;
  */
 abstract class ImageAutodoc
 {
+    abstract public function __set(string $name, $value);
+    abstract public function __get(string $name);
 }
