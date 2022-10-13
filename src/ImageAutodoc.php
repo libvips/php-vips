@@ -703,4 +703,6 @@ namespace Jcupitt\Vips;
  */
 abstract class ImageAutodoc extends VipsObject
 {
+    abstract public function __set(string $name, $value);
+    abstract public function __get(string $name);
 }
