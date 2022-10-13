@@ -1,13 +1,11 @@
 name: Tests
 
-on:
-  push:
-  pull_request:
+on: [ push, pull_request ]
 
 jobs:
   tests:
-    name: ${{ matrix.php }} ${{ matrix.env.COMPOSER_FLAGS }}
-    runs-on: ubuntu-latest
+    name: ${{ matrix.php }}
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -17,8 +15,6 @@ jobs:
           - php: '8.1'
           - php: '8.2'
 
-    env:
-      COMPOSER_FLAGS: ${{ matrix.env.COMPOSER_FLAGS }}
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -28,15 +24,14 @@ jobs:
           coverage: none
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install vips
         run: sudo apt-get install -y libvips
 
       - name: Install composer dependencies
         run: |
-          composer update --prefer-dist --no-interaction --no-progress --no-ansi ${COMPOSER_FLAGS}
-
+          composer update --prefer-dist --no-interaction --no-progress --no-ansi 
 
       - name: PHPUnit
         run: composer test
