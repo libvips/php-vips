@@ -1,9 +1,9 @@
-name: Tests
+name: CI
 
 on: [ push, pull_request ]
 
 jobs:
-  tests:
+  CI:
     name: ${{ matrix.php }}
     runs-on: ubuntu-22.04
     strategy:
