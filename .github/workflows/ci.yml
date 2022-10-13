@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install vips
-        run: sudo apt-get install -y libvips
+        run: sudo apt install -y libvips --no-install-recommends
 
       - name: Install composer dependencies
         run: |
