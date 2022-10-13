@@ -832,7 +832,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @return Image A new Image.
      */
     public static function newFromMemory(
-        mixed  $data,
+        $data,
         int $width,
         int $height,
         int $bands,
