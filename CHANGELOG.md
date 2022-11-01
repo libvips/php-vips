@@ -2,6 +2,11 @@
 
 All notable changes to `:vips` will be documented in this file.
 
+## master
+
+- remove unused vips_error_buffer_copy() declaration to fix compatibility with
+  libvips before 8.9 [Waschnick]
+
 ## 2.1.0 - 2022-10-11
 
 - allow "-" as a name component separator [andrews05]

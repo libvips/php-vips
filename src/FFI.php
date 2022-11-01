@@ -436,7 +436,6 @@ int vips_init (const char *argv0);
 int vips_shutdown (void);
 
 const char *vips_error_buffer (void);
-char *vips_error_buffer_copy (void);
 void vips_error_clear (void);
 void vips_error_freeze (void);
 void vips_error_thaw (void);
