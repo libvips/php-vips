@@ -81,8 +81,9 @@ class VipsOperation extends VipsObject
         if ($pointer == null) {
             throw new Exception();
         }
+        $operation = new VipsOperation($pointer);
 
-        return new VipsOperation($pointer);
+        return $operation;
     }
 
     public function setMatch($name, $match_image, $value): void
@@ -223,6 +224,7 @@ class VipsOperation extends VipsObject
 
         $operation = self::newFromName($operation_name);
         $operation->introspect = self::introspect($operation_name);
+        $introspect = $operation->introspect;
 
         /* the first image argument is the thing we expand constants to
          * match ... look inside tables for images, since we may be passing
@@ -244,11 +246,11 @@ class VipsOperation extends VipsObject
          * args, using instance if required, and only check the nargs after
          * this pass.
          */
-        $n_required = count($operation->introspect->required_input);
+        $n_required = count($introspect->required_input);
         $n_supplied = count($arguments);
         $n_used = 0;
-        foreach ($operation->introspect->required_input as $name) {
-            if ($name == $operation->introspect->member_this) {
+        foreach ($introspect->required_input as $name) {
+            if ($name == $introspect->member_this) {
                 if (!$instance) {
                     $operation->unrefOutputs();
                     throw new Exception("instance argument not supplied");
@@ -291,8 +293,8 @@ class VipsOperation extends VipsObject
          */
         foreach ($options as $name => $value) {
             $name = str_replace("-", "_", $name);
-            if (!in_array($name, $operation->introspect->optional_input) &&
-                !in_array($name, $operation->introspect->optional_output)) {
+            if (!in_array($name, $introspect->optional_input) &&
+                !in_array($name, $introspect->optional_output)) {
                 $operation->unrefOutputs();
                 throw new Exception("optional argument '$name' does not exist");
             }
@@ -309,7 +311,7 @@ class VipsOperation extends VipsObject
             throw new Exception();
         }
         $operation = new VipsOperation($pointer);
-        $operation->introspect = self::introspect($operation_name);
+        $operation->introspect = $introspect;
 
         # TODO .. need to attach input refs to output, see _find_inside in
         # pyvips
@@ -317,14 +319,14 @@ class VipsOperation extends VipsObject
         /* Fetch required output args (and modified input args).
          */
         $result = [];
-        foreach ($operation->introspect->required_output as $name) {
+        foreach ($introspect->required_output as $name) {
             $result[$name] = $operation->get($name);
         }
 
         /* Any optional output args.
          */
         $option_keys = array_keys($options);
-        foreach ($operation->introspect->optional_output as $name) {
+        foreach ($introspect->optional_output as $name) {
             $name = str_replace("-", "_", $name);
             if (in_array($name, $option_keys)) {
                 $result[$name] = $operation->get($name);

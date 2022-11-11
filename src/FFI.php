@@ -541,8 +541,8 @@ typedef struct _VipsArgumentClass {
     unsigned int offset;
 } VipsArgumentClass;
 
-int vips_object_get_argument (VipsObject* object,
-    const char *name, GParamSpec** pspec,
+int vips_object_get_argument (VipsObject* object, const char *name, 
+    GParamSpec** pspec,
     VipsArgumentClass** argument_class,
     VipsArgumentInstance** argument_instance);
 

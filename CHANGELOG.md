@@ -2,6 +2,11 @@
 
 All notable changes to `:vips` will be documented in this file.
 
+## master
+
+- refactor callBase() for maintainability
+- work around a php-ffi memory leak in getPspec()
+
 ## 2.1.0 - 2022-10-11
 
 - allow "-" as a name component separator [andrews05]
