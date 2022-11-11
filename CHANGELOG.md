@@ -5,7 +5,7 @@ All notable changes to `:vips` will be documented in this file.
 ## master
 
 - refactor callBase() for maintainability
-- work around a php-ffi memory leak in getPspec()
+- work around a php-ffi memory leak in getPspec() [levmv]
 
 ## 2.1.0 - 2022-10-11
 
