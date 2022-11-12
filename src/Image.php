@@ -797,8 +797,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $width = count($array[0]);
 
         $n = $width * $height;
-        $ctype = \FFI::arrayType(\FFI::type("double"), [$n]);
-        $a = \FFI::new($ctype, true, true);
+        $a = \FFI::new("double[$n]", true, true);
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
                 $a[$x + $y * $width] = $array[$y][$x];
@@ -975,8 +974,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToMemory(): string
     {
-        $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
-        $p_size = \FFI::new($ctype);
+        $p_size = \FFI::new("size_t[1]", $ctype);
 
         $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
@@ -1017,8 +1015,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToArray(): array
     {
-        $ctype = \FFI::arrayType(\FFI::type("size_t"), [1]);
-        $p_size = \FFI::new($ctype);
+        $p_size = \FFI::new("size_t[1]");
 
         $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
@@ -1027,10 +1024,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
         }
 
         // wrap pointer up as a C array of the right type
-        $n = $this->width * $this->height * $this->bands;
         $type_name = FFI::ftypes($this->format);
-        $ctype = \FFI::arrayType(\FFI::type($type_name), [$n]);
-        $array = \FFI::cast($ctype, $pointer);
+        $n = $this->width * $this->height * $this->bands;
+        $array = \FFI::cast("$type_name[$n]", $pointer);
 
         // copy to PHP memory as a flat array
         $result = [];
