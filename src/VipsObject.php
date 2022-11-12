@@ -107,10 +107,10 @@ abstract class VipsObject extends GObject
             $pspec = null;
         } else {
             /* php-ffi seems to leak if we do the obvious $pspec_array[0] to
-             * get the return result ... instead, we must make a new pointer 
+             * get the return result ... instead, we must make a new pointer
              * object and copy the value ourselves
              *
-             * the returns values from vips_object_get_argument() are static, 
+             * the returns values from vips_object_get_argument() are static,
              * so this is safe
              */
             $pspec = FFI::gobject()->new("GParamSpec*");
