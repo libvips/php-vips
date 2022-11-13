@@ -147,8 +147,7 @@ class GValue
                     $value = [$value];
                 }
                 $n = count($value);
-                $ctype = \FFI::arrayType(\FFI::type("int"), [$n]);
-                $array = \FFI::new($ctype);
+                $array = \FFI::new("int[$n]");
                 for ($i = 0; $i < $n; $i++) {
                     $array[$i] = $value[$i];
                 }
@@ -161,8 +160,7 @@ class GValue
                     $value = [$value];
                 }
                 $n = count($value);
-                $ctype = \FFI::arrayType(\FFI::type("double"), [$n]);
-                $array = \FFI::new($ctype);
+                $array = \FFI::new("double[$n]");
                 for ($i = 0; $i < $n; $i++) {
                     $array[$i] = $value[$i];
                 }
@@ -189,8 +187,7 @@ class GValue
                 # we need to set the blob to a copy of the data that vips_lib
                 # can own and free
                 $n = strlen($value);
-                $ctype = \FFI::arrayType(\FFI::type("char"), [$n]);
-                $memory = \FFI::new($ctype, false, true);
+                $memory = \FFI::new("char[$n]", false, true);
                 for ($i = 0; $i < $n; $i++) {
                     $memory[$i] = $value[$i];
                 }
