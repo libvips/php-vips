@@ -1,6 +1,6 @@
 # PHP binding for libvips 
 
-[![Build Status](https://travis-ci.org/libvips/php-vips.svg?branch=master)](https://travis-ci.org/libvips/php-vips)
+[![CI](https://github.com/libvips/php-vips/workflows/CI/badge.svg)](https://github.com/libvips/php-vips/actions)
 
 `php-vips` is a binding for [libvips](https://github.com/libvips/libvips) 8.7
 and later that runs on PHP 7.4 and later.
