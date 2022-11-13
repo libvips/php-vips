@@ -7,6 +7,7 @@ All notable changes to `:vips` will be documented in this file.
 - refactor callBase() for maintainability
 - work around a php-ffi memory leak in getPspec() [levmv]
 - work around a php-ffi memory leak in arrayType()
+- better test for disabled ffi
 
 ## 2.1.0 - 2022-10-11
 
