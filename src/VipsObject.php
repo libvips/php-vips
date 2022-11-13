@@ -88,26 +88,39 @@ abstract class VipsObject extends GObject
     // get the pspec for a property
     // NULL for no such name
     // very slow! avoid if possible
-    // FIXME add a cache for this thing
+    // FIXME add a cache for this thing, see code in pyvips
     public function getPspec(string $name): ?\FFI\CData
     {
         $name = str_replace("-", "_", $name);
-        $pspec = FFI::gobject()->new("GParamSpec*[1]");
-        $argument_class = FFI::vips()->new("VipsArgumentClass*[1]");
-        $argument_instance = FFI::vips()->new("VipsArgumentInstance*[1]");
+        $pspec_array = FFI::gobject()->new("GParamSpec*[1]");
+        $argument_class_array = FFI::vips()->new("VipsArgumentClass*[1]");
+        $argument_instance_array = FFI::vips()->new("VipsArgumentInstance*[1]");
         $result = FFI::vips()->vips_object_get_argument(
             $this->pointer,
             $name,
-            $pspec,
-            $argument_class,
-            $argument_instance
+            $pspec_array,
+            $argument_class_array,
+            $argument_instance_array
         );
 
         if ($result != 0) {
-            return null;
+            $pspec = null;
         } else {
-            return $pspec[0];
+            /* php-ffi seems to leak if we do the obvious $pspec_array[0] to
+             * get the return result ... instead, we must make a new pointer
+             * object and copy the value ourselves
+             *
+             * the returns values from vips_object_get_argument() are static,
+             * so this is safe
+             */
+            $pspec = FFI::gobject()->new("GParamSpec*");
+            $to_pointer = \FFI::addr($pspec);
+            $from_pointer = \FFI::addr($pspec_array);
+            $size = \FFI::sizeof($from_pointer);
+            \FFI::memcpy($to_pointer, $from_pointer, $size);
         }
+
+        return $pspec;
     }
 
     // get the type of a property from a VipsObject
