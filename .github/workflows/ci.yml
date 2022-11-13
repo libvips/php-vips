@@ -1,0 +1,37 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  CI:
+    name: ${{ matrix.php }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '7.4'
+          - php: '8.0'
+          - php: '8.1'
+          - php: '8.2'
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install vips
+        run: sudo apt install -y libvips --no-install-recommends
+
+      - name: Install composer dependencies
+        run: |
+          composer update --prefer-dist --no-interaction --no-progress --no-ansi 
+
+      - name: PHPUnit
+        run: composer test
