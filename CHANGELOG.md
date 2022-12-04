@@ -5,6 +5,7 @@ All notable changes to `:vips` will be documented in this file.
 
 - allowed for psr/log 2.0 and 3.0 to be installed as well [boris-glumpler]
 - avoid “Deprecate dynamic properties” warning in PHP 8.2 [chregu]
+- remove "install-vips.sh" script, no longer useful
 
 ### 1.0.9 - 2021-11-20
 
