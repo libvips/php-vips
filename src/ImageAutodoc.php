@@ -203,6 +203,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method string dzsave_buffer(array $options = []) Save image to dz buffer.
  *     @throws Exception
+ * @method void dzsave_target(string $target, array $options = []) Save image to deepzoom target.
+ *     @throws Exception
  * @method Image embed(integer $x, integer $y, integer $width, integer $height, array $options = []) Embed an image in a larger image.
  *     @throws Exception
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
@@ -642,6 +644,8 @@ namespace Jcupitt\Vips;
  * @method void tiffsave(string $filename, array $options = []) Save image to tiff file.
  *     @throws Exception
  * @method string tiffsave_buffer(array $options = []) Save image to tiff buffer.
+ *     @throws Exception
+ * @method void tiffsave_target(string $target, array $options = []) Save image to tiff target.
  *     @throws Exception
  * @method Image tilecache(array $options = []) Cache an image as a set of tiles.
  *     @throws Exception
