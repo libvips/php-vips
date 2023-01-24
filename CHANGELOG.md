@@ -4,7 +4,7 @@ All notable changes to `:vips` will be documented in this file.
 
 ## master
 
-- fix startup on windows [West14]
+- improve FFI startup [West14]
 
 ## 2.1.1 - 2022-11-13
 

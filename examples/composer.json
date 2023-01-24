@@ -1,5 +1,5 @@
 {
     "require": {
-        "jcupitt/vips": "2.0.0"
+        "jcupitt/vips": "2.1.1"
     }
 }

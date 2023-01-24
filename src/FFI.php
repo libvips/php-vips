@@ -201,17 +201,12 @@ class FFI
             return;
         }
 
-        // try experimentally binding a bit of stdio ... if this fails, FFI
-        // has probably not been installed or enabled, and php will throw a
-        // useful error message
-        //
-        // this won't work on windows since there's no run time linker
-        //
-        // FIXME ... find a better way to test if FFI has been enabled 
-        if (PHP_OS_FAMILY !== "Windows") {
-            $stdio = \FFI::cdef(<<<EOS
-                int printf(const char *, ...);
-            EOS);
+        // the two usual install problems
+        if (!extension_loaded('ffi')) {
+            throw new Exception('FFI extension not loaded');
+        }
+        if (!ini_get('ffi.enable')) {
+            throw new Exception("ffi.enable not set to 'true'");
         }
 
         $vips_libname = self::libraryName("libvips", 42);
