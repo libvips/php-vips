@@ -2,6 +2,10 @@
 
 All notable changes to `:vips` will be documented in this file.
 
+## master
+
+- fix startup on windows [West14]
+
 ## 2.1.1 - 2022-11-13
 
 - remove unused vips_error_buffer_copy() declaration to fix compatibility with

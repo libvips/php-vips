@@ -204,9 +204,15 @@ class FFI
         // try experimentally binding a bit of stdio ... if this fails, FFI
         // has probably not been installed or enabled, and php will throw a
         // useful error message
-        $stdio = \FFI::cdef(<<<EOS
-            int printf(const char *, ...);
-        EOS);
+        //
+        // this won't work on windows since there's no run time linker
+        //
+        // FIXME ... find a better way to test if FFI has been enabled 
+        if (PHP_OS_FAMILY !== "Windows") {
+            $stdio = \FFI::cdef(<<<EOS
+                int printf(const char *, ...);
+            EOS);
+        }
 
         $vips_libname = self::libraryName("libvips", 42);
         if (PHP_OS_FAMILY === "Windows") {
