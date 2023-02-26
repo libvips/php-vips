@@ -10,7 +10,8 @@ class VipsTargetResource extends VipsTargetCustom
     private $resource;
 
     /**
-     * The resource passed in will become "owned" by this class. On destruction of this class, the resource will be closed.
+     * The resource passed in will become "owned" by this class.
+     * On destruction of this class, the resource will be closed.
      *
      * @param resource $resource
      */

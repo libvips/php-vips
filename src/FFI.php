@@ -751,6 +751,11 @@ EOS;
             "VipsOperation" => self::$vips->type("VipsOperation*"),
             "VipsImage" => self::$vips->type("VipsImage*"),
             "VipsInterpolate" => self::$vips->type("VipsInterpolate*"),
+            "VipsConnection" => self::$vips->type("VipsConnection*"),
+            "VipsSource" => self::$vips->type("VipsSource*"),
+            "VipsSourceCustom" => self::$vips->type("VipsSourceCustom*"),
+            "VipsTarget" => self::$vips->type("VipsTarget*"),
+            "VipsTargetCustom" => self::$vips->type("VipsTargetCustom*"),
         ];
 
         self::$gtypes = [
@@ -774,6 +779,8 @@ EOS;
 
             "GObject" => self::$gobject->g_type_from_name("GObject"),
             "VipsImage" => self::$gobject->g_type_from_name("VipsImage"),
+
+            "GCallback" => self::$gobject->g_type_from_name("GCallback"),
         ];
 
         // map vips format names to c type names

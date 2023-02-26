@@ -6,10 +6,18 @@ use Closure;
 
 class VipsSourceCustom extends VipsSource
 {
+    /**
+     * A pointer to the underlying VipsSourceCustom. This is the same as the
+     * GObject, just cast to VipsSourceCustom to help FFI.
+     *
+     * @internal
+     */
+    public \FFI\CData $pointer;
+
     public function __construct()
     {
-        $source = \FFI::cast(FFI::ctypes('VipsSource'), FFI::vips()->vips_source_custom_new());
-        parent::__construct($source);
+        $this->pointer = FFI::vips()->vips_source_custom_new();
+        parent::__construct($this->pointer);
     }
 
     /**

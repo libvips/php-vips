@@ -5,6 +5,20 @@ namespace Jcupitt\Vips;
 class VipsSource extends Connection
 {
     /**
+     * A pointer to the underlying VipsSource. This is the same as the
+     * GObject, just cast to VipsSource to help FFI.
+     *
+     * @internal
+     */
+    public \FFI\CData $pointer;
+
+    public function __construct(\FFI\CData $pointer)
+    {
+        $this->pointer = \FFI::cast(FFI::ctypes('VipsSource'), $pointer);
+        parent::__construct($pointer);
+    }
+
+    /**
      * Make a new source from a file descriptor (a small integer).
      * Make a new source that is attached to the descriptor. For example:
      *  source = pyvips.Source.new_from_descriptor(0)

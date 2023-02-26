@@ -902,6 +902,38 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Find the name of the load operation vips will use to load a VipsSource, for
+     * example 'VipsForeignLoadJpegSource'. You can use this to work out what
+     * options to pass to newFromSource().
+     *
+     * @param VipsSource $source The source to test
+     * @return string|null The name of the load operation, or null.
+     */
+    public static function findLoadSource(VipsSource $source): ?string
+    {
+        return FFI::vips()->vips_foreign_find_load_source(\FFI::cast(FFI::ctypes('VipsSource'), $source->pointer));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function newFromSource(VipsSource $source, string $string_options = '', array $options = []): self
+    {
+        $loader = self::findLoadSource($source);
+        if ($loader === null) {
+            throw new Exception('unable to load from source');
+        }
+
+        if ($string_options !== '') {
+            $options = array_merge([
+                "string_options" => $string_options,
+            ], $options);
+        }
+
+        return VipsOperation::call($loader, null, [$source], $options);
+    }
+
+    /**
      * Write an image to a file.
      *
      * @param string $name The file to write the image to.
@@ -1038,6 +1070,28 @@ class Image extends ImageAutodoc implements \ArrayAccess
         FFI::glib()->g_free($pointer);
 
         return $result;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function writeToTarget(VipsTarget $target, string $suffix, array $options = []): void
+    {
+        $filename = Utils::filenameGetFilename($suffix);
+        $string_options = Utils::filenameGetOptions($suffix);
+        $saver = FFI::vips()->vips_foreign_find_save_target($filename);
+
+        if ($saver === '') {
+            throw new Exception("can't save to target with filename $filename");
+        }
+
+        if ($string_options !== '') {
+            $options = array_merge([
+                "string_options" => $string_options,
+            ], $options);
+        }
+
+        VipsOperation::call($saver, $this, [$target], $options);
     }
 
     /**

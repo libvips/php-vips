@@ -56,7 +56,7 @@ abstract class VipsObject extends GObject
      *
      * @internal
      */
-    protected \FFI\CData $pointer;
+    private \FFI\CData $pointer;
 
     /**
      * A pointer to the underlying GObject. This is the same as the

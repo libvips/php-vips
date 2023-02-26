@@ -5,18 +5,25 @@ namespace Jcupitt\Vips;
 abstract class Connection extends VipsObject
 {
     /**
+     * A pointer to the underlying Connection. This is the same as the
+     * GObject, just cast to Connection to help FFI.
+     *
+     * @internal
+     */
+    public \FFI\CData $pointer;
+
+    public function __construct(\FFI\CData $pointer)
+    {
+        $this->pointer = \FFI::cast(FFI::ctypes('VipsConnection'), $pointer);
+        parent::__construct($pointer);
+    }
+
+    /**
      * Get the filename associated with a connection. Return null if there is no associated file.
      */
     public function filename(): ?string
     {
-        $so = \FFI::cast(FFI::ctypes('VipsConnection'), $this->pointer);
-        $pointer = FFI::vips()->vips_connection_filename($so);
-
-        if (\FFI::isNull($pointer)) {
-            return null;
-        }
-
-        return \FFI::string($pointer);
+        return FFI::vips()->vips_connection_filename($this->pointer);
     }
 
     /**
@@ -24,13 +31,6 @@ abstract class Connection extends VipsObject
      */
     public function nick(): ?string
     {
-        $so = \FFI::cast(FFI::ctypes('VipsConnection'), $this->pointer);
-        $pointer = FFI::vips()->vips_connection_nick($so);
-
-        if (\FFI::isNull($pointer)) {
-            return null;
-        }
-
-        return \FFI::string($pointer);
+        return FFI::vips()->vips_connection_nick($this->pointer);
     }
 }

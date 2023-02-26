@@ -6,10 +6,18 @@ use Closure;
 
 class VipsTargetCustom extends VipsTarget
 {
+    /**
+     * A pointer to the underlying VipsTargetCustom. This is the same as the
+     * GObject, just cast to VipsTargetCustom to help FFI.
+     *
+     * @internal
+     */
+    public \FFI\CData $pointer;
+
     public function __construct()
     {
-        $pointer = \FFI::cast(FFI::ctypes('VipsTarget'), FFI::vips()->vips_target_custom_new());
-        parent::__construct($pointer);
+        $this->pointer = FFI::vips()->vips_target_custom_new();
+        parent::__construct($this->pointer);
     }
 
     public function onWrite(Closure $callback): void
