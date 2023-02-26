@@ -38,6 +38,9 @@
 
 namespace Jcupitt\Vips;
 
+use Closure;
+use FFI\CData;
+
 /**
  * This class holds a pointer to a GObject and manages object lifetime.
  *
@@ -55,7 +58,7 @@ abstract class GObject
      *
      * @internal
      */
-    private \FFI\CData $pointer;
+    private CData $pointer;
 
     /**
      * Wrap a GObject around an underlying vips resource. The GObject takes
@@ -69,7 +72,7 @@ abstract class GObject
      *
      * @internal
      */
-    public function __construct(\FFI\CData $pointer)
+    public function __construct(CData $pointer)
     {
         $this->pointer = \FFI::cast(FFI::ctypes("GObject"), $pointer);
     }
@@ -94,7 +97,50 @@ abstract class GObject
         FFI::gobject()->g_object_unref($this->pointer);
     }
 
-    // TODO signal marshalling to go in
+    public function signalConnect(string $name, Closure $callback): void
+    {
+        static $marshalers = null;
+
+        if ($marshalers === null) {
+            $imageProgressCb = static function (CData $vi, CData $progress, CData $handle) {
+                FFI::gobject()->g_object_ref($vi);
+                $image = new Image($vi);
+                $progress = \FFI::cast(FFI::ctypes('VipsProgress'), $progress);
+                $handle($image, $progress);
+            };
+            $marshalers = ['preeval' => $imageProgressCb, 'eval' => $imageProgressCb, 'posteval' => $imageProgressCb];
+
+            if (FFI::atLeast(8, 9)) {
+                $marshalers['read'] = static function (CData $gObject, CData $pointer, int $length, CData $handle): int {
+                    $buffer = \FFI::string($pointer, $length);
+                    return $handle($buffer);
+                };
+                $marshalers['seek'] = static function (CData $gObject, int $offset, int $whence, CData $handle): int {
+                    return $handle($offset, $whence);
+                };
+                $marshalers['write'] = static function (CData $gObject, CData $pointer, int $length, CData $handle): int {
+                    $buffer = \FFI::string($pointer, $length);
+                    return $handle($buffer);
+                };
+                $marshalers['finish'] = static function (CData $gObject, CData $handle): void {
+                    $handle();
+                };
+            }
+
+            if (FFI::atLeast(8, 13)) {
+                $marshalers['end'] = static function (CData $gObject, CData $handle): int {
+                    return $handle();
+                };
+            }
+        }
+
+        if (!isset($marshalers[$name])) {
+            throw new Exception("unsupported signal $name");
+        }
+
+        $go = \FFI::cast(FFI::ctypes('GObject'), $this->pointer);
+        FFI::gobject()->g_signal_connect_data($go, $name, $marshalers[$name], $callback, null, 0);
+    }
 }
 
 /*

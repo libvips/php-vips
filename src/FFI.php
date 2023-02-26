@@ -703,12 +703,6 @@ typedef struct _VipsSourceCustom {
 
 VipsSourceCustom* vips_source_custom_new (void);
 
-// FIXME ... these need porting to php-ffi
-// extern "Python" gint64 _marshal_read (VipsSource*,
-//    void*, gint64, void*);
-// extern "Python" gint64 _marshal_seek (VipsSource*,
-//    gint64, int, void*);
-
 typedef struct _VipsTarget {
     VipsConnection parent_object;
 
