@@ -188,9 +188,7 @@ class GValue
                 # can own and free
                 $n = strlen($value);
                 $memory = \FFI::new("char[$n]", false, true);
-                for ($i = 0; $i < $n; $i++) {
-                    $memory[$i] = $value[$i];
-                }
+                \FFI::memcpy($memory, $value, $n);
                 FFI::vips()->
                     vips_value_set_blob_free($this->pointer, $memory, $n);
                 break;

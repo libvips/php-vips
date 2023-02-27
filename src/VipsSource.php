@@ -61,7 +61,12 @@ class VipsSource extends Connection
      */
     public static function newFromMemory(string $data): self
     {
-        $pointer = FFI::vips()->vips_source_new_from_memory($data, strlen($data));
+        # we need to set the memory to a copy of the data that vips_lib
+        # can own and free
+        $n = strlen($data);
+        $memory = \FFI::new("char[$n]", false, true);
+        \FFI::memcpy($memory, $data, $n);
+        $pointer = FFI::vips()->vips_source_new_from_memory($memory, $n);
 
         if (\FFI::isNull($pointer)) {
             throw new Exception("can't create source from memory");

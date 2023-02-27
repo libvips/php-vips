@@ -302,6 +302,7 @@ typedef uint32_t guint32;
 typedef int32_t gint32;
 typedef uint64_t guint64;
 typedef int64_t gint64;
+typedef void* gpointer;
 
 typedef $gtype GType;
 
@@ -366,6 +367,7 @@ void g_value_set_enum (GValue* value, int e);
 void g_value_set_flags (GValue* value, unsigned int f);
 void g_value_set_string (GValue* value, const char* str);
 void g_value_set_object (GValue* value, void* object);
+void g_value_set_pointer (GValue* value, gpointer pointer);
 
 bool g_value_get_boolean (const GValue* value);
 int g_value_get_int (GValue* value);
@@ -376,6 +378,7 @@ int g_value_get_enum (GValue* value);
 unsigned int g_value_get_flags (GValue* value);
 const char* g_value_get_string (GValue* value);
 void* g_value_get_object (GValue* value);
+gpointer g_value_get_pointer (GValue* value);
 
 typedef struct _GEnumValue {
     int value;
@@ -429,6 +432,17 @@ long g_signal_connect_data (GObject* object,
     int connect_flags);
 
 const char* g_param_spec_get_blurb (GParamSpec* psp);
+
+typedef struct _GClosure GClosure;
+typedef void (*marshaler)(struct GClosure* closure, GValue* return_value, int n_param_values, const GValue* param_values, void* invocation_hint, void* marshal_data);
+struct _GClosure {
+    int in_marshal : 1;
+    int is_invalid : 1;
+    marshaler marshal;
+};
+long g_signal_connect_closure(GObject* object, const char* detailed_signal, GClosure *closure, bool after);
+GClosure* g_closure_ref(GClosure* closure);
+GClosure* g_closure_new_simple (int sizeof_closure, void* data);
 EOS;
 
         # the whole libvips API, mostly adapted from pyvips
@@ -746,6 +760,7 @@ EOS;
         // look these up in advance
         self::$ctypes = [
             "GObject" => self::$gobject->type("GObject*"),
+            "GClosure" => self::$gobject->type("GClosure"),
             "GParamSpec" => self::$gobject->type("GParamSpec*"),
             "VipsObject" => self::$vips->type("VipsObject*"),
             "VipsOperation" => self::$vips->type("VipsOperation*"),
@@ -780,7 +795,7 @@ EOS;
             "GObject" => self::$gobject->g_type_from_name("GObject"),
             "VipsImage" => self::$gobject->g_type_from_name("VipsImage"),
 
-            "GCallback" => self::$gobject->g_type_from_name("GCallback"),
+            "GClosure" => self::$gobject->g_type_from_name("GClosure"),
         ];
 
         // map vips format names to c type names

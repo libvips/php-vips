@@ -67,7 +67,7 @@ abstract class GObject
      * Don't call this yourself, users should stick to (for example)
      * Image::newFromFile().
      *
-     * @param FFI\CData $pointer The underlying pointer that this
+     * @param CData $pointer The underlying pointer that this
      *  object should wrap.
      *
      * @internal
@@ -99,39 +99,111 @@ abstract class GObject
 
     public function signalConnect(string $name, Closure $callback): void
     {
-        static $marshalers = null;
+        $imageProgressCb = static function (
+            CData $gClosure,
+            ?CData $returnValue,
+            int $numberOfParams,
+            CData $params,
+            CData $hint,
+            ?CData $data
+        ) use ($callback) {
+            assert($numberOfParams === 3);
+            /**
+             * Marshal-Signature: void(VipsImage*, void*, void*)
+             */
+            $vi = \FFI::cast(FFI::ctypes('GObject'), FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1])));
+            FFI::gobject()->g_object_ref($vi);
+            $image = new Image($vi);
+            $pr = \FFI::cast(FFI::ctypes('VipsProgress'), FFI::gobject()->g_value_get_pointer(\FFI::addr($params[2])));
+            $callback($image, $pr);
+        };
+        $marshalers = ['preeval' => $imageProgressCb, 'eval' => $imageProgressCb, 'posteval' => $imageProgressCb];
 
-        if ($marshalers === null) {
-            $imageProgressCb = static function (CData $vi, CData $progress, CData $handle) {
-                FFI::gobject()->g_object_ref($vi);
-                $image = new Image($vi);
-                $progress = \FFI::cast(FFI::ctypes('VipsProgress'), $progress);
-                $handle($image, $progress);
+        if (FFI::atLeast(8, 9)) {
+            $marshalers['read'] = static function (
+                CData $gClosure,
+                CData $returnValue,
+                int $numberOfParams,
+                CData $params,
+                CData $hint,
+                ?CData $data
+            ) use (&$callback): void {
+                assert($numberOfParams === 4);
+                /*
+                 * Marshal-Signature: gint64(VipsSourceCustom*, void*, gint64, void*)
+                 */
+                $bufferPointer = FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]));
+                $bufferLength = (int) FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
+                $buffer = \FFI::string($bufferPointer, $bufferLength);
+                $returnBufferLength = $callback($buffer);
+                \FFI::memcpy($bufferPointer, $buffer, $returnBufferLength);
+                FFI::gobject()->g_value_set_int64($returnValue, $returnBufferLength);
+                FFI::gobject()->g_value_set_pointer(\FFI::addr($params[1]), $bufferPointer);
             };
-            $marshalers = ['preeval' => $imageProgressCb, 'eval' => $imageProgressCb, 'posteval' => $imageProgressCb];
+            $marshalers['seek'] = static function (
+                CData $gClosure,
+                CData $returnValue,
+                int $numberOfParams,
+                CData $params,
+                CData $hint,
+                ?CData $data
+            ) use (&$callback): void {
+                assert($numberOfParams === 4);
+                /*
+                 * Marshal-Signature: gint64(VipsSourceCustom*, gint64, int, void*)
+                 */
+                $offset = (int) FFI::gobject()->g_value_get_int64(\FFI::addr($params[1]));
+                $whence = (int) FFI::gobject()->g_value_get_int(\FFI::addr($params[2]));
+                FFI::gobject()->g_value_set_int64($returnValue, $callback($offset, $whence));
+            };
+            $marshalers['write'] = static function (
+                CData $gClosure,
+                CData $returnValue,
+                int $numberOfParams,
+                CData $params,
+                CData $hint,
+                ?CData $data
+            ) use (&$callback): void {
+                assert($numberOfParams === 4);
+                /*
+                 * Marshal-Signature: gint64(VipsTargetCustom*, void*, gint64, void*)
+                 */
+                $bufferPointer = FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]));
+                $bufferLength = (int) FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
+                $buffer = \FFI::string($bufferPointer, $bufferLength);
+                FFI::gobject()->g_value_set_int64($returnValue, $callback($buffer));
+            };
+            $marshalers['finish'] = static function (
+                CData $gClosure,
+                ?CData $returnValue,
+                int $numberOfParams,
+                CData $params,
+                CData $hint,
+                ?CData $data
+            ) use (&$callback): void {
+                assert($numberOfParams === 2);
+                /**
+                 * Marshal-Signature: void(VipsTargetCustom*, void*)
+                 */
+                $callback();
+            };
+        }
 
-            if (FFI::atLeast(8, 9)) {
-                $marshalers['read'] = static function (CData $gObject, CData $pointer, int $length, CData $handle): int {
-                    $buffer = \FFI::string($pointer, $length);
-                    return $handle($buffer);
-                };
-                $marshalers['seek'] = static function (CData $gObject, int $offset, int $whence, CData $handle): int {
-                    return $handle($offset, $whence);
-                };
-                $marshalers['write'] = static function (CData $gObject, CData $pointer, int $length, CData $handle): int {
-                    $buffer = \FFI::string($pointer, $length);
-                    return $handle($buffer);
-                };
-                $marshalers['finish'] = static function (CData $gObject, CData $handle): void {
-                    $handle();
-                };
-            }
-
-            if (FFI::atLeast(8, 13)) {
-                $marshalers['end'] = static function (CData $gObject, CData $handle): int {
-                    return $handle();
-                };
-            }
+        if (FFI::atLeast(8, 13)) {
+            $marshalers['end'] = static function (
+                CData $gClosure,
+                CData $returnValue,
+                int $numberOfParams,
+                CData $params,
+                CData $hint,
+                ?CData $data
+            ) use (&$callback): void {
+                assert($numberOfParams === 2);
+                /**
+                 * Marshal-Signature: int(VipsTargetCustom*, void*)
+                 */
+                FFI::gobject()->g_value_set_int($returnValue, $callback());
+            };
         }
 
         if (!isset($marshalers[$name])) {
@@ -139,7 +211,9 @@ abstract class GObject
         }
 
         $go = \FFI::cast(FFI::ctypes('GObject'), $this->pointer);
-        FFI::gobject()->g_signal_connect_data($go, $name, $marshalers[$name], $callback, null, 0);
+        $gc = FFI::gobject()->g_closure_new_simple(64, null);
+        $gc->marshal = $marshalers[$name];
+        FFI::gobject()->g_signal_connect_closure($go, $name, $gc, 0);
     }
 }
 
