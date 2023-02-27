@@ -30,7 +30,7 @@ class VipsSource extends Connection
     {
         $pointer = FFI::vips()->vips_source_new_from_descriptor($descriptor);
 
-        if (\FFI::isNull($pointer)) {
+        if ($pointer === null) {
             throw new Exception("can't create source from descriptor $descriptor");
         }
 
@@ -48,7 +48,7 @@ class VipsSource extends Connection
     {
         $pointer = FFI::vips()->vips_source_new_from_file($filename);
 
-        if (\FFI::isNull($pointer)) {
+        if ($pointer === null) {
             throw new Exception("can't create source from filename $filename");
         }
 
@@ -68,7 +68,7 @@ class VipsSource extends Connection
         \FFI::memcpy($memory, $data, $n);
         $pointer = FFI::vips()->vips_source_new_from_memory($memory, $n);
 
-        if (\FFI::isNull($pointer)) {
+        if ($pointer === null) {
             throw new Exception("can't create source from memory");
         }
 

@@ -138,7 +138,6 @@ abstract class GObject
                 $returnBufferLength = $callback($buffer);
                 \FFI::memcpy($bufferPointer, $buffer, $returnBufferLength);
                 FFI::gobject()->g_value_set_int64($returnValue, $returnBufferLength);
-                FFI::gobject()->g_value_set_pointer(\FFI::addr($params[1]), $bufferPointer);
             };
             $marshalers['seek'] = static function (
                 CData $gClosure,
@@ -171,7 +170,9 @@ abstract class GObject
                 $bufferPointer = FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]));
                 $bufferLength = (int) FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
                 $buffer = \FFI::string($bufferPointer, $bufferLength);
-                FFI::gobject()->g_value_set_int64($returnValue, $callback($buffer));
+                $returnBufferLength = $callback($buffer);
+                \FFI::memcpy($bufferPointer, $buffer, $returnBufferLength);
+                FFI::gobject()->g_value_set_int64($returnValue, $returnBufferLength);
             };
             $marshalers['finish'] = static function (
                 CData $gClosure,
@@ -211,7 +212,7 @@ abstract class GObject
         }
 
         $go = \FFI::cast(FFI::ctypes('GObject'), $this->pointer);
-        $gc = FFI::gobject()->g_closure_new_simple(64, null);
+        $gc = FFI::gobject()->g_closure_new_simple(\FFI::sizeof(FFI::ctypes('GClosure')), null);
         $gc->marshal = $marshalers[$name];
         FFI::gobject()->g_signal_connect_closure($go, $name, $gc, 0);
     }

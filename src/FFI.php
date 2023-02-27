@@ -434,11 +434,54 @@ long g_signal_connect_data (GObject* object,
 const char* g_param_spec_get_blurb (GParamSpec* psp);
 
 typedef struct _GClosure GClosure;
-typedef void (*marshaler)(struct GClosure* closure, GValue* return_value, int n_param_values, const GValue* param_values, void* invocation_hint, void* marshal_data);
-struct _GClosure {
-    int in_marshal : 1;
-    int is_invalid : 1;
-    marshaler marshal;
+typedef void (*marshaler)(
+    struct GClosure* closure, 
+    GValue* return_value, 
+    int n_param_values, 
+    const GValue* param_values, 
+    void* invocation_hint, 
+    void* marshal_data
+);
+
+typedef struct _GClosureNotifyData GClosureNotifyData;
+struct _GClosureNotifyData
+{
+  void*       data;
+  GClosureNotify notify;
+};
+struct _GClosure
+{
+  /*< private >*/
+  int ref_count : 15;  /* (atomic) */
+  /* meta_marshal is not used anymore but must be zero for historical reasons
+     as it was exposed in the G_CLOSURE_N_NOTIFIERS macro */
+  int meta_marshal_nouse : 1;  /* (atomic) */
+  int n_guards : 1;  /* (atomic) */
+  int n_fnotifiers : 2;  /* finalization notifiers (atomic) */
+  int n_inotifiers : 8;  /* invalidation notifiers (atomic) */
+  int in_inotify : 1;  /* (atomic) */
+  int floating : 1;  /* (atomic) */
+  /*< protected >*/
+  int derivative_flag : 1;  /* (atomic) */
+  /*< public >*/
+  int in_marshal : 1;  /* (atomic) */
+  int is_invalid : 1;  /* (atomic) */
+
+  /*< private >*/	marshaler marshal;
+  /*< protected >*/	void* data;
+
+  /*< private >*/	GClosureNotifyData *notifiers;
+
+  /* invariants/constraints:
+   * - ->marshal and ->data are _invalid_ as soon as ->is_invalid==TRUE
+   * - invocation of all inotifiers occurs prior to fnotifiers
+   * - order of inotifiers is random
+   *   inotifiers may _not_ free/invalidate parameter values (e.g. ->data)
+   * - order of fnotifiers is random
+   * - each notifier may only be removed before or during its invocation
+   * - reference counting may only happen prior to fnotify invocation
+   *   (in that sense, fnotifiers are really finalization handlers)
+   */
 };
 long g_signal_connect_closure(GObject* object, const char* detailed_signal, GClosure *closure, bool after);
 GClosure* g_closure_ref(GClosure* closure);

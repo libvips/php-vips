@@ -67,6 +67,25 @@ class StreamingTest extends TestCase
         unlink($target->filename());
     }
 
+    public function testNoLeak(): void
+    {
+        $lastUsage = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $filename = tempnam(sys_get_temp_dir(), 'image');
+            $source = new VipsSourceResource(fopen(__DIR__ . '/images/img_0076.jpg', 'rb'));
+            $target = new VipsTargetResource(fopen($filename, 'wb+'));
+            $image = Image::newFromSource($source);
+            $image->writeToTarget($target, '.jpg[Q=95]');
+            unlink($filename);
+            $usage = memory_get_peak_usage(true);
+            $diff = $usage - $lastUsage;
+            if ($lastUsage !== 0 && $diff > 0) {
+                echo "LEAK LEAK LEAK" . PHP_EOL;
+            }
+            $lastUsage = $usage;
+        }
+    }
+
     public function testFromFileToDescriptor(): void
     {
         // NOTE(L3tum): There is no way to get a file descriptor in PHP :)

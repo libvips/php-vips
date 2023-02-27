@@ -18,32 +18,41 @@ class VipsTarget extends Connection
         parent::__construct($pointer);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function newToDescriptor(int $descriptor): self
     {
         $pointer = FFI::vips()->vips_target_new_to_descriptor($descriptor);
-        if (\FFI::isNull($pointer)) {
+        if ($pointer === null) {
             throw new Exception("can't create output target from descriptor $descriptor");
         }
 
         return new self($pointer);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function newToFile(string $filename): self
     {
         $pointer = FFI::vips()->vips_target_new_to_file($filename);
 
-        if (\FFI::isNull($pointer)) {
+        if ($pointer === null) {
             throw new Exception("can't create output target from filename $filename");
         }
 
         return new self($pointer);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function newToMemory(): self
     {
         $pointer = FFI::vips()->vips_target_new_to_memory();
 
-        if (\FFI::isNull($pointer)) {
+        if ($pointer === null) {
             throw new Exception("can't create output target from memory");
         }
 
