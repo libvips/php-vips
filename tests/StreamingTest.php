@@ -70,6 +70,7 @@ class StreamingTest extends TestCase
     public function testNoLeak(): void
     {
         $lastUsage = 0;
+        $leaked = false;
         for ($i = 0; $i < 10; $i++) {
             $filename = tempnam(sys_get_temp_dir(), 'image');
             $source = new VipsSourceResource(fopen(__DIR__ . '/images/img_0076.jpg', 'rb'));
@@ -80,10 +81,12 @@ class StreamingTest extends TestCase
             $usage = memory_get_peak_usage(true);
             $diff = $usage - $lastUsage;
             if ($lastUsage !== 0 && $diff > 0) {
-                echo "LEAK LEAK LEAK" . PHP_EOL;
+                $leaked = true;
             }
             $lastUsage = $usage;
         }
+
+        $this->assertFalse($leaked, 'Streaming leaked memory');
     }
 
     public function testFromFileToDescriptor(): void
