@@ -122,10 +122,10 @@ $doBenchmark = static function () {
 
 $doBenchmark();
 
-echo "=== NOW NO CACHE ===" . PHP_EOL;
-
-Config::cacheSetMax(0);
-Config::cacheSetMaxFiles(0);
-Config::cacheSetMaxMem(0);
-
-$doBenchmark();
+//echo "=== NOW NO CACHE ===" . PHP_EOL;
+//
+//Config::cacheSetMax(0);
+//Config::cacheSetMaxFiles(0);
+//Config::cacheSetMaxMem(0);
+//
+//$doBenchmark();

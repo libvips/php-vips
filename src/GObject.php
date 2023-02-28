@@ -171,7 +171,6 @@ abstract class GObject
                 $bufferLength = (int) FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
                 $buffer = \FFI::string($bufferPointer, $bufferLength);
                 $returnBufferLength = $callback($buffer);
-                \FFI::memcpy($bufferPointer, $buffer, $returnBufferLength);
                 FFI::gobject()->g_value_set_int64($returnValue, $returnBufferLength);
             };
             $marshalers['finish'] = static function (
@@ -211,10 +210,9 @@ abstract class GObject
             throw new Exception("unsupported signal $name");
         }
 
-        $go = \FFI::cast(FFI::ctypes('GObject'), $this->pointer);
         $gc = FFI::gobject()->g_closure_new_simple(\FFI::sizeof(FFI::ctypes('GClosure')), null);
         $gc->marshal = $marshalers[$name];
-        FFI::gobject()->g_signal_connect_closure($go, $name, $gc, 0);
+        FFI::gobject()->g_signal_connect_closure($this->pointer, $name, $gc, 0);
     }
 }
 
