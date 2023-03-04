@@ -20,24 +20,24 @@ class VipsTargetResource extends VipsTargetCustom
         $this->resource = $resource;
         parent::__construct();
 
-        $this->onWrite(static function (string $buffer) use ($resource): int {
+        $this->onWrite(static function (string $buffer) use (&$resource): int {
             return fwrite($resource, $buffer) ?: 0;
         });
 
-        $this->onEnd(static function () use ($resource): void {
+        $this->onEnd(static function () use (&$resource): void {
             fclose($resource);
         });
 
         $meta = stream_get_meta_data($resource);
         // See: https://www.php.net/manual/en/function.fopen.php
         if (substr($meta['mode'], -1) === '+') {
-            $this->onRead(static function (int $length) use ($resource): ?string {
+            $this->onRead(static function (int $length) use (&$resource): ?string {
                 return fread($resource, $length) ?: null;
             });
         }
 
         if ($meta['seekable']) {
-            $this->onSeek(static function (int $offset, int $whence) use ($resource): int {
+            $this->onSeek(static function (int $offset, int $whence) use (&$resource): int {
                 fseek($resource, $offset, $whence);
                 return ftell($resource);
             });

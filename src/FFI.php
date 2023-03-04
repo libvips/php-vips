@@ -484,7 +484,6 @@ struct _GClosure
    */
 };
 long g_signal_connect_closure(GObject* object, const char* detailed_signal, GClosure *closure, bool after);
-GClosure* g_closure_ref(GClosure* closure);
 GClosure* g_closure_new_simple (int sizeof_closure, void* data);
 EOS;
 

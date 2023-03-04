@@ -22,23 +22,14 @@ class VipsSourceCustom extends VipsSource
 
     /**
      * Attach a read handler.
-     * The interface is exactly as io.read() in Python. The handler is given a number
+     * The interface is similar to fread. The handler is given a number
      * of bytes to fetch, and should return a bytes-like object containing up
      * to that number of bytes. If there is no more data available, it should
      * return None.
      */
     public function onRead(Closure $callback): void
     {
-        $this->signalConnect('read', static function (string &$buffer) use ($callback): int {
-            $chunk = $callback(strlen($buffer));
-
-            if ($chunk === null) {
-                return 0;
-            }
-
-            $buffer = substr_replace($buffer, $chunk, 0);
-            return strlen($chunk);
-        });
+        $this->signalConnect('read', $callback);
     }
 
     /**

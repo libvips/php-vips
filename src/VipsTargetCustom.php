@@ -28,15 +28,7 @@ class VipsTargetCustom extends VipsTarget
     public function onRead(Closure $callback): void
     {
         if (FFI::atLeast(8, 13)) {
-            $this->signalConnect('read', static function (string &$buffer) use ($callback): int {
-                $chunk = $callback(strlen($buffer));
-
-                if ($chunk === null) {
-                    return 0;
-                }
-                $buffer = substr_replace($buffer, $chunk, 0);
-                return strlen($chunk);
-            });
+            $this->signalConnect('read', $callback);
         }
     }
 

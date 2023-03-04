@@ -22,12 +22,12 @@ class VipsSourceResource extends VipsSourceCustom
         $this->resource = $resource;
         parent::__construct();
 
-        $this->onRead(static function (int $length) use ($resource): ?string {
+        $this->onRead(static function (int $length) use (&$resource): ?string {
             return fread($resource, $length) ?: null;
         });
 
         if (stream_get_meta_data($resource)['seekable']) {
-            $this->onSeek(static function (int $offset, int $whence) use ($resource): int {
+            $this->onSeek(static function (int $offset, int $whence) use (&$resource): int {
                 fseek($resource, $offset, $whence);
                 return ftell($resource);
             });
