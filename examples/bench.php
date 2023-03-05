@@ -1,9 +1,14 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 use Jcupitt\Vips;
+
+if (count($argv) != 3) {
+    echo("usage: ./bench.php input-image output-image\n");
+    exit(1);
+}
 
 $im = Vips\Image::newFromFile($argv[1], ['access' => Vips\Access::SEQUENTIAL]);
 

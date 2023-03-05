@@ -5,6 +5,7 @@ All notable changes to `:vips` will be documented in this file.
 ## master
 
 - improve FFI startup [West14]
+- revise example use of composer [jcupitt]
 
 ## 2.1.1 - 2022-11-13
 
