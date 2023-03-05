@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 use Jcupitt\Vips;
 
 #Vips\Config::setLogger(new Vips\DebugLogger());
@@ -41,4 +41,4 @@ $image->writeToFile($argv[2]);
 $image = null;
 $watermark = null;
 
-Vips\Config::shutDown();
+Vips\FFI::shutDown();
