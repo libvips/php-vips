@@ -25,7 +25,7 @@ class VipsSourceCustom extends VipsSource
      * The interface is similar to fread. The handler is given a number
      * of bytes to fetch, and should return a bytes-like object containing up
      * to that number of bytes. If there is no more data available, it should
-     * return None.
+     * return null.
      */
     public function onRead(Closure $callback): void
     {

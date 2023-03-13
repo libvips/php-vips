@@ -21,9 +21,9 @@ class VipsSource extends Connection
     /**
      * Make a new source from a file descriptor (a small integer).
      * Make a new source that is attached to the descriptor. For example:
-     *  source = pyvips.Source.new_from_descriptor(0)
+     *      $source = VipsSource::newFromDescriptor(0)
      * Makes a descriptor attached to stdin.
-     * You can pass this source to (for example) :meth:`new_from_source`.
+     * You can pass this source to (for example) @see Image::newFromSource()
      * @throws Exception
      */
     public static function newFromDescriptor(int $descriptor): self
@@ -40,8 +40,8 @@ class VipsSource extends Connection
     /**
      * Make a new source from a filename.
      * Make a new source that is attached to the named file. For example:
-     *  source = pyvips.Source.new_from_file("myfile.jpg")
-     * You can pass this source to (for example) :meth:`new_from_source`.
+     *      $source = VipsSource::newFromFile("myfile.jpg")
+     * You can pass this source to (for example) @see Image::newFromSource()
      * @throws Exception
      */
     public static function newFromFile(string $filename): self
@@ -56,7 +56,10 @@ class VipsSource extends Connection
     }
 
     /**
-     * @TODO Not sure how best to implement this since PHP does not have buffers like Python
+     * Make a new source from a filename.
+     * Make a new source that uses the provided $data. For example:
+     *      $source = VipsSource::newFromFile(file_get_contents("myfile.jpg"))
+     * You can pass this source to (for example) @see Image::newFromSource()
      * @throws Exception
      */
     public static function newFromMemory(string $data): self
