@@ -1885,7 +1885,11 @@ class Image extends ImageAutodoc implements \ArrayAccess
             $other = (array) $other;
         }
 
-        return VipsOperation::call('bandrank', $this, $other, $options);
+        return VipsOperation::call(
+            'bandrank',
+            null,
+            [array_merge([$this], $other)],
+            $options);
     }
 
     /**

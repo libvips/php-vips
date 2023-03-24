@@ -6,6 +6,7 @@ All notable changes to `:vips` will be documented in this file.
 
 - improve FFI startup [West14]
 - revise example use of composer [jcupitt]
+- fix bandrank [axkirillov]
 
 ## 2.1.1 - 2022-11-13
 
