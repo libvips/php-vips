@@ -61,6 +61,25 @@ abstract class GObject
     private CData $pointer;
 
     /**
+     * Upstream objects we must keep alive.
+     *
+     * A set of references to other php objects which this object refers to
+     * via ffi, ie. references which the php GC cannot find automatically.
+     *
+     * @internal
+     */
+    private array $_references = [];
+
+    /** 
+     * Marshalling functions for signal_connect.
+     *
+     * We build these once on first use, see get_marshal.
+     *
+     * @internal
+     */
+    private static ?array $_marshal = null;
+        
+    /**
      * Wrap a GObject around an underlying vips resource. The GObject takes
      * ownership of the pointer and will unref it on finalize.
      *
@@ -95,6 +114,72 @@ abstract class GObject
     public function unref(): void
     {
         FFI::gobject()->g_object_unref($this->pointer);
+    }
+
+    private static function get_marshal(string $name): ?Closure
+    {
+        if (self::$_marshal == null) {
+            $progress = function (CData $image_pointer,
+                                  CData $progress_pointer,
+                                  ?CData $user) {
+                $image = new Image($image_pointer);
+                // Image() will unref on gc, so we must ref
+                FFI::gobject()->g_object_ref($image_pointer);
+                $progress = \FFI::cast(FFI::ctypes("VipsProgress"), 
+                                       $progress_pointer);
+                Closure $callback = $user;
+
+                echo "marshal progress:\n";
+                echo "  image = $image\n";
+                echo "  progress->run = $progress->run\n";
+                echo "  progress->eta = $progress->eta\n";
+                echo "  progress->tpels = $progress->tpels\n";
+                echo "  progress->npels = $progress->npels\n";
+                echo "  progress->percent = $progress->percent\n";
+                echo "  data = ";
+                print_r($user);
+                echo "\n";
+            };
+
+            self::$_marshal = [
+                "preeval" => $progress,
+                "eval" => $progress,
+                "posteval" => $progress,
+            ];
+        }
+
+        if (!array_key_exists($name, self::$_marshal)) {
+            throw new Exception("unsupported signal $name");
+        }
+
+        return self::$_marshal[$name];
+    }
+
+    public function signal_connect2(string $name, $callback): void
+    {
+        $marshal = self::get_marshal($name);
+        if ($marshal === null) {
+            throw new Exception("unsupported signal $name");
+        }
+
+        // php-ffi is expecting a void* for the user pointer 
+        //$user = \FFI::cast("void*", $callback);
+
+        $id = FFI::gobject()->g_signal_connect_data($this->pointer, 
+                                                    $name, 
+                                                    $marshal,
+                                                    //$user, 
+                                                    null,
+                                                    null,
+                                                    0);
+        if ($id === 0) {
+            throw new Exception("unable to connect signal $name");
+        }
+
+        // the closure we were passed may well be dynamically created and
+        // contain objects which must not be GCd ... we must hold a reference
+        // to it to keep it alive
+        $this->_references[] = $callback;
     }
 
     /**

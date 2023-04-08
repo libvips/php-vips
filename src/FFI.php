@@ -422,12 +422,12 @@ void g_object_set_property (GObject* object,
 void g_object_get_property (GObject* object,
     const char* name, GValue* value);
 
-typedef void (*GCallback)(void);
+typedef void (*GCallback)(void*, void*, void*);
 typedef void (*GClosureNotify)(void* data, struct _GClosure *);
 long g_signal_connect_data (GObject* object,
     const char* detailed_signal,
     GCallback c_handler,
-    void* data,
+    gpointer data,
     GClosureNotify destroy_data,
     int connect_flags);
 
@@ -490,7 +490,6 @@ EOS;
         # the whole libvips API, mostly adapted from pyvips
         $vips_decls = $typedefs . <<<EOS
 typedef struct _VipsImage VipsImage;
-typedef struct _VipsProgress VipsProgress;
 
 // Defined in GObject, just typedef to void
 typedef void GParamSpec;
@@ -808,6 +807,7 @@ EOS;
             "VipsOperation" => self::$vips->type("VipsOperation*"),
             "VipsImage" => self::$vips->type("VipsImage*"),
             "VipsInterpolate" => self::$vips->type("VipsInterpolate*"),
+            "VipsProgress" => self::$vips->type("VipsProgress*"),
             "VipsConnection" => self::$vips->type("VipsConnection*"),
             "VipsSource" => self::$vips->type("VipsSource*"),
             "VipsSourceCustom" => self::$vips->type("VipsSourceCustom*"),
@@ -816,6 +816,7 @@ EOS;
         ];
 
         self::$gtypes = [
+            "gpointer" => self::$gobject->g_type_from_name("gpointer"),
             "gboolean" => self::$gobject->g_type_from_name("gboolean"),
             "gint" => self::$gobject->g_type_from_name("gint"),
             "gint64" => self::$gobject->g_type_from_name("gint64"),
