@@ -127,7 +127,7 @@ abstract class GObject
                 FFI::gobject()->g_object_ref($image_pointer);
                 $progress = \FFI::cast(FFI::ctypes("VipsProgress"), 
                                        $progress_pointer);
-                Closure $callback = $user;
+                // Closure $callback = $user;
 
                 echo "marshal progress:\n";
                 echo "  image = $image\n";
