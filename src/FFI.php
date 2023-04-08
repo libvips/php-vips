@@ -802,6 +802,7 @@ EOS;
         self::$ctypes = [
             "GObject" => self::$gobject->type("GObject*"),
             "GClosure" => self::$gobject->type("GClosure"),
+            "GCallback" => self::$gobject->type("GCallback"),
             "GParamSpec" => self::$gobject->type("GParamSpec*"),
             "VipsObject" => self::$vips->type("VipsObject*"),
             "VipsOperation" => self::$vips->type("VipsOperation*"),

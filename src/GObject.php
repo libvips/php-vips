@@ -70,15 +70,6 @@ abstract class GObject
      */
     private array $_references = [];
 
-    /** 
-     * Marshalling functions for signal_connect.
-     *
-     * We build these once on first use, see get_marshal.
-     *
-     * @internal
-     */
-    private static ?array $_marshal = null;
-        
     /**
      * Wrap a GObject around an underlying vips resource. The GObject takes
      * ownership of the pointer and will unref it on finalize.
@@ -116,87 +107,65 @@ abstract class GObject
         FFI::gobject()->g_object_unref($this->pointer);
     }
 
-    private static function get_marshal(string $name): ?Closure
+    /**
+     * Connect to a signal on this object.
+     *
+     * The callback will be triggered every time this signal is issued on this 
+     * instance.
+     *
+     * @throws Exception
+     */
+    public function signalConnect(string $name, Closure $callback): void
     {
-        if (self::$_marshal == null) {
-            $progress = function (CData $image_pointer,
-                                  CData $progress_pointer,
-                                  ?CData $user) {
-                $image = new Image($image_pointer);
-                // Image() will unref on gc, so we must ref
-                FFI::gobject()->g_object_ref($image_pointer);
-                $progress = \FFI::cast(FFI::ctypes("VipsProgress"), 
-                                       $progress_pointer);
-                // Closure $callback = $user;
-
-                echo "marshal progress:\n";
-                echo "  image = $image\n";
-                echo "  progress->run = $progress->run\n";
-                echo "  progress->eta = $progress->eta\n";
-                echo "  progress->tpels = $progress->tpels\n";
-                echo "  progress->npels = $progress->npels\n";
-                echo "  progress->percent = $progress->percent\n";
-                echo "  data = ";
-                print_r($user);
-                echo "\n";
-            };
-
-            self::$_marshal = [
-                "preeval" => $progress,
-                "eval" => $progress,
-                "posteval" => $progress,
-            ];
-        }
-
-        if (!array_key_exists($name, self::$_marshal)) {
-            throw new Exception("unsupported signal $name");
-        }
-
-        return self::$_marshal[$name];
-    }
-
-    public function signal_connect2(string $name, $callback): void
-    {
-        $marshal = self::get_marshal($name);
-        if ($marshal === null) {
-            throw new Exception("unsupported signal $name");
-        }
-
-        // php-ffi is expecting a void* for the user pointer 
-        //$user = \FFI::cast("void*", $callback);
+        $marshal = self::buildMarshal($name, $callback);
 
         $id = FFI::gobject()->g_signal_connect_data($this->pointer, 
                                                     $name, 
                                                     $marshal,
-                                                    //$user, 
-                                                    null,
+                                                    null, 
                                                     null,
                                                     0);
         if ($id === 0) {
             throw new Exception("unable to connect signal $name");
         }
 
-        // the closure we were passed may well be dynamically created and
-        // contain objects which must not be GCd ... we must hold a reference
-        // to it to keep it alive
-        $this->_references[] = $callback;
+        // the marshaller must not be GCed
+        // FIXME ... _references must be copied to all child objects in call()
+        $this->_references[] = $marshal;
     }
 
-    /**
-     * Connect to a signal on this object.
-     * The callback will be triggered every time this signal is issued on this instance.
-     * @throws Exception
+    /* Ideally, we'd use the "user" pointer of signal_connect to hold the
+     * callback closure, but unfortunately php-ffi has no way (I think) to 
+     * turn a C pointer to function back into a php function, so we have to
+     * build a custom closure for every signal connect with the callback
+     * embedded within it.
      */
-    public function signalConnect(string $name, Closure $callback): void
+    private static function buildMarshal(string $name, Closure $callback):
+        Closure
     {
-        $marshaler = self::getMarshaler($name, $callback);
-        if ($marshaler === null) {
-            throw new Exception("unsupported signal $name");
-        }
+        switch ($name) {
+            case 'preeval':
+            case 'eval':
+            case 'posteval':
+                return static function (
+                    CData $image_pointer,
+                    CData $progress_pointer,
+                    ?CData $user
+                ) use (&$callback): void {
+                    $image = new Image($image_pointer);
+                    // Image() will unref on gc, so we must ref
+                    FFI::gobject()->g_object_ref($image_pointer);
 
-        $gc = FFI::gobject()->g_closure_new_simple(\FFI::sizeof(FFI::ctypes('GClosure')), null);
-        $gc->marshal = $marshaler;
-        FFI::gobject()->g_signal_connect_closure($this->pointer, $name, $gc, 0);
+                    // FIXME ... maybe wrap VipsProgress as a php class?
+                    $progress = \FFI::cast(FFI::ctypes("VipsProgress"), 
+                                           $progress_pointer);
+
+                    $callback($image, $progress);
+                };
+
+            default:
+                throw new Exception("unsupported signal $name");
+        }
     }
 
     private static function getMarshaler(string $name, Closure $callback): ?Closure
@@ -229,34 +198,7 @@ abstract class GObject
                     );
                     $callback($image, $pr);
                 };
-            case 'read':
-                if (FFI::atLeast(8, 9)) {
-                    return static function (
-                        CData  $gClosure,
-                        CData  $returnValue,
-                        int    $numberOfParams,
-                        CData  $params,
-                        CData  $hint,
-                        ?CData $data
-                    ) use (&$callback): void {
-                        assert($numberOfParams === 4);
-                        /*
-                         * Signature: gint64(VipsSourceCustom* source, void* buffer, gint64 length, void* handle)
-                         */
-                        $bufferLength = (int)FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
-                        $returnBuffer = $callback($bufferLength);
-                        $returnBufferLength = 0;
 
-                        if ($returnBuffer !== null) {
-                            $returnBufferLength = strlen($returnBuffer);
-                            $bufferPointer = FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]));
-                            \FFI::memcpy($bufferPointer, $returnBuffer, $returnBufferLength);
-                        }
-                        FFI::gobject()->g_value_set_int64($returnValue, $returnBufferLength);
-                    };
-                }
-
-                return null;
             case 'seek':
                 if (FFI::atLeast(8, 9)) {
                     return static function (
