@@ -422,8 +422,12 @@ void g_object_set_property (GObject* object,
 void g_object_get_property (GObject* object,
     const char* name, GValue* value);
 
-typedef void (*GCallback)(void*, void*, void*);
 typedef void (*GClosureNotify)(void* data, struct _GClosure *);
+
+typedef void (*GCallback)(void);
+typedef void (*GCallback_progress)(void*,void*,void*);
+typedef gint64 (*GCallback_read)(void*,void*,gint64,void*);
+
 long g_signal_connect_data (GObject* object,
     const char* detailed_signal,
     GCallback c_handler,
@@ -803,6 +807,9 @@ EOS;
             "GObject" => self::$gobject->type("GObject*"),
             "GClosure" => self::$gobject->type("GClosure"),
             "GCallback" => self::$gobject->type("GCallback"),
+            "GCallback_read" => self::$gobject->type("GCallback_read"),
+            "GCallback_progress" => self::$gobject->type("GCallback_progress"),
+            "GType" => self::$gobject->type("GType"),
             "GParamSpec" => self::$gobject->type("GParamSpec*"),
             "VipsObject" => self::$vips->type("VipsObject*"),
             "VipsOperation" => self::$vips->type("VipsOperation*"),

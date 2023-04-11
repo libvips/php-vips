@@ -54,6 +54,11 @@ use FFI\CData;
 abstract class GObject
 {
     /**
+     */
+    private static array $handleTable = [];
+    private static int $nextIndex = 0;
+
+    /**
      * A pointer to the underlying GObject.
      *
      * @internal
@@ -117,21 +122,26 @@ abstract class GObject
      */
     public function signalConnect(string $name, Closure $callback): void
     {
-        $marshal = self::buildMarshal($name, $callback);
+        echo "signalConnect:\n";
 
+        $marshal = self::getMarshal($name);
+        $handle = self::getHandle($callback);
+
+        $sig = \FFI::arrayType(FFI::ctypes("GCallback"), [1]);
+        $c_callback = \FFI::new($sig);
+        $c_callback[0] = $marshal;
+            
         $id = FFI::gobject()->g_signal_connect_data($this->pointer, 
                                                     $name, 
-                                                    $marshal,
-                                                    null, 
+                                                    $c_callback[0],
+                                                    $handle, 
                                                     null,
                                                     0);
         if ($id === 0) {
             throw new Exception("unable to connect signal $name");
         }
 
-        // the marshaller must not be GCed
-        // FIXME ... _references must be copied to all child objects in call()
-        $this->_references[] = $marshal;
+        echo "signalConnect: done\n";
     }
 
     /* Ideally, we'd use the "user" pointer of signal_connect to hold the
@@ -140,32 +150,71 @@ abstract class GObject
      * build a custom closure for every signal connect with the callback
      * embedded within it.
      */
-    private static function buildMarshal(string $name, Closure $callback):
-        Closure
+    private static function getMarshal(string $name) : CData
     {
         switch ($name) {
             case 'preeval':
             case 'eval':
             case 'posteval':
-                return static function (
-                    CData $image_pointer,
-                    CData $progress_pointer,
-                    ?CData $user
-                ) use (&$callback): void {
-                    $image = new Image($image_pointer);
+                $marshal = static function (
+                    CData $imagePointer,
+                    CData $progressPointer,
+                    CData $handle) : void {
+                    $image = new Image($imagePointer);
                     // Image() will unref on gc, so we must ref
-                    FFI::gobject()->g_object_ref($image_pointer);
+                    FFI::gobject()->g_object_ref($imagePointer);
 
                     // FIXME ... maybe wrap VipsProgress as a php class?
                     $progress = \FFI::cast(FFI::ctypes("VipsProgress"), 
-                                           $progress_pointer);
+                                           $progressPointer);
+
+                    $callback = self::fromHandle($handle);
 
                     $callback($image, $progress);
                 };
 
-            default:
-                throw new Exception("unsupported signal $name");
+                $sig = \FFI::arrayType(FFI::ctypes("GCallback_progress"), [1]);
+                $c_callback = \FFI::new($sig);
+                $c_callback[0] = $marshal;
+
+                return \FFI::cast(FFI::ctypes("GCallback"), $c_callback[0]);
+
+            case 'read':
+                if (FFI::atLeast(8, 9)) {
+                    $marshal = function (
+                        CData $sourcePointer,
+                        CData $bufferPointer,
+                        int $bufferLength,
+                        CData $handle) : int {
+                        echo "hello from read marshal!\n";
+                        $callback = self::fromHandle($handle);
+                        $result = 0;
+
+                        $returnBuffer = $callback($bufferLength);
+                        if ($returnBuffer !== null) {
+                            $result = strlen($returnBuffer);
+                            \FFI::memcpy($bufferPointer, 
+                                $returnBuffer, 
+                                $result
+                            );
+                        }
+
+                        return $result;
+                    };
+
+                    $sig = \FFI::arrayType(FFI::ctypes("GCallback_read"), [1]);
+                    $c_callback = \FFI::new($sig);
+                    $c_callback[0] = $marshal;
+
+                    echo "c_callback[0] = ";
+                    print_r($c_callback[0]);
+                    echo "\n";
+
+                    return \FFI::cast(FFI::ctypes("GCallback"), $c_callback[0]);
+                }
         }
+
+        throw new Exception("unsupported signal $name");
     }
 
     private static function getMarshaler(string $name, Closure $callback): ?Closure
@@ -284,6 +333,28 @@ abstract class GObject
             default:
                 return null;
         }
+    }
+
+    private static function getHandle($object) : CData
+    {
+        $index = self::$nextIndex;
+        self::$nextIndex += 1;
+
+        self::$handleTable[$index] = $object;
+
+        // hide the index inside a void*
+        $x = \FFI::new(FFI::ctypes("GType"));
+        $x->cdata = $index;
+
+        return \FFI::cast("void*", $x);
+    }
+
+    private static function fromHandle($handle)
+    {
+        // recover the index from a void*
+        $index = $handle->cdata;
+
+        return self::$handleTable[$index];
     }
 }
 
