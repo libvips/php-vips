@@ -732,6 +732,13 @@ const char* vips_foreign_find_save_target (const char* suffix);
 EOS;
         }
 
+        if (PHP_OS_FAMILY === "OSX" ||
+            PHP_OS_FAMILY === "Darwin") {
+            $glib_libname = $path . $glib_libname;
+            $gobject_libname = $path . $gobject_libname;
+            $vips_libname = $path . $vips_libname;
+        }
+
         Utils::debugLog("init", ["binding ..."]);
         self::$glib = \FFI::cdef($glib_decls, $glib_libname);
         self::$gobject = \FFI::cdef($gobject_decls, $gobject_libname);
