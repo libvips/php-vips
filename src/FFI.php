@@ -253,7 +253,10 @@ class FFI
                 EOS, $path . $vips_libname);
                 break;
             } catch (\FFI\Exception $e) {
-                Utils::debugLog("init", ["msg" => "library load failed", "exception" => $e]);
+                Utils::debugLog("init", [
+                    "msg" => "library load failed", 
+                    "exception" => $e->getMessage()
+                ]);
             }
         }
 
@@ -805,6 +808,7 @@ EOS;
             "GClosure" => self::$gobject->type("GClosure"),
             "GParamSpec" => self::$gobject->type("GParamSpec*"),
             "VipsObject" => self::$vips->type("VipsObject*"),
+            "VipsProgress" => self::$vips->type("VipsProgress*"),
             "VipsOperation" => self::$vips->type("VipsOperation*"),
             "VipsImage" => self::$vips->type("VipsImage*"),
             "VipsInterpolate" => self::$vips->type("VipsInterpolate*"),

@@ -1297,6 +1297,20 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Enable progress reporting on an image.
+     *
+     * When progress reporting is enabled, evaluation of the most downstream
+     * image from this image will report progress using the ::preeval, ::eval,
+     * and ::posteval signals.
+     *
+     * @param bool $progress True to enable progress reporting.
+     */
+    public function setProgress($progress): void
+    {
+        FFI::vips()->vips_image_set_progress($this->pointer, $progress);
+    }
+
+    /**
      * Makes a string-ified version of the Image.
      *
      * @return string

@@ -99,7 +99,10 @@ abstract class GObject
 
     /**
      * Connect to a signal on this object.
-     * The callback will be triggered every time this signal is issued on this instance.
+     *
+     * The callback will be triggered every time this signal is issued on this 
+     * instance.
+     *
      * @throws Exception
      */
     public function signalConnect(string $name, Closure $callback): void
@@ -109,12 +112,14 @@ abstract class GObject
             throw new Exception("unsupported signal $name");
         }
 
-        $gc = FFI::gobject()->g_closure_new_simple(\FFI::sizeof(FFI::ctypes('GClosure')), null);
+        $sizeof = \FFI::sizeof(FFI::ctypes('GClosure'));
+        $gc = FFI::gobject()->g_closure_new_simple($sizeof, null);
         $gc->marshal = $marshaler;
         FFI::gobject()->g_signal_connect_closure($this->pointer, $name, $gc, 0);
     }
 
-    private static function getMarshaler(string $name, Closure $callback): ?Closure
+    private static function getMarshaler(string $name, 
+        Closure $callback): ?Closure
     {
         switch ($name) {
             case 'preeval':
@@ -130,20 +135,20 @@ abstract class GObject
                 ) use (&$callback) {
                     assert($numberOfParams === 3);
                     /**
-                     * Signature: void(VipsImage* image, void* progress, void* handle)
+                     * void(VipsImage*, VipsProgress*, void*)
                      */
-                    $vi = \FFI::cast(
-                        FFI::ctypes('GObject'),
-                        FFI::gobject()->g_value_get_pointer(\FFI::addr($params[0]))
-                    );
-                    FFI::gobject()->g_object_ref($vi);
-                    $image = new Image($vi);
-                    $pr = \FFI::cast(
-                        FFI::ctypes('VipsProgress'),
-                        FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]))
-                    );
-                    $callback($image, $pr);
+                    $pointer = FFI::gobject()->
+                        g_value_get_object(\FFI::addr($params[0]));
+                    FFI::gobject()->g_object_ref($pointer);
+                    $image = new Image($pointer);
+        
+                    $pointer = FFI::gobject()->
+                        g_value_get_pointer(\FFI::addr($params[1]));
+                    $progress = \FFI::cast(FFI::ctypes('VipsProgress'), $pointer);
+
+                    $callback($image, $progress);
                 };
+
             case 'read':
                 if (FFI::atLeast(8, 9)) {
                     return static function (
@@ -155,23 +160,31 @@ abstract class GObject
                         ?CData $data
                     ) use (&$callback): void {
                         assert($numberOfParams === 4);
-                        /*
-                         * Signature: gint64(VipsSourceCustom* source, void* buffer, gint64 length, void* handle)
+                        /**
+                         * gint64(VipsSourceCustom*, 
+                         *      void* buffer, gint64 length, void* handle)
                          */
-                        $bufferLength = (int)FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
+                        $bufferLength = (int)FFI::gobject()->
+                            g_value_get_int64(\FFI::addr($params[2]));
                         $returnBuffer = $callback($bufferLength);
-                        $returnBufferLength = 0;
+                        $returnBufferLength = 
+                            $returnBuffer !== null ? strlen($returnBuffer) : 0;
+                        $returnBufferLength = min($returnBufferLength, 
+                            $bufferLength);
+                        $bufferPointer = FFI::gobject()->
+                            g_value_get_pointer(\FFI::addr($params[1]));
+                        \FFI::memcpy($bufferPointer, 
+                            $returnBuffer, 
+                            $returnBufferLength);
 
-                        if ($returnBuffer !== null) {
-                            $returnBufferLength = strlen($returnBuffer);
-                            $bufferPointer = FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]));
-                            \FFI::memcpy($bufferPointer, $returnBuffer, $returnBufferLength);
-                        }
-                        FFI::gobject()->g_value_set_int64($returnValue, $returnBufferLength);
+                        FFI::gobject()->
+                            g_value_set_int64($returnValue, 
+                                $returnBufferLength);
                     };
                 }
 
                 return null;
+
             case 'seek':
                 if (FFI::atLeast(8, 9)) {
                     return static function (
@@ -183,16 +196,22 @@ abstract class GObject
                         ?CData $data
                     ) use (&$callback): void {
                         assert($numberOfParams === 4);
-                        /*
-                         * Signature: gint64(VipsSourceCustom* source, gint64 offset, int whence, void* handle)
+                        /**
+                         * gint64(VipsSourceCustom*, 
+                         *      gint64 offset, int whence, void* handle)
                          */
-                        $offset = (int)FFI::gobject()->g_value_get_int64(\FFI::addr($params[1]));
-                        $whence = (int)FFI::gobject()->g_value_get_int(\FFI::addr($params[2]));
-                        FFI::gobject()->g_value_set_int64($returnValue, $callback($offset, $whence));
+                        $offset = (int)FFI::gobject()->
+                            g_value_get_int64(\FFI::addr($params[1]));
+                        $whence = (int)FFI::gobject()->
+                            g_value_get_int(\FFI::addr($params[2]));
+                        $newOffset = $callback($offset, $whence);
+                        FFI::gobject()->
+                            g_value_set_int64($returnValue, $newOffset);
                     };
                 }
 
                 return null;
+
             case 'write':
                 if (FFI::atLeast(8, 9)) {
                     return static function (
@@ -204,18 +223,24 @@ abstract class GObject
                         ?CData $data
                     ) use (&$callback): void {
                         assert($numberOfParams === 4);
-                        /*
-                         * Signature: gint64(VipsTargetCustom* target, void* buffer, gint64 length, void* handle)
+                        /**
+                         * gint64(VipsTargetCustom*, 
+                         *      void* buffer, gint64 length, void* handle)
                          */
-                        $bufferPointer = FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]));
-                        $bufferLength = (int)FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
+                        $bufferPointer = FFI::gobject()->
+                            g_value_get_pointer(\FFI::addr($params[1]));
+                        $bufferLength = (int)FFI::gobject()->
+                            g_value_get_int64(\FFI::addr($params[2]));
                         $buffer = \FFI::string($bufferPointer, $bufferLength);
                         $returnBufferLength = $callback($buffer);
-                        FFI::gobject()->g_value_set_int64($returnValue, $returnBufferLength);
+                        FFI::gobject()->
+                            g_value_set_int64($returnValue, 
+                                $returnBufferLength);
                     };
                 }
 
                 return null;
+
             case 'finish':
                 if (FFI::atLeast(8, 9)) {
                     return static function (
@@ -228,13 +253,14 @@ abstract class GObject
                     ) use (&$callback): void {
                         assert($numberOfParams === 2);
                         /**
-                         * Signature: void(VipsTargetCustom* target, void* handle)
+                         * void(VipsTargetCustom*, void* handle)
                          */
                         $callback();
                     };
                 }
 
                 return null;
+
             case 'end':
                 if (FFI::atLeast(8, 13)) {
                     return static function (
@@ -247,13 +273,15 @@ abstract class GObject
                     ) use (&$callback): void {
                         assert($numberOfParams === 2);
                         /**
-                         * Signature: int(VipsTargetCustom* target, void* handle)
+                         * int(VipsTargetCustom*, void* handle)
                          */
-                        FFI::gobject()->g_value_set_int($returnValue, $callback());
+                        $result = $callback();
+                        FFI::gobject()->g_value_set_int($returnValue, $result);
                     };
                 }
 
                 return null;
+
             default:
                 return null;
         }
