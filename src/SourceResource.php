@@ -2,8 +2,6 @@
 
 namespace Jcupitt\Vips;
 
-use Closure;
-
 class SourceResource extends SourceCustom
 {
     /**

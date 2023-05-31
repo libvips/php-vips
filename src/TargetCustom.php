@@ -2,8 +2,6 @@
 
 namespace Jcupitt\Vips;
 
-use Closure;
-
 class TargetCustom extends Target
 {
     /**
@@ -26,7 +24,7 @@ class TargetCustom extends Target
      * and should return the number of bytes written.
      * @throws Exception
      */
-    public function onWrite(Closure $callback): void
+    public function onWrite(callable $callback): void
     {
         $this->signalConnect('write', $callback);
     }
@@ -41,7 +39,7 @@ class TargetCustom extends Target
      * target will be treated as unreadable and libvips will be unable to
      * write some file types (just TIFF, as of the time of writing).
      */
-    public function onRead(Closure $callback): void
+    public function onRead(callable $callback): void
     {
         if (FFI::atLeast(8, 13)) {
             $this->signalConnect('read', $callback);
@@ -61,7 +59,7 @@ class TargetCustom extends Target
      *  1 => current position
      *  2 => end
      */
-    public function onSeek(Closure $callback): void
+    public function onSeek(callable $callback): void
     {
         if (FFI::atLeast(8, 13)) {
             $this->signalConnect('seek', $callback);
@@ -75,7 +73,7 @@ class TargetCustom extends Target
      * Automatically falls back to onFinish if libvips <8.13
      * @throws Exception
      */
-    public function onEnd(Closure $callback): void
+    public function onEnd(callable $callback): void
     {
         if (FFI::atLeast(8, 13)) {
             $this->signalConnect('end', $callback);
@@ -89,7 +87,7 @@ class TargetCustom extends Target
      * For libvips 8.13 and later, this method is deprecated in favour of @throws Exception
      * @see TargetCustom::onEnd()
      */
-    public function onFinish(Closure $callback): void
+    public function onFinish(callable $callback): void
     {
         $this->signalConnect('finish', $callback);
     }

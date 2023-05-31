@@ -2,8 +2,6 @@
 
 namespace Jcupitt\Vips;
 
-use Closure;
-
 class SourceCustom extends Source
 {
     /**
@@ -27,7 +25,7 @@ class SourceCustom extends Source
      * to that number of bytes. If there is no more data available, it should
      * return null.
      */
-    public function onRead(Closure $callback): void
+    public function onRead(callable $callback): void
     {
         $this->signalConnect('read', $callback);
     }
@@ -45,7 +43,7 @@ class SourceCustom extends Source
      *  1 => current position
      *  2 => end
      */
-    public function onSeek(Closure $callback): void
+    public function onSeek(callable $callback): void
     {
         $this->signalConnect('seek', $callback);
     }

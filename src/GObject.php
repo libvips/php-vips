@@ -102,7 +102,7 @@ abstract class GObject
      * The callback will be triggered every time this signal is issued on this instance.
      * @throws Exception
      */
-    public function signalConnect(string $name, Closure $callback): void
+    public function signalConnect(string $name, callable $callback): void
     {
         $marshaler = self::getMarshaler($name, $callback);
         if ($marshaler === null) {
@@ -114,7 +114,7 @@ abstract class GObject
         FFI::gobject()->g_signal_connect_closure($this->pointer, $name, $gc, 0);
     }
 
-    private static function getMarshaler(string $name, Closure $callback): ?Closure
+    private static function getMarshaler(string $name, callable $callback): ?Closure
     {
         switch ($name) {
             case 'preeval':
