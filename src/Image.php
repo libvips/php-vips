@@ -1082,7 +1082,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $saver = FFI::vips()->vips_foreign_find_save_target($filename);
 
         if ($saver === '') {
-            throw new Exception("can't save to target with filename $filename");
+            throw new Exception("can't save to target with given suffix $filename");
         }
 
         if ($string_options !== '') {
