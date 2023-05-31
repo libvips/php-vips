@@ -24,7 +24,6 @@ class Target extends Connection
      *      $target = VipsTarget.newToDescriptor(1)
      * Makes a descriptor attached to stdout.
      * You can pass this target to (for example) @see Image::writeToTarget()
-
      * @throws Exception
      */
     public static function newToDescriptor(int $descriptor): self
