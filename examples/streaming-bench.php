@@ -3,10 +3,10 @@
 
 use Jcupitt\Vips\Config;
 use Jcupitt\Vips\Image;
-use Jcupitt\Vips\VipsSource;
-use Jcupitt\Vips\VipsSourceResource;
-use Jcupitt\Vips\VipsTarget;
-use Jcupitt\Vips\VipsTargetResource;
+use Jcupitt\Vips\Source;
+use Jcupitt\Vips\SourceResource;
+use Jcupitt\Vips\Target;
+use Jcupitt\Vips\TargetResource;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -24,8 +24,8 @@ $doBenchmark = static function () {
     $start = microtime(true);
 
     for ($i = 0; $i < $iterations; $i++) {
-        $source = new VipsSourceResource(fopen($sourceFile, 'rb'));
-        $target = new VipsTargetResource(fopen($targetFile, 'wb+'));
+        $source = new SourceResource(fopen($sourceFile, 'rb'));
+        $target = new TargetResource(fopen($targetFile, 'wb+'));
         $image = Image::newFromSource($source, '', $sourceOptions);
         $image = $image->resize($targetWidth / $image->width);
         $image->writeToTarget(
@@ -42,8 +42,8 @@ $doBenchmark = static function () {
     $start = microtime(true);
 
     for ($i = 0; $i < $iterations; $i++) {
-        $source = VipsSource::newFromFile($sourceFile);
-        $target = VipsTarget::newToFile($targetFile);
+        $source = Source::newFromFile($sourceFile);
+        $target = Target::newToFile($targetFile);
         $image = Image::newFromSource($source, '', $sourceOptions);
         $image = $image->resize($targetWidth / $image->width);
         $image->writeToTarget(
@@ -60,8 +60,8 @@ $doBenchmark = static function () {
     $start = microtime(true);
 
     for ($i = 0; $i < $iterations; $i++) {
-        $source = new VipsSourceResource(fopen($sourceFile, 'rb'));
-        $target = new VipsTargetResource(fopen($targetFile, 'wb+'));
+        $source = new SourceResource(fopen($sourceFile, 'rb'));
+        $target = new TargetResource(fopen($targetFile, 'wb+'));
         $image = Image::thumbnail_source($source, $targetWidth);
         $image->writeToTarget(
             $target,
@@ -77,8 +77,8 @@ $doBenchmark = static function () {
     $start = microtime(true);
 
     for ($i = 0; $i < $iterations; $i++) {
-        $source = VipsSource::newFromFile($sourceFile);
-        $target = VipsTarget::newToFile($targetFile);
+        $source = Source::newFromFile($sourceFile);
+        $target = Target::newToFile($targetFile);
         $image = Image::thumbnail_source($source, $targetWidth);
         $image->writeToTarget(
             $target,

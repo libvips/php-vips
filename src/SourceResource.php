@@ -4,7 +4,7 @@ namespace Jcupitt\Vips;
 
 use Closure;
 
-class VipsSourceResource extends VipsSourceCustom
+class SourceResource extends SourceCustom
 {
     /**
      * @var resource

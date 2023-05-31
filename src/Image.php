@@ -906,10 +906,10 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * example 'VipsForeignLoadJpegSource'. You can use this to work out what
      * options to pass to newFromSource().
      *
-     * @param VipsSource $source The source to test
+     * @param Source $source The source to test
      * @return string|null The name of the load operation, or null.
      */
-    public static function findLoadSource(VipsSource $source): ?string
+    public static function findLoadSource(Source $source): ?string
     {
         return FFI::vips()->vips_foreign_find_load_source(\FFI::cast(FFI::ctypes('VipsSource'), $source->pointer));
     }
@@ -917,7 +917,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * @throws Exception
      */
-    public static function newFromSource(VipsSource $source, string $string_options = '', array $options = []): self
+    public static function newFromSource(Source $source, string $string_options = '', array $options = []): self
     {
         $loader = self::findLoadSource($source);
         if ($loader === null) {
@@ -1075,7 +1075,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
     /**
      * @throws Exception
      */
-    public function writeToTarget(VipsTarget $target, string $suffix, array $options = []): void
+    public function writeToTarget(Target $target, string $suffix, array $options = []): void
     {
         $filename = Utils::filenameGetFilename($suffix);
         $string_options = Utils::filenameGetOptions($suffix);

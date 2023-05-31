@@ -4,7 +4,7 @@ namespace Jcupitt\Vips;
 
 use Closure;
 
-class VipsSourceCustom extends VipsSource
+class SourceCustom extends Source
 {
     /**
      * A pointer to the underlying VipsSourceCustom. This is the same as the

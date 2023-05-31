@@ -32,8 +32,8 @@ gtype_to_php_arg = {
     GValue.array_double_type: 'float[]|float',
     GValue.array_image_type: 'Image[]|Image',
     GValue.blob_type: 'string',
-    GValue.source_type: 'VipsSource',
-    GValue.target_type: 'VipsTarget'
+    GValue.source_type: 'Source',
+    GValue.target_type: 'Target'
 }
 
 # php result type names are different, annoyingly, and very restricted
@@ -51,8 +51,8 @@ gtype_to_php_result = {
     GValue.array_double_type: 'array',
     GValue.array_image_type: 'array',
     GValue.blob_type: 'string',
-    GValue.source_type: 'VipsSource',
-    GValue.target_type: 'VipsTarget'
+    GValue.source_type: 'Source',
+    GValue.target_type: 'Target'
 }
 
 # values for VipsArgumentFlags

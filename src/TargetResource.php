@@ -2,7 +2,7 @@
 
 namespace Jcupitt\Vips;
 
-class VipsTargetResource extends VipsTargetCustom
+class TargetResource extends TargetCustom
 {
     /**
      * @var resource

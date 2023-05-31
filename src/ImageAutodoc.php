@@ -171,11 +171,11 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image csvload(string $filename, array $options = []) Load csv.
  *     @throws Exception
- * @method static Image csvload_source(VipsSource $source, array $options = []) Load csv.
+ * @method static Image csvload_source(Source $source, array $options = []) Load csv.
  *     @throws Exception
  * @method void csvsave(string $filename, array $options = []) Save image to csv.
  *     @throws Exception
- * @method void csvsave_target(VipsTarget $target, array $options = []) Save image to csv.
+ * @method void csvsave_target(Target $target, array $options = []) Save image to csv.
  *     @throws Exception
  * @method Image dE00(Image $right, array $options = []) Calculate dE00.
  *     @throws Exception
@@ -227,7 +227,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image fitsload(string $filename, array $options = []) Load a FITS image.
  *     @throws Exception
- * @method static Image fitsload_source(VipsSource $source, array $options = []) Load FITS from a source.
+ * @method static Image fitsload_source(Source $source, array $options = []) Load FITS from a source.
  *     @throws Exception
  * @method void fitssave(string $filename, array $options = []) Save image to fits file.
  *     @throws Exception
@@ -258,7 +258,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image gifload_buffer(string $buffer, array $options = []) Load GIF with libnsgif.
  *     @throws Exception
- * @method static Image gifload_source(VipsSource $source, array $options = []) Load gif from source.
+ * @method static Image gifload_source(Source $source, array $options = []) Load gif from source.
  *     @throws Exception
  * @method Image globalbalance(array $options = []) Global balance an image mosaic.
  *     @throws Exception
@@ -273,13 +273,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image heifload_buffer(string $buffer, array $options = []) Load a HEIF image.
  *     @throws Exception
- * @method static Image heifload_source(VipsSource $source, array $options = []) Load a HEIF image.
+ * @method static Image heifload_source(Source $source, array $options = []) Load a HEIF image.
  *     @throws Exception
  * @method void heifsave(string $filename, array $options = []) Save image in HEIF format.
  *     @throws Exception
  * @method string heifsave_buffer(array $options = []) Save image in HEIF format.
  *     @throws Exception
- * @method void heifsave_target(VipsTarget $target, array $options = []) Save image in HEIF format.
+ * @method void heifsave_target(Target $target, array $options = []) Save image in HEIF format.
  *     @throws Exception
  * @method Image hist_cum(array $options = []) Form cumulative histogram.
  *     @throws Exception
@@ -330,7 +330,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image jpegload_buffer(string $buffer, array $options = []) Load jpeg from buffer.
  *     @throws Exception
- * @method static Image jpegload_source(VipsSource $source, array $options = []) Load image from jpeg source.
+ * @method static Image jpegload_source(Source $source, array $options = []) Load image from jpeg source.
  *     @throws Exception
  * @method void jpegsave(string $filename, array $options = []) Save image to jpeg file.
  *     @throws Exception
@@ -338,19 +338,19 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void jpegsave_mime(array $options = []) Save image to jpeg mime.
  *     @throws Exception
- * @method void jpegsave_target(VipsTarget $target, array $options = []) Save image to jpeg target.
+ * @method void jpegsave_target(Target $target, array $options = []) Save image to jpeg target.
  *     @throws Exception
  * @method static Image jxlload(string $filename, array $options = []) Load JPEG-XL image.
  *     @throws Exception
  * @method static Image jxlload_buffer(string $buffer, array $options = []) Load JPEG-XL image.
  *     @throws Exception
- * @method static Image jxlload_source(VipsSource $source, array $options = []) Load JPEG-XL image.
+ * @method static Image jxlload_source(Source $source, array $options = []) Load JPEG-XL image.
  *     @throws Exception
  * @method void jxlsave(string $filename, array $options = []) Save image in JPEG-XL format.
  *     @throws Exception
  * @method string jxlsave_buffer(array $options = []) Save image in JPEG-XL format.
  *     @throws Exception
- * @method void jxlsave_target(VipsTarget $target, array $options = []) Save image in JPEG-XL format.
+ * @method void jxlsave_target(Target $target, array $options = []) Save image in JPEG-XL format.
  *     @throws Exception
  * @method Image labelregions(array $options = []) Label regions in an image.
  *     @throws Exception
@@ -409,13 +409,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image matrixload(string $filename, array $options = []) Load matrix.
  *     @throws Exception
- * @method static Image matrixload_source(VipsSource $source, array $options = []) Load matrix.
+ * @method static Image matrixload_source(Source $source, array $options = []) Load matrix.
  *     @throws Exception
  * @method void matrixprint(array $options = []) Print matrix.
  *     @throws Exception
  * @method void matrixsave(string $filename, array $options = []) Save image to matrix.
  *     @throws Exception
- * @method void matrixsave_target(VipsTarget $target, array $options = []) Save image to matrix.
+ * @method void matrixsave_target(Target $target, array $options = []) Save image to matrix.
  *     @throws Exception
  * @method float max(array $options = []) Find image maximum.
  *     @throws Exception
@@ -441,13 +441,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image openslideload(string $filename, array $options = []) Load file with OpenSlide.
  *     @throws Exception
- * @method static Image openslideload_source(VipsSource $source, array $options = []) Load source with OpenSlide.
+ * @method static Image openslideload_source(Source $source, array $options = []) Load source with OpenSlide.
  *     @throws Exception
  * @method static Image pdfload(string $filename, array $options = []) Load PDF from file.
  *     @throws Exception
  * @method static Image pdfload_buffer(string $buffer, array $options = []) Load PDF from buffer.
  *     @throws Exception
- * @method static Image pdfload_source(VipsSource $source, array $options = []) Load PDF from source.
+ * @method static Image pdfload_source(Source $source, array $options = []) Load PDF from source.
  *     @throws Exception
  * @method integer percent(float $percent, array $options = []) Find threshold for percent of pixels.
  *     @throws Exception
@@ -459,21 +459,21 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image pngload_buffer(string $buffer, array $options = []) Load png from buffer.
  *     @throws Exception
- * @method static Image pngload_source(VipsSource $source, array $options = []) Load png from source.
+ * @method static Image pngload_source(Source $source, array $options = []) Load png from source.
  *     @throws Exception
  * @method void pngsave(string $filename, array $options = []) Save image to png file.
  *     @throws Exception
  * @method string pngsave_buffer(array $options = []) Save image to png buffer.
  *     @throws Exception
- * @method void pngsave_target(VipsTarget $target, array $options = []) Save image to target as PNG.
+ * @method void pngsave_target(Target $target, array $options = []) Save image to target as PNG.
  *     @throws Exception
  * @method static Image ppmload(string $filename, array $options = []) Load ppm from file.
  *     @throws Exception
- * @method static Image ppmload_source(VipsSource $source, array $options = []) Load ppm base class.
+ * @method static Image ppmload_source(Source $source, array $options = []) Load ppm base class.
  *     @throws Exception
  * @method void ppmsave(string $filename, array $options = []) Save image to ppm file.
  *     @throws Exception
- * @method void ppmsave_target(VipsTarget $target, array $options = []) Save to ppm.
+ * @method void ppmsave_target(Target $target, array $options = []) Save to ppm.
  *     @throws Exception
  * @method Image premultiply(array $options = []) Premultiply image alpha.
  *     @throws Exception
@@ -499,13 +499,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image radload_buffer(string $buffer, array $options = []) Load rad from buffer.
  *     @throws Exception
- * @method static Image radload_source(VipsSource $source, array $options = []) Load rad from source.
+ * @method static Image radload_source(Source $source, array $options = []) Load rad from source.
  *     @throws Exception
  * @method void radsave(string $filename, array $options = []) Save image to Radiance file.
  *     @throws Exception
  * @method string radsave_buffer(array $options = []) Save image to Radiance buffer.
  *     @throws Exception
- * @method void radsave_target(VipsTarget $target, array $options = []) Save image to Radiance target.
+ * @method void radsave_target(Target $target, array $options = []) Save image to Radiance target.
  *     @throws Exception
  * @method Image rank(integer $width, integer $height, integer $index, array $options = []) Rank filter.
  *     @throws Exception
@@ -593,7 +593,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image svgload_buffer(string $buffer, array $options = []) Load SVG with rsvg.
  *     @throws Exception
- * @method static Image svgload_source(VipsSource $source, array $options = []) Load svg from source.
+ * @method static Image svgload_source(Source $source, array $options = []) Load svg from source.
  *     @throws Exception
  * @method static Image switch(Image[]|Image $tests, array $options = []) Find the index of the first non-zero pixel in tests.
  *     @throws Exception
@@ -607,13 +607,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image thumbnail_image(integer $width, array $options = []) Generate thumbnail from image.
  *     @throws Exception
- * @method static Image thumbnail_source(VipsSource $source, integer $width, array $options = []) Generate thumbnail from source.
+ * @method static Image thumbnail_source(Source $source, integer $width, array $options = []) Generate thumbnail from source.
  *     @throws Exception
  * @method static Image tiffload(string $filename, array $options = []) Load tiff from file.
  *     @throws Exception
  * @method static Image tiffload_buffer(string $buffer, array $options = []) Load tiff from buffer.
  *     @throws Exception
- * @method static Image tiffload_source(VipsSource $source, array $options = []) Load tiff from source.
+ * @method static Image tiffload_source(Source $source, array $options = []) Load tiff from source.
  *     @throws Exception
  * @method void tiffsave(string $filename, array $options = []) Save image to tiff file.
  *     @throws Exception
@@ -629,23 +629,23 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image vipsload(string $filename, array $options = []) Load vips from file.
  *     @throws Exception
- * @method static Image vipsload_source(VipsSource $source, array $options = []) Load vips from source.
+ * @method static Image vipsload_source(Source $source, array $options = []) Load vips from source.
  *     @throws Exception
  * @method void vipssave(string $filename, array $options = []) Save image to file in vips format.
  *     @throws Exception
- * @method void vipssave_target(VipsTarget $target, array $options = []) Save image to target in vips format.
+ * @method void vipssave_target(Target $target, array $options = []) Save image to target in vips format.
  *     @throws Exception
  * @method static Image webpload(string $filename, array $options = []) Load webp from file.
  *     @throws Exception
  * @method static Image webpload_buffer(string $buffer, array $options = []) Load webp from buffer.
  *     @throws Exception
- * @method static Image webpload_source(VipsSource $source, array $options = []) Load webp from source.
+ * @method static Image webpload_source(Source $source, array $options = []) Load webp from source.
  *     @throws Exception
  * @method void webpsave(string $filename, array $options = []) Save image to webp file.
  *     @throws Exception
  * @method string webpsave_buffer(array $options = []) Save image to webp buffer.
  *     @throws Exception
- * @method void webpsave_target(VipsTarget $target, array $options = []) Save image to webp target.
+ * @method void webpsave_target(Target $target, array $options = []) Save image to webp target.
  *     @throws Exception
  * @method static Image worley(integer $width, integer $height, array $options = []) Make a worley noise image.
  *     @throws Exception

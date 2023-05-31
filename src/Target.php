@@ -2,7 +2,7 @@
 
 namespace Jcupitt\Vips;
 
-class VipsTarget extends Connection
+class Target extends Connection
 {
     /**
      * A pointer to the underlying VipsTarget. This is the same as the

@@ -4,7 +4,7 @@ namespace Jcupitt\Vips;
 
 use Closure;
 
-class VipsTargetCustom extends VipsTarget
+class TargetCustom extends Target
 {
     /**
      * A pointer to the underlying VipsTargetCustom. This is the same as the
@@ -86,8 +86,8 @@ class VipsTargetCustom extends VipsTarget
 
     /**
      * Attach a finish handler.
-     * For libvips 8.13 and later, this method is deprecated in favour of @see VipsTargetCustom::onEnd()
-     * @throws Exception
+     * For libvips 8.13 and later, this method is deprecated in favour of @throws Exception
+     * @see TargetCustom::onEnd()
      */
     public function onFinish(Closure $callback): void
     {

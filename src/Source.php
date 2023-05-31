@@ -2,7 +2,7 @@
 
 namespace Jcupitt\Vips;
 
-class VipsSource extends Connection
+class Source extends Connection
 {
     /**
      * A pointer to the underlying VipsSource. This is the same as the

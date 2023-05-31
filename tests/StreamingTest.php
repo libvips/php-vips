@@ -5,10 +5,10 @@ namespace Jcupitt\Vips\Test;
 use Generator;
 use Jcupitt\Vips\Exception;
 use Jcupitt\Vips\Image;
-use Jcupitt\Vips\VipsSource;
-use Jcupitt\Vips\VipsSourceResource;
-use Jcupitt\Vips\VipsTarget;
-use Jcupitt\Vips\VipsTargetResource;
+use Jcupitt\Vips\Source;
+use Jcupitt\Vips\SourceResource;
+use Jcupitt\Vips\Target;
+use Jcupitt\Vips\TargetResource;
 use PHPUnit\Framework\TestCase;
 
 class StreamingTest extends TestCase
@@ -19,15 +19,15 @@ class StreamingTest extends TestCase
     public function sourceAndTargetProvider(): Generator
     {
         $sources = [
-            'File' => fn() => VipsSource::newFromFile(__DIR__ . '/images/img_0076.jpg'),
-            'Memory' => fn() => VipsSource::newFromMemory(file_get_contents(__DIR__ . '/images/img_0076.jpg')),
-            'Resource' => fn() => new VipsSourceResource(fopen(__DIR__ . '/images/img_0076.jpg', 'rb'))
+            'File' => fn() => Source::newFromFile(__DIR__ . '/images/img_0076.jpg'),
+            'Memory' => fn() => Source::newFromMemory(file_get_contents(__DIR__ . '/images/img_0076.jpg')),
+            'Resource' => fn() => new SourceResource(fopen(__DIR__ . '/images/img_0076.jpg', 'rb'))
         ];
         $targets = [
-            'File' => fn() => VipsTarget::newToFile(tempnam(sys_get_temp_dir(), 'image')),
-            'Memory' => fn() => VipsTarget::newToMemory(),
-            'Resource' => fn() => new VipsTargetResource(fopen('php://memory', 'wb+')),
-            'Resource(Not Readable)' => fn() => new VipsTargetResource(fopen('php://memory', 'wb'))
+            'File' => fn() => Target::newToFile(tempnam(sys_get_temp_dir(), 'image')),
+            'Memory' => fn() => Target::newToMemory(),
+            'Resource' => fn() => new TargetResource(fopen('php://memory', 'wb+')),
+            'Resource(Not Readable)' => fn() => new TargetResource(fopen('php://memory', 'wb'))
         ];
 
         foreach ($sources as $sourceName => $source) {
@@ -40,7 +40,7 @@ class StreamingTest extends TestCase
     /**
      * @dataProvider sourceAndTargetProvider
      */
-    public function testFromSourceToTarget(VipsSource $source, VipsTarget $target): void
+    public function testFromSourceToTarget(Source $source, Target $target): void
     {
         $image = Image::newFromSource($source);
         $image->writeToTarget($target, '.jpg[Q=95]');
@@ -56,8 +56,8 @@ class StreamingTest extends TestCase
      */
     public function testFromFileToFile(): void
     {
-        $source = VipsSource::newFromFile(__DIR__ . '/images/img_0076.jpg');
-        $target = VipsTarget::newToFile(tempnam(sys_get_temp_dir(), 'image'));
+        $source = Source::newFromFile(__DIR__ . '/images/img_0076.jpg');
+        $target = Target::newToFile(tempnam(sys_get_temp_dir(), 'image'));
         $image = Image::newFromSource($source);
         $image->writeToTarget($target, '.jpg[Q=95]');
 
@@ -73,8 +73,8 @@ class StreamingTest extends TestCase
         $leaked = false;
         for ($i = 0; $i < 10; $i++) {
             $filename = tempnam(sys_get_temp_dir(), 'image');
-            $source = new VipsSourceResource(fopen(__DIR__ . '/images/img_0076.jpg', 'rb'));
-            $target = new VipsTargetResource(fopen($filename, 'wb+'));
+            $source = new SourceResource(fopen(__DIR__ . '/images/img_0076.jpg', 'rb'));
+            $target = new TargetResource(fopen($filename, 'wb+'));
             $image = Image::newFromSource($source);
             $image->writeToTarget($target, '.jpg[Q=95]');
             unlink($filename);
