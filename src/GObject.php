@@ -109,8 +109,8 @@ abstract class GObject
             throw new Exception("unsupported signal $name");
         }
 
-        $gc = FFI::gobject()->g_closure_new_simple(\FFI::sizeof(FFI::ctypes('GClosure')), null);
-        $gc->marshal = $marshaler;
+        $gc = FFI::newGClosure();
+        FFI::gobject()->g_closure_set_marshal($gc, $marshaler);
         FFI::gobject()->g_signal_connect_closure($this->pointer, $name, $gc, 0);
     }
 
