@@ -132,10 +132,7 @@ abstract class GObject
                     /**
                      * Signature: void(VipsImage* image, void* progress, void* handle)
                      */
-                    $vi = \FFI::cast(
-                        FFI::ctypes('GObject'),
-                        FFI::gobject()->g_value_get_pointer(\FFI::addr($params[0]))
-                    );
+                    $vi = FFI::gobject()->g_value_get_object(\FFI::addr($params[0]));
                     FFI::gobject()->g_object_ref($vi);
                     $image = new Image($vi);
                     $pr = \FFI::cast(
