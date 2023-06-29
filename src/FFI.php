@@ -196,10 +196,11 @@ class FFI
         return null;
     }
 
-    private static function libraryLoad(array $libraryPaths,
-                                        string $libraryName, 
-                                        string $interface): \FFI
-    {
+    private static function libraryLoad(
+        array $libraryPaths,
+        string $libraryName,
+        string $interface
+    ): \FFI {
         Utils::debugLog("trying to open", ["libraryName" => $libraryName]);
         foreach ($libraryPaths as $path) {
             Utils::debugLog("trying path", ["path" => $path]);
@@ -209,7 +210,7 @@ class FFI
                 return $library;
             } catch (\FFI\Exception $e) {
                 Utils::debugLog("init", [
-                    "msg" => "library load failed", 
+                    "msg" => "library load failed",
                     "exception" => $e->getMessage()
                 ]);
             }
@@ -558,7 +559,7 @@ typedef struct _VipsArgumentClass {
     unsigned int offset;
 } VipsArgumentClass;
 
-int vips_object_get_argument (VipsObject* object, const char *name, 
+int vips_object_get_argument (VipsObject* object, const char *name,
     GParamSpec** pspec,
     VipsArgumentClass** argument_class,
     VipsArgumentInstance** argument_instance);
@@ -743,15 +744,21 @@ EOS;
         }
 
         Utils::debugLog("init", ["binding ..."]);
-        self::$glib = self::libraryLoad($libraryPaths, 
-                                        $glib_libname, 
-                                        $glib_decls);
-        self::$gobject = self::libraryLoad($libraryPaths, 
-                                           $gobject_libname, 
-                                           $gobject_decls);
-        self::$vips = self::libraryLoad($libraryPaths, 
-                                        $vips_libname, 
-                                        $vips_decls);
+        self::$glib = self::libraryLoad(
+            $libraryPaths,
+            $glib_libname,
+            $glib_decls
+        );
+        self::$gobject = self::libraryLoad(
+            $libraryPaths,
+            $gobject_libname,
+            $gobject_decls
+        );
+        self::$vips = self::libraryLoad(
+            $libraryPaths,
+            $vips_libname,
+            $vips_decls
+        );
 
         # Useful for debugging
         # self::$vips->vips_leak_set(1);
