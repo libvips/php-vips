@@ -1889,7 +1889,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'bandrank',
             null,
             [array_merge([$this], $other)],
-            $options);
+            $options
+        );
     }
 
     /**

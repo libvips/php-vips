@@ -254,7 +254,7 @@ class FFI
                 break;
             } catch (\FFI\Exception $e) {
                 Utils::debugLog("init", [
-                    "msg" => "library load failed", 
+                    "msg" => "library load failed",
                     "exception" => $e->getMessage()
                 ]);
             }
