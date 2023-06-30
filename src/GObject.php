@@ -151,7 +151,7 @@ abstract class GObject
                         CData  $hint,
                         ?CData $data
                     ) use (&$callback): void {
-                        assert($numberOfParams === 4);
+                        assert($numberOfParams === 3);
                         /*
                          * Signature: gint64(VipsSourceCustom* source, void* buffer, gint64 length, void* handle)
                          */
@@ -179,7 +179,7 @@ abstract class GObject
                         CData  $hint,
                         ?CData $data
                     ) use (&$callback): void {
-                        assert($numberOfParams === 4);
+                        assert($numberOfParams === 3);
                         /*
                          * Signature: gint64(VipsSourceCustom* source, gint64 offset, int whence, void* handle)
                          */
@@ -200,7 +200,7 @@ abstract class GObject
                         CData  $hint,
                         ?CData $data
                     ) use (&$callback): void {
-                        assert($numberOfParams === 4);
+                        assert($numberOfParams === 3);
                         /*
                          * Signature: gint64(VipsTargetCustom* target, void* buffer, gint64 length, void* handle)
                          */
@@ -223,7 +223,7 @@ abstract class GObject
                         CData  $hint,
                         ?CData $data
                     ) use (&$callback): void {
-                        assert($numberOfParams === 2);
+                        assert($numberOfParams === 0);
                         /**
                          * Signature: void(VipsTargetCustom* target, void* handle)
                          */
@@ -242,7 +242,7 @@ abstract class GObject
                         CData  $hint,
                         ?CData $data
                     ) use (&$callback): void {
-                        assert($numberOfParams === 2);
+                        assert($numberOfParams === 0);
                         /**
                          * Signature: int(VipsTargetCustom* target, void* handle)
                          */
