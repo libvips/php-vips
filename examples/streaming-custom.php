@@ -27,7 +27,7 @@ $source->onSeek(function ($offset, $whence) use (&$in_file) {
 });
 
 // open for write and read ... formats like tiff need to be able to seek back
-// in the output and update bytes later 
+// in the output and update bytes later
 $out_file = fopen($argv[2], 'w+');
 $target = new Vips\TargetCustom();
 $target->onWrite(function ($buffer) use (&$out_file) {
@@ -35,9 +35,9 @@ $target->onWrite(function ($buffer) use (&$out_file) {
     if ($result === false) {
         // IO error
         return -1;
-    }
-    else
+    } else {
         return $result;
+    }
 });
 // read and seek are optional
 $target->onSeek(function ($offset, $whence) use (&$out_file) {
@@ -53,4 +53,3 @@ $target->onRead(function ($bufferLength) use (&$out_file) {
 
 $image = Vips\Image::newFromSource($source);
 $image->writeToTarget($target, $argv[3]);
-

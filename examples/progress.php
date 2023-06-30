@@ -9,14 +9,14 @@ use Jcupitt\Vips;
 $image = Vips\Image::black(1, 1000000);
 $image->setProgress(true);
     
-$image->signalConnect("preeval", function($image, $progress) {
+$image->signalConnect("preeval", function ($image, $progress) {
     echo "preeval:\n";
 });
-$image->signalConnect("eval", function($image, $progress) {
+$image->signalConnect("eval", function ($image, $progress) {
     echo "eval: $progress->percent % complete\r";
-}); 
+});
     
-$image->signalConnect("posteval", function($image, $progress) {
+$image->signalConnect("posteval", function ($image, $progress) {
     echo "\nposteval:\n";
 });
     
