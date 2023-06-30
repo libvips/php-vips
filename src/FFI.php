@@ -204,6 +204,29 @@ class FFI
                 // most *nix
                 return "$name.so.$abi";
         }
+
+        return null;
+    }
+
+    private static function libraryLoad(
+        array $libraryPaths,
+        string $libraryName,
+        string $interface
+    ): \FFI {
+        Utils::debugLog("trying to open", ["libraryName" => $libraryName]);
+        foreach ($libraryPaths as $path) {
+            Utils::debugLog("trying path", ["path" => $path]);
+            try {
+                $library = \FFI::cdef($interface, $path . $libraryName);
+                Utils::debugLog("success", []);
+                return $library;
+            } catch (\FFI\Exception $e) {
+                Utils::debugLog("init", [
+                    "msg" => "library load failed",
+                    "exception" => $e->getMessage()
+                ]);
+            }
+        }
     }
 
     private static function init(): void
@@ -251,30 +274,15 @@ class FFI
             $libraryPaths[] = "/opt/homebrew/lib/"; // Homebrew on Apple Silicon
         }
 
-        // attempt to open libraries using the system library search method
-        // (no prefix) and a couple of fallback paths, if any
-        $vips = null;
-        foreach ($libraryPaths as $path) {
-            Utils::debugLog("init", ["path" => $path]);
-
-            try {
-                $vips = \FFI::cdef(<<<EOS
-                    int vips_init (const char *argv0);
-                    const char *vips_error_buffer (void);
-                    int vips_version(int flag);
-                EOS, $path . $vips_libname);
-                break;
-            } catch (\FFI\Exception $e) {
-                Utils::debugLog("init", [
-                    "msg" => "library load failed",
-                    "exception" => $e->getMessage()
-                ]);
-            }
-        }
+        $vips = self::libraryLoad($libraryPaths, $vips_libname, <<<EOS
+            int vips_init (const char *argv0);
+            const char *vips_error_buffer (void);
+            int vips_version(int flag);
+        EOS);
 
         if ($vips === null) {
+            // drop the "" (system path) member
             array_shift($libraryPaths);
-
             $msg = "Unable to open library '$vips_libname'";
             if (!empty($libraryPaths)) {
                 $msg .= " in any of ['" . implode("', '", $libraryPaths) . "']";
@@ -579,7 +587,7 @@ typedef struct _VipsArgumentClass {
     unsigned int offset;
 } VipsArgumentClass;
 
-int vips_object_get_argument (VipsObject* object, const char *name, 
+int vips_object_get_argument (VipsObject* object, const char *name,
     GParamSpec** pspec,
     VipsArgumentClass** argument_class,
     VipsArgumentInstance** argument_instance);
@@ -758,9 +766,21 @@ EOS;
         }
 
         Utils::debugLog("init", ["binding ..."]);
-        self::$glib = \FFI::cdef($glib_decls, $glib_libname);
-        self::$gobject = \FFI::cdef($gobject_decls, $gobject_libname);
-        self::$vips = \FFI::cdef($vips_decls, $vips_libname);
+        self::$glib = self::libraryLoad(
+            $libraryPaths,
+            $glib_libname,
+            $glib_decls
+        );
+        self::$gobject = self::libraryLoad(
+            $libraryPaths,
+            $gobject_libname,
+            $gobject_decls
+        );
+        self::$vips = self::libraryLoad(
+            $libraryPaths,
+            $vips_libname,
+            $vips_decls
+        );
 
         # Useful for debugging
         # self::$vips->vips_leak_set(1);
