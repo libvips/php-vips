@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-            <title>Documentation</title>
+            <title>php-vips</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Documentation</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">php-vips</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -74,6 +74,16 @@
     <ul class="phpdocumentor-list">
                     <li>
                 <a href="packages/Jcupitt-Vips.html" class="">Vips</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/php.html" class="">php</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/php-vips.html" class="">vips</a>
                 
             </li>
             </ul>
@@ -188,53 +198,18 @@
 
 <dl class="phpdocumentor-table-of-contents">
                     <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/Jcupitt-Vips-Config.html#property_ffi_inited">$ffi_inited</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/Jcupitt-Vips-Config.html#property_ftypes">$ftypes</a>
-    <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/Jcupitt-Vips-Config.html#property_gtypes">$gtypes</a>
-    <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/Jcupitt-Vips-Config.html#property_library_micro">$library_micro</a>
-    <span>
-                        &nbsp;: int            </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/Jcupitt-Vips-Config.html#property_library_minor">$library_minor</a>
-    <span>
-                        &nbsp;: int            </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/Jcupitt-Vips-Config.html#property_logger">$logger</a>
     <span>
-                        &nbsp;: <abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>            </span>
+                        &nbsp;: <abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null            </span>
 </dt>
 <dd>The logger instance.</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Jcupitt-Vips-Config.html#method_atLeast">atLeast()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: bool    </span>
 </dt>
-<dd></dd>
+<dd>Is this at least libvips major.minor[.patch]?</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Jcupitt-Vips-Config.html#method_cacheSetMax">cacheSetMax()</a>
@@ -268,60 +243,11 @@ bytes.</dd>
 evaluation.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Config.html#method_ctypes">ctypes()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Config.html#method_ffi">ffi()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Config.html#method_filenameGetFilename">filenameGetFilename()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Config.html#method_filenameGetOptions">filenameGetOptions()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Config.html#method_ftypes">ftypes()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Jcupitt-Vips-Config.html#method_getLogger">getLogger()</a>
     <span>
                                 &nbsp;: <abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null    </span>
 </dt>
 <dd>Gets a logger.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Config.html#method_gtypes">gtypes()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Config.html#method_printAll">printAll()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd>Handy for debugging.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Jcupitt-Vips-Config.html#method_setLogger">setLogger()</a>
@@ -337,20 +263,6 @@ evaluation.</dd>
 </dt>
 <dd>Gets the libvips version number as a string of the form
 MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/Jcupitt-Vips-Config.html#method_init">init()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/Jcupitt-Vips-Config.html#method_libraryName">libraryName()</a>
-    <span>
-                                &nbsp;: mixed    </span>
-</dt>
-<dd></dd>
 
         </dl>
 
@@ -371,176 +283,6 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</dd>
             -private
             -static                                            "
 >
-    <h4 class="phpdocumentor-element__name" id="property_ffi_inited">
-        $ffi_inited
-        <a href="classes/Jcupitt-Vips-Config.html#property_ffi_inited" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">69</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$ffi_inited</span>
-     = <span class="phpdocumentor-signature__default-value">false</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-            -static                                            "
->
-    <h4 class="phpdocumentor-element__name" id="property_ftypes">
-        $ftypes
-        <a href="classes/Jcupitt-Vips-Config.html#property_ftypes" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">87</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
-    <span class="phpdocumentor-signature__name">$ftypes</span>
-    </code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-            -static                                            "
->
-    <h4 class="phpdocumentor-element__name" id="property_gtypes">
-        $gtypes
-        <a href="classes/Jcupitt-Vips-Config.html#property_gtypes" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">86</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
-    <span class="phpdocumentor-signature__name">$gtypes</span>
-    </code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-            -static                                            "
->
-    <h4 class="phpdocumentor-element__name" id="property_library_micro">
-        $library_micro
-        <a href="classes/Jcupitt-Vips-Config.html#property_library_micro" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">78</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">int</span>
-    <span class="phpdocumentor-signature__name">$library_micro</span>
-    </code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-            -static                                            "
->
-    <h4 class="phpdocumentor-element__name" id="property_library_minor">
-        $library_minor
-        <a href="classes/Jcupitt-Vips-Config.html#property_library_minor" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">77</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">int</span>
-    <span class="phpdocumentor-signature__name">$library_minor</span>
-    </code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-            -static                                            "
->
     <h4 class="phpdocumentor-element__name" id="property_logger">
         $logger
         <a href="classes/Jcupitt-Vips-Config.html#property_logger" class="headerlink"><i class="fas fa-link"></i></a>
@@ -550,7 +292,7 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">61</span>
+    <span class="phpdocumentor-element-found-in__line">59</span>
 
     </aside>
 
@@ -558,12 +300,13 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</dd>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null</span>
     <span class="phpdocumentor-signature__name">$logger</span>
-    </code>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
 
     
-    
+        <section class="phpdocumentor-description"></section>
+
     
 
 </article>
@@ -587,33 +330,44 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">275</span>
+    <span class="phpdocumentor-element-found-in__line">159</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">Is this at least libvips major.minor[.patch]?</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">atLeast</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$need_major</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$need_minor</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">atLeast</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$x</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$y</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$z</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$need_major</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                <span class="phpdocumentor-signature__argument__name">$x</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
+                    <section class="phpdocumentor-description"><p>Major component.</p>
+</section>
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$need_minor</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                <span class="phpdocumentor-signature__argument__name">$y</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
+                    <section class="phpdocumentor-description"><p>Minor component.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$z</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Patch component.</p>
+</section>
 
             </dd>
             </dl>
@@ -621,9 +375,11 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</dd>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">bool</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p><code class="prettyprint">true</code> if at least libvips major.minor[.patch]; otherwise, <code class="prettyprint">false</code>.</p>
+</section>
+
     
 </article>
                     <article
@@ -639,7 +395,7 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">123</span>
+    <span class="phpdocumentor-element-found-in__line">95</span>
 
     </aside>
 
@@ -648,7 +404,7 @@ cache.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">cacheSetMax</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">cacheSetMax</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -685,7 +441,7 @@ cache.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">150</span>
+    <span class="phpdocumentor-element-found-in__line">122</span>
 
     </aside>
 
@@ -693,7 +449,7 @@ cache.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">cacheSetMaxFiles</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">cacheSetMaxFiles</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -731,7 +487,7 @@ can use.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">137</span>
+    <span class="phpdocumentor-element-found-in__line">109</span>
 
     </aside>
 
@@ -740,7 +496,7 @@ bytes.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">cacheSetMaxMem</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">cacheSetMaxMem</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -778,7 +534,7 @@ hold, in bytes.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">164</span>
+    <span class="phpdocumentor-element-found-in__line">136</span>
 
     </aside>
 
@@ -787,7 +543,7 @@ evaluation.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">concurrencySet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">concurrencySet</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -818,215 +574,6 @@ for image evaluation.</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_ctypes">
-        ctypes()
-        <a href="classes/Jcupitt-Vips-Config.html#method_ctypes" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">202</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">ctypes</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_ffi">
-        ffi()
-        <a href="classes/Jcupitt-Vips-Config.html#method_ffi" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">192</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">ffi</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_filenameGetFilename">
-        filenameGetFilename()
-        <a href="classes/Jcupitt-Vips-Config.html#method_filenameGetFilename" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">257</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">filenameGetFilename</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_filenameGetOptions">
-        filenameGetOptions()
-        <a href="classes/Jcupitt-Vips-Config.html#method_filenameGetOptions" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">266</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">filenameGetOptions</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_ftypes">
-        ftypes()
-        <a href="classes/Jcupitt-Vips-Config.html#method_ftypes" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">216</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">ftypes</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
     <h4 class="phpdocumentor-element__name" id="method_getLogger">
         getLogger()
         <a href="classes/Jcupitt-Vips-Config.html#method_getLogger" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1034,7 +581,7 @@ for image evaluation.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">110</span>
+    <span class="phpdocumentor-element-found-in__line">82</span>
 
     </aside>
 
@@ -1042,7 +589,7 @@ for image evaluation.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getLogger</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">getLogger</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>|null</span></code>
 
     
     
@@ -1062,83 +609,6 @@ for image evaluation.</p>
             -public
                                     -static                    "
 >
-    <h4 class="phpdocumentor-element__name" id="method_gtypes">
-        gtypes()
-        <a href="classes/Jcupitt-Vips-Config.html#method_gtypes" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">209</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">gtypes</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_printAll">
-        printAll()
-        <a href="classes/Jcupitt-Vips-Config.html#method_printAll" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">187</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Handy for debugging.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">printAll</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                    -static                    "
->
     <h4 class="phpdocumentor-element__name" id="method_setLogger">
         setLogger()
         <a href="classes/Jcupitt-Vips-Config.html#method_setLogger" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1146,7 +616,7 @@ for image evaluation.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">100</span>
+    <span class="phpdocumentor-element-found-in__line">72</span>
 
     </aside>
 
@@ -1154,7 +624,7 @@ for image evaluation.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">setLogger</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$logger</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
         <section class="phpdocumentor-description"><pre class="prettyprint"><code class="language-php">Vips\Config::setLogger(new Vips\Logger);
 </code></pre>
@@ -1192,7 +662,7 @@ for image evaluation.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">175</span>
+    <span class="phpdocumentor-element-found-in__line">147</span>
 
     </aside>
 
@@ -1201,7 +671,7 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">version</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">version</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
     
     
@@ -1209,91 +679,6 @@ MAJOR.MINOR.MICRO, for example &quot;8.6.1&quot;.</p>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_init">
-        init()
-        <a href="classes/Jcupitt-Vips-Config.html#method_init" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">297</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">init</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -private
-                                    -static                    "
->
-    <h4 class="phpdocumentor-element__name" id="method_libraryName">
-        libraryName()
-        <a href="classes/Jcupitt-Vips-Config.html#method_libraryName" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Config.php"><a href="files/src-config.html"><abbr title="src/Config.php">Config.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">282</span>
-
-    </aside>
-
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">libraryName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$abi</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
-
-        <section class="phpdocumentor-description"></section>
-
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$abi</span>
-                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
         
     

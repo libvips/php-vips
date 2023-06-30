@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-            <title>Documentation</title>
+            <title>php-vips</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Documentation</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">php-vips</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -74,6 +74,16 @@
     <ul class="phpdocumentor-list">
                     <li>
                 <a href="packages/Jcupitt-Vips.html" class="">Vips</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/php.html" class="">php</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/php-vips.html" class="">vips</a>
                 
             </li>
             </ul>
@@ -200,14 +210,14 @@ on demand once per operation and the results held in a cache.</p>
     <span>
                         &nbsp;: string            </span>
 </dt>
-<dd>The operation description (eg. &quot;add two images&quot;).</dd>
+<dd>The operation description (e.g. &quot;add two images&quot;).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/Jcupitt-Vips-Introspect.html#property_flags">$flags</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
-<dd>The operation flags (eg. SEQUENTIAL | DEPRECATED).</dd>
+<dd>The operation flags (e.g. SEQUENTIAL | DEPRECATED).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/Jcupitt-Vips-Introspect.html#property_member_this">$member_this</a>
@@ -269,7 +279,7 @@ on demand once per operation and the results held in a cache.</p>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Jcupitt-Vips-Introspect.html#method___toString">__toString()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: string    </span>
 </dt>
 <dd></dd>
 
@@ -339,7 +349,7 @@ on demand once per operation and the results held in a cache.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">The operation description (eg. &quot;add two images&quot;).</p>
+        <p class="phpdocumentor-summary">The operation description (e.g. &quot;add two images&quot;).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -373,7 +383,7 @@ on demand once per operation and the results held in a cache.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">The operation flags (eg. SEQUENTIAL | DEPRECATED).</p>
+        <p class="phpdocumentor-summary">The operation flags (e.g. SEQUENTIAL | DEPRECATED).</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -646,21 +656,20 @@ on demand once per operation and the results held in a cache.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Introspect.php"><a href="files/src-introspect.html"><abbr title="src/Introspect.php">Introspect.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">93</span>
+    <span class="phpdocumentor-element-found-in__line">96</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$operation_name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$name</span>
+                <span class="phpdocumentor-signature__argument__name">$operation_name</span>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
@@ -670,6 +679,20 @@ on demand once per operation and the results held in a cache.</p>
             </dl>
 
     
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/Jcupitt-Vips-Exception.html"><abbr title="\Jcupitt\Vips\Exception">Exception</abbr></a></span>
+                                                            
+                                             
+                                    </dd>
+                        </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
@@ -690,14 +713,14 @@ on demand once per operation and the results held in a cache.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Introspect.php"><a href="files/src-introspect.html"><abbr title="src/Introspect.php">Introspect.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">204</span>
+    <span class="phpdocumentor-element-found-in__line">203</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__toString</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__toString</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
         <section class="phpdocumentor-description"></section>
 
@@ -705,7 +728,7 @@ on demand once per operation and the results held in a cache.</p>
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
         
     

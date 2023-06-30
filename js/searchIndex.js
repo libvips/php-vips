@@ -501,75 +501,35 @@ Search.appendIndex(
             "summary": "Gets\u0020the\u0020libvips\u0020version\u0020number\u0020as\u0020a\u0020string\u0020of\u0020the\u0020form\nMAJOR.MINOR.MICRO,\u0020for\u0020example\u0020\u00228.6.1\u0022.",
             "url": "classes/Jcupitt-Vips-Config.html#method_version"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003AprintAll\u0028\u0029",
-            "name": "printAll",
-            "summary": "Handy\u0020for\u0020debugging.",
-            "url": "classes/Jcupitt-Vips-Config.html#method_printAll"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003Affi\u0028\u0029",
-            "name": "ffi",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#method_ffi"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003Actypes\u0028\u0029",
-            "name": "ctypes",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#method_ctypes"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003A\u0024gtypes",
-            "name": "gtypes",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#property_gtypes"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003A\u0024ftypes",
-            "name": "ftypes",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#property_ftypes"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003AfilenameGetFilename\u0028\u0029",
-            "name": "filenameGetFilename",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#method_filenameGetFilename"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003AfilenameGetOptions\u0028\u0029",
-            "name": "filenameGetOptions",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#method_filenameGetOptions"
-        },                {
             "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003AatLeast\u0028\u0029",
             "name": "atLeast",
-            "summary": "",
+            "summary": "Is\u0020this\u0020at\u0020least\u0020libvips\u0020major.minor\u005B.patch\u005D\u003F",
             "url": "classes/Jcupitt-Vips-Config.html#method_atLeast"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003AlibraryName\u0028\u0029",
-            "name": "libraryName",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#method_libraryName"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003Ainit\u0028\u0029",
-            "name": "init",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#method_init"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003A\u0024logger",
             "name": "logger",
             "summary": "The\u0020logger\u0020instance.",
             "url": "classes/Jcupitt-Vips-Config.html#property_logger"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003A\u0024ffi_inited",
-            "name": "ffi_inited",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#property_ffi_inited"
+            "fqsen": "\\Jcupitt\\Vips\\Connection",
+            "name": "Connection",
+            "summary": "This\u0020class\u0020holds\u0020a\u0020pointer\u0020to\u0020a\u0020VipsObject\u0020\u0028the\u0020libvips\u0020base\u0020class\u0029\u0020and\nmanages\u0020properties.",
+            "url": "classes/Jcupitt-Vips-Connection.html"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003A\u0024library_minor",
-            "name": "library_minor",
+            "fqsen": "\\Jcupitt\\Vips\\Connection\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#property_library_minor"
+            "url": "classes/Jcupitt-Vips-Connection.html#method___construct"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Config\u003A\u003A\u0024library_micro",
-            "name": "library_micro",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Config.html#property_library_micro"
+            "fqsen": "\\Jcupitt\\Vips\\Connection\u003A\u003Afilename\u0028\u0029",
+            "name": "filename",
+            "summary": "Get\u0020the\u0020filename\u0020associated\u0020with\u0020a\u0020connection.\u0020Return\u0020null\u0020if\u0020there\u0020is\u0020no\u0020associated\u0020file.",
+            "url": "classes/Jcupitt-Vips-Connection.html#method_filename"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Connection\u003A\u003Anick\u0028\u0029",
+            "name": "nick",
+            "summary": "Make\u0020a\u0020human\u002Dreadable\u0020name\u0020for\u0020a\u0020connection\u0020suitable\u0020for\u0020error\u0020messages.",
+            "url": "classes/Jcupitt-Vips-Connection.html#method_nick"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\LOG_FORMAT",
             "name": "LOG_FORMAT",
@@ -636,6 +596,11 @@ Search.appendIndex(
             "summary": "The\u0020vips\u0020exception\u0020class.\u0020All\u0020exceptions\u0020thrown\u0020by\u0020php\u002Dvips\u0020are\u0020subclasses\nof\u0020this.",
             "url": "classes/Jcupitt-Vips-Exception.html"
         },                {
+            "fqsen": "\\Jcupitt\\Vips\\Exception\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Exception.html#method___construct"
+        },                {
             "fqsen": "\\Jcupitt\\Vips\\Extend",
             "name": "Extend",
             "summary": "The\u0020Extend\u0020enum.",
@@ -695,6 +660,86 @@ Search.appendIndex(
             "name": "WARNING",
             "summary": "",
             "url": "classes/Jcupitt-Vips-FailOn.html#constant_WARNING"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI",
+            "name": "FFI",
+            "summary": "This\u0020class\u0020contains\u0020the\u0020libvips\u0020FFI\u0020methods.",
+            "url": "classes/Jcupitt-Vips-FFI.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003Aglib\u0028\u0029",
+            "name": "glib",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_glib"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003Agobject\u0028\u0029",
+            "name": "gobject",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_gobject"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003Avips\u0028\u0029",
+            "name": "vips",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_vips"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003Actypes\u0028\u0029",
+            "name": "ctypes",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_ctypes"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003A\u0024gtypes",
+            "name": "gtypes",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#property_gtypes"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003A\u0024ftypes",
+            "name": "ftypes",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#property_ftypes"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003Aversion\u0028\u0029",
+            "name": "version",
+            "summary": "Gets\u0020the\u0020libvips\u0020version\u0020number\u0020as\u0020a\u0020string\u0020of\u0020the\u0020form\nMAJOR.MINOR.MICRO,\u0020for\u0020example\u0020\u00228.6.1\u0022.",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_version"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003AatLeast\u0028\u0029",
+            "name": "atLeast",
+            "summary": "Is\u0020this\u0020at\u0020least\u0020libvips\u0020major.minor\u005B.patch\u005D\u003F",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_atLeast"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003AshutDown\u0028\u0029",
+            "name": "shutDown",
+            "summary": "Shut\u0020down\u0020libvips.\u0020Call\u0020this\u0020just\u0020before\u0020process\u0020exit.",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_shutDown"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003AnewGClosure\u0028\u0029",
+            "name": "newGClosure",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_newGClosure"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003AlibraryName\u0028\u0029",
+            "name": "libraryName",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_libraryName"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003AlibraryLoad\u0028\u0029",
+            "name": "libraryLoad",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_libraryLoad"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003Ainit\u0028\u0029",
+            "name": "init",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_init"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003A\u0024library_minor",
+            "name": "library_minor",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#property_library_minor"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003A\u0024library_micro",
+            "name": "library_micro",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-FFI.html#property_library_micro"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\ForeignDzContainer",
             "name": "ForeignDzContainer",
@@ -791,6 +836,36 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-ForeignHeifCompression.html#constant_AV1"
         },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignHeifEncoder",
+            "name": "ForeignHeifEncoder",
+            "summary": "The\u0020ForeignHeifEncoder\u0020enum.",
+            "url": "classes/Jcupitt-Vips-ForeignHeifEncoder.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignHeifEncoder\u003A\u003AAUTO",
+            "name": "AUTO",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignHeifEncoder.html#constant_AUTO"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignHeifEncoder\u003A\u003AAOM",
+            "name": "AOM",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignHeifEncoder.html#constant_AOM"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignHeifEncoder\u003A\u003ARAV1E",
+            "name": "RAV1E",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignHeifEncoder.html#constant_RAV1E"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignHeifEncoder\u003A\u003ASVT",
+            "name": "SVT",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignHeifEncoder.html#constant_SVT"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignHeifEncoder\u003A\u003AX265",
+            "name": "X265",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignHeifEncoder.html#constant_X265"
+        },                {
             "fqsen": "\\Jcupitt\\Vips\\ForeignJpegSubsample",
             "name": "ForeignJpegSubsample",
             "summary": "The\u0020ForeignJpegSubsample\u0020enum.",
@@ -835,6 +910,11 @@ Search.appendIndex(
             "name": "PFM",
             "summary": "",
             "url": "classes/Jcupitt-Vips-ForeignPpmFormat.html#constant_PFM"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPpmFormat\u003A\u003APNM",
+            "name": "PNM",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPpmFormat.html#constant_PNM"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\ForeignSubsample",
             "name": "ForeignSubsample",
@@ -1001,6 +1081,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-GObject.html#method_unref"
         },                {
+            "fqsen": "\\Jcupitt\\Vips\\GObject\u003A\u003AsignalConnect\u0028\u0029",
+            "name": "signalConnect",
+            "summary": "Connect\u0020to\u0020a\u0020signal\u0020on\u0020this\u0020object.",
+            "url": "classes/Jcupitt-Vips-GObject.html#method_signalConnect"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\GObject\u003A\u003AgetMarshaler\u0028\u0029",
+            "name": "getMarshaler",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-GObject.html#method_getMarshaler"
+        },                {
             "fqsen": "\\Jcupitt\\Vips\\GsfOutputCsvQuotingMode",
             "name": "GsfOutputCsvQuotingMode",
             "summary": "The\u0020GsfOutputCsvQuotingMode\u0020enum.",
@@ -1028,12 +1118,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Jcupitt\\Vips\\GValue\u003A\u003AtoEnum\u0028\u0029",
             "name": "toEnum",
-            "summary": "",
+            "summary": "Turn\u0020a\u0020string\u0020into\u0020an\u0020enum\u0020value,\u0020if\u0020possible",
             "url": "classes/Jcupitt-Vips-GValue.html#method_toEnum"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\GValue\u003A\u003AfromEnum\u0028\u0029",
             "name": "fromEnum",
-            "summary": "",
+            "summary": "Turn\u0020an\u0020enum\u0020into\u0020a\u0020string,\u0020if\u0020possible",
             "url": "classes/Jcupitt-Vips-GValue.html#method_fromEnum"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\GValue\u003A\u003A__destruct\u0028\u0029",
@@ -1053,12 +1143,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Jcupitt\\Vips\\GValue\u003A\u003Aset\u0028\u0029",
             "name": "set",
-            "summary": "",
+            "summary": "Set\u0020a\u0020GValue.",
             "url": "classes/Jcupitt-Vips-GValue.html#method_set"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\GValue\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "",
+            "summary": "Get\u0020the\u0020contents\u0020of\u0020a\u0020GValue.",
             "url": "classes/Jcupitt-Vips-GValue.html#method_get"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\GValue\u003A\u003A\u0024struct",
@@ -1116,6 +1206,16 @@ Search.appendIndex(
             "summary": "Create\u0020a\u0020new\u0020image\u0020from\u0020a\u0020constant.",
             "url": "classes/Jcupitt-Vips-Image.html#method_newFromImage"
         },                {
+            "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AfindLoadSource\u0028\u0029",
+            "name": "findLoadSource",
+            "summary": "Find\u0020the\u0020name\u0020of\u0020the\u0020load\u0020operation\u0020vips\u0020will\u0020use\u0020to\u0020load\u0020a\u0020VipsSource,\u0020for\nexample\u0020\u0027VipsForeignLoadJpegSource\u0027.\u0020You\u0020can\u0020use\u0020this\u0020to\u0020work\u0020out\u0020what\noptions\u0020to\u0020pass\u0020to\u0020newFromSource\u0028\u0029.",
+            "url": "classes/Jcupitt-Vips-Image.html#method_findLoadSource"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AnewFromSource\u0028\u0029",
+            "name": "newFromSource",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Image.html#method_newFromSource"
+        },                {
             "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AwriteToFile\u0028\u0029",
             "name": "writeToFile",
             "summary": "Write\u0020an\u0020image\u0020to\u0020a\u0020file.",
@@ -1135,6 +1235,11 @@ Search.appendIndex(
             "name": "writeToArray",
             "summary": "Write\u0020an\u0020image\u0020to\u0020a\u0020PHP\u0020array.",
             "url": "classes/Jcupitt-Vips-Image.html#method_writeToArray"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AwriteToTarget\u0028\u0029",
+            "name": "writeToTarget",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Image.html#method_writeToTarget"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AcopyMemory\u0028\u0029",
             "name": "copyMemory",
@@ -1185,6 +1290,11 @@ Search.appendIndex(
             "name": "remove",
             "summary": "Remove\u0020a\u0020field\u0020from\u0020the\u0020underlying\u0020image.",
             "url": "classes/Jcupitt-Vips-Image.html#method_remove"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AsetProgress\u0028\u0029",
+            "name": "setProgress",
+            "summary": "Enable\u0020progress\u0020reporting\u0020on\u0020an\u0020image.",
+            "url": "classes/Jcupitt-Vips-Image.html#method_setProgress"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003A__toString\u0028\u0029",
             "name": "__toString",
@@ -1506,6 +1616,16 @@ Search.appendIndex(
             "summary": "Autodocs\u0020for\u0020the\u0020Image\u0020class.",
             "url": "classes/Jcupitt-Vips-ImageAutodoc.html"
         },                {
+            "fqsen": "\\Jcupitt\\Vips\\ImageAutodoc\u003A\u003A__set\u0028\u0029",
+            "name": "__set",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ImageAutodoc.html#method___set"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ImageAutodoc\u003A\u003A__get\u0028\u0029",
+            "name": "__get",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ImageAutodoc.html#method___get"
+        },                {
             "fqsen": "\\Jcupitt\\Vips\\ImageType",
             "name": "ImageType",
             "summary": "The\u0020ImageType\u0020enum.",
@@ -1758,12 +1878,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Introspect\u003A\u003A\u0024description",
             "name": "description",
-            "summary": "The\u0020operation\u0020description\u0020\u0028eg.\u0020\u0022add\u0020two\u0020images\u0022\u0029.",
+            "summary": "The\u0020operation\u0020description\u0020\u0028e.g.\u0020\u0022add\u0020two\u0020images\u0022\u0029.",
             "url": "classes/Jcupitt-Vips-Introspect.html#property_description"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Introspect\u003A\u003A\u0024flags",
             "name": "flags",
-            "summary": "The\u0020operation\u0020flags\u0020\u0028eg.\u0020SEQUENTIAL\u0020\u007C\u0020DEPRECATED\u0029.",
+            "summary": "The\u0020operation\u0020flags\u0020\u0028e.g.\u0020SEQUENTIAL\u0020\u007C\u0020DEPRECATED\u0029.",
             "url": "classes/Jcupitt-Vips-Introspect.html#property_flags"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Introspect\u003A\u003A\u0024arguments",
@@ -2216,6 +2336,176 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-Size.html#constant_FORCE"
         },                {
+            "fqsen": "\\Jcupitt\\Vips\\Source",
+            "name": "Source",
+            "summary": "This\u0020class\u0020holds\u0020a\u0020pointer\u0020to\u0020a\u0020VipsObject\u0020\u0028the\u0020libvips\u0020base\u0020class\u0029\u0020and\nmanages\u0020properties.",
+            "url": "classes/Jcupitt-Vips-Source.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Source\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Source.html#method___construct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Source\u003A\u003AnewFromDescriptor\u0028\u0029",
+            "name": "newFromDescriptor",
+            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020file\u0020descriptor\u0020\u0028a\u0020small\u0020integer\u0029.",
+            "url": "classes/Jcupitt-Vips-Source.html#method_newFromDescriptor"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Source\u003A\u003AnewFromFile\u0028\u0029",
+            "name": "newFromFile",
+            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020filename.",
+            "url": "classes/Jcupitt-Vips-Source.html#method_newFromFile"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Source\u003A\u003AnewFromMemory\u0028\u0029",
+            "name": "newFromMemory",
+            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020filename.",
+            "url": "classes/Jcupitt-Vips-Source.html#method_newFromMemory"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceCustom",
+            "name": "SourceCustom",
+            "summary": "This\u0020class\u0020holds\u0020a\u0020pointer\u0020to\u0020a\u0020VipsObject\u0020\u0028the\u0020libvips\u0020base\u0020class\u0029\u0020and\nmanages\u0020properties.",
+            "url": "classes/Jcupitt-Vips-SourceCustom.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceCustom\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-SourceCustom.html#method___construct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceCustom\u003A\u003AonRead\u0028\u0029",
+            "name": "onRead",
+            "summary": "Attach\u0020a\u0020read\u0020handler.",
+            "url": "classes/Jcupitt-Vips-SourceCustom.html#method_onRead"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceCustom\u003A\u003AonSeek\u0028\u0029",
+            "name": "onSeek",
+            "summary": "Attach\u0020a\u0020seek\u0020handler.",
+            "url": "classes/Jcupitt-Vips-SourceCustom.html#method_onSeek"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceResource",
+            "name": "SourceResource",
+            "summary": "This\u0020class\u0020holds\u0020a\u0020pointer\u0020to\u0020a\u0020VipsObject\u0020\u0028the\u0020libvips\u0020base\u0020class\u0029\u0020and\nmanages\u0020properties.",
+            "url": "classes/Jcupitt-Vips-SourceResource.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceResource\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "The\u0020resource\u0020passed\u0020in\u0020will\u0020become\u0020\u0022owned\u0022\u0020by\u0020this\u0020class.",
+            "url": "classes/Jcupitt-Vips-SourceResource.html#method___construct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceResource\u003A\u003A__destruct\u0028\u0029",
+            "name": "__destruct",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-SourceResource.html#method___destruct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\SourceResource\u003A\u003A\u0024resource",
+            "name": "resource",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-SourceResource.html#property_resource"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Target",
+            "name": "Target",
+            "summary": "This\u0020class\u0020holds\u0020a\u0020pointer\u0020to\u0020a\u0020VipsObject\u0020\u0028the\u0020libvips\u0020base\u0020class\u0029\u0020and\nmanages\u0020properties.",
+            "url": "classes/Jcupitt-Vips-Target.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Target\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Target.html#method___construct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Target\u003A\u003AnewToDescriptor\u0028\u0029",
+            "name": "newToDescriptor",
+            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020file\u0020descriptor\u0020\u0028a\u0020small\u0020integer\u0029.",
+            "url": "classes/Jcupitt-Vips-Target.html#method_newToDescriptor"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Target\u003A\u003AnewToFile\u0028\u0029",
+            "name": "newToFile",
+            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020file\u0020name.",
+            "url": "classes/Jcupitt-Vips-Target.html#method_newToFile"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Target\u003A\u003AnewToMemory\u0028\u0029",
+            "name": "newToMemory",
+            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020memory\u0020buffer.",
+            "url": "classes/Jcupitt-Vips-Target.html#method_newToMemory"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetCustom",
+            "name": "TargetCustom",
+            "summary": "This\u0020class\u0020holds\u0020a\u0020pointer\u0020to\u0020a\u0020VipsObject\u0020\u0028the\u0020libvips\u0020base\u0020class\u0029\u0020and\nmanages\u0020properties.",
+            "url": "classes/Jcupitt-Vips-TargetCustom.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetCustom\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-TargetCustom.html#method___construct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetCustom\u003A\u003AonWrite\u0028\u0029",
+            "name": "onWrite",
+            "summary": "Attach\u0020a\u0020write\u0020handler.",
+            "url": "classes/Jcupitt-Vips-TargetCustom.html#method_onWrite"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetCustom\u003A\u003AonRead\u0028\u0029",
+            "name": "onRead",
+            "summary": "Attach\u0020a\u0020read\u0020handler.",
+            "url": "classes/Jcupitt-Vips-TargetCustom.html#method_onRead"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetCustom\u003A\u003AonSeek\u0028\u0029",
+            "name": "onSeek",
+            "summary": "Attach\u0020a\u0020seek\u0020handler.",
+            "url": "classes/Jcupitt-Vips-TargetCustom.html#method_onSeek"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetCustom\u003A\u003AonEnd\u0028\u0029",
+            "name": "onEnd",
+            "summary": "Attach\u0020an\u0020end\u0020handler.",
+            "url": "classes/Jcupitt-Vips-TargetCustom.html#method_onEnd"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetCustom\u003A\u003AonFinish\u0028\u0029",
+            "name": "onFinish",
+            "summary": "Attach\u0020a\u0020finish\u0020handler.",
+            "url": "classes/Jcupitt-Vips-TargetCustom.html#method_onFinish"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetResource",
+            "name": "TargetResource",
+            "summary": "This\u0020class\u0020holds\u0020a\u0020pointer\u0020to\u0020a\u0020VipsObject\u0020\u0028the\u0020libvips\u0020base\u0020class\u0029\u0020and\nmanages\u0020properties.",
+            "url": "classes/Jcupitt-Vips-TargetResource.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetResource\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "The\u0020resource\u0020passed\u0020in\u0020will\u0020become\u0020\u0022owned\u0022\u0020by\u0020this\u0020class.",
+            "url": "classes/Jcupitt-Vips-TargetResource.html#method___construct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetResource\u003A\u003A__destruct\u0028\u0029",
+            "name": "__destruct",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-TargetResource.html#method___destruct"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TargetResource\u003A\u003A\u0024resource",
+            "name": "resource",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-TargetResource.html#property_resource"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TextWrap",
+            "name": "TextWrap",
+            "summary": "The\u0020TextWrap\u0020enum.",
+            "url": "classes/Jcupitt-Vips-TextWrap.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TextWrap\u003A\u003AWORD",
+            "name": "WORD",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-TextWrap.html#constant_WORD"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TextWrap\u003A\u003ACHAR",
+            "name": "CHAR",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-TextWrap.html#constant_CHAR"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TextWrap\u003A\u003AWORD_CHAR",
+            "name": "WORD_CHAR",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-TextWrap.html#constant_WORD_CHAR"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\TextWrap\u003A\u003ANONE",
+            "name": "NONE",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-TextWrap.html#constant_NONE"
+        },                {
             "fqsen": "\\Jcupitt\\Vips\\Token",
             "name": "Token",
             "summary": "The\u0020Token\u0020enum.",
@@ -2260,6 +2550,16 @@ Search.appendIndex(
             "name": "typeFromName",
             "summary": "Look\u0020up\u0020the\u0020GTyoe\u0020from\u0020a\u0020type\u0020name.\u0020If\u0020the\u0020type\u0020does\u0020not\u0020exist,\nreturn\u00200.",
             "url": "classes/Jcupitt-Vips-Utils.html#method_typeFromName"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Utils\u003A\u003AfilenameGetFilename\u0028\u0029",
+            "name": "filenameGetFilename",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Utils.html#method_filenameGetFilename"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Utils\u003A\u003AfilenameGetOptions\u0028\u0029",
+            "name": "filenameGetOptions",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Utils.html#method_filenameGetOptions"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\VipsObject",
             "name": "VipsObject",

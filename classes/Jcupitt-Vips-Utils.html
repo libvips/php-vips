@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-            <title>Documentation</title>
+            <title>php-vips</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Documentation</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">php-vips</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -74,6 +74,16 @@
     <ul class="phpdocumentor-list">
                     <li>
                 <a href="packages/Jcupitt-Vips.html" class="">Vips</a>
+                
+            </li>
+            </ul>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/php.html" class="">php</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/php-vips.html" class="">vips</a>
                 
             </li>
             </ul>
@@ -202,6 +212,20 @@
 <dd>Log an error message.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Jcupitt-Vips-Utils.html#method_filenameGetFilename">filenameGetFilename()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/Jcupitt-Vips-Utils.html#method_filenameGetOptions">filenameGetOptions()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/Jcupitt-Vips-Utils.html#method_typeFromName">typeFromName()</a>
     <span>
                                 &nbsp;: int    </span>
@@ -243,7 +267,7 @@ return 0.</dd>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">debugLog</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$arguments</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">debugLog</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$arguments</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -297,7 +321,7 @@ return 0.</dd>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">errorLog</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">errorLog</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr>|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exception</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -313,10 +337,10 @@ return 0.</dd>
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$exception</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr></span>
-                            </dt>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr>|null</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">null</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>The exception.</p>
+                    <section class="phpdocumentor-description"><p>The exception, if any.</p>
 </section>
 
             </dd>
@@ -326,6 +350,94 @@ return 0.</dd>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_filenameGetFilename">
+        filenameGetFilename()
+        <a href="classes/Jcupitt-Vips-Utils.html#method_filenameGetFilename" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Utils.php"><a href="files/src-utils.html"><abbr title="src/Utils.php">Utils.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">98</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">filenameGetFilename</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_filenameGetOptions">
+        filenameGetOptions()
+        <a href="classes/Jcupitt-Vips-Utils.html#method_filenameGetOptions" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Utils.php"><a href="files/src-utils.html"><abbr title="src/Utils.php">Utils.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">107</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">filenameGetOptions</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
             &mdash;
         
     
@@ -352,7 +464,7 @@ return 0.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">typeFromName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">typeFromName</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
