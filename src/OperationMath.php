@@ -59,10 +59,4 @@ abstract class OperationMath
     const LOG10 = 'log10';
     const EXP = 'exp';
     const EXP10 = 'exp10';
-    const SINH = 'sinh';
-    const COSH = 'cosh';
-    const TANH = 'tanh';
-    const ASINH = 'asinh';
-    const ACOSH = 'acosh';
-    const ATANH = 'atanh';
 }

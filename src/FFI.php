@@ -178,6 +178,18 @@ class FFI
         self::vips()->vips_shutdown();
     }
 
+    public static function newGClosure(): \FFI\CData
+    {
+        // GClosure measures 32-bit with the first few fields until marshal
+        // Marshal is a function pointer, thus platform-dependant.
+        // Data is a pointer, thus platform-dependant.
+        // Notifiers is an array-pointer, thus platform-dependant.
+        // All in all it's basically 4 (bytes) + 3 * POINTER_SIZE
+        // However, gobject wants 8 (bytes) + 3 * POINTER_SIZE.
+        // I'm not sure where that extra byte comes from. Padding on 64-bit machines?
+        return self::gobject()->g_closure_new_simple(8 + 3 * PHP_INT_SIZE, null);
+    }
+
     private static function libraryName(string $name, int $abi): string
     {
         switch (PHP_OS_FAMILY) {
@@ -305,6 +317,7 @@ typedef uint32_t guint32;
 typedef int32_t gint32;
 typedef uint64_t guint64;
 typedef int64_t gint64;
+typedef void* gpointer;
 
 typedef $gtype GType;
 
@@ -369,6 +382,7 @@ void g_value_set_enum (GValue* value, int e);
 void g_value_set_flags (GValue* value, unsigned int f);
 void g_value_set_string (GValue* value, const char* str);
 void g_value_set_object (GValue* value, void* object);
+void g_value_set_pointer (GValue* value, gpointer pointer);
 
 bool g_value_get_boolean (const GValue* value);
 int g_value_get_int (GValue* value);
@@ -379,6 +393,7 @@ int g_value_get_enum (GValue* value);
 unsigned int g_value_get_flags (GValue* value);
 const char* g_value_get_string (GValue* value);
 void* g_value_get_object (GValue* value);
+gpointer g_value_get_pointer (GValue* value);
 
 typedef struct _GEnumValue {
     int value;
@@ -432,6 +447,19 @@ long g_signal_connect_data (GObject* object,
     int connect_flags);
 
 const char* g_param_spec_get_blurb (GParamSpec* psp);
+
+typedef void *GClosure;
+typedef void (*marshaler)(
+    struct GClosure* closure, 
+    GValue* return_value, 
+    int n_param_values, 
+    const GValue* param_values, 
+    void* invocation_hint, 
+    void* marshal_data
+);
+void g_closure_set_marshal(GClosure* closure, marshaler marshal);
+long g_signal_connect_closure(GObject* object, const char* detailed_signal, GClosure *closure, bool after);
+GClosure* g_closure_new_simple (int sizeof_closure, void* data);
 EOS;
 
         # the whole libvips API, mostly adapted from pyvips
@@ -706,12 +734,6 @@ typedef struct _VipsSourceCustom {
 
 VipsSourceCustom* vips_source_custom_new (void);
 
-// FIXME ... these need porting to php-ffi
-// extern "Python" gint64 _marshal_read (VipsSource*,
-//    void*, gint64, void*);
-// extern "Python" gint64 _marshal_seek (VipsSource*,
-//    gint64, int, void*);
-
 typedef struct _VipsTarget {
     VipsConnection parent_object;
 
@@ -755,11 +777,17 @@ EOS;
         // look these up in advance
         self::$ctypes = [
             "GObject" => self::$gobject->type("GObject*"),
+            "GClosure" => self::$gobject->type("GClosure"),
             "GParamSpec" => self::$gobject->type("GParamSpec*"),
             "VipsObject" => self::$vips->type("VipsObject*"),
             "VipsOperation" => self::$vips->type("VipsOperation*"),
             "VipsImage" => self::$vips->type("VipsImage*"),
             "VipsInterpolate" => self::$vips->type("VipsInterpolate*"),
+            "VipsConnection" => self::$vips->type("VipsConnection*"),
+            "VipsSource" => self::$vips->type("VipsSource*"),
+            "VipsSourceCustom" => self::$vips->type("VipsSourceCustom*"),
+            "VipsTarget" => self::$vips->type("VipsTarget*"),
+            "VipsTargetCustom" => self::$vips->type("VipsTargetCustom*"),
         ];
 
         self::$gtypes = [
@@ -783,6 +811,8 @@ EOS;
 
             "GObject" => self::$gobject->g_type_from_name("GObject"),
             "VipsImage" => self::$gobject->g_type_from_name("VipsImage"),
+
+            "GClosure" => self::$gobject->g_type_from_name("GClosure"),
         ];
 
         // map vips format names to c type names
