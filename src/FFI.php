@@ -808,6 +808,7 @@ EOS;
             "VipsSourceCustom" => self::$vips->type("VipsSourceCustom*"),
             "VipsTarget" => self::$vips->type("VipsTarget*"),
             "VipsTargetCustom" => self::$vips->type("VipsTargetCustom*"),
+            "VipsProgress" => self::$vips->type("VipsProgress*"),
         ];
 
         self::$gtypes = [

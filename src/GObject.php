@@ -128,7 +128,7 @@ abstract class GObject
                     CData  $hint,
                     ?CData $data
                 ) use (&$callback) {
-                    assert($numberOfParams === 3);
+                    assert($numberOfParams === 2);
                     /**
                      * Signature: void(VipsImage* image, void* progress, void* handle)
                      */
