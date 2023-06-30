@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The OperationMath enum.
+ * The TextWrap enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,22 +47,10 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class OperationMath
+abstract class TextWrap
 {
-    const SIN = 'sin';
-    const COS = 'cos';
-    const TAN = 'tan';
-    const ASIN = 'asin';
-    const ACOS = 'acos';
-    const ATAN = 'atan';
-    const LOG = 'log';
-    const LOG10 = 'log10';
-    const EXP = 'exp';
-    const EXP10 = 'exp10';
-    const SINH = 'sinh';
-    const COSH = 'cosh';
-    const TANH = 'tanh';
-    const ASINH = 'asinh';
-    const ACOSH = 'acosh';
-    const ATANH = 'atanh';
+    const WORD = 'word';
+    const CHAR = 'char';
+    const WORD_CHAR = 'word-char';
+    const NONE = 'none';
 }

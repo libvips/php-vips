@@ -53,4 +53,5 @@ abstract class ForeignDzLayout
     const ZOOMIFY = 'zoomify';
     const GOOGLE = 'google';
     const IIIF = 'iiif';
+    const IIIF3 = 'iiif3';
 }

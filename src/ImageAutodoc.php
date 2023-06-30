@@ -203,6 +203,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method string dzsave_buffer(array $options = []) Save image to dz buffer.
  *     @throws Exception
+ * @method void dzsave_target(Target $target, array $options = []) Save image to deepzoom target.
+ *     @throws Exception
  * @method Image embed(integer $x, integer $y, integer $width, integer $height, array $options = []) Embed an image in a larger image.
  *     @throws Exception
  * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
@@ -259,6 +261,12 @@ namespace Jcupitt\Vips;
  * @method static Image gifload_buffer(string $buffer, array $options = []) Load GIF with libnsgif.
  *     @throws Exception
  * @method static Image gifload_source(Source $source, array $options = []) Load gif from source.
+ *     @throws Exception
+ * @method void gifsave(string $filename, array $options = []) Save as gif.
+ *     @throws Exception
+ * @method string gifsave_buffer(array $options = []) Save as gif.
+ *     @throws Exception
+ * @method void gifsave_target(Target $target, array $options = []) Save as gif.
  *     @throws Exception
  * @method Image globalbalance(array $options = []) Global balance an image mosaic.
  *     @throws Exception
@@ -326,6 +334,18 @@ namespace Jcupitt\Vips;
  * @method Image join(Image $in2, string $direction, array $options = []) Join a pair of images.
  *     @see Direction for possible values for $direction
  *     @throws Exception
+ * @method static Image jp2kload(string $filename, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method static Image jp2kload_buffer(string $buffer, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method static Image jp2kload_source(Source $source, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method void jp2ksave(string $filename, array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
+ * @method string jp2ksave_buffer(array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
+ * @method void jp2ksave_target(Target $target, array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
  * @method static Image jpegload(string $filename, array $options = []) Load jpeg from file.
  *     @throws Exception
  * @method static Image jpegload_buffer(string $buffer, array $options = []) Load jpeg from buffer.
@@ -358,11 +378,11 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image linecache(array $options = []) Cache an image as a set of lines.
  *     @throws Exception
- * @method static Image logmat(float $sigma, float $min_ampl, array $options = []) Make a laplacian of gaussian image.
+ * @method static Image logmat(float $sigma, float $min_ampl, array $options = []) Make a Laplacian of Gaussian image.
  *     @throws Exception
- * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick.
+ * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick7.
  *     @throws Exception
- * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick.
+ * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick7.
  *     @throws Exception
  * @method void magicksave(string $filename, array $options = []) Save file with ImageMagick.
  *     @throws Exception
@@ -461,9 +481,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image pngload_source(Source $source, array $options = []) Load png from source.
  *     @throws Exception
- * @method void pngsave(string $filename, array $options = []) Save image to png file.
+ * @method void pngsave(string $filename, array $options = []) Save image to file as PNG.
  *     @throws Exception
- * @method string pngsave_buffer(array $options = []) Save image to png buffer.
+ * @method string pngsave_buffer(array $options = []) Save image to buffer as PNG.
  *     @throws Exception
  * @method void pngsave_target(Target $target, array $options = []) Save image to target as PNG.
  *     @throws Exception
@@ -476,6 +496,8 @@ namespace Jcupitt\Vips;
  * @method void ppmsave_target(Target $target, array $options = []) Save to ppm.
  *     @throws Exception
  * @method Image premultiply(array $options = []) Premultiply image alpha.
+ *     @throws Exception
+ * @method Image prewitt(array $options = []) Prewitt edge detector.
  *     @throws Exception
  * @method array profile(array $options = []) Find image profiles.
  *     Return array with: [
@@ -557,6 +579,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image scale(array $options = []) Scale an image to uchar.
  *     @throws Exception
+ * @method Image scharr(array $options = []) Scharr edge detector.
+ *     @throws Exception
  * @method Image sequential(array $options = []) Check sequential access.
  *     @throws Exception
  * @method Image sharpen(array $options = []) Unsharp masking for print.
@@ -619,6 +643,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method string tiffsave_buffer(array $options = []) Save image to tiff buffer.
  *     @throws Exception
+ * @method void tiffsave_target(Target $target, array $options = []) Save image to tiff target.
+ *     @throws Exception
  * @method Image tilecache(array $options = []) Cache an image as a set of tiles.
  *     @throws Exception
  * @method static Image tonelut(array $options = []) Build a look-up table.
@@ -641,11 +667,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image webpload_source(Source $source, array $options = []) Load webp from source.
  *     @throws Exception
- * @method void webpsave(string $filename, array $options = []) Save image to webp file.
+ * @method void webpsave(string $filename, array $options = []) Save as WebP.
  *     @throws Exception
- * @method string webpsave_buffer(array $options = []) Save image to webp buffer.
+ * @method string webpsave_buffer(array $options = []) Save as WebP.
  *     @throws Exception
- * @method void webpsave_target(Target $target, array $options = []) Save image to webp target.
+ * @method void webpsave_mime(array $options = []) Save image to webp mime.
+ *     @throws Exception
+ * @method void webpsave_target(Target $target, array $options = []) Save as WebP.
  *     @throws Exception
  * @method static Image worley(integer $width, integer $height, array $options = []) Make a worley noise image.
  *     @throws Exception

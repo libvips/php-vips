@@ -53,4 +53,5 @@ abstract class ForeignPpmFormat
     const PGM = 'pgm';
     const PPM = 'ppm';
     const PFM = 'pfm';
+    const PNM = 'pnm';
 }
