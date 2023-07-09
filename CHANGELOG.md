@@ -4,10 +4,14 @@ All notable changes to `:vips` will be documented in this file.
 
 ## master
 
-- improve FFI startup [West14]
+- improve FFI startup [West14, jcupitt]
 - revise example use of composer [jcupitt]
 - fix bandrank [axkirillov]
 - fix FFI startup log error [ganicus]
+- add Source, Target, SourceResource, TargetResource, SourceCustom, 
+  TargetCustom [L3tum]
+- add setProgress and progress example [jcupitt]
+- add streaming-custom example [jcupitt]
 
 ## 2.1.1 - 2022-11-13
 

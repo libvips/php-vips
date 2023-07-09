@@ -906,6 +906,38 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Find the name of the load operation vips will use to load a VipsSource, for
+     * example 'VipsForeignLoadJpegSource'. You can use this to work out what
+     * options to pass to newFromSource().
+     *
+     * @param Source $source The source to test
+     * @return string|null The name of the load operation, or null.
+     */
+    public static function findLoadSource(Source $source): ?string
+    {
+        return FFI::vips()->vips_foreign_find_load_source(\FFI::cast(FFI::ctypes('VipsSource'), $source->pointer));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function newFromSource(Source $source, string $string_options = '', array $options = []): self
+    {
+        $loader = self::findLoadSource($source);
+        if ($loader === null) {
+            throw new Exception('unable to load from source');
+        }
+
+        if ($string_options !== '') {
+            $options = array_merge([
+                "string_options" => $string_options,
+            ], $options);
+        }
+
+        return VipsOperation::call($loader, null, [$source], $options);
+    }
+
+    /**
      * Write an image to a file.
      *
      * @param string $name The file to write the image to.
@@ -1042,6 +1074,28 @@ class Image extends ImageAutodoc implements \ArrayAccess
         FFI::glib()->g_free($pointer);
 
         return $result;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function writeToTarget(Target $target, string $suffix, array $options = []): void
+    {
+        $filename = Utils::filenameGetFilename($suffix);
+        $string_options = Utils::filenameGetOptions($suffix);
+        $saver = FFI::vips()->vips_foreign_find_save_target($filename);
+
+        if ($saver === '') {
+            throw new Exception("can't save to target with given suffix $filename");
+        }
+
+        if ($string_options !== '') {
+            $options = array_merge([
+                "string_options" => $string_options,
+            ], $options);
+        }
+
+        VipsOperation::call($saver, $this, [$target], $options);
     }
 
     /**
@@ -1244,6 +1298,22 @@ class Image extends ImageAutodoc implements \ArrayAccess
         if (!FFI::vips()->vips_image_remove($this->pointer, $name)) {
             throw new Exception();
         }
+    }
+
+    /**
+     * Enable progress reporting on an image.
+     *
+     * The preeval, eval and posteval signals will be emitted on the
+     * most-downstream image for which setProgress() was enabled. @see
+     * GObject::signalConnect().
+     *
+     * @param bool $progress TRUE to enable progress reporting.
+     *
+     * @return void
+     */
+    public function setProgress(bool $progress): void
+    {
+        FFI::vips()->vips_image_set_progress($this->pointer, $progress);
     }
 
     /**
@@ -1893,7 +1963,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
             'bandrank',
             null,
             [array_merge([$this], $other)],
-            $options);
+            $options
+        );
     }
 
     /**

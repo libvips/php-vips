@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The ForeignPpmFormat enum.
+ * The ForeignHeifEncoder enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,11 +47,11 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ForeignPpmFormat
+abstract class ForeignHeifEncoder
 {
-    const PBM = 'pbm';
-    const PGM = 'pgm';
-    const PPM = 'ppm';
-    const PFM = 'pfm';
-    const PNM = 'pnm';
+    const AUTO = 'auto';
+    const AOM = 'aom';
+    const RAV1E = 'rav1e';
+    const SVT = 'svt';
+    const X265 = 'x265';
 }
