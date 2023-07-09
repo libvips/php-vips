@@ -96,8 +96,10 @@ namespace Jcupitt\Vips;
  * default mode is `random`, this allows for full random access to image pixels,
  * but is slower and needs more memory.
  *
- * You can also load formatted images from
- * strings or create images from PHP arrays.
+ * You can also load formatted images from strings or create images from 
+ * PHP arrays.
+ *
+ * See the [main libvips documentation](https://www.libvips.org/API/current/VipsImage.html#vips-image-new-from-file) for a more detailed explaination.
  *
  * The next line:
  *
@@ -694,6 +696,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
 
     /**
      * Create a new Image from a file on disc.
+     *
+     * See the [main libvips documentation](https://www.libvips.org/API/current/VipsImage.html#vips-image-new-from-file) for a more detailed explaination.
      *
      * @param string $name The file to open.
      * @param array  $options  Any options to pass on to the load operation.
