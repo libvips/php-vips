@@ -42,7 +42,7 @@ to your `composer.json`:
 
 ```
 "require": {
-    "jcupitt/vips" : "2.1.0"
+    "jcupitt/vips" : "2.2.0"
 }
 ```
 
