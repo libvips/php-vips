@@ -348,6 +348,7 @@ EOS;
         $glib_decls = $typedefs . <<<EOS
 void* g_malloc (size_t size);
 void g_free (void* data);
+void g_strfreev (char** str_array);
 EOS;
 
         // GObject declarations

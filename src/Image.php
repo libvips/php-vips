@@ -114,6 +114,8 @@ namespace Jcupitt\Vips;
  * conform to PHP naming conventions, you can use something like
  * `$image->get('ipct-data')`.
  *
+ * Use `$image->getFields()` to get an array of all the possible field names.
+ *
  * Next we have:
  *
  * ```php
@@ -1215,6 +1217,25 @@ class Image extends ImageAutodoc implements \ArrayAccess
     public function typeOf(string $name): int
     {
         return $this->getType($name);
+    }
+
+    /**
+     * Get the field names available for an image.
+     *
+     * @return Array
+     */
+    public function getFields(): array
+    {
+        $str_array = FFI::vips()->vips_image_get_fields($this->pointer);
+
+        $fields = [];
+        for ($i = 0; $str_array[$i] != null; $i++) {
+            array_push($fields, \FFI::string($str_array[$i]));
+        }
+
+        FFI::glib()->g_free($str_array);
+
+        return $fields;
     }
 
     /**

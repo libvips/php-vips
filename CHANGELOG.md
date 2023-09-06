@@ -4,6 +4,8 @@ All notable changes to `:vips` will be documented in this file.
 
 ## master
 
+- add getFields() to fetch an array of field names
+
 ## 2.2.0 - 2023-08-17
 
 - improve FFI startup [West14, jcupitt]
