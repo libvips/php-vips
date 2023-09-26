@@ -4,7 +4,9 @@ All notable changes to `:vips` will be documented in this file.
 
 ## master
 
-- add getFields() to fetch an array of field names
+## 2.3.0 - 2023-09-26
+
+- add getFields() to fetch an array of field names [jcupitt]
 
 ## 2.2.0 - 2023-08-17
 
