@@ -4,6 +4,8 @@ All notable changes to `:vips` will be documented in this file.
 
 ## master
 
+- added `animate-image.php` example [jcupitt]
+
 ## 2.3.0 - 2023-09-26
 
 - add getFields() to fetch an array of field names [jcupitt]
