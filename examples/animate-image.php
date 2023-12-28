@@ -13,21 +13,22 @@ if (count($argv) != 4) {
 
 $image = Vips\Image::newFromFile($argv[1]);
 $text = Vips\Image::text($argv[3], ["dpi" => 300, "rgba" => true]);
-$animation = NULL;
+$animation = null;
 $delay = [];
 
-for ($x = 0; $x < $image->width + $text->width; $x += 10)
-{
+for ($x = 0; $x < $image->width + $text->width; $x += 10) {
     // append the frame to the image vertically ... we make a very tall, thin
     // strip of frames to save
     $frame = $image->composite2($text, "over", [
         "x" => $x - $text->width,
         "y" => $image->height / 2 - $text->height / 2
     ]);
-    if ($animation == NULL)
+    if ($animation == null) {
         $animation = $frame;
-    else
+    }
+    else {
         $animation = $animation->join($frame, "vertical");
+    }
 
     // frame delay in ms
     array_push($delay, 30);
