@@ -25,8 +25,7 @@ for ($x = 0; $x < $image->width + $text->width; $x += 10) {
     ]);
     if ($animation == null) {
         $animation = $frame;
-    }
-    else {
+    } else {
         $animation = $animation->join($frame, "vertical");
     }
 
