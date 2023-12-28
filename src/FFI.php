@@ -204,8 +204,6 @@ class FFI
                 // most *nix
                 return "$name.so.$abi";
         }
-
-        return null;
     }
 
     private static function libraryLoad(
