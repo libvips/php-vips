@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The ImageType enum.
+ * The ForeignPngFilter flags.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,14 +47,12 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class ImageType
+abstract class ForeignPngFilter
 {
-    const ERROR = 'error';
-    const NONE = 'none';
-    const SETBUF = 'setbuf';
-    const SETBUF_FOREIGN = 'setbuf-foreign';
-    const OPENIN = 'openin';
-    const MMAPIN = 'mmapin';
-    const MMAPINRW = 'mmapinrw';
-    const OPENOUT = 'openout';
+    const NONE = 8;
+    const SUB = 16;
+    const UP = 32;
+    const AVG = 64;
+    const PAETH = 128;
+    const ALL = 248;
 }

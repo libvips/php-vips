@@ -160,7 +160,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image convi(Image $mask, array $options = []) Int convolution operation.
  *     @throws Exception
- * @method Image convsep(Image $mask, array $options = []) Seperable convolution operation.
+ * @method Image convsep(Image $mask, array $options = []) Separable convolution operation.
  *     @throws Exception
  * @method Image copy(array $options = []) Copy an image.
  *     @throws Exception
@@ -372,6 +372,18 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void jxlsave_target(Target $target, array $options = []) Save image in JPEG-XL format.
  *     @throws Exception
+ * @method static Image kakaduload(string $filename, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method static Image kakaduload_buffer(string $buffer, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method static Image kakaduload_source(Source $source, array $options = []) Load JPEG2000 image.
+ *     @throws Exception
+ * @method void kakadusave(string $filename, array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
+ * @method string kakadusave_buffer(array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
+ * @method void kakadusave_target(Target $target, array $options = []) Save image in JPEG2000 format.
+ *     @throws Exception
  * @method Image labelregions(array $options = []) Label regions in an image.
  *     @throws Exception
  * @method Image linear(float[]|float $a, float[]|float $b, array $options = []) Calculate (a * in + b).
@@ -380,9 +392,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image logmat(float $sigma, float $min_ampl, array $options = []) Make a Laplacian of Gaussian image.
  *     @throws Exception
- * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick7.
+ * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick.
  *     @throws Exception
- * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick7.
+ * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick.
  *     @throws Exception
  * @method void magicksave(string $filename, array $options = []) Save file with ImageMagick.
  *     @throws Exception
@@ -457,6 +469,12 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image msb(array $options = []) Pick most-significant byte from an image.
  *     @throws Exception
+ * @method static Image niftiload(string $filename, array $options = []) Load NIfTI volume.
+ *     @throws Exception
+ * @method static Image niftiload_source(Source $source, array $options = []) Load NIfTI volumes.
+ *     @throws Exception
+ * @method void niftisave(string $filename, array $options = []) Save image to nifti file.
+ *     @throws Exception
  * @method static Image openexrload(string $filename, array $options = []) Load an OpenEXR image.
  *     @throws Exception
  * @method static Image openslideload(string $filename, array $options = []) Load file with OpenSlide.
@@ -481,9 +499,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image pngload_source(Source $source, array $options = []) Load png from source.
  *     @throws Exception
- * @method void pngsave(string $filename, array $options = []) Save image to file as PNG.
+ * @method void pngsave(string $filename, array $options = []) Save image to png file.
  *     @throws Exception
- * @method string pngsave_buffer(array $options = []) Save image to buffer as PNG.
+ * @method string pngsave_buffer(array $options = []) Save image to png buffer.
  *     @throws Exception
  * @method void pngsave_target(Target $target, array $options = []) Save image to target as PNG.
  *     @throws Exception

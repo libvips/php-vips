@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The Token enum.
+ * The ForeignKeep flags.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,10 +47,13 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Token
+abstract class ForeignKeep
 {
-    const LEFT = 'left';
-    const RIGHT = 'right';
-    const STRING = 'string';
-    const EQUALS = 'equals';
+    const NONE = 0;
+    const EXIF = 1;
+    const XMP = 2;
+    const IPTC = 4;
+    const ICC = 8;
+    const OTHER = 16;
+    const ALL = 31;
 }

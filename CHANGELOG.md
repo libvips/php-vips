@@ -5,6 +5,8 @@ All notable changes to `:vips` will be documented in this file.
 ## master
 
 - added `animate-image.php` example [jcupitt]
+- added flags support [jcupitt]
+- added `keep.php` example [jcupitt]
 
 ## 2.3.0 - 2023-09-26
 

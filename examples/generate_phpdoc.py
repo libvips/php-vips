@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
+# needs pyvips 2.2.3 or later
+
 from pyvips import Image, Introspect, GValue, Error, \
-    ffi, values_for_enum, vips_lib, gobject_lib, \
+    ffi, enum_dict, flags_dict, vips_lib, gobject_lib, \
     type_map, type_name, type_from_name, nickname_find
 
 # This file generates the phpdoc comments for the magic methods and properties.
-# It's in Python, since we use the whole of FFI, not just the
-# small bit exposed by php-vips-ext.
 
 # Regenerate docs with something like:
 #
@@ -292,6 +292,10 @@ def generate_enums():
 
     type_map(type_from_name('GEnum'), add_enum)
 
+    # Filter internal enums
+    blacklist = ['VipsImageType', 'VipsToken']
+    all_enums = [name for name in all_enums if name not in blacklist]
+
     for name in all_enums:
         gtype = type_from_name(name)
         php_name = remove_prefix(name)
@@ -310,14 +314,59 @@ def generate_enums():
             f.write('abstract class {0}\n'.format(php_name))
             f.write('{\n')
 
-            for value in values_for_enum(gtype):
-                php_name = value.replace('-', '_').upper()
+            for key, value in enum_dict(gtype).items():
+                php_name = key.replace('-', '_').upper()
                 if php_name in reserved_php_names:
                     php_name = reserved_php_names[php_name]
-                f.write('    const {0} = \'{1}\';\n'.format(php_name, value))
+                f.write('    const {0} = \'{1}\';\n'.format(php_name, key))
+
+            f.write('}\n')
+
+
+def generate_flags():
+    all_flags = []
+
+    def add_flags(gtype, a, b):
+        nickname = type_name(gtype)
+        all_flags.append(nickname)
+
+        type_map(gtype, add_flags)
+
+        return ffi.NULL
+
+    type_map(type_from_name('GFlags'), add_flags)
+
+    # Filter internal flags
+    blacklist = ['VipsForeignFlags']
+    all_flags = [name for name in all_flags if name not in blacklist]
+
+    for name in all_flags:
+        gtype = type_from_name(name)
+        php_name = remove_prefix(name)
+
+        print('Generating {0}.php ...'.format(php_name))
+
+        with open('{0}.php'.format(php_name), 'w') as f:
+            f.write(preamble)
+            f.write('\n')
+            f.write('namespace Jcupitt\\Vips;\n')
+            f.write('\n')
+            f.write('/**\n')
+            f.write(' * The {0} flags.\n'.format(php_name))
+            f.write(class_header)
+            f.write(' */\n')
+            f.write('abstract class {0}\n'.format(php_name))
+            f.write('{\n')
+
+            for key, value in flags_dict(gtype).items():
+                php_name = key.replace('-', '_').upper()
+                if php_name in reserved_php_names:
+                    php_name = reserved_php_names[php_name]
+                f.write('    const {0} = {1};\n'.format(php_name, value))
 
             f.write('}\n')
 
 
 generate_auto_doc('ImageAutodoc.php')
 generate_enums()
+generate_flags()

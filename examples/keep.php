@@ -18,7 +18,18 @@ function printMetadata($im)
 }
 
 $im = Vips\Image::newFromFile($argv[1]);
+echo "$argv[1]\n";
 printMetadata($im);
+
+echo "\nafter keep => icc\n";
+$buf = $im->tiffsave_buffer(['keep' => Vips\ForeignKeep::ICC]);
+$im2 = Vips\Image::newFromBuffer($buf, "");
+printMetadata($im2);
+
+echo "\nafter keep => exif|xmp\n";
+$buf = $im->tiffsave_buffer(['keep' => Vips\ForeignKeep::ICC | Vips\ForeignKeep::XMP]);
+$im2 = Vips\Image::newFromBuffer($buf, "");
+printMetadata($im2);
 
 /*
  * Local variables:
