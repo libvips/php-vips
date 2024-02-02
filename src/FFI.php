@@ -272,14 +272,14 @@ class FFI
             // Homebrew on Apple Silicon
             $libraryPaths[] = "/opt/homebrew/lib/";
             // See https://github.com/Homebrew/brew/issues/13481#issuecomment-1207203483
-            $libraryPaths[] = "/usr/local/opt/vips/";
+            $libraryPaths[] = "/usr/local/lib/";
         }
 
-        $vips = self::libraryLoad($libraryPaths, $vips_libname, <<<EOS
+        $vips = self::libraryLoad($libraryPaths, $vips_libname, <<<'CPP'
             int vips_init (const char *argv0);
             const char *vips_error_buffer (void);
             int vips_version(int flag);
-        EOS);
+        CPP);
 
         if ($vips === null) {
             // drop the "" (system path) member
