@@ -807,7 +807,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $width = count($array[0]);
 
         $n = $width * $height;
-        $a = \FFI::new("double[$n]", true, true);
+        $a = FFI::vips()->new("double[$n]", true, true);
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
                 $a[$x + $y * $width] = $array[$y][$x];
@@ -1018,7 +1018,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToMemory(): string
     {
-        $p_size = \FFI::new("size_t[1]");
+        $p_size = FFI::vips()->new("size_t[1]");
 
         $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
@@ -1059,7 +1059,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToArray(): array
     {
-        $p_size = \FFI::new("size_t[1]");
+        $p_size = FFI::vips()->new("size_t[1]");
 
         $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
