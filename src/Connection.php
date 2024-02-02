@@ -14,7 +14,7 @@ abstract class Connection extends VipsObject
 
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(FFI::ctypes('VipsConnection'), $pointer);
+        $this->pointer = FFI::vips()->cast(FFI::ctypes('VipsConnection'), $pointer);
         parent::__construct($pointer);
     }
 

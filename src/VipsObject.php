@@ -68,8 +68,8 @@ abstract class VipsObject extends GObject
 
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(FFI::ctypes("VipsObject"), $pointer);
-        $this->gObject = \FFI::cast(FFI::ctypes("GObject"), $pointer);
+        $this->pointer = FFI::vips()->cast(FFI::ctypes("VipsObject"), $pointer);
+        $this->gObject = FFI::vips()->cast(FFI::ctypes("GObject"), $pointer);
 
         parent::__construct($pointer);
     }
