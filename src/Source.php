@@ -14,7 +14,7 @@ class Source extends Connection
 
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(FFI::ctypes('VipsSource'), $pointer);
+        $this->pointer = FFI::vips()->cast(FFI::ctypes('VipsSource'), $pointer);
         parent::__construct($pointer);
     }
 
@@ -67,7 +67,7 @@ class Source extends Connection
         # we need to set the memory to a copy of the data that vips_lib
         # can own and free
         $n = strlen($data);
-        $memory = \FFI::new("char[$n]", false, true);
+        $memory = FFI::vips()->new("char[$n]", false, true);
         \FFI::memcpy($memory, $data, $n);
         $pointer = FFI::vips()->vips_source_new_from_memory($memory, $n);
 

@@ -500,7 +500,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(FFI::ctypes("VipsImage"), $pointer);
+        $this->pointer = FFI::vips()->cast(FFI::ctypes("VipsImage"), $pointer);
         parent::__construct($pointer);
     }
 
@@ -807,7 +807,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $width = count($array[0]);
 
         $n = $width * $height;
-        $a = \FFI::new("double[$n]", true, true);
+        $a = FFI::vips()->new("double[$n]", true, true);
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
                 $a[$x + $y * $width] = $array[$y][$x];
@@ -921,7 +921,9 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public static function findLoadSource(Source $source): ?string
     {
-        return FFI::vips()->vips_foreign_find_load_source(\FFI::cast(FFI::ctypes('VipsSource'), $source->pointer));
+        return FFI::vips()->vips_foreign_find_load_source(
+            FFI::vips()->cast(FFI::ctypes('VipsSource'), $source->pointer)
+        );
     }
 
     /**
@@ -1043,7 +1045,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToMemory(): string
     {
-        $p_size = \FFI::new("size_t[1]");
+        $p_size = FFI::vips()->new("size_t[1]");
 
         $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
@@ -1084,7 +1086,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
      */
     public function writeToArray(): array
     {
-        $p_size = \FFI::new("size_t[1]");
+        $p_size = FFI::vips()->new("size_t[1]");
 
         $pointer = FFI::vips()->
             vips_image_write_to_memory($this->pointer, $p_size);
@@ -1095,7 +1097,7 @@ class Image extends ImageAutodoc implements \ArrayAccess
         // wrap pointer up as a C array of the right type
         $type_name = FFI::ftypes($this->format);
         $n = $this->width * $this->height * $this->bands;
-        $array = \FFI::cast("{$type_name}[$n]", $pointer);
+        $array = FFI::vips()->cast("{$type_name}[$n]", $pointer);
 
         // copy to PHP memory as a flat array
         $result = [];

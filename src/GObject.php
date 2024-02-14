@@ -74,7 +74,7 @@ abstract class GObject
      */
     public function __construct(CData $pointer)
     {
-        $this->pointer = \FFI::cast(FFI::ctypes("GObject"), $pointer);
+        $this->pointer = FFI::vips()->cast(FFI::ctypes("GObject"), $pointer);
     }
 
     public function __destruct()
@@ -135,7 +135,7 @@ abstract class GObject
                     $vi = FFI::gobject()->g_value_get_object(\FFI::addr($params[0]));
                     FFI::gobject()->g_object_ref($vi);
                     $image = new Image($vi);
-                    $pr = \FFI::cast(
+                    $pr = FFI::vips()->cast(
                         FFI::ctypes('VipsProgress'),
                         FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]))
                     );

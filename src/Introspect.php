@@ -105,7 +105,7 @@ class Introspect
         $p_flags = FFI::vips()->new("int*[1]");
         $p_n_args = FFI::vips()->new("int[1]");
         $result = FFI::vips()->vips_object_get_args(
-            \FFI::cast(FFI::ctypes("VipsObject"), $operation->pointer),
+            FFI::vips()->cast(FFI::ctypes("VipsObject"), $operation->pointer),
             $p_names,
             $p_flags,
             $p_n_args

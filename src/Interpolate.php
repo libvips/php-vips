@@ -62,7 +62,7 @@ class Interpolate extends VipsObject
 
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(FFI::ctypes("VipsInterpolate"), $pointer);
+        $this->pointer = FFI::vips()->cast(FFI::ctypes("VipsInterpolate"), $pointer);
 
         parent::__construct($pointer);
     }

@@ -14,7 +14,7 @@ class Target extends Connection
 
     public function __construct(\FFI\CData $pointer)
     {
-        $this->pointer = \FFI::cast(FFI::ctypes('VipsTarget'), $pointer);
+        $this->pointer = FFI::vips()->cast(FFI::ctypes('VipsTarget'), $pointer);
         parent::__construct($pointer);
     }
 
