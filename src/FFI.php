@@ -163,9 +163,10 @@ class FFI
      */
     public static function atLeast(int $x, int $y, int $z = 0): bool
     {
-        return self::$library_major > $x
-            || (self::$library_major === $x && self::$library_minor > $y)
-            || (self::$library_major === $x && self::$library_minor === $y && self::$library_micro >= $z);
+        return self::$library_major > $x ||
+            (self::$library_major === $x && self::$library_minor > $y) ||
+            (self::$library_major === $x && self::$library_minor === $y &&
+                self::$library_micro >= $z);
     }
 
     /**

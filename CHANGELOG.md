@@ -7,6 +7,9 @@ All notable changes to `:vips` will be documented in this file.
 - added `animate-image.php` example [jcupitt]
 - added flags support [jcupitt]
 - added `keep.php` example [jcupitt]
+- added streaming examples [jcupitt]
+- fix php 8.3 compatibility [uuf6429]
+- better library finding [uuf6429]
 
 ## 2.3.0 - 2023-09-26
 
