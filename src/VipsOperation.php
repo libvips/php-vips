@@ -304,7 +304,8 @@ class VipsOperation extends VipsObject
 
         /* Build the operation
          */
-        $pointer = FFI::vips()->vips_cache_operation_build($operation->pointer);
+        $pointer = FFI::vips()->
+            vips_cache_operation_build($operation->pointer);
         if ($pointer == null) {
             $operation->unrefOutputs();
             throw new Exception();
