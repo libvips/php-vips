@@ -236,12 +236,16 @@ class FFI
             return;
         }
 
-        // the two usual installation problems
+        // detect the most common installation problems
         if (!extension_loaded('ffi')) {
             throw new Exception('FFI extension not loaded');
         }
         if (!ini_get('ffi.enable')) {
             throw new Exception("ffi.enable not set to 'true'");
+        }
+        if (version_compare(PHP_VERSION, '8.3') &&
+            ini_get('zend.max_allowed_stack_size') != '-1') {
+            throw new Exception("zend.max_allowed_stack_size not set to '-1'");
         }
 
         $vips_libname = self::libraryName("libvips", 42);

@@ -53,6 +53,18 @@ server can use it to call any native library they have access to.
 Of course if attackers are running their own PHP code on your webserver you
 are probably already toast, unfortunately.
 
+Finally, on php 8.3 and later you need to disable stack overflow
+tests. php-vips executes FFI callbacks off the main thread and this confuses
+those checks, at least in php 8.3.0.
+
+Add:
+
+```
+zend.max_allowed_stack_size=-1
+```
+
+To your `php.ini`.
+
 ### Example
 
 ```php
