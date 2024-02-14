@@ -27,7 +27,7 @@ class StreamingTest extends TestCase
             'File' => fn() => Target::newToFile(tempnam(sys_get_temp_dir(), 'image')),
             'Memory' => fn() => Target::newToMemory(),
             'Resource' => fn() => new TargetResource(fopen('php://memory', 'wb+')),
-            'Resource(Not Readable)' => fn() => new TargetResource(fopen('php://memory', 'wb'))
+            'Resource (not readable)' => fn() => new TargetResource(fopen('php://memory', 'wb'))
         ];
 
         foreach ($sources as $sourceName => $source) {
