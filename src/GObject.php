@@ -152,7 +152,7 @@ abstract class GObject
                         ?CData $data
                     ) use (&$callback): void {
                         assert($numberOfParams === 3);
-                        /*
+                        /**
                          * Signature: gint64(VipsSourceCustom* source, void* buffer, gint64 length, void* handle)
                          */
                         $bufferLength = (int)FFI::gobject()->g_value_get_int64(\FFI::addr($params[2]));
@@ -180,7 +180,7 @@ abstract class GObject
                         ?CData $data
                     ) use (&$callback): void {
                         assert($numberOfParams === 3);
-                        /*
+                        /**
                          * Signature: gint64(VipsSourceCustom* source, gint64 offset, int whence, void* handle)
                          */
                         $offset = (int)FFI::gobject()->g_value_get_int64(\FFI::addr($params[1]));
@@ -201,7 +201,7 @@ abstract class GObject
                         ?CData $data
                     ) use (&$callback): void {
                         assert($numberOfParams === 3);
-                        /*
+                        /**
                          * Signature: gint64(VipsTargetCustom* target, void* buffer, gint64 length, void* handle)
                          */
                         $bufferPointer = FFI::gobject()->g_value_get_pointer(\FFI::addr($params[1]));
