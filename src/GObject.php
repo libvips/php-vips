@@ -223,7 +223,7 @@ abstract class GObject
                         CData  $hint,
                         ?CData $data
                     ) use (&$callback): void {
-                        assert($numberOfParams === 0);
+                        assert($numberOfParams === 1);
                         /**
                          * Signature: void(VipsTargetCustom* target, void* handle)
                          */
@@ -242,7 +242,7 @@ abstract class GObject
                         CData  $hint,
                         ?CData $data
                     ) use (&$callback): void {
-                        assert($numberOfParams === 0);
+                        assert($numberOfParams === 1);
                         /**
                          * Signature: int(VipsTargetCustom* target, void* handle)
                          */

@@ -993,18 +993,45 @@ class Image extends ImageAutodoc implements \ArrayAccess
         $filename = Utils::filenameGetFilename($suffix);
         $string_options = Utils::filenameGetOptions($suffix);
 
-        $saver = FFI::vips()->vips_foreign_find_save_buffer($filename);
-        if ($saver == "") {
-            throw new Exception();
+        $saver = null;
+
+        // see if we can save with the Target API ... we need 8.9 or later for
+        // Target, and we need this libvips to have a target saver for this
+        // format
+        if (FFI::atLeast(8, 9)) {
+            FFI::vips()->vips_error_freeze();
+            $saver = FFI::vips()->vips_foreign_find_save_target($filename);
+            FFI::vips()->vips_error_thaw();
         }
 
-        if (strlen($string_options) != 0) {
-            $options = array_merge([
-                "string_options" => $string_options,
-            ], $options);
+        if ($saver !== null) {
+            $target = Target::newToMemory();
+            if (strlen($string_options) != 0) {
+                $options = array_merge([
+                    "string_options" => $string_options,
+                ], $options);
+            }
+
+            VipsOperation::call($saver, $this, [$target], $options);
+
+            $buffer = $target->get("blob");
+        } else {
+            // fall back to the old _buffer API
+            $saver = FFI::vips()->vips_foreign_find_save_buffer($filename);
+            if ($saver == "") {
+                throw new Exception();
+            }
+
+            if (strlen($string_options) != 0) {
+                $options = array_merge([
+                    "string_options" => $string_options,
+                ], $options);
+            }
+
+            $buffer = VipsOperation::call($saver, $this, [], $options);
         }
 
-        return VipsOperation::call($saver, $this, [], $options);
+        return $buffer;
     }
 
     /**
