@@ -180,10 +180,10 @@ class FFI
 
     public static function newGClosure(): \FFI\CData
     {
-        // GClosure measures 32-bit with the first few fields until marshal
-        // Marshal is a function pointer, thus platform-dependant.
-        // Data is a pointer, thus platform-dependant.
-        // Notifiers is an array-pointer, thus platform-dependant.
+        // GClosure measures 32-bit with the first few fields until marshal.
+        // - Marshal is a function pointer, thus platform-dependant.
+        // - Data is a pointer, thus platform-dependant.
+        // - Notifiers is an array-pointer, thus platform-dependant.
         // All in all it's basically 4 (bytes) + 3 * POINTER_SIZE
         // However, gobject wants 8 (bytes) + 3 * POINTER_SIZE.
         // I'm not sure where that extra byte comes from. Padding on 64-bit machines?
@@ -210,7 +210,7 @@ class FFI
         array $libraryPaths,
         string $libraryName,
         string $interface
-    ): \FFI {
+    ): ?\FFI {
         Utils::debugLog("trying to open", ["libraryName" => $libraryName]);
         foreach ($libraryPaths as $path) {
             Utils::debugLog("trying path", ["path" => $path]);
@@ -225,6 +225,7 @@ class FFI
                 ]);
             }
         }
+        return null;
     }
 
     private static function init(): void
@@ -234,7 +235,7 @@ class FFI
             return;
         }
 
-        // the two usual install problems
+        // the two usual installation problems
         if (!extension_loaded('ffi')) {
             throw new Exception('FFI extension not loaded');
         }
@@ -267,16 +268,18 @@ class FFI
             $libraryPaths[] = $vipshome . "/lib/";
         }
 
-        if (PHP_OS_FAMILY === "OSX" ||
-            PHP_OS_FAMILY === "Darwin") {
-            $libraryPaths[] = "/opt/homebrew/lib/"; // Homebrew on Apple Silicon
+        if (PHP_OS_FAMILY === "OSX" || PHP_OS_FAMILY === "Darwin") {
+            // Homebrew on Apple Silicon
+            $libraryPaths[] = "/opt/homebrew/lib/";
+            // See https://github.com/Homebrew/brew/issues/13481#issuecomment-1207203483
+            $libraryPaths[] = "/usr/local/lib/";
         }
 
-        $vips = self::libraryLoad($libraryPaths, $vips_libname, <<<EOS
+        $vips = self::libraryLoad($libraryPaths, $vips_libname, <<<'CPP'
             int vips_init (const char *argv0);
             const char *vips_error_buffer (void);
             int vips_version(int flag);
-        EOS);
+        CPP);
 
         if ($vips === null) {
             // drop the "" (system path) member
@@ -313,11 +316,8 @@ class FFI
                 "8.7 or later required");
         }
 
-        // GType is the size of a pointer
-        $gtype = $is_64bits ? "guint64" : "guint32";
-
         // Typedefs shared across the libvips, GLib and GObject declarations
-        $typedefs = <<<EOS
+        $typedefs = <<<'CPP'
 // we need the glib names for these types
 typedef uint32_t guint32;
 typedef int32_t gint32;
@@ -325,7 +325,12 @@ typedef uint64_t guint64;
 typedef int64_t gint64;
 typedef void* gpointer;
 
-typedef $gtype GType;
+CPP;
+
+        // GType is the size of a pointer
+        $typedefs .= 'typedef ' . ($is_64bits ? 'guint64' : 'guint32') . ' GType;';
+
+        $typedefs .= <<<'CPP'
 
 typedef struct _GData GData;
 
@@ -340,17 +345,17 @@ typedef struct _GObject {
     unsigned int ref_count;
     GData *qdata;
 } GObject;
-EOS;
+CPP;
 
         // GLib declarations
-        $glib_decls = $typedefs . <<<EOS
+        $glib_decls = $typedefs . <<<'CPP'
 void* g_malloc (size_t size);
 void g_free (void* data);
 void g_strfreev (char** str_array);
-EOS;
+CPP;
 
         // GObject declarations
-        $gobject_decls = $typedefs . <<<EOS
+        $gobject_decls = $typedefs . <<<'CPP'
 typedef struct _GValue {
     GType g_type;
     guint64 data[2];
@@ -467,10 +472,10 @@ typedef void (*marshaler)(
 void g_closure_set_marshal(GClosure* closure, marshaler marshal);
 long g_signal_connect_closure(GObject* object, const char* detailed_signal, GClosure *closure, bool after);
 GClosure* g_closure_new_simple (int sizeof_closure, void* data);
-EOS;
+CPP;
 
         # the whole libvips API, mostly adapted from pyvips
-        $vips_decls = $typedefs . <<<EOS
+        $vips_decls = $typedefs . <<<'CPP'
 typedef struct _VipsImage VipsImage;
 typedef struct _VipsProgress VipsProgress;
 
@@ -696,10 +701,10 @@ void vips_value_set_blob_free (GValue* value, void* data, size_t length);
 
 int vips_object_get_args (VipsObject* object,
     const char*** names, int** flags, int* n_args);
-EOS;
+CPP;
 
         if (self::atLeast(8, 8)) {
-            $vips_decls = $vips_decls . <<<EOS
+            $vips_decls = $vips_decls . <<<'CPP'
 char** vips_foreign_get_suffixes (void);
 
 void* vips_region_fetch (VipsRegion*, int, int, int, int,
@@ -708,11 +713,11 @@ int vips_region_width (VipsRegion*);
 int vips_region_height (VipsRegion*);
 int vips_image_get_page_height (VipsImage*);
 int vips_image_get_n_pages (VipsImage*);
-EOS;
+CPP;
         }
 
         if (self::atLeast(8, 8)) {
-            $vips_decls = $vips_decls . <<<EOS
+            $vips_decls = $vips_decls . <<<'CPP'
 typedef struct _VipsConnection {
     VipsObject parent_object;
 
@@ -761,7 +766,7 @@ VipsTargetCustom* vips_target_custom_new (void);
 
 const char* vips_foreign_find_load_source (VipsSource *source);
 const char* vips_foreign_find_save_target (const char* suffix);
-EOS;
+CPP;
         }
 
         Utils::debugLog("init", ["binding ..."]);
