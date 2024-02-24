@@ -10,6 +10,7 @@ All notable changes to `:vips` will be documented in this file.
 - added streaming examples [jcupitt]
 - fix php 8.3 compatibility [uuf6429]
 - better library finding [uuf6429]
+- fix compat with libvips before 8.9 [allanvb]
 
 ## 2.3.0 - 2023-09-26
 

@@ -3,6 +3,7 @@
 namespace Jcupitt\Vips\Test;
 
 use Generator;
+use Jcupitt\Vips\FFI;
 use Jcupitt\Vips\Exception;
 use Jcupitt\Vips\Image;
 use Jcupitt\Vips\Source;
@@ -13,6 +14,15 @@ use PHPUnit\Framework\TestCase;
 
 class StreamingTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (!FFI::atLeast(8, 9)) {
+            $this->markTestSkipped('libvips too old for streaming tests');
+        }
+    }
+
     /**
      * @throws Exception
      */

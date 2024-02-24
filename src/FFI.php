@@ -812,13 +812,18 @@ CPP;
             "VipsOperation" => self::$vips->type("VipsOperation*"),
             "VipsImage" => self::$vips->type("VipsImage*"),
             "VipsInterpolate" => self::$vips->type("VipsInterpolate*"),
-            "VipsConnection" => self::$vips->type("VipsConnection*"),
-            "VipsSource" => self::$vips->type("VipsSource*"),
-            "VipsSourceCustom" => self::$vips->type("VipsSourceCustom*"),
-            "VipsTarget" => self::$vips->type("VipsTarget*"),
-            "VipsTargetCustom" => self::$vips->type("VipsTargetCustom*"),
             "VipsProgress" => self::$vips->type("VipsProgress*"),
         ];
+
+        if (self::atLeast(8, 9)) {
+            self::$ctypes = array_merge(self::$ctypes, [
+                "VipsConnection" => self::$vips->type("VipsConnection*"),
+                "VipsSource" => self::$vips->type("VipsSource*"),
+                "VipsSourceCustom" => self::$vips->type("VipsSourceCustom*"),
+                "VipsTarget" => self::$vips->type("VipsTarget*"),
+                "VipsTargetCustom" => self::$vips->type("VipsTargetCustom*"),
+            ]);
+        }
 
         self::$gtypes = [
             "gboolean" => self::$gobject->g_type_from_name("gboolean"),
