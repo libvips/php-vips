@@ -1,8 +1,10 @@
 # Changelog
 
-All notable changes to `:vips` will be documented in this file.
+All notable changes to `php-vips` will be documented in this file.
 
 ## master
+
+## 2.4.0 - 2024-04-09
 
 - added `animate-image.php` example [jcupitt]
 - added flags support [jcupitt]
