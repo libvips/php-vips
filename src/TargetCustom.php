@@ -21,9 +21,9 @@ class TargetCustom extends Target
     /**
      * Attach a write handler.
      *
-     * The interface is similar to fwrite(). The handler is given a 
-     * bytes-like object to write, and should return the number of bytes 
-     * written. 
+     * The interface is similar to fwrite(). The handler is given a
+     * bytes-like object to write, and should return the number of bytes
+     * written.
      *
      * Unlike fwrite, you should return -1 on error.
      *
@@ -98,7 +98,7 @@ class TargetCustom extends Target
     /**
      * Attach a finish handler.
      *
-     * For libvips 8.13 and later, this method is deprecated in favour of 
+     * For libvips 8.13 and later, this method is deprecated in favour of
      * onEnd().
      *
      * @see TargetCustom::onEnd()
