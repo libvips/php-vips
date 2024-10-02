@@ -20,6 +20,7 @@ class SourceCustom extends Source
 
     /**
      * Attach a read handler.
+     *
      * The interface is similar to fread. The handler is given a number
      * of bytes to fetch, and should return a bytes-like object containing up
      * to that number of bytes. If there is no more data available, it should
@@ -32,16 +33,18 @@ class SourceCustom extends Source
 
     /**
      * Attach a seek handler.
+     *
      * The interface is the same as fseek, so the handler is passed
      * parameters for $offset and $whence with the same meanings.
      * However, the handler MUST return the new seek position. A simple way
      * to do this is to call ftell() and return that result.
      * Seek handlers are optional. If you do not set one, your source will be
      * treated as unseekable and libvips will do extra caching.
+     *
      * $whence in particular:
-     *  0 => start
-     *  1 => current position
-     *  2 => end
+     *  - 0 => start
+     *  - 1 => current position
+     *  - 2 => end
      */
     public function onSeek(callable $callback): void
     {
