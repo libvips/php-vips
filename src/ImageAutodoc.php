@@ -87,6 +87,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image abs(array $options = []) Absolute value of an image.
  *     @throws Exception
+ * @method Image addalpha(array $options = []) Append an alpha channel.
+ *     @throws Exception
  * @method Image affine(float[]|float $matrix, array $options = []) Affine transform of an image.
  *     @throws Exception
  * @method static Image analyzeload(string $filename, array $options = []) Load an Analyze6 image.
@@ -120,14 +122,14 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image byteswap(array $options = []) Byteswap an image.
  *     @throws Exception
- * @method Image cache(array $options = []) Cache an image.
- *     @throws Exception
  * @method Image canny(array $options = []) Canny edge detector.
  *     @throws Exception
  * @method Image case(Image[]|Image $cases, array $options = []) Use pixel values to pick cases from an array of images.
  *     @throws Exception
  * @method Image cast(string $format, array $options = []) Cast an image.
  *     @see BandFormat for possible values for $format
+ *     @throws Exception
+ * @method Image clamp(array $options = []) Clamp values of an image.
  *     @throws Exception
  * @method Image colourspace(string $space, array $options = []) Convert to a new colorspace.
  *     @see Interpretation for possible values for $space
@@ -372,18 +374,6 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void jxlsave_target(Target $target, array $options = []) Save image in JPEG-XL format.
  *     @throws Exception
- * @method static Image kakaduload(string $filename, array $options = []) Load JPEG2000 image.
- *     @throws Exception
- * @method static Image kakaduload_buffer(string $buffer, array $options = []) Load JPEG2000 image.
- *     @throws Exception
- * @method static Image kakaduload_source(Source $source, array $options = []) Load JPEG2000 image.
- *     @throws Exception
- * @method void kakadusave(string $filename, array $options = []) Save image in JPEG2000 format.
- *     @throws Exception
- * @method string kakadusave_buffer(array $options = []) Save image in JPEG2000 format.
- *     @throws Exception
- * @method void kakadusave_target(Target $target, array $options = []) Save image in JPEG2000 format.
- *     @throws Exception
  * @method Image labelregions(array $options = []) Label regions in an image.
  *     @throws Exception
  * @method Image linear(float[]|float $a, float[]|float $b, array $options = []) Calculate (a * in + b).
@@ -451,12 +441,16 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method float max(array $options = []) Find image maximum.
  *     @throws Exception
+ * @method Image maxpair(Image $right, array $options = []) Maximum of a pair of images.
+ *     @throws Exception
  * @method Image measure(integer $h, integer $v, array $options = []) Measure a set of patches on a color chart.
  *     @throws Exception
  * @method Image merge(Image $sec, string $direction, integer $dx, integer $dy, array $options = []) Merge two images.
  *     @see Direction for possible values for $direction
  *     @throws Exception
  * @method float min(array $options = []) Find image minimum.
+ *     @throws Exception
+ * @method Image minpair(Image $right, array $options = []) Minimum of a pair of images.
  *     @throws Exception
  * @method Image morph(Image $mask, string $morph, array $options = []) Morphology operation.
  *     @see OperationMorphology for possible values for $morph
@@ -499,9 +493,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image pngload_source(Source $source, array $options = []) Load png from source.
  *     @throws Exception
- * @method void pngsave(string $filename, array $options = []) Save image to png file.
+ * @method void pngsave(string $filename, array $options = []) Save image to file as PNG.
  *     @throws Exception
- * @method string pngsave_buffer(array $options = []) Save image to png buffer.
+ * @method string pngsave_buffer(array $options = []) Save image to buffer as PNG.
  *     @throws Exception
  * @method void pngsave_target(Target $target, array $options = []) Save image to target as PNG.
  *     @throws Exception
@@ -553,7 +547,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void rawsave(string $filename, array $options = []) Save image to raw file.
  *     @throws Exception
- * @method void rawsave_fd(integer $fd, array $options = []) Write raw image to file descriptor.
+ * @method string rawsave_buffer(array $options = []) Write raw image to buffer.
+ *     @throws Exception
+ * @method void rawsave_target(Target $target, array $options = []) Write raw image to target.
  *     @throws Exception
  * @method Image recomb(Image $m, array $options = []) Linear recombination with matrix.
  *     @throws Exception
@@ -598,6 +594,9 @@ namespace Jcupitt\Vips;
  * @method Image scale(array $options = []) Scale an image to uchar.
  *     @throws Exception
  * @method Image scharr(array $options = []) Scharr edge detector.
+ *     @throws Exception
+ * @method static Image sdf(integer $width, integer $height, string $shape, array $options = []) Create an SDF image.
+ *     @see SdfShape for possible values for $shape
  *     @throws Exception
  * @method Image sequential(array $options = []) Check sequential access.
  *     @throws Exception
