@@ -65,6 +65,35 @@ zend.max_allowed_stack_size=-1
 
 To your `php.ini`.
 
+#### Troubleshooting
+
+To make sure to have all correctly installed and your php correctly configure use the following script in your terminal:
+
+```bash
+php -r 'echo "Has FFI Extension: " . (extension_loaded("ffi") ? "true" : "false") . PHP_EOL;
+    echo "Has FFI Class: " . (class_exists(FFI::class) ? "true" : "false") . PHP_EOL;
+    echo "Has FFI Enabled: " . (ini_get("ffi.enable") === "1" ? "true" : "false") . PHP_EOL;
+    echo "Has zend.max_allowed_stack_size correct: " . (ini_get("zend.max_allowed_stack_size") === "-1" ? "true" : "false") . PHP_EOL;
+    try {
+        require_once("vendor/autoload.php");
+        $libVipsInstalled = \\Jcupitt\\Vips\\Config::version();
+        echo "Has LibVips Installed: " . $libVipsInstalled . PHP_EOL;
+    } catch (\Exception $e) {
+        echo "Has LibVips Installed: false " . PHP_EOL;
+        echo PHP_EOL . "Error: " . $libVipsError = $e->getMessage();
+    }'
+```
+
+It should output:
+
+```bash
+Has FFI Extension: true
+Has FFI Class: true
+Has FFI Enabled: false
+Has zend.max_allowed_stack_size correct: true
+Has LibVips Installed: 8.16.0
+```
+
 ### Example
 
 ```php
