@@ -89,7 +89,7 @@ It should output:
 ```bash
 Has FFI Extension: true
 Has FFI Class: true
-Has FFI Enabled: false
+Has FFI Enabled: true
 Has zend.max_allowed_stack_size correct: true
 Has LibVips Installed: 8.16.0
 ```
