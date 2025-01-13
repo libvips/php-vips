@@ -4,6 +4,10 @@ All notable changes to `php-vips` will be documented in this file.
 
 ## master
 
+## 2.4.1 - 2025-01-13
+
+- fix php 8.4 compatibility [deluxetom]
+
 ## 2.4.0 - 2024-04-09
 
 - added `animate-image.php` example [jcupitt]
