@@ -15,7 +15,6 @@ jobs:
           - php: '8.1'
           - php: '8.2'
           - php: '8.3'
-          - php: '8.3'
           - php: '8.4'
 
     steps:
@@ -23,8 +22,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          ini-values: zend.max_allowed_stack_size=-1,ffi.enable=true
-          extensions: ffi, exif
+          ini-values: ffi.enable=true, zend.max_allowed_stack_size=-1
+          extensions: ffi
           tools: composer:v2
           coverage: none
 
