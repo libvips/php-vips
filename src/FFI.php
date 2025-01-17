@@ -267,6 +267,7 @@ class FFI
 
         $vipshome = getenv("VIPSHOME");
         if ($vipshome) {
+            $libraryPaths[] = $vipshome . '/';
             // lib<qual>/ predicates lib/
             $libraryPaths[] = $vipshome . ($is_64bits ? "/lib64/" : "/lib32/");
             // lib/ is always searched
