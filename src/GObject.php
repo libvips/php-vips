@@ -61,6 +61,14 @@ abstract class GObject
     private CData $pointer;
 
     /**
+     * libvips executes FFI callbacks off the main thread and this confuses
+     * the stack limit checks available since PHP 8.3.0. We need to check
+     * if `zend.max_allowed_stack_size` is set to `-1`.
+     * See: https://github.com/libvips/php-vips/pull/237.
+     */
+    private static bool $check_max_stack_size = true;
+
+    /**
      * Wrap a GObject around an underlying vips resource. The GObject takes
      * ownership of the pointer and will unref it on finalize.
      *
@@ -104,6 +112,16 @@ abstract class GObject
      */
     public function signalConnect(string $name, callable $callback): void
     {
+        if (self::$check_max_stack_size) {
+            $max_allowed_stack_size = ini_get('zend.max_allowed_stack_size');
+            if ($max_allowed_stack_size !== false &&
+                $max_allowed_stack_size !== '-1') {
+                throw new Exception("signalConnect() requires zend.max_allowed_stack_size set to '-1'");
+            }
+
+            self::$check_max_stack_size = false;
+        }
+
         $marshaler = self::getMarshaler($name, $callback);
         if ($marshaler === null) {
             throw new Exception("unsupported signal $name");

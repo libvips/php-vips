@@ -243,10 +243,6 @@ class FFI
         if (!ini_get('ffi.enable')) {
             throw new Exception("ffi.enable not set to 'true'");
         }
-        if (version_compare(PHP_VERSION, '8.3', '>=') &&
-            ini_get('zend.max_allowed_stack_size') != '-1') {
-            throw new Exception("zend.max_allowed_stack_size not set to '-1'");
-        }
 
         $vips_libname = self::libraryName("libvips", 42);
         if (PHP_OS_FAMILY === "Windows") {
