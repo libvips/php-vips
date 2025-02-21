@@ -243,12 +243,17 @@ class FFI
         if (!ini_get('ffi.enable')) {
             throw new Exception("ffi.enable not set to 'true'");
         }
-        if (version_compare(PHP_VERSION, '8.3', '>=') &&
-            ini_get('zend.max_allowed_stack_size') != '-1') {
+        if (version_compare(PHP_VERSION, '8.3', '>=') && 
+            ini_get('zend.max_allowed_stack_size') !== '-1' && 
+            ini_get('zend.max_allowed_stack_size') !== false) {
             throw new Exception("zend.max_allowed_stack_size not set to '-1'");
         }
 
-        $vips_libname = self::libraryName("libvips", 42);
+        // Use "libvips.so" on Termux, otherwise use the standard versioned library
+        $vips_libname = getenv('PREFIX') === '/data/data/com.termux/files/usr' 
+            ? "libvips.so" 
+            : self::libraryName("libvips", 42);
+        
         if (PHP_OS_FAMILY === "Windows") {
             $glib_libname = self::libraryName("libglib-2.0", 0);
             $gobject_libname = self::libraryName("libgobject-2.0", 0);
