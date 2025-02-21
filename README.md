@@ -73,6 +73,9 @@ To your `php.ini`.
 require __DIR__ . '/vendor/autoload.php';
 use Jcupitt\Vips;
 
+// handy for Windows
+Vips\FFI::addLibraryPath("C:/vips-dev-8.16/bin");
+
 // check libvips version
 echo 'libvips version: ' . Vips\Config::version() . PHP_EOL;
 
