@@ -80,6 +80,15 @@ class FFI
     private static bool $ffi_inited = false;
 
     /**
+     * A list of paths where libvips might reside.
+     *
+     * @internal
+     */
+    private static array $libraryPaths = [
+        "" // system library
+    ];
+
+    /**
      * Look up these once.
      *
      * @internal
@@ -170,6 +179,39 @@ class FFI
     }
 
     /**
+     * Adds a directory to the search path for shared libraries.
+     *
+     * This method has no effect if FFI handles are already initialized,
+     * if the specified path is non-existent, or if the path is already
+     * included.
+     *
+     * @param string $path The path of the library.
+     * @return bool `true` if the path was added; otherwise, `false`.
+     */
+    public static function addLibraryPath(string $path): bool
+    {
+        // Already initialized.
+        if (self::$ffi_inited) {
+            return false;
+        }
+
+        $path = realpath($path);
+        if ($path === false) {
+            return false;
+        }
+
+        $path .= DIRECTORY_SEPARATOR;
+
+        if (in_array($path, self::$libraryPaths)) {
+            return false;
+        }
+
+        self::$libraryPaths[] = $path;
+
+        return true;
+    }
+
+    /**
      * Shut down libvips. Call this just before process exit.
      *
      * @return void
@@ -208,12 +250,11 @@ class FFI
     }
 
     private static function libraryLoad(
-        array $libraryPaths,
         string $libraryName,
         string $interface
     ): ?\FFI {
         Utils::debugLog("trying to open", ["libraryName" => $libraryName]);
-        foreach ($libraryPaths as $path) {
+        foreach (self::$libraryPaths as $path) {
             Utils::debugLog("trying path", ["path" => $path]);
             try {
                 $library = \FFI::cdef($interface, $path . $libraryName);
@@ -252,26 +293,14 @@ class FFI
 
         $is_64bits = PHP_INT_SIZE === 8;
 
-        $libraryPaths = [
-            "" // system library
-        ];
-
-        $vipshome = getenv("VIPSHOME");
-        if ($vipshome) {
-            // lib<qual>/ predicates lib/
-            $libraryPaths[] = $vipshome . ($is_64bits ? "/lib64/" : "/lib32/");
-            // lib/ is always searched
-            $libraryPaths[] = $vipshome . "/lib/";
-        }
-
         if (PHP_OS_FAMILY === "OSX" || PHP_OS_FAMILY === "Darwin") {
             // Homebrew on Apple Silicon
-            $libraryPaths[] = "/opt/homebrew/lib/";
+            self::addLibraryPath("/opt/homebrew/lib");
             // See https://github.com/Homebrew/brew/issues/13481#issuecomment-1207203483
-            $libraryPaths[] = "/usr/local/lib/";
+            self::addLibraryPath("/usr/local/lib");
         }
 
-        $vips = self::libraryLoad($libraryPaths, $vips_libname, <<<'CPP'
+        $vips = self::libraryLoad($vips_libname, <<<'CPP'
             int vips_init (const char *argv0);
             const char *vips_error_buffer (void);
             int vips_version(int flag);
@@ -279,10 +308,10 @@ class FFI
 
         if ($vips === null) {
             // drop the "" (system path) member
-            array_shift($libraryPaths);
+            array_shift(self::$libraryPaths);
             $msg = "Unable to open library '$vips_libname'";
-            if (!empty($libraryPaths)) {
-                $msg .= " in any of ['" . implode("', '", $libraryPaths) . "']";
+            if (!empty(self::$libraryPaths)) {
+                $msg .= " in any of ['" . implode("', '", self::$libraryPaths) . "']";
             }
             $msg .= ". Make sure that you've installed libvips and that '$vips_libname'";
             $msg .= " is on your system's library search path.";
@@ -777,13 +806,13 @@ CPP;
          * one that libvips itself is using, and they will share runtime types.
          */
         self::$glib =
-            self::libraryLoad($libraryPaths, $vips_libname, $glib_decls) ??
-            self::libraryLoad($libraryPaths, $glib_libname, $glib_decls);
+            self::libraryLoad($vips_libname, $glib_decls) ??
+            self::libraryLoad($glib_libname, $glib_decls);
         self::$gobject =
-            self::libraryLoad($libraryPaths, $vips_libname, $gobject_decls) ??
-            self::libraryLoad($libraryPaths, $gobject_libname, $gobject_decls);
+            self::libraryLoad($vips_libname, $gobject_decls) ??
+            self::libraryLoad($gobject_libname, $gobject_decls);
 
-        self::$vips = self::libraryLoad($libraryPaths, $vips_libname, $vips_decls);
+        self::$vips = self::libraryLoad($vips_libname, $vips_decls);
 
         # Useful for debugging
         # self::$vips->vips_leak_set(1);
