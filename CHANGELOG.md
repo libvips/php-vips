@@ -4,6 +4,11 @@ All notable changes to `php-vips` will be documented in this file.
 
 ## master
 
+## 2.4.2 - 2025-04-04
+
+- only test `max_allowed_stack_size` when we have to [kleisauke]
+- better libvips finding [kleisauke]
+
 ## 2.4.1 - 2025-01-13
 
 - fix php 8.4 compatibility [deluxetom]
