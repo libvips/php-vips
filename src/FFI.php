@@ -245,13 +245,8 @@ class FFI
         }
 
         $vips_libname = self::libraryName("libvips", 42);
-        if (PHP_OS_FAMILY === "Windows") {
-            $glib_libname = self::libraryName("libglib-2.0", 0);
-            $gobject_libname = self::libraryName("libgobject-2.0", 0);
-        } else {
-            $glib_libname = $vips_libname;
-            $gobject_libname = $vips_libname;
-        }
+        $glib_libname = self::libraryName("libglib-2.0", 0);
+        $gobject_libname = self::libraryName("libgobject-2.0", 0);
 
         Utils::debugLog("init", ["library" => $vips_libname]);
 
@@ -771,21 +766,24 @@ CPP;
         }
 
         Utils::debugLog("init", ["binding ..."]);
-        self::$glib = self::libraryLoad(
-            $libraryPaths,
-            $glib_libname,
-            $glib_decls
-        );
-        self::$gobject = self::libraryLoad(
-            $libraryPaths,
-            $gobject_libname,
-            $gobject_decls
-        );
-        self::$vips = self::libraryLoad(
-            $libraryPaths,
-            $vips_libname,
-            $vips_decls
-        );
+
+        /**
+         * We can sometimes get dependent libraries from libvips -- either the platform
+         * will open dependencies for us automatically, or the libvips binary has been
+         * built to includes all main dependencies (common on Windows, can happen
+         * elsewhere).
+         *
+         * We must get GLib functions from libvips if we can, since it will be the
+         * one that libvips itself is using, and they will share runtime types.
+         */
+        self::$glib =
+            self::libraryLoad($libraryPaths, $vips_libname, $glib_decls) ??
+            self::libraryLoad($libraryPaths, $glib_libname, $glib_decls);
+        self::$gobject =
+            self::libraryLoad($libraryPaths, $vips_libname, $gobject_decls) ??
+            self::libraryLoad($libraryPaths, $gobject_libname, $gobject_decls);
+
+        self::$vips = self::libraryLoad($libraryPaths, $vips_libname, $vips_decls);
 
         # Useful for debugging
         # self::$vips->vips_leak_set(1);
