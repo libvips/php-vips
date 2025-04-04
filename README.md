@@ -73,6 +73,9 @@ To your `php.ini`.
 require __DIR__ . '/vendor/autoload.php';
 use Jcupitt\Vips;
 
+// check libvips version
+echo 'libvips version: ' . Vips\Config::version() . PHP_EOL;
+
 // fast thumbnail generator
 $image = Vips\Image::thumbnail('somefile.jpg', 128);
 $image->writeToFile('tiny.jpg');
