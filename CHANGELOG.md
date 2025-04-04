@@ -4,10 +4,10 @@ All notable changes to `php-vips` will be documented in this file.
 
 ## master
 
-## 2.4.2 - 2025-04-04
+## 2.5.0 - 2025-04-04
 
+- add addLibraryPath() to let users set their libvips location [kleisauke]
 - only test `max_allowed_stack_size` when we have to [kleisauke]
-- better libvips finding [kleisauke]
 
 ## 2.4.1 - 2025-01-13
 
