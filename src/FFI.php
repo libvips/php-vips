@@ -181,8 +181,9 @@ class FFI
     /**
      * Adds a directory to the search path for shared libraries.
      *
-     * This method has no effect if FFI handles are already initialized or
-     * if the specified path is already included.
+     * This method has no effect if FFI handles are already initialized,
+     * if the specified path is non-existent, or if the path is already
+     * included.
      *
      * @param string $path The path of the library.
      * @return bool `true` if the path was added; otherwise, `false`.
@@ -194,12 +195,20 @@ class FFI
             return false;
         }
 
-        if (!in_array($path, self::$libraryPaths)) {
-            self::$libraryPaths[] = $path;
-            return true;
+        $path = realpath($path);
+        if ($path === false) {
+            return false;
         }
 
-        return false;
+        $path .= DIRECTORY_SEPARATOR;
+
+        if (in_array($path, self::$libraryPaths)) {
+            return false;
+        }
+
+        self::$libraryPaths[] = $path;
+
+        return true;
     }
 
     /**
@@ -248,9 +257,6 @@ class FFI
         foreach (self::$libraryPaths as $path) {
             Utils::debugLog("trying path", ["path" => $path]);
             try {
-                if ($path !== '') {
-                    $path .= '/';
-                }
                 $library = \FFI::cdef($interface, $path . $libraryName);
                 Utils::debugLog("success", []);
                 return $library;
@@ -289,9 +295,9 @@ class FFI
 
         if (PHP_OS_FAMILY === "OSX" || PHP_OS_FAMILY === "Darwin") {
             // Homebrew on Apple Silicon
-            self::$libraryPaths[] = "/opt/homebrew/lib";
+            self::addLibraryPath("/opt/homebrew/lib");
             // See https://github.com/Homebrew/brew/issues/13481#issuecomment-1207203483
-            self::$libraryPaths[] = "/usr/local/lib";
+            self::addLibraryPath("/usr/local/lib");
         }
 
         $vips = self::libraryLoad($vips_libname, <<<'CPP'
