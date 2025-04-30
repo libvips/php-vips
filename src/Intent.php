@@ -53,4 +53,5 @@ abstract class Intent
     const RELATIVE = 'relative';
     const SATURATION = 'saturation';
     const ABSOLUTE = 'absolute';
+    const AUTO = 'auto';
 }

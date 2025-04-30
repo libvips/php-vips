@@ -427,11 +427,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image matload(string $filename, array $options = []) Load mat from file.
  *     @throws Exception
- * @method Image matrixinvert(array $options = []) Invert an matrix.
+ * @method Image matrixinvert(array $options = []) Invert a matrix.
  *     @throws Exception
  * @method static Image matrixload(string $filename, array $options = []) Load matrix.
  *     @throws Exception
  * @method static Image matrixload_source(Source $source, array $options = []) Load matrix.
+ *     @throws Exception
+ * @method Image matrixmultiply(Image $right, array $options = []) Multiply two matrices.
  *     @throws Exception
  * @method void matrixprint(array $options = []) Print matrix.
  *     @throws Exception
@@ -567,6 +569,8 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image remainder_const(float[]|float $c, array $options = []) Remainder after integer division of an image and a constant.
  *     @throws Exception
+ * @method Image remosaic(string $old_str, string $new_str, array $options = []) Rebuild an mosaiced image.
+ *     @throws Exception
  * @method Image replicate(integer $across, integer $down, array $options = []) Replicate an image.
  *     @throws Exception
  * @method Image resize(float $scale, array $options = []) Resize an image.
@@ -589,7 +593,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image scRGB2XYZ(array $options = []) Transform scRGB to XYZ.
  *     @throws Exception
- * @method Image scRGB2sRGB(array $options = []) Convert an scRGB image to sRGB.
+ * @method Image scRGB2sRGB(array $options = []) Convert scRGB to sRGB.
  *     @throws Exception
  * @method Image scale(array $options = []) Scale an image to uchar.
  *     @throws Exception

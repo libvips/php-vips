@@ -55,4 +55,6 @@ abstract class Kernel
     const MITCHELL = 'mitchell';
     const LANCZOS2 = 'lanczos2';
     const LANCZOS3 = 'lanczos3';
+    const MKS2013 = 'mks2013';
+    const MKS2021 = 'mks2021';
 }
