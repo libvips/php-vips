@@ -8,11 +8,8 @@ CREDITS             export-ignore
 phpcs-ruleset.xml   export-ignore
 phpdoc.xml          export-ignore
 phpunit.xml         export-ignore
-scrutinizer.yml     export-ignore
 .github             export-ignore
 examples            export-ignore
 tests               export-ignore
-API-1.0.0           export-ignore
-RELEASE-2.0.0       export-ignore
 CONTRIBUTING.md     export-ignore
 CHANGELOG.md        export-ignore
