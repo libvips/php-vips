@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The DemandStyle enum.
+ * The ForeignSaveable flags.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,11 +47,12 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class DemandStyle
+abstract class ForeignSaveable
 {
-    const ERROR = 'error';
-    const SMALLTILE = 'smalltile';
-    const FATSTRIP = 'fatstrip';
-    const THINSTRIP = 'thinstrip';
-    const ANY = 'any';
+    const ANY = 0;
+    const MONO = 1;
+    const RGB = 2;
+    const CMYK = 4;
+    const ALPHA = 8;
+    const ALL = 15;
 }
