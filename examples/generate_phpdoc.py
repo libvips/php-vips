@@ -3,7 +3,7 @@
 # needs pyvips 2.2.3 or later
 
 from pyvips import Image, Introspect, GValue, Error, \
-    ffi, enum_dict, flags_dict, vips_lib, gobject_lib, \
+    ffi, enum_dict, flags_dict, gobject_lib, \
     type_map, type_name, type_from_name, nickname_find
 
 # This file generates the phpdoc comments for the magic methods and properties.
@@ -275,11 +275,6 @@ def generate_auto_doc(filename):
 
 
 def generate_enums():
-    # otherwise we're missing some enums
-    vips_lib.vips_token_get_type()
-    vips_lib.vips_saveable_get_type()
-    vips_lib.vips_image_type_get_type()
-
     all_enums = []
 
     def add_enum(gtype, a, b):
@@ -291,10 +286,6 @@ def generate_enums():
         return ffi.NULL
 
     type_map(type_from_name('GEnum'), add_enum)
-
-    # Filter internal enums
-    blacklist = ['VipsImageType', 'VipsToken']
-    all_enums = [name for name in all_enums if name not in blacklist]
 
     for name in all_enums:
         gtype = type_from_name(name)

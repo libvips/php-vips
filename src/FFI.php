@@ -551,9 +551,6 @@ void* vips_value_get_blob (const GValue* value, size_t* length);
 GType vips_interpretation_get_type (void);
 GType vips_operation_flags_get_type (void);
 GType vips_band_format_get_type (void);
-GType vips_token_get_type (void);
-GType vips_saveable_get_type (void);
-GType vips_image_type_get_type (void);
 
 void vips_image_set_progress (VipsImage* image, bool progress);
 void vips_image_set_kill (VipsImage* image, bool kill);
@@ -822,9 +819,6 @@ CPP;
         self::$vips->vips_interpretation_get_type();
         self::$vips->vips_operation_flags_get_type();
         self::$vips->vips_band_format_get_type();
-        self::$vips->vips_token_get_type();
-        self::$vips->vips_saveable_get_type();
-        self::$vips->vips_image_type_get_type();
 
         // look these up in advance
         self::$ctypes = [
