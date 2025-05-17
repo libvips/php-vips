@@ -30,8 +30,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install vips
-        run: sudo apt install -y --no-install-recommends libvips
+      - name: Install libvips
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends libvips
 
       - name: Install composer dependencies
         run: |
