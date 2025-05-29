@@ -539,6 +539,8 @@ void vips_value_set_array_image (GValue *value, int n);
 typedef void (*FreeFn)(void* a);
 void vips_value_set_blob (GValue* value,
     FreeFn free_fn, void* data, size_t length);
+void* vips_blob_copy (const void *data, size_t length);
+void vips_area_unref (void *area);
 
 const char* vips_value_get_ref_string (const GValue* value,
     size_t* length);
@@ -760,8 +762,7 @@ typedef struct _VipsSource {
 
 VipsSource* vips_source_new_from_descriptor (int descriptor);
 VipsSource* vips_source_new_from_file (const char* filename);
-VipsSource* vips_source_new_from_memory (const void* data,
-    size_t size);
+VipsSource* vips_source_new_from_blob (void* blob);
 
 typedef struct _VipsSourceCustom {
     VipsSource parent_object;
