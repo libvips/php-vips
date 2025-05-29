@@ -12,16 +12,6 @@ class Source extends Connection
      */
     public \FFI\CData $pointer;
 
-    /**
-     * Pointer to the underlying memory buffer when using
-     * @see Source::newFromMemory()
-     *
-     * Must be freed when no longer needed.
-     *
-     * @internal
-     */
-    public ?\FFI\CData $memory = null;
-
     public function __construct(\FFI\CData $pointer)
     {
         $this->pointer = FFI::vips()->cast(FFI::ctypes('VipsSource'), $pointer);
@@ -74,27 +64,19 @@ class Source extends Connection
      */
     public static function newFromMemory(string $data): self
     {
-        # we need to set the memory to a copy of the data
-        $n = strlen($data);
-        $memory = FFI::vips()->new("char[$n]", false, true);
-        \FFI::memcpy($memory, $data, $n);
-        $pointer = FFI::vips()->vips_source_new_from_memory($memory, $n);
+        $blob = FFI::vips()->vips_blob_copy($data, strlen($data));
+        if ($blob === null) {
+            throw new Exception("can't create source from memory");
+        }
 
+        $pointer = FFI::vips()->vips_source_new_from_blob($blob);
         if ($pointer === null) {
-            \FFI::free($memory);
+            FFI::vips()->vips_area_unref($blob);
             throw new Exception("can't create source from memory");
         }
 
         $source = new self($pointer);
-        $source->memory = $memory;
+        FFI::vips()->vips_area_unref($blob);
         return $source;
-    }
-
-    public function __destruct()
-    {
-        if ($this->memory !== null) {
-            \FFI::free($this->memory);
-        }
-        parent::__destruct();
     }
 }
