@@ -19,9 +19,12 @@ class Source extends Connection
     }
 
     /**
-     * Make a new source from a file descriptor (a small integer).
-     * Make a new source that is attached to the descriptor. For example:
-     *      $source = VipsSource::newFromDescriptor(0)
+     * Make a new source from a file descriptor. For example:
+     *
+     * ```php
+     * $source = Source::newFromDescriptor(0);
+     * ```
+     *
      * Makes a descriptor attached to stdin.
      * You can pass this source to (for example) @see Image::newFromSource()
      * @throws Exception
@@ -38,9 +41,12 @@ class Source extends Connection
     }
 
     /**
-     * Make a new source from a filename.
-     * Make a new source that is attached to the named file. For example:
-     *      $source = VipsSource::newFromFile("myfile.jpg")
+     * Make a new source from a filename. For example:
+     *
+     * ```php
+     * $source = Source::newFromFile("myfile.jpg");
+     * ```
+     *
      * You can pass this source to (for example) @see Image::newFromSource()
      * @throws Exception
      */
@@ -56,9 +62,12 @@ class Source extends Connection
     }
 
     /**
-     * Make a new source from a filename.
-     * Make a new source that uses the provided $data. For example:
-     *      $source = VipsSource::newFromFile(file_get_contents("myfile.jpg"))
+     * Make a new source from a memory buffer. For example:
+     *
+     * ```php
+     * $source = Source::newFromMemory(file_get_contents("myfile.jpg"));
+     * ```
+     *
      * You can pass this source to (for example) @see Image::newFromSource()
      * @throws Exception
      */

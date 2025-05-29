@@ -19,9 +19,12 @@ class Target extends Connection
     }
 
     /**
-     * Make a new target to write to a file descriptor (a small integer).
-     * Make a new target that is attached to the descriptor. For example::
-     *      $target = VipsTarget.newToDescriptor(1)
+     * Make a new target to write to a file descriptor. For example:
+     *
+     * ```php
+     * $target = Target::newToDescriptor(1);
+     * ```
+     *
      * Makes a descriptor attached to stdout.
      * You can pass this target to (for example) @see Image::writeToTarget()
      * @throws Exception
@@ -37,9 +40,12 @@ class Target extends Connection
     }
 
     /**
-     * Make a new target to write to a file name.
-     * Make a new target that is attached to the file name. For example::
-     *      $target = VipsTarget.newToFile("myfile.jpg")
+     * Make a new target to write to a filename. For example:
+     *
+     * ```php
+     * $target = Target::newToFile("myfile.jpg");
+     * ```
+     *
      * You can pass this target to (for example) @see Image::writeToTarget()
      * @throws Exception
      */
@@ -55,9 +61,12 @@ class Target extends Connection
     }
 
     /**
-     * Make a new target to write to a memory buffer.
-     * For example::
-     *      $target = VipsTarget.newToMemory()
+     * Make a new target to write to a memory buffer. For example:
+     *
+     * ```php
+     * $target = Target::newToMemory();
+     * ```
+     *
      * You can pass this target to (for example) @see Image::writeToTarget()
      * @throws Exception
      */
