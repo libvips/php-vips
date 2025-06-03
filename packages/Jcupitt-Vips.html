@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -52,8 +53,8 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-                    <section class="phpdocumentor-sidebar__category">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="namespaces/jcupitt.html" class="">Jcupitt</a>
@@ -66,7 +67,7 @@
             </ul>
 
                         </section>
-                <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="packages/Jcupitt.html" class="">Jcupitt</a>
@@ -90,21 +91,22 @@
 
                         </section>
             
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="packages/Jcupitt.html">Jcupitt</a></li>
     </ul>
 
@@ -112,181 +114,67 @@
         <h2 class="phpdocumentor-content__title">Vips</h2>
 
         
-
-<h3 id="interfaces_class_traits">
-    Interfaces, Classes, Traits and Enums
-    <a href="#interfaces_class_traits" class="headerlink"><i class="fas fa-link"></i></a>
-</h3>
-
-<dl class="phpdocumentor-table-of-contents">
-    
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Access.html"><abbr title="\Jcupitt\Vips\Access">Access</abbr></a></dt>
-        <dd>The Access enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Align.html"><abbr title="\Jcupitt\Vips\Align">Align</abbr></a></dt>
-        <dd>The Align enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Angle.html"><abbr title="\Jcupitt\Vips\Angle">Angle</abbr></a></dt>
-        <dd>The Angle enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Angle45.html"><abbr title="\Jcupitt\Vips\Angle45">Angle45</abbr></a></dt>
-        <dd>The Angle45 enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ArgumentFlags.html"><abbr title="\Jcupitt\Vips\ArgumentFlags">ArgumentFlags</abbr></a></dt>
-        <dd>The ArgumentFlags enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-BandFormat.html"><abbr title="\Jcupitt\Vips\BandFormat">BandFormat</abbr></a></dt>
-        <dd>The BandFormat enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-BlendMode.html"><abbr title="\Jcupitt\Vips\BlendMode">BlendMode</abbr></a></dt>
-        <dd>The BlendMode enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Coding.html"><abbr title="\Jcupitt\Vips\Coding">Coding</abbr></a></dt>
-        <dd>The Coding enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Combine.html"><abbr title="\Jcupitt\Vips\Combine">Combine</abbr></a></dt>
-        <dd>The Combine enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-CombineMode.html"><abbr title="\Jcupitt\Vips\CombineMode">CombineMode</abbr></a></dt>
-        <dd>The CombineMode enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-CompassDirection.html"><abbr title="\Jcupitt\Vips\CompassDirection">CompassDirection</abbr></a></dt>
-        <dd>The CompassDirection enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Config.html"><abbr title="\Jcupitt\Vips\Config">Config</abbr></a></dt>
-        <dd>This class contains the top-level libvips control methods.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-DebugLogger.html"><abbr title="\Jcupitt\Vips\DebugLogger">DebugLogger</abbr></a></dt>
-        <dd>A simple logger, handy for debugging. See Main::setLogger().</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-DemandStyle.html"><abbr title="\Jcupitt\Vips\DemandStyle">DemandStyle</abbr></a></dt>
-        <dd>The DemandStyle enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Direction.html"><abbr title="\Jcupitt\Vips\Direction">Direction</abbr></a></dt>
-        <dd>The Direction enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Exception.html"><abbr title="\Jcupitt\Vips\Exception">Exception</abbr></a></dt>
-        <dd>The vips exception class. All exceptions thrown by php-vips are subclasses
-of this.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Extend.html"><abbr title="\Jcupitt\Vips\Extend">Extend</abbr></a></dt>
-        <dd>The Extend enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-FailOn.html"><abbr title="\Jcupitt\Vips\FailOn">FailOn</abbr></a></dt>
-        <dd>The FailOn enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-FFI.html"><abbr title="\Jcupitt\Vips\FFI">FFI</abbr></a></dt>
-        <dd>This class contains the libvips FFI methods.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignDzContainer.html"><abbr title="\Jcupitt\Vips\ForeignDzContainer">ForeignDzContainer</abbr></a></dt>
-        <dd>The ForeignDzContainer enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignDzDepth.html"><abbr title="\Jcupitt\Vips\ForeignDzDepth">ForeignDzDepth</abbr></a></dt>
-        <dd>The ForeignDzDepth enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignDzLayout.html"><abbr title="\Jcupitt\Vips\ForeignDzLayout">ForeignDzLayout</abbr></a></dt>
-        <dd>The ForeignDzLayout enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignHeifCompression.html"><abbr title="\Jcupitt\Vips\ForeignHeifCompression">ForeignHeifCompression</abbr></a></dt>
-        <dd>The ForeignHeifCompression enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignHeifEncoder.html"><abbr title="\Jcupitt\Vips\ForeignHeifEncoder">ForeignHeifEncoder</abbr></a></dt>
-        <dd>The ForeignHeifEncoder enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignJpegSubsample.html"><abbr title="\Jcupitt\Vips\ForeignJpegSubsample">ForeignJpegSubsample</abbr></a></dt>
-        <dd>The ForeignJpegSubsample enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignPpmFormat.html"><abbr title="\Jcupitt\Vips\ForeignPpmFormat">ForeignPpmFormat</abbr></a></dt>
-        <dd>The ForeignPpmFormat enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignSubsample.html"><abbr title="\Jcupitt\Vips\ForeignSubsample">ForeignSubsample</abbr></a></dt>
-        <dd>The ForeignSubsample enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignTiffCompression.html"><abbr title="\Jcupitt\Vips\ForeignTiffCompression">ForeignTiffCompression</abbr></a></dt>
-        <dd>The ForeignTiffCompression enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignTiffPredictor.html"><abbr title="\Jcupitt\Vips\ForeignTiffPredictor">ForeignTiffPredictor</abbr></a></dt>
-        <dd>The ForeignTiffPredictor enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignTiffResunit.html"><abbr title="\Jcupitt\Vips\ForeignTiffResunit">ForeignTiffResunit</abbr></a></dt>
-        <dd>The ForeignTiffResunit enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignWebpPreset.html"><abbr title="\Jcupitt\Vips\ForeignWebpPreset">ForeignWebpPreset</abbr></a></dt>
-        <dd>The ForeignWebpPreset enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-GObject.html"><abbr title="\Jcupitt\Vips\GObject">GObject</abbr></a></dt>
-        <dd>This class holds a pointer to a GObject and manages object lifetime.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-GsfOutputCsvQuotingMode.html"><abbr title="\Jcupitt\Vips\GsfOutputCsvQuotingMode">GsfOutputCsvQuotingMode</abbr></a></dt>
-        <dd>The GsfOutputCsvQuotingMode enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-GValue.html"><abbr title="\Jcupitt\Vips\GValue">GValue</abbr></a></dt>
-        <dd></dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Image.html"><abbr title="\Jcupitt\Vips\Image">Image</abbr></a></dt>
-        <dd>This class represents a Vips image object.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ImageAutodoc.html"><abbr title="\Jcupitt\Vips\ImageAutodoc">ImageAutodoc</abbr></a></dt>
-        <dd>Autodocs for the Image class.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ImageType.html"><abbr title="\Jcupitt\Vips\ImageType">ImageType</abbr></a></dt>
-        <dd>The ImageType enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Intent.html"><abbr title="\Jcupitt\Vips\Intent">Intent</abbr></a></dt>
-        <dd>The Intent enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Interesting.html"><abbr title="\Jcupitt\Vips\Interesting">Interesting</abbr></a></dt>
-        <dd>The Interesting enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Interpolate.html"><abbr title="\Jcupitt\Vips\Interpolate">Interpolate</abbr></a></dt>
-        <dd>This class holds a pointer to a VipsInterpolate (the libvips
-base class for interpolators) and manages argument introspection and
-operation call.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Interpretation.html"><abbr title="\Jcupitt\Vips\Interpretation">Interpretation</abbr></a></dt>
-        <dd>The Interpretation enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Introspect.html"><abbr title="\Jcupitt\Vips\Introspect">Introspect</abbr></a></dt>
-        <dd>Introspect a VipsOperation and discover everything we can. This is called
-on demand once per operation and the results held in a cache.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Kernel.html"><abbr title="\Jcupitt\Vips\Kernel">Kernel</abbr></a></dt>
-        <dd>The Kernel enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationBoolean.html"><abbr title="\Jcupitt\Vips\OperationBoolean">OperationBoolean</abbr></a></dt>
-        <dd>The OperationBoolean enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationComplex.html"><abbr title="\Jcupitt\Vips\OperationComplex">OperationComplex</abbr></a></dt>
-        <dd>The OperationComplex enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationComplex2.html"><abbr title="\Jcupitt\Vips\OperationComplex2">OperationComplex2</abbr></a></dt>
-        <dd>The OperationComplex2 enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationComplexget.html"><abbr title="\Jcupitt\Vips\OperationComplexget">OperationComplexget</abbr></a></dt>
-        <dd>The OperationComplexget enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationMath.html"><abbr title="\Jcupitt\Vips\OperationMath">OperationMath</abbr></a></dt>
-        <dd>The OperationMath enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationMath2.html"><abbr title="\Jcupitt\Vips\OperationMath2">OperationMath2</abbr></a></dt>
-        <dd>The OperationMath2 enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationMorphology.html"><abbr title="\Jcupitt\Vips\OperationMorphology">OperationMorphology</abbr></a></dt>
-        <dd>The OperationMorphology enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationRelational.html"><abbr title="\Jcupitt\Vips\OperationRelational">OperationRelational</abbr></a></dt>
-        <dd>The OperationRelational enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationRound.html"><abbr title="\Jcupitt\Vips\OperationRound">OperationRound</abbr></a></dt>
-        <dd>The OperationRound enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-PCS.html"><abbr title="\Jcupitt\Vips\PCS">PCS</abbr></a></dt>
-        <dd>The PCS enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Precision.html"><abbr title="\Jcupitt\Vips\Precision">Precision</abbr></a></dt>
-        <dd>The Precision enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-RegionShrink.html"><abbr title="\Jcupitt\Vips\RegionShrink">RegionShrink</abbr></a></dt>
-        <dd>The RegionShrink enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Saveable.html"><abbr title="\Jcupitt\Vips\Saveable">Saveable</abbr></a></dt>
-        <dd>The Saveable enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Size.html"><abbr title="\Jcupitt\Vips\Size">Size</abbr></a></dt>
-        <dd>The Size enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-TextWrap.html"><abbr title="\Jcupitt\Vips\TextWrap">TextWrap</abbr></a></dt>
-        <dd>The TextWrap enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Token.html"><abbr title="\Jcupitt\Vips\Token">Token</abbr></a></dt>
-        <dd>The Token enum.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Utils.html"><abbr title="\Jcupitt\Vips\Utils">Utils</abbr></a></dt>
-        <dd>Various utilities.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-VipsObject.html"><abbr title="\Jcupitt\Vips\VipsObject">VipsObject</abbr></a></dt>
-        <dd>This class holds a pointer to a VipsObject (the libvips base class) and
-manages properties.</dd>
-            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-VipsOperation.html"><abbr title="\Jcupitt\Vips\VipsOperation">VipsOperation</abbr></a></dt>
-        <dd>This class holds a pointer to a VipsOperation (the libvips operation base
-class) and manages argument introspection and operation call.</dd>
-    
-    
-    </dl>
-
-
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="packages/Jcupitt-Vips.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+    <h4 id="toc-classes">
+        Classes
+        <a href="packages/Jcupitt-Vips.html#toc-classes" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <dl class="phpdocumentor-table-of-contents">
+                    <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Access.html"><abbr title="\Jcupitt\Vips\Access">Access</abbr></a></dt><dd>The Access enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Align.html"><abbr title="\Jcupitt\Vips\Align">Align</abbr></a></dt><dd>The Align enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Angle.html"><abbr title="\Jcupitt\Vips\Angle">Angle</abbr></a></dt><dd>The Angle enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Angle45.html"><abbr title="\Jcupitt\Vips\Angle45">Angle45</abbr></a></dt><dd>The Angle45 enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ArgumentFlags.html"><abbr title="\Jcupitt\Vips\ArgumentFlags">ArgumentFlags</abbr></a></dt><dd>The ArgumentFlags enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-BandFormat.html"><abbr title="\Jcupitt\Vips\BandFormat">BandFormat</abbr></a></dt><dd>The BandFormat enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-BlendMode.html"><abbr title="\Jcupitt\Vips\BlendMode">BlendMode</abbr></a></dt><dd>The BlendMode enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Coding.html"><abbr title="\Jcupitt\Vips\Coding">Coding</abbr></a></dt><dd>The Coding enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Combine.html"><abbr title="\Jcupitt\Vips\Combine">Combine</abbr></a></dt><dd>The Combine enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-CombineMode.html"><abbr title="\Jcupitt\Vips\CombineMode">CombineMode</abbr></a></dt><dd>The CombineMode enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-CompassDirection.html"><abbr title="\Jcupitt\Vips\CompassDirection">CompassDirection</abbr></a></dt><dd>The CompassDirection enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Config.html"><abbr title="\Jcupitt\Vips\Config">Config</abbr></a></dt><dd>This class contains the top-level libvips control methods.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-DebugLogger.html"><abbr title="\Jcupitt\Vips\DebugLogger">DebugLogger</abbr></a></dt><dd>A simple logger, handy for debugging. See Main::setLogger().</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Direction.html"><abbr title="\Jcupitt\Vips\Direction">Direction</abbr></a></dt><dd>The Direction enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Exception.html"><abbr title="\Jcupitt\Vips\Exception">Exception</abbr></a></dt><dd>The vips exception class. All exceptions thrown by php-vips are subclasses
+of this.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Extend.html"><abbr title="\Jcupitt\Vips\Extend">Extend</abbr></a></dt><dd>The Extend enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-FailOn.html"><abbr title="\Jcupitt\Vips\FailOn">FailOn</abbr></a></dt><dd>The FailOn enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-FFI.html"><abbr title="\Jcupitt\Vips\FFI">FFI</abbr></a></dt><dd>This class contains the libvips FFI methods.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignDzContainer.html"><abbr title="\Jcupitt\Vips\ForeignDzContainer">ForeignDzContainer</abbr></a></dt><dd>The ForeignDzContainer enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignDzDepth.html"><abbr title="\Jcupitt\Vips\ForeignDzDepth">ForeignDzDepth</abbr></a></dt><dd>The ForeignDzDepth enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignDzLayout.html"><abbr title="\Jcupitt\Vips\ForeignDzLayout">ForeignDzLayout</abbr></a></dt><dd>The ForeignDzLayout enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignHeifCompression.html"><abbr title="\Jcupitt\Vips\ForeignHeifCompression">ForeignHeifCompression</abbr></a></dt><dd>The ForeignHeifCompression enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignHeifEncoder.html"><abbr title="\Jcupitt\Vips\ForeignHeifEncoder">ForeignHeifEncoder</abbr></a></dt><dd>The ForeignHeifEncoder enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignKeep.html"><abbr title="\Jcupitt\Vips\ForeignKeep">ForeignKeep</abbr></a></dt><dd>The ForeignKeep flags.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignPngFilter.html"><abbr title="\Jcupitt\Vips\ForeignPngFilter">ForeignPngFilter</abbr></a></dt><dd>The ForeignPngFilter flags.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignPpmFormat.html"><abbr title="\Jcupitt\Vips\ForeignPpmFormat">ForeignPpmFormat</abbr></a></dt><dd>The ForeignPpmFormat enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignSubsample.html"><abbr title="\Jcupitt\Vips\ForeignSubsample">ForeignSubsample</abbr></a></dt><dd>The ForeignSubsample enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignTiffCompression.html"><abbr title="\Jcupitt\Vips\ForeignTiffCompression">ForeignTiffCompression</abbr></a></dt><dd>The ForeignTiffCompression enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignTiffPredictor.html"><abbr title="\Jcupitt\Vips\ForeignTiffPredictor">ForeignTiffPredictor</abbr></a></dt><dd>The ForeignTiffPredictor enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignTiffResunit.html"><abbr title="\Jcupitt\Vips\ForeignTiffResunit">ForeignTiffResunit</abbr></a></dt><dd>The ForeignTiffResunit enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ForeignWebpPreset.html"><abbr title="\Jcupitt\Vips\ForeignWebpPreset">ForeignWebpPreset</abbr></a></dt><dd>The ForeignWebpPreset enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-GObject.html"><abbr title="\Jcupitt\Vips\GObject">GObject</abbr></a></dt><dd>This class holds a pointer to a GObject and manages object lifetime.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-GValue.html"><abbr title="\Jcupitt\Vips\GValue">GValue</abbr></a></dt>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Image.html"><abbr title="\Jcupitt\Vips\Image">Image</abbr></a></dt><dd>This class represents a Vips image object.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-ImageAutodoc.html"><abbr title="\Jcupitt\Vips\ImageAutodoc">ImageAutodoc</abbr></a></dt><dd>Autodocs for the Image class.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Intent.html"><abbr title="\Jcupitt\Vips\Intent">Intent</abbr></a></dt><dd>The Intent enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Interesting.html"><abbr title="\Jcupitt\Vips\Interesting">Interesting</abbr></a></dt><dd>The Interesting enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Interpolate.html"><abbr title="\Jcupitt\Vips\Interpolate">Interpolate</abbr></a></dt><dd>This class holds a pointer to a VipsInterpolate (the libvips
+base class for interpolators) and manages argument introspection and
+operation call.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Interpretation.html"><abbr title="\Jcupitt\Vips\Interpretation">Interpretation</abbr></a></dt><dd>The Interpretation enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Introspect.html"><abbr title="\Jcupitt\Vips\Introspect">Introspect</abbr></a></dt><dd>Introspect a VipsOperation and discover everything we can. This is called
+on demand once per operation and the results held in a cache.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Kernel.html"><abbr title="\Jcupitt\Vips\Kernel">Kernel</abbr></a></dt><dd>The Kernel enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationBoolean.html"><abbr title="\Jcupitt\Vips\OperationBoolean">OperationBoolean</abbr></a></dt><dd>The OperationBoolean enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationComplex.html"><abbr title="\Jcupitt\Vips\OperationComplex">OperationComplex</abbr></a></dt><dd>The OperationComplex enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationComplex2.html"><abbr title="\Jcupitt\Vips\OperationComplex2">OperationComplex2</abbr></a></dt><dd>The OperationComplex2 enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationComplexget.html"><abbr title="\Jcupitt\Vips\OperationComplexget">OperationComplexget</abbr></a></dt><dd>The OperationComplexget enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationMath.html"><abbr title="\Jcupitt\Vips\OperationMath">OperationMath</abbr></a></dt><dd>The OperationMath enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationMath2.html"><abbr title="\Jcupitt\Vips\OperationMath2">OperationMath2</abbr></a></dt><dd>The OperationMath2 enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationMorphology.html"><abbr title="\Jcupitt\Vips\OperationMorphology">OperationMorphology</abbr></a></dt><dd>The OperationMorphology enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationRelational.html"><abbr title="\Jcupitt\Vips\OperationRelational">OperationRelational</abbr></a></dt><dd>The OperationRelational enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-OperationRound.html"><abbr title="\Jcupitt\Vips\OperationRound">OperationRound</abbr></a></dt><dd>The OperationRound enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-PCS.html"><abbr title="\Jcupitt\Vips\PCS">PCS</abbr></a></dt><dd>The PCS enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Precision.html"><abbr title="\Jcupitt\Vips\Precision">Precision</abbr></a></dt><dd>The Precision enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-RegionShrink.html"><abbr title="\Jcupitt\Vips\RegionShrink">RegionShrink</abbr></a></dt><dd>The RegionShrink enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-SdfShape.html"><abbr title="\Jcupitt\Vips\SdfShape">SdfShape</abbr></a></dt><dd>The SdfShape enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Size.html"><abbr title="\Jcupitt\Vips\Size">Size</abbr></a></dt><dd>The Size enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-TextWrap.html"><abbr title="\Jcupitt\Vips\TextWrap">TextWrap</abbr></a></dt><dd>The TextWrap enum.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Utils.html"><abbr title="\Jcupitt\Vips\Utils">Utils</abbr></a></dt><dd>Various utilities.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-VipsObject.html"><abbr title="\Jcupitt\Vips\VipsObject">VipsObject</abbr></a></dt><dd>This class holds a pointer to a VipsObject (the libvips base class) and
+manages properties.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-VipsOperation.html"><abbr title="\Jcupitt\Vips\VipsOperation">VipsOperation</abbr></a></dt><dd>This class holds a pointer to a VipsOperation (the libvips operation base
+class) and manages argument introspection and operation call.</dd>    </dl>
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="packages/Jcupitt-Vips.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/jcupitt-vips.html#constant_DATE_FORMAT">DATE_FORMAT</a>
+    <a class="" href="namespaces/jcupitt-vips.html#constant_DATE_FORMAT">DATE_FORMAT</a>
     <span>
         &nbsp;= &quot;Y-m-d\\TH:i:sP&quot;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="namespaces/jcupitt-vips.html#constant_LOG_FORMAT">LOG_FORMAT</a>
+    <a class="" href="namespaces/jcupitt-vips.html#constant_LOG_FORMAT">LOG_FORMAT</a>
     <span>
         &nbsp;= &quot;[%datetime%] %level_name%: %message% %context%\n&quot;                            </span>
 </dt>
-<dd></dd>
 
-                    </dl>
+    </dl>
+
+
+
+
 
         
     <section class="phpdocumentor-constants">
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
             <a href="packages/Jcupitt-Vips.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_DATE_FORMAT">
         DATE_FORMAT
         <a href="namespaces/jcupitt-vips.html#constant_DATE_FORMAT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -297,6 +185,7 @@ class) and manages argument introspection and operation call.</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -305,9 +194,9 @@ class) and manages argument introspection and operation call.</dd>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -316,6 +205,7 @@ class) and manages argument introspection and operation call.</dd>
     <h4 class="phpdocumentor-element__name" id="constant_LOG_FORMAT">
         LOG_FORMAT
         <a href="namespaces/jcupitt-vips.html#constant_LOG_FORMAT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -326,6 +216,7 @@ class) and manages argument introspection and operation call.</dd>
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -334,9 +225,9 @@ class) and manages argument introspection and operation call.</dd>
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -344,8 +235,128 @@ class) and manages argument introspection and operation call.</dd>
             </section>
 
         
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
+
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
+
+                    var xhr = new XMLHttpRequest();
+
+                    xhr.open('GET', src, true);
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+                            Prism.highlightElement(code);
+                            return;
+                        }
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
+                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
+                    }
+                    modal.classList.add("phpdocumentor-modal__open");
+
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
+                    });
+                });
+            });
+        })();
+    </script>
+
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                            
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                                                                        <li><a href="packages/Jcupitt-Vips.html#toc-classes">Classes</a></li>
+                                                                                                        <li><a href="packages/Jcupitt-Vips.html#toc-constants">Constants</a></li>
+                                                        </ul>
+            </li>
+
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="namespaces/jcupitt-vips.html#constant_DATE_FORMAT">DATE_FORMAT</a></li>
+                                                    <li class=""><a href="namespaces/jcupitt-vips.html#constant_LOG_FORMAT">LOG_FORMAT</a></li>
+                                            </ul>
+                </li>
+            
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -356,7 +367,6 @@ class) and manages argument introspection and operation call.</dd>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="packages/Jcupitt-Vips.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 

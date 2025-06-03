@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -52,8 +53,8 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-                    <section class="phpdocumentor-sidebar__category">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="namespaces/jcupitt.html" class="">Jcupitt</a>
@@ -66,7 +67,7 @@
             </ul>
 
                         </section>
-                <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="packages/Jcupitt.html" class="">Jcupitt</a>
@@ -90,21 +91,22 @@
 
                         </section>
             
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/jcupitt.html">Jcupitt</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/jcupitt-vips.html">Vips</a></li>
     </ul>
@@ -128,6 +130,11 @@
     
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SourceResource.php"><a href="files/src-sourceresource.html"><abbr title="src/SourceResource.php">SourceResource.php</abbr></a></abbr>
     :
@@ -148,186 +155,201 @@ manages properties.</p>
 
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/Jcupitt-Vips-SourceResource.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/Jcupitt-Vips-SourceResource.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/Jcupitt-Vips-SourceResource.html#property_resource">$resource</a>
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a class="" href="classes/Jcupitt-Vips-GObject.html#property_check_max_stack_size">$check_max_stack_size</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd>libvips executes FFI callbacks off the main thread and this confuses
+the stack limit checks available since PHP 8.3.0. We need to check
+if `zend.max_allowed_stack_size` is set to `-1`.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a class="" href="classes/Jcupitt-Vips-SourceResource.html#property_resource">$resource</a>
     <span>
                         &nbsp;: resource            </span>
 </dt>
-<dd></dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-GObject.html#method___clone">__clone()</a>
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/Jcupitt-Vips-SourceResource.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/Jcupitt-Vips-GObject.html#method___clone">__clone()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-SourceResource.html#method___construct">__construct()</a>
+    <a class="" href="classes/Jcupitt-Vips-SourceResource.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>The resource passed in will become &quot;owned&quot; by this class.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-SourceResource.html#method___destruct">__destruct()</a>
+    <a class="" href="classes/Jcupitt-Vips-SourceResource.html#method___destruct">__destruct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Connection.html#method_filename">filename()</a>
+    <a class="" href="classes/Jcupitt-Vips-Connection.html#method_filename">filename()</a>
     <span>
                                 &nbsp;: string|null    </span>
 </dt>
 <dd>Get the filename associated with a connection. Return null if there is no associated file.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_get">get()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_get">get()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_getArgumentDescription">getArgumentDescription()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_getArgumentDescription">getArgumentDescription()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_getBlurb">getBlurb()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_getBlurb">getBlurb()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_getDescription">getDescription()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_getDescription">getDescription()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_getPspec">getPspec()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_getPspec">getPspec()</a>
     <span>
                                 &nbsp;: <abbr title="\FFI\CData">CData</abbr>|null    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_getType">getType()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_getType">getType()</a>
     <span>
                                 &nbsp;: int    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Source.html#method_newFromDescriptor">newFromDescriptor()</a>
+    <a class="" href="classes/Jcupitt-Vips-Source.html#method_newFromDescriptor">newFromDescriptor()</a>
     <span>
                                 &nbsp;: self    </span>
 </dt>
-<dd>Make a new source from a file descriptor (a small integer).</dd>
+<dd>Make a new source from a file descriptor. For example:</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Source.html#method_newFromFile">newFromFile()</a>
+    <a class="" href="classes/Jcupitt-Vips-Source.html#method_newFromFile">newFromFile()</a>
     <span>
                                 &nbsp;: self    </span>
 </dt>
-<dd>Make a new source from a filename.</dd>
+<dd>Make a new source from a filename. For example:</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Source.html#method_newFromMemory">newFromMemory()</a>
+    <a class="" href="classes/Jcupitt-Vips-Source.html#method_newFromMemory">newFromMemory()</a>
     <span>
                                 &nbsp;: self    </span>
 </dt>
-<dd>Make a new source from a filename.</dd>
+<dd>Make a new source from a memory buffer. For example:</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Connection.html#method_nick">nick()</a>
+    <a class="" href="classes/Jcupitt-Vips-Connection.html#method_nick">nick()</a>
     <span>
                                 &nbsp;: string|null    </span>
 </dt>
 <dd>Make a human-readable name for a connection suitable for error messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-SourceCustom.html#method_onRead">onRead()</a>
+    <a class="" href="classes/Jcupitt-Vips-SourceCustom.html#method_onRead">onRead()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
 <dd>Attach a read handler.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-SourceCustom.html#method_onSeek">onSeek()</a>
+    <a class="" href="classes/Jcupitt-Vips-SourceCustom.html#method_onSeek">onSeek()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
 <dd>Attach a seek handler.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_printAll">printAll()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_printAll">printAll()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-GObject.html#method_ref">ref()</a>
+    <a class="" href="classes/Jcupitt-Vips-GObject.html#method_ref">ref()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_set">set()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_set">set()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_setString">setString()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_setString">setString()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-GObject.html#method_signalConnect">signalConnect()</a>
+    <a class="" href="classes/Jcupitt-Vips-GObject.html#method_signalConnect">signalConnect()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
 <dd>Connect to a signal on this object.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-GObject.html#method_unref">unref()</a>
+    <a class="" href="classes/Jcupitt-Vips-GObject.html#method_unref">unref()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-VipsObject.html#method_unrefOutputs">unrefOutputs()</a>
+    <a class="" href="classes/Jcupitt-Vips-VipsObject.html#method_unrefOutputs">unrefOutputs()</a>
     <span>
                                 &nbsp;: void    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/Jcupitt-Vips-GObject.html#method_getMarshaler">getMarshaler()</a>
+    <a class="" href="classes/Jcupitt-Vips-GObject.html#method_getMarshaler">getMarshaler()</a>
     <span>
                                 &nbsp;: <abbr title="\Closure">Closure</abbr>|null    </span>
 </dt>
-<dd></dd>
 
-        </dl>
+    </dl>
 
 
 
@@ -338,7 +360,49 @@ manages properties.</p>
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
             <a href="classes/Jcupitt-Vips-SourceResource.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_check_max_stack_size">
+        $check_max_stack_size
+        <a href="classes/Jcupitt-Vips-GObject.html#property_check_max_stack_size" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/GObject.php"><a href="files/src-gobject.html"><abbr title="src/GObject.php">GObject.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">69</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">libvips executes FFI callbacks off the main thread and this confuses
+the stack limit checks available since PHP 8.3.0. We need to check
+if `zend.max_allowed_stack_size` is set to `-1`.</p>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$check_max_stack_size</span>
+     = <span class="phpdocumentor-signature__default-value">true</span></code>
+
+        <section class="phpdocumentor-description"><p>See: https://github.com/libvips/php-vips/pull/237.</p>
+</section>
+
+    
+    
+
+    
+
+</article>
                     <article
         class="
             phpdocumentor-element
@@ -349,6 +413,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="property_resource">
         $resource
         <a href="classes/Jcupitt-Vips-SourceResource.html#property_resource" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -360,6 +425,7 @@ manages properties.</p>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">resource</span>
@@ -370,6 +436,8 @@ manages properties.</p>
     
     
 
+    
+
 </article>
             </section>
 
@@ -377,6 +445,7 @@ manages properties.</p>
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/Jcupitt-Vips-SourceResource.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="phpdocumentor-element
@@ -387,11 +456,12 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method___clone">
         __clone()
         <a href="classes/Jcupitt-Vips-GObject.html#method___clone" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/GObject.php"><a href="files/src-gobject.html"><abbr title="src/GObject.php">GObject.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">85</span>
+    <span class="phpdocumentor-element-found-in__line">93</span>
 
     </aside>
 
@@ -400,15 +470,15 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__clone</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -420,6 +490,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
         <a href="classes/Jcupitt-Vips-SourceResource.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SourceResource.php"><a href="files/src-sourceresource.html"><abbr title="src/SourceResource.php">SourceResource.php</abbr></a></abbr>
@@ -434,6 +505,9 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">resource&nbsp;</span><span class="phpdocumentor-signature__argument__name">$resource</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>On destruction of this class, the resource will be closed.</p>
 </section>
 
@@ -450,10 +524,8 @@ manages properties.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -465,6 +537,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method___destruct">
         __destruct()
         <a href="classes/Jcupitt-Vips-SourceResource.html#method___destruct" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SourceResource.php"><a href="files/src-sourceresource.html"><abbr title="src/SourceResource.php">SourceResource.php</abbr></a></abbr>
@@ -478,15 +551,15 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__destruct</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -498,6 +571,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_filename">
         filename()
         <a href="classes/Jcupitt-Vips-Connection.html#method_filename" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Connection.php"><a href="files/src-connection.html"><abbr title="src/Connection.php">Connection.php</abbr></a></abbr>
@@ -512,15 +586,20 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">filename</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
     
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|null</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -531,6 +610,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_get">
         get()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_get" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -544,6 +624,9 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">get</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -552,15 +635,15 @@ manages properties.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-VipsObject.html#method_get#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -571,12 +654,10 @@ manages properties.</p>
                                                             
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -588,6 +669,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_getArgumentDescription">
         getArgumentDescription()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_getArgumentDescription" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -601,8 +683,10 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getArgumentDescription</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -610,18 +694,19 @@ manages properties.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -632,6 +717,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_getBlurb">
         getBlurb()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_getBlurb" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -645,8 +731,10 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getBlurb</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -654,18 +742,19 @@ manages properties.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -676,6 +765,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_getDescription">
         getDescription()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_getDescription" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -689,16 +779,20 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getDescription</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
+    
+
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -709,6 +803,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_getPspec">
         getPspec()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_getPspec" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -722,8 +817,10 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getPspec</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\FFI\CData">CData</abbr>|null</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -731,18 +828,19 @@ manages properties.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\FFI\CData">CData</abbr>|null</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\FFI\CData">CData</abbr>|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -753,6 +851,7 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_getType">
         getType()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_getType" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -766,8 +865,10 @@ manages properties.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getType</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -775,18 +876,19 @@ manages properties.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">int</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -797,23 +899,27 @@ manages properties.</p>
     <h4 class="phpdocumentor-element__name" id="method_newFromDescriptor">
         newFromDescriptor()
         <a href="classes/Jcupitt-Vips-Source.html#method_newFromDescriptor" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Source.php"><a href="files/src-source.html"><abbr title="src/Source.php">Source.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">29</span>
+    <span class="phpdocumentor-element-found-in__line">32</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Make a new source from a file descriptor (a small integer).</p>
+        <p class="phpdocumentor-summary">Make a new source from a file descriptor. For example:</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">newFromDescriptor</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$descriptor</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
 
-        <section class="phpdocumentor-description"><p>Make a new source that is attached to the descriptor. For example:
-$source = VipsSource::newFromDescriptor(0)
-Makes a descriptor attached to stdin.
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><pre class="prettyprint"><code class="language-php">$source = Source::newFromDescriptor(0);
+</code></pre>
+<p>Makes a descriptor attached to stdin.
 You can pass this source to (for example) @see Image::newFromSource()</p>
 </section>
 
@@ -824,15 +930,15 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-Source.html#method_newFromDescriptor#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -843,13 +949,15 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
                                                             
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">self</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -860,23 +968,27 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
     <h4 class="phpdocumentor-element__name" id="method_newFromFile">
         newFromFile()
         <a href="classes/Jcupitt-Vips-Source.html#method_newFromFile" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Source.php"><a href="files/src-source.html"><abbr title="src/Source.php">Source.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">47</span>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Make a new source from a filename.</p>
+        <p class="phpdocumentor-summary">Make a new source from a filename. For example:</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">newFromFile</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filename</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
 
-        <section class="phpdocumentor-description"><p>Make a new source that is attached to the named file. For example:
-$source = VipsSource::newFromFile(&quot;myfile.jpg&quot;)
-You can pass this source to (for example) @see Image::newFromSource()</p>
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><pre class="prettyprint"><code class="language-php">$source = Source::newFromFile(&quot;myfile.jpg&quot;);
+</code></pre>
+<p>You can pass this source to (for example) @see Image::newFromSource()</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -886,15 +998,15 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-Source.html#method_newFromFile#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -905,13 +1017,15 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
                                                             
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">self</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -922,23 +1036,27 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
     <h4 class="phpdocumentor-element__name" id="method_newFromMemory">
         newFromMemory()
         <a href="classes/Jcupitt-Vips-Source.html#method_newFromMemory" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Source.php"><a href="files/src-source.html"><abbr title="src/Source.php">Source.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">65</span>
+    <span class="phpdocumentor-element-found-in__line">74</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Make a new source from a filename.</p>
+        <p class="phpdocumentor-summary">Make a new source from a memory buffer. For example:</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">newFromMemory</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
 
-        <section class="phpdocumentor-description"><p>Make a new source that uses the provided $data. For example:
-$source = VipsSource::newFromFile(file_get_contents(&quot;myfile.jpg&quot;))
-You can pass this source to (for example) @see Image::newFromSource()</p>
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><pre class="prettyprint"><code class="language-php">$source = Source::newFromMemory(file_get_contents(&quot;myfile.jpg&quot;));
+</code></pre>
+<p>You can pass this source to (for example) @see Image::newFromSource()</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -948,15 +1066,15 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-Source.html#method_newFromMemory#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -967,13 +1085,15 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
                                                             
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">self</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">self</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -984,6 +1104,7 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
     <h4 class="phpdocumentor-element__name" id="method_nick">
         nick()
         <a href="classes/Jcupitt-Vips-Connection.html#method_nick" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Connection.php"><a href="files/src-connection.html"><abbr title="src/Connection.php">Connection.php</abbr></a></abbr>
@@ -998,15 +1119,20 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">nick</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|null</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
     
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|null</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1017,11 +1143,12 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
     <h4 class="phpdocumentor-element__name" id="method_onRead">
         onRead()
         <a href="classes/Jcupitt-Vips-SourceCustom.html#method_onRead" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SourceCustom.php"><a href="files/src-sourcecustom.html"><abbr title="src/SourceCustom.php">SourceCustom.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">28</span>
+    <span class="phpdocumentor-element-found-in__line">29</span>
 
     </aside>
 
@@ -1031,6 +1158,9 @@ You can pass this source to (for example) @see Image::newFromSource()</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">onRead</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">callable&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callback</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>The interface is similar to fread. The handler is given a number
 of bytes to fetch, and should return a bytes-like object containing up
 to that number of bytes. If there is no more data available, it should
@@ -1044,17 +1174,14 @@ return null.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">callable</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1066,11 +1193,12 @@ return null.</p>
     <h4 class="phpdocumentor-element__name" id="method_onSeek">
         onSeek()
         <a href="classes/Jcupitt-Vips-SourceCustom.html#method_onSeek" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SourceCustom.php"><a href="files/src-sourcecustom.html"><abbr title="src/SourceCustom.php">SourceCustom.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">49</span>
 
     </aside>
 
@@ -1080,16 +1208,21 @@ return null.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">onSeek</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">callable&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callback</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>The interface is the same as fseek, so the handler is passed
 parameters for $offset and $whence with the same meanings.
 However, the handler MUST return the new seek position. A simple way
 to do this is to call ftell() and return that result.
 Seek handlers are optional. If you do not set one, your source will be
-treated as unseekable and libvips will do extra caching.
-$whence in particular:
-0 =&gt; start
-1 =&gt; current position
-2 =&gt; end</p>
+treated as unseekable and libvips will do extra caching.</p>
+<p>$whence in particular:</p>
+<ul>
+<li>0 =&gt; start</li>
+<li>1 =&gt; current position</li>
+<li>2 =&gt; end</li>
+</ul>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -1099,17 +1232,14 @@ $whence in particular:
                 : <span class="phpdocumentor-signature__argument__return-type">callable</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1121,6 +1251,7 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_printAll">
         printAll()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_printAll" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -1134,15 +1265,15 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">public</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">printAll</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1154,11 +1285,12 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_ref">
         ref()
         <a href="classes/Jcupitt-Vips-GObject.html#method_ref" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/GObject.php"><a href="files/src-gobject.html"><abbr title="src/GObject.php">GObject.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">90</span>
+    <span class="phpdocumentor-element-found-in__line">98</span>
 
     </aside>
 
@@ -1167,15 +1299,15 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">ref</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1187,6 +1319,7 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_set">
         set()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_set" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -1200,6 +1333,9 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">set</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1208,23 +1344,22 @@ $whence in particular:
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$value</span>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-VipsObject.html#method_set#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -1235,12 +1370,10 @@ $whence in particular:
                                                             
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1252,6 +1385,7 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_setString">
         setString()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_setString" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -1265,8 +1399,10 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">setString</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$string_options</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1274,18 +1410,19 @@ $whence in particular:
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1296,11 +1433,12 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_signalConnect">
         signalConnect()
         <a href="classes/Jcupitt-Vips-GObject.html#method_signalConnect" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/GObject.php"><a href="files/src-gobject.html"><abbr title="src/GObject.php">GObject.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">105</span>
+    <span class="phpdocumentor-element-found-in__line">113</span>
 
     </aside>
 
@@ -1310,6 +1448,9 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">signalConnect</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">callable&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callback</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
         <section class="phpdocumentor-description"><p>The callback will be triggered every time this signal is issued on this instance.</p>
 </section>
 
@@ -1320,23 +1461,22 @@ $whence in particular:
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$callback</span>
                 : <span class="phpdocumentor-signature__argument__return-type">callable</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-GObject.html#method_signalConnect#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -1347,12 +1487,10 @@ $whence in particular:
                                                             
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1364,11 +1502,12 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_unref">
         unref()
         <a href="classes/Jcupitt-Vips-GObject.html#method_unref" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/GObject.php"><a href="files/src-gobject.html"><abbr title="src/GObject.php">GObject.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">95</span>
+    <span class="phpdocumentor-element-found-in__line">103</span>
 
     </aside>
 
@@ -1377,15 +1516,15 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">unref</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1397,6 +1536,7 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_unrefOutputs">
         unrefOutputs()
         <a href="classes/Jcupitt-Vips-VipsObject.html#method_unrefOutputs" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/VipsObject.php"><a href="files/src-vipsobject.html"><abbr title="src/VipsObject.php">VipsObject.php</abbr></a></abbr>
@@ -1410,15 +1550,15 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">unrefOutputs</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -1430,11 +1570,12 @@ $whence in particular:
     <h4 class="phpdocumentor-element__name" id="method_getMarshaler">
         getMarshaler()
         <a href="classes/Jcupitt-Vips-GObject.html#method_getMarshaler" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/GObject.php"><a href="files/src-gobject.html"><abbr title="src/GObject.php">GObject.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">117</span>
+    <span class="phpdocumentor-element-found-in__line">135</span>
 
     </aside>
 
@@ -1443,8 +1584,10 @@ $whence in particular:
     <span class="phpdocumentor-signature__visibility">private</span>
             <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">getMarshaler</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">callable&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callback</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1452,93 +1595,180 @@ $whence in particular:
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
                 <span class="phpdocumentor-signature__argument__name">$callback</span>
                 : <span class="phpdocumentor-signature__argument__return-type">callable</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
-            &mdash;
-        
     
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Closure">Closure</abbr>|null</span>
+            </section>
+
 </article>
             </section>
 
-        
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/SourceResource.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
     <script type="text/javascript">
-        function loadExternalCodeSnippets(line) {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach((pre) => {
-                var src = pre.getAttribute('data-src').replace( /\\/g, '/');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
 
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
 
-                pre.textContent = '';
+                    var xhr = new XMLHttpRequest();
 
-                pre.setAttribute('data-line', line)
-                code.textContent = 'Loading…';
+                    xhr.open('GET', src, true);
 
-                pre.appendChild(code);
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', src, true);
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
 
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
-
                             Prism.highlightElement(code);
+                            return;
                         }
-                        else if (xhr.status >= 400) {
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
                             code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
                         }
-                        else {
-                            code.textContent = '✖ Error: File does not exist, is empty or trying to view from localhost';
-                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
                     }
-                };
+                    modal.classList.add("phpdocumentor-modal__open");
 
-                xhr.send(null);
-            });
-        }
-
-        var modals = document.querySelectorAll("[data-modal]");
-
-        modals.forEach(function (trigger) {
-            trigger.addEventListener("click", function (event) {
-                //event.preventDefault();
-                const modal = document.getElementById(trigger.dataset.modal);
-                modal.classList.add("phpdocumentor-modal__open");
-                loadExternalCodeSnippets(trigger.dataset.line)
-                const exits = modal.querySelectorAll("[data-exit-button]");
-                exits.forEach(function (exit) {
-                    exit.addEventListener("click", function (event) {
-                        event.preventDefault();
-                        modal.classList.remove("phpdocumentor-modal__open");
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
                     });
                 });
             });
-        });
+        })();
     </script>
 
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                            <li><a href="classes/Jcupitt-Vips-SourceResource.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/Jcupitt-Vips-SourceResource.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/Jcupitt-Vips-GObject.html#property_check_max_stack_size">$check_max_stack_size</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-SourceResource.html#property_resource">$resource</a></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/Jcupitt-Vips-GObject.html#method___clone">__clone()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-SourceResource.html#method___construct">__construct()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-SourceResource.html#method___destruct">__destruct()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-Connection.html#method_filename">filename()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_get">get()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_getArgumentDescription">getArgumentDescription()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_getBlurb">getBlurb()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_getDescription">getDescription()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_getPspec">getPspec()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_getType">getType()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-Source.html#method_newFromDescriptor">newFromDescriptor()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-Source.html#method_newFromFile">newFromFile()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-Source.html#method_newFromMemory">newFromMemory()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-Connection.html#method_nick">nick()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-SourceCustom.html#method_onRead">onRead()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-SourceCustom.html#method_onSeek">onSeek()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_printAll">printAll()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-GObject.html#method_ref">ref()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_set">set()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_setString">setString()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-GObject.html#method_signalConnect">signalConnect()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-GObject.html#method_unref">unref()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-VipsObject.html#method_unrefOutputs">unrefOutputs()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-GObject.html#method_getMarshaler">getMarshaler()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -1549,7 +1779,6 @@ $whence in particular:
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/Jcupitt-Vips-SourceResource.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 

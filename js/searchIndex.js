@@ -551,31 +551,6 @@ Search.appendIndex(
             "summary": "Logs\u0020with\u0020an\u0020arbitrary\u0020level.",
             "url": "classes/Jcupitt-Vips-DebugLogger.html#method_log"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\DemandStyle",
-            "name": "DemandStyle",
-            "summary": "The\u0020DemandStyle\u0020enum.",
-            "url": "classes/Jcupitt-Vips-DemandStyle.html"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\DemandStyle\u003A\u003AERROR",
-            "name": "ERROR",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-DemandStyle.html#constant_ERROR"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\DemandStyle\u003A\u003ASMALLTILE",
-            "name": "SMALLTILE",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-DemandStyle.html#constant_SMALLTILE"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\DemandStyle\u003A\u003AFATSTRIP",
-            "name": "FATSTRIP",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-DemandStyle.html#constant_FATSTRIP"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\DemandStyle\u003A\u003ATHINSTRIP",
-            "name": "THINSTRIP",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-DemandStyle.html#constant_THINSTRIP"
-        },                {
             "fqsen": "\\Jcupitt\\Vips\\Direction",
             "name": "Direction",
             "summary": "The\u0020Direction\u0020enum.",
@@ -705,6 +680,11 @@ Search.appendIndex(
             "name": "atLeast",
             "summary": "Is\u0020this\u0020at\u0020least\u0020libvips\u0020major.minor\u005B.patch\u005D\u003F",
             "url": "classes/Jcupitt-Vips-FFI.html#method_atLeast"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003AaddLibraryPath\u0028\u0029",
+            "name": "addLibraryPath",
+            "summary": "Adds\u0020a\u0020directory\u0020to\u0020the\u0020search\u0020path\u0020for\u0020shared\u0020libraries.",
+            "url": "classes/Jcupitt-Vips-FFI.html#method_addLibraryPath"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\FFI\u003A\u003AshutDown\u0028\u0029",
             "name": "shutDown",
@@ -866,25 +846,80 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-ForeignHeifEncoder.html#constant_X265"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\ForeignJpegSubsample",
-            "name": "ForeignJpegSubsample",
-            "summary": "The\u0020ForeignJpegSubsample\u0020enum.",
-            "url": "classes/Jcupitt-Vips-ForeignJpegSubsample.html"
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep",
+            "name": "ForeignKeep",
+            "summary": "The\u0020ForeignKeep\u0020flags.",
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\ForeignJpegSubsample\u003A\u003AAUTO",
-            "name": "AUTO",
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003ANONE",
+            "name": "NONE",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-ForeignJpegSubsample.html#constant_AUTO"
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_NONE"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\ForeignJpegSubsample\u003A\u003AON",
-            "name": "ON",
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AEXIF",
+            "name": "EXIF",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-ForeignJpegSubsample.html#constant_ON"
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_EXIF"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\ForeignJpegSubsample\u003A\u003AOFF",
-            "name": "OFF",
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AXMP",
+            "name": "XMP",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-ForeignJpegSubsample.html#constant_OFF"
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_XMP"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AIPTC",
+            "name": "IPTC",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_IPTC"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AICC",
+            "name": "ICC",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_ICC"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AOTHER",
+            "name": "OTHER",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_OTHER"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AALL",
+            "name": "ALL",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_ALL"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter",
+            "name": "ForeignPngFilter",
+            "summary": "The\u0020ForeignPngFilter\u0020flags.",
+            "url": "classes/Jcupitt-Vips-ForeignPngFilter.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter\u003A\u003ANONE",
+            "name": "NONE",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPngFilter.html#constant_NONE"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter\u003A\u003ASUB",
+            "name": "SUB",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPngFilter.html#constant_SUB"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter\u003A\u003AUP",
+            "name": "UP",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPngFilter.html#constant_UP"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter\u003A\u003AAVG",
+            "name": "AVG",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPngFilter.html#constant_AVG"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter\u003A\u003APAETH",
+            "name": "PAETH",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPngFilter.html#constant_PAETH"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter\u003A\u003AALL",
+            "name": "ALL",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPngFilter.html#constant_ALL"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\ForeignPpmFormat",
             "name": "ForeignPpmFormat",
@@ -1091,20 +1126,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-GObject.html#method_getMarshaler"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\GsfOutputCsvQuotingMode",
-            "name": "GsfOutputCsvQuotingMode",
-            "summary": "The\u0020GsfOutputCsvQuotingMode\u0020enum.",
-            "url": "classes/Jcupitt-Vips-GsfOutputCsvQuotingMode.html"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\GsfOutputCsvQuotingMode\u003A\u003ANEVER",
-            "name": "NEVER",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-GsfOutputCsvQuotingMode.html#constant_NEVER"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\GsfOutputCsvQuotingMode\u003A\u003AAUTO",
-            "name": "AUTO",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-GsfOutputCsvQuotingMode.html#constant_AUTO"
+            "fqsen": "\\Jcupitt\\Vips\\GObject\u003A\u003A\u0024check_max_stack_size",
+            "name": "check_max_stack_size",
+            "summary": "libvips\u0020executes\u0020FFI\u0020callbacks\u0020off\u0020the\u0020main\u0020thread\u0020and\u0020this\u0020confuses\nthe\u0020stack\u0020limit\u0020checks\u0020available\u0020since\u0020PHP\u00208.3.0.\u0020We\u0020need\u0020to\u0020check\nif\u0020\u0060zend.max_allowed_stack_size\u0060\u0020is\u0020set\u0020to\u0020\u0060\u002D1\u0060.",
+            "url": "classes/Jcupitt-Vips-GObject.html#property_check_max_stack_size"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\GValue",
             "name": "GValue",
@@ -1275,6 +1300,11 @@ Search.appendIndex(
             "name": "typeOf",
             "summary": "A\u0020deprecated\u0020synonym\u0020for\u0020getType\u0028\u0029.",
             "url": "classes/Jcupitt-Vips-Image.html#method_typeOf"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AgetFields\u0028\u0029",
+            "name": "getFields",
+            "summary": "Get\u0020the\u0020field\u0020names\u0020available\u0020for\u0020an\u0020image.",
+            "url": "classes/Jcupitt-Vips-Image.html#method_getFields"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003Aset\u0028\u0029",
             "name": "set",
@@ -1626,51 +1656,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-ImageAutodoc.html#method___get"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType",
-            "name": "ImageType",
-            "summary": "The\u0020ImageType\u0020enum.",
-            "url": "classes/Jcupitt-Vips-ImageType.html"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003AERROR",
-            "name": "ERROR",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_ERROR"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003ANONE",
-            "name": "NONE",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_NONE"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003ASETBUF",
-            "name": "SETBUF",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_SETBUF"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003ASETBUF_FOREIGN",
-            "name": "SETBUF_FOREIGN",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_SETBUF_FOREIGN"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003AOPENIN",
-            "name": "OPENIN",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_OPENIN"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003AMMAPIN",
-            "name": "MMAPIN",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_MMAPIN"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003AMMAPINRW",
-            "name": "MMAPINRW",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_MMAPINRW"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\ImageType\u003A\u003AOPENOUT",
-            "name": "OPENOUT",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-ImageType.html#constant_OPENOUT"
-        },                {
             "fqsen": "\\Jcupitt\\Vips\\Intent",
             "name": "Intent",
             "summary": "The\u0020Intent\u0020enum.",
@@ -1695,6 +1680,11 @@ Search.appendIndex(
             "name": "ABSOLUTE",
             "summary": "",
             "url": "classes/Jcupitt-Vips-Intent.html#constant_ABSOLUTE"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Intent\u003A\u003AAUTO",
+            "name": "AUTO",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Intent.html#constant_AUTO"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Interesting",
             "name": "Interesting",
@@ -1955,6 +1945,16 @@ Search.appendIndex(
             "name": "LANCZOS3",
             "summary": "",
             "url": "classes/Jcupitt-Vips-Kernel.html#constant_LANCZOS3"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Kernel\u003A\u003AMKS2013",
+            "name": "MKS2013",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Kernel.html#constant_MKS2013"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Kernel\u003A\u003AMKS2021",
+            "name": "MKS2021",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Kernel.html#constant_MKS2021"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\OperationBoolean",
             "name": "OperationBoolean",
@@ -2276,40 +2276,30 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-RegionShrink.html#constant_NEAREST"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Saveable",
-            "name": "Saveable",
-            "summary": "The\u0020Saveable\u0020enum.",
-            "url": "classes/Jcupitt-Vips-Saveable.html"
+            "fqsen": "\\Jcupitt\\Vips\\SdfShape",
+            "name": "SdfShape",
+            "summary": "The\u0020SdfShape\u0020enum.",
+            "url": "classes/Jcupitt-Vips-SdfShape.html"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Saveable\u003A\u003AMONO",
-            "name": "MONO",
+            "fqsen": "\\Jcupitt\\Vips\\SdfShape\u003A\u003ACIRCLE",
+            "name": "CIRCLE",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-Saveable.html#constant_MONO"
+            "url": "classes/Jcupitt-Vips-SdfShape.html#constant_CIRCLE"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Saveable\u003A\u003ARGB",
-            "name": "RGB",
+            "fqsen": "\\Jcupitt\\Vips\\SdfShape\u003A\u003ABOX",
+            "name": "BOX",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-Saveable.html#constant_RGB"
+            "url": "classes/Jcupitt-Vips-SdfShape.html#constant_BOX"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Saveable\u003A\u003ARGBA",
-            "name": "RGBA",
+            "fqsen": "\\Jcupitt\\Vips\\SdfShape\u003A\u003AROUNDED_BOX",
+            "name": "ROUNDED_BOX",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-Saveable.html#constant_RGBA"
+            "url": "classes/Jcupitt-Vips-SdfShape.html#constant_ROUNDED_BOX"
         },                {
-            "fqsen": "\\Jcupitt\\Vips\\Saveable\u003A\u003ARGBA_ONLY",
-            "name": "RGBA_ONLY",
+            "fqsen": "\\Jcupitt\\Vips\\SdfShape\u003A\u003ALINE",
+            "name": "LINE",
             "summary": "",
-            "url": "classes/Jcupitt-Vips-Saveable.html#constant_RGBA_ONLY"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Saveable\u003A\u003ARGB_CMYK",
-            "name": "RGB_CMYK",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Saveable.html#constant_RGB_CMYK"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Saveable\u003A\u003AANY",
-            "name": "ANY",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Saveable.html#constant_ANY"
+            "url": "classes/Jcupitt-Vips-SdfShape.html#constant_LINE"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Size",
             "name": "Size",
@@ -2348,17 +2338,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Source\u003A\u003AnewFromDescriptor\u0028\u0029",
             "name": "newFromDescriptor",
-            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020file\u0020descriptor\u0020\u0028a\u0020small\u0020integer\u0029.",
+            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020file\u0020descriptor.\u0020For\u0020example\u003A",
             "url": "classes/Jcupitt-Vips-Source.html#method_newFromDescriptor"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Source\u003A\u003AnewFromFile\u0028\u0029",
             "name": "newFromFile",
-            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020filename.",
+            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020filename.\u0020For\u0020example\u003A",
             "url": "classes/Jcupitt-Vips-Source.html#method_newFromFile"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Source\u003A\u003AnewFromMemory\u0028\u0029",
             "name": "newFromMemory",
-            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020filename.",
+            "summary": "Make\u0020a\u0020new\u0020source\u0020from\u0020a\u0020memory\u0020buffer.\u0020For\u0020example\u003A",
             "url": "classes/Jcupitt-Vips-Source.html#method_newFromMemory"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\SourceCustom",
@@ -2413,17 +2403,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Target\u003A\u003AnewToDescriptor\u0028\u0029",
             "name": "newToDescriptor",
-            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020file\u0020descriptor\u0020\u0028a\u0020small\u0020integer\u0029.",
+            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020file\u0020descriptor.\u0020For\u0020example\u003A",
             "url": "classes/Jcupitt-Vips-Target.html#method_newToDescriptor"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Target\u003A\u003AnewToFile\u0028\u0029",
             "name": "newToFile",
-            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020file\u0020name.",
+            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020filename.\u0020For\u0020example\u003A",
             "url": "classes/Jcupitt-Vips-Target.html#method_newToFile"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Target\u003A\u003AnewToMemory\u0028\u0029",
             "name": "newToMemory",
-            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020memory\u0020buffer.",
+            "summary": "Make\u0020a\u0020new\u0020target\u0020to\u0020write\u0020to\u0020a\u0020memory\u0020buffer.\u0020For\u0020example\u003A",
             "url": "classes/Jcupitt-Vips-Target.html#method_newToMemory"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\TargetCustom",
@@ -2505,31 +2495,6 @@ Search.appendIndex(
             "name": "NONE",
             "summary": "",
             "url": "classes/Jcupitt-Vips-TextWrap.html#constant_NONE"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Token",
-            "name": "Token",
-            "summary": "The\u0020Token\u0020enum.",
-            "url": "classes/Jcupitt-Vips-Token.html"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Token\u003A\u003ALEFT",
-            "name": "LEFT",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Token.html#constant_LEFT"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Token\u003A\u003ARIGHT",
-            "name": "RIGHT",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Token.html#constant_RIGHT"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Token\u003A\u003ASTRING",
-            "name": "STRING",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Token.html#constant_STRING"
-        },                {
-            "fqsen": "\\Jcupitt\\Vips\\Token\u003A\u003AEQUALS",
-            "name": "EQUALS",
-            "summary": "",
-            "url": "classes/Jcupitt-Vips-Token.html#constant_EQUALS"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Utils",
             "name": "Utils",

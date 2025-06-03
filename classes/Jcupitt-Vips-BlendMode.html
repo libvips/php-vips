@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -52,8 +53,8 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-                    <section class="phpdocumentor-sidebar__category">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="namespaces/jcupitt.html" class="">Jcupitt</a>
@@ -66,7 +67,7 @@
             </ul>
 
                         </section>
-                <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="packages/Jcupitt.html" class="">Jcupitt</a>
@@ -90,21 +91,22 @@
 
                         </section>
             
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/jcupitt.html">Jcupitt</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/jcupitt-vips.html">Vips</a></li>
     </ul>
@@ -125,6 +127,13 @@
     
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+    <div class="phpdocumentor-label phpdocumentor-label--success"><span>Abstract</span><span>Yes</span></div>
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/BlendMode.php"><a href="files/src-blendmode.html"><abbr title="src/BlendMode.php">BlendMode.php</abbr></a></abbr>
     :
@@ -136,9 +145,11 @@
 
 
 
+
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-BlendMode.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -184,8 +195,7 @@
                                                                                                         <a class="phpdocumentor-tag-link" href="https://github.com/jcupitt/php-vips"> https://github.com/jcupitt/php-vips </a>
                     
                                     </dd>
-                        </dl>
-
+                                            </dl>
 
 
 
@@ -193,186 +203,176 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/Jcupitt-Vips-BlendMode.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/Jcupitt-Vips-BlendMode.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_ADD">ADD</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_ADD">ADD</a>
     <span>
         &nbsp;= &#039;add&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_ATOP">ATOP</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_ATOP">ATOP</a>
     <span>
         &nbsp;= &#039;atop&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_CLEAR">CLEAR</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_CLEAR">CLEAR</a>
     <span>
         &nbsp;= &#039;clear&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_BURN">COLOUR_BURN</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_BURN">COLOUR_BURN</a>
     <span>
         &nbsp;= &#039;colour-burn&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_DODGE">COLOUR_DODGE</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_DODGE">COLOUR_DODGE</a>
     <span>
         &nbsp;= &#039;colour-dodge&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DARKEN">DARKEN</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_DARKEN">DARKEN</a>
     <span>
         &nbsp;= &#039;darken&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST">DEST</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST">DEST</a>
     <span>
         &nbsp;= &#039;dest&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_ATOP">DEST_ATOP</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_ATOP">DEST_ATOP</a>
     <span>
         &nbsp;= &#039;dest-atop&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_IN">DEST_IN</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_IN">DEST_IN</a>
     <span>
         &nbsp;= &#039;dest-in&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OUT">DEST_OUT</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OUT">DEST_OUT</a>
     <span>
         &nbsp;= &#039;dest-out&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OVER">DEST_OVER</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OVER">DEST_OVER</a>
     <span>
         &nbsp;= &#039;dest-over&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DIFFERENCE">DIFFERENCE</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_DIFFERENCE">DIFFERENCE</a>
     <span>
         &nbsp;= &#039;difference&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_EXCLUSION">EXCLUSION</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_EXCLUSION">EXCLUSION</a>
     <span>
         &nbsp;= &#039;exclusion&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_HARD_LIGHT">HARD_LIGHT</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_HARD_LIGHT">HARD_LIGHT</a>
     <span>
         &nbsp;= &#039;hard-light&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_IN">IN</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_IN">IN</a>
     <span>
         &nbsp;= &#039;in&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_LIGHTEN">LIGHTEN</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_LIGHTEN">LIGHTEN</a>
     <span>
         &nbsp;= &#039;lighten&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_MULTIPLY">MULTIPLY</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_MULTIPLY">MULTIPLY</a>
     <span>
         &nbsp;= &#039;multiply&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_OUT">OUT</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_OUT">OUT</a>
     <span>
         &nbsp;= &#039;out&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_OVER">OVER</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_OVER">OVER</a>
     <span>
         &nbsp;= &#039;over&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_OVERLAY">OVERLAY</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_OVERLAY">OVERLAY</a>
     <span>
         &nbsp;= &#039;overlay&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SATURATE">SATURATE</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_SATURATE">SATURATE</a>
     <span>
         &nbsp;= &#039;saturate&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SCREEN">SCREEN</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_SCREEN">SCREEN</a>
     <span>
         &nbsp;= &#039;screen&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SOFT_LIGHT">SOFT_LIGHT</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_SOFT_LIGHT">SOFT_LIGHT</a>
     <span>
         &nbsp;= &#039;soft-light&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SOURCE">SOURCE</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_SOURCE">SOURCE</a>
     <span>
         &nbsp;= &#039;source&#039;                            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/Jcupitt-Vips-BlendMode.html#constant_XOR1">XOR1</a>
+    <a class="" href="classes/Jcupitt-Vips-BlendMode.html#constant_XOR1">XOR1</a>
     <span>
         &nbsp;= &#039;xor&#039;                            </span>
 </dt>
-<dd></dd>
 
-                    </dl>
+    </dl>
+
+
+
 
 
 
@@ -381,11 +381,13 @@
         <h3 class="phpdocumentor-elements__header" id="constants">
             Constants
             <a href="classes/Jcupitt-Vips-BlendMode.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_ADD">
         ADD
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_ADD" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -396,6 +398,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -404,9 +407,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -415,6 +418,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_ATOP">
         ATOP
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_ATOP" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -425,6 +429,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -433,9 +438,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -444,6 +449,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_CLEAR">
         CLEAR
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_CLEAR" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -454,6 +460,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -462,9 +469,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -473,6 +480,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_COLOUR_BURN">
         COLOUR_BURN
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_BURN" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -483,6 +491,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -491,9 +500,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -502,6 +511,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_COLOUR_DODGE">
         COLOUR_DODGE
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_DODGE" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -512,6 +522,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -520,9 +531,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -531,6 +542,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_DARKEN">
         DARKEN
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DARKEN" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -541,6 +553,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -549,9 +562,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -560,6 +573,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_DEST">
         DEST
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -570,6 +584,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -578,9 +593,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -589,6 +604,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_DEST_ATOP">
         DEST_ATOP
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_ATOP" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -599,6 +615,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -607,9 +624,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -618,6 +635,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_DEST_IN">
         DEST_IN
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_IN" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -628,6 +646,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -636,9 +655,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -647,6 +666,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_DEST_OUT">
         DEST_OUT
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OUT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -657,6 +677,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -665,9 +686,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -676,6 +697,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_DEST_OVER">
         DEST_OVER
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OVER" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -686,6 +708,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -694,9 +717,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -705,6 +728,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_DIFFERENCE">
         DIFFERENCE
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_DIFFERENCE" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -715,6 +739,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -723,9 +748,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -734,6 +759,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_EXCLUSION">
         EXCLUSION
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_EXCLUSION" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -744,6 +770,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -752,9 +779,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -763,6 +790,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_HARD_LIGHT">
         HARD_LIGHT
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_HARD_LIGHT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -773,6 +801,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -781,9 +810,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -792,6 +821,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_IN">
         IN
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_IN" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -802,6 +832,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -810,9 +841,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -821,6 +852,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_LIGHTEN">
         LIGHTEN
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_LIGHTEN" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -831,6 +863,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -839,9 +872,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -850,6 +883,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_MULTIPLY">
         MULTIPLY
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_MULTIPLY" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -860,6 +894,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -868,9 +903,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -879,6 +914,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_OUT">
         OUT
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_OUT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -889,6 +925,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -897,9 +934,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -908,6 +945,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_OVER">
         OVER
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_OVER" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -918,6 +956,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -926,9 +965,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -937,6 +976,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_OVERLAY">
         OVERLAY
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_OVERLAY" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -947,6 +987,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -955,9 +996,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -966,6 +1007,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_SATURATE">
         SATURATE
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SATURATE" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -976,6 +1018,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -984,9 +1027,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -995,6 +1038,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_SCREEN">
         SCREEN
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SCREEN" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -1005,6 +1049,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -1013,9 +1058,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -1024,6 +1069,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_SOFT_LIGHT">
         SOFT_LIGHT
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SOFT_LIGHT" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -1034,6 +1080,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -1042,9 +1089,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -1053,6 +1100,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_SOURCE">
         SOURCE
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_SOURCE" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -1063,6 +1111,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -1071,9 +1120,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -1082,6 +1131,7 @@
     <h4 class="phpdocumentor-element__name" id="constant_XOR1">
         XOR1
         <a href="classes/Jcupitt-Vips-BlendMode.html#constant_XOR1" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
@@ -1092,6 +1142,7 @@
     </aside>
 
     
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
@@ -1100,9 +1151,9 @@
 </code>
 
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -1112,70 +1163,150 @@
         
 
         
-        
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/BlendMode.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
     <script type="text/javascript">
-        function loadExternalCodeSnippets(line) {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach((pre) => {
-                var src = pre.getAttribute('data-src').replace( /\\/g, '/');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
 
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
 
-                pre.textContent = '';
+                    var xhr = new XMLHttpRequest();
 
-                pre.setAttribute('data-line', line)
-                code.textContent = 'Loading…';
+                    xhr.open('GET', src, true);
 
-                pre.appendChild(code);
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', src, true);
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
 
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
-
                             Prism.highlightElement(code);
+                            return;
                         }
-                        else if (xhr.status >= 400) {
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
                             code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
                         }
-                        else {
-                            code.textContent = '✖ Error: File does not exist, is empty or trying to view from localhost';
-                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
                     }
-                };
+                    modal.classList.add("phpdocumentor-modal__open");
 
-                xhr.send(null);
-            });
-        }
-
-        var modals = document.querySelectorAll("[data-modal]");
-
-        modals.forEach(function (trigger) {
-            trigger.addEventListener("click", function (event) {
-                //event.preventDefault();
-                const modal = document.getElementById(trigger.dataset.modal);
-                modal.classList.add("phpdocumentor-modal__open");
-                loadExternalCodeSnippets(trigger.dataset.line)
-                const exits = modal.querySelectorAll("[data-exit-button]");
-                exits.forEach(function (exit) {
-                    exit.addEventListener("click", function (event) {
-                        event.preventDefault();
-                        modal.classList.remove("phpdocumentor-modal__open");
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
                     });
                 });
             });
-        });
+        })();
     </script>
 
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/Jcupitt-Vips-BlendMode.html#toc-constants">Constants</a></li>
+                                                                            </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_ADD">ADD</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_ATOP">ATOP</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_CLEAR">CLEAR</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_BURN">COLOUR_BURN</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_COLOUR_DODGE">COLOUR_DODGE</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_DARKEN">DARKEN</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST">DEST</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_ATOP">DEST_ATOP</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_IN">DEST_IN</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OUT">DEST_OUT</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_DEST_OVER">DEST_OVER</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_DIFFERENCE">DIFFERENCE</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_EXCLUSION">EXCLUSION</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_HARD_LIGHT">HARD_LIGHT</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_IN">IN</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_LIGHTEN">LIGHTEN</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_MULTIPLY">MULTIPLY</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_OUT">OUT</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_OVER">OVER</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_OVERLAY">OVERLAY</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_SATURATE">SATURATE</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_SCREEN">SCREEN</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_SOFT_LIGHT">SOFT_LIGHT</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_SOURCE">SOURCE</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-BlendMode.html#constant_XOR1">XOR1</a></li>
+                                            </ul>
+                </li>
+            
+            
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -1186,7 +1317,6 @@
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/Jcupitt-Vips-BlendMode.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 

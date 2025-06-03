@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -52,8 +53,8 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-                    <section class="phpdocumentor-sidebar__category">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="namespaces/jcupitt.html" class="">Jcupitt</a>
@@ -66,7 +67,7 @@
             </ul>
 
                         </section>
-                <section class="phpdocumentor-sidebar__category">
+                <section class="phpdocumentor-sidebar__category -packages">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
     <a href="packages/Jcupitt.html" class="">Jcupitt</a>
@@ -90,21 +91,22 @@
 
                         </section>
             
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -reports">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
 
-    <section class="phpdocumentor-sidebar__category">
+    <section class="phpdocumentor-sidebar__category -indices">
         <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
         <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/jcupitt.html">Jcupitt</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/jcupitt-vips.html">Vips</a></li>
     </ul>
@@ -125,6 +127,11 @@
     
     </h2>
 
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Introspect.php"><a href="files/src-introspect.html"><abbr title="src/Introspect.php">Introspect.php</abbr></a></abbr>
     :
@@ -137,9 +144,11 @@ on demand once per operation and the results held in a cache.</p>
 
 
 
+
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-Introspect.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -185,8 +194,7 @@ on demand once per operation and the results held in a cache.</p>
                                                                                                         <a class="phpdocumentor-tag-link" href="https://github.com/libvips/php-vips"> https://github.com/libvips/php-vips </a>
                     
                                     </dd>
-                        </dl>
-
+                                            </dl>
 
 
 
@@ -194,68 +202,80 @@ on demand once per operation and the results held in a cache.</p>
 
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/Jcupitt-Vips-Introspect.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
 </h3>
 
+
+
+
+
+
+
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/Jcupitt-Vips-Introspect.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
 <dl class="phpdocumentor-table-of-contents">
-                    <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_arguments">$arguments</a>
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_arguments">$arguments</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd>A hash from arg name to a hash of details.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_description">$description</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_description">$description</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 <dd>The operation description (e.g. &quot;add two images&quot;).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_flags">$flags</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_flags">$flags</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
 <dd>The operation flags (e.g. SEQUENTIAL | DEPRECATED).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_member_this">$member_this</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_member_this">$member_this</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 <dd>The name of the arg this operation uses as &quot;this&quot;.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_method_args">$method_args</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_method_args">$method_args</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd>And the required input args, without the &quot;this&quot;.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_name">$name</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_name">$name</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 <dd>The operation nickname (eg. &quot;add&quot;).</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_optional_input">$optional_input</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_optional_input">$optional_input</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_optional_output">$optional_output</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_optional_output">$optional_output</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_required_input">$required_input</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_required_input">$required_input</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
@@ -263,27 +283,32 @@ on demand once per operation and the results held in a cache.</p>
 = [&quot;filename&quot;].</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#property_required_output">$required_output</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#property_required_output">$required_output</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
-<dd></dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#method___construct">__construct()</a>
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/Jcupitt-Vips-Introspect.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
-<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/Jcupitt-Vips-Introspect.html#method___toString">__toString()</a>
+    <a class="" href="classes/Jcupitt-Vips-Introspect.html#method___toString">__toString()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd></dd>
 
-        </dl>
+    </dl>
 
 
 
@@ -294,6 +319,7 @@ on demand once per operation and the results held in a cache.</p>
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
             <a href="classes/Jcupitt-Vips-Introspect.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="
@@ -305,6 +331,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_arguments">
         $arguments
         <a href="classes/Jcupitt-Vips-Introspect.html#property_arguments" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -317,6 +344,7 @@ on demand once per operation and the results held in a cache.</p>
 
         <p class="phpdocumentor-summary">A hash from arg name to a hash of details.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
@@ -324,7 +352,8 @@ on demand once per operation and the results held in a cache.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"></section>
+    
+    
 
     
 
@@ -339,6 +368,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_description">
         $description
         <a href="classes/Jcupitt-Vips-Introspect.html#property_description" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -351,6 +381,7 @@ on demand once per operation and the results held in a cache.</p>
 
         <p class="phpdocumentor-summary">The operation description (e.g. &quot;add two images&quot;).</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -358,7 +389,8 @@ on demand once per operation and the results held in a cache.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"></section>
+    
+    
 
     
 
@@ -373,6 +405,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_flags">
         $flags
         <a href="classes/Jcupitt-Vips-Introspect.html#property_flags" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -385,6 +418,7 @@ on demand once per operation and the results held in a cache.</p>
 
         <p class="phpdocumentor-summary">The operation flags (e.g. SEQUENTIAL | DEPRECATED).</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -392,7 +426,8 @@ on demand once per operation and the results held in a cache.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"></section>
+    
+    
 
     
 
@@ -407,6 +442,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_member_this">
         $member_this
         <a href="classes/Jcupitt-Vips-Introspect.html#property_member_this" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -419,6 +455,7 @@ on demand once per operation and the results held in a cache.</p>
 
         <p class="phpdocumentor-summary">The name of the arg this operation uses as &quot;this&quot;.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -426,7 +463,8 @@ on demand once per operation and the results held in a cache.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"></section>
+    
+    
 
     
 
@@ -441,6 +479,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_method_args">
         $method_args
         <a href="classes/Jcupitt-Vips-Introspect.html#property_method_args" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -453,6 +492,7 @@ on demand once per operation and the results held in a cache.</p>
 
         <p class="phpdocumentor-summary">And the required input args, without the &quot;this&quot;.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
@@ -460,7 +500,8 @@ on demand once per operation and the results held in a cache.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"></section>
+    
+    
 
     
 
@@ -475,6 +516,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_name">
         $name
         <a href="classes/Jcupitt-Vips-Introspect.html#property_name" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -487,6 +529,7 @@ on demand once per operation and the results held in a cache.</p>
 
         <p class="phpdocumentor-summary">The operation nickname (eg. &quot;add&quot;).</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -494,7 +537,8 @@ on demand once per operation and the results held in a cache.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"></section>
+    
+    
 
     
 
@@ -509,6 +553,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_optional_input">
         $optional_input
         <a href="classes/Jcupitt-Vips-Introspect.html#property_optional_input" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -520,15 +565,16 @@ on demand once per operation and the results held in a cache.</p>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$optional_input</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -543,6 +589,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_optional_output">
         $optional_output
         <a href="classes/Jcupitt-Vips-Introspect.html#property_optional_output" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -554,15 +601,16 @@ on demand once per operation and the results held in a cache.</p>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$optional_output</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -577,6 +625,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_required_input">
         $required_input
         <a href="classes/Jcupitt-Vips-Introspect.html#property_required_input" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -590,6 +639,7 @@ on demand once per operation and the results held in a cache.</p>
         <p class="phpdocumentor-summary">Arrays of arg names, in order and by category, eg. $this-&gt;required_input
 = [&quot;filename&quot;].</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
@@ -597,7 +647,8 @@ on demand once per operation and the results held in a cache.</p>
     </code>
 
     
-        <section class="phpdocumentor-description"></section>
+    
+    
 
     
 
@@ -612,6 +663,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="property_required_output">
         $required_output
         <a href="classes/Jcupitt-Vips-Introspect.html#property_required_output" class="headerlink"><i class="fas fa-link"></i></a>
+
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
@@ -623,15 +675,16 @@ on demand once per operation and the results held in a cache.</p>
     </aside>
 
     
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
     <span class="phpdocumentor-signature__name">$required_output</span>
     </code>
 
-        <section class="phpdocumentor-description"></section>
-
-        <section class="phpdocumentor-description"></section>
+    
+    
+    
 
     
 
@@ -642,6 +695,7 @@ on demand once per operation and the results held in a cache.</p>
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
             <a href="classes/Jcupitt-Vips-Introspect.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
         </h3>
                     <article
         class="phpdocumentor-element
@@ -652,6 +706,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
         <a href="classes/Jcupitt-Vips-Introspect.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Introspect.php"><a href="files/src-introspect.html"><abbr title="src/Introspect.php">Introspect.php</abbr></a></abbr>
@@ -665,6 +720,9 @@ on demand once per operation and the results held in a cache.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$operation_name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -673,15 +731,15 @@ on demand once per operation and the results held in a cache.</p>
                 : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"></section>
-
+                
             </dd>
             </dl>
 
     
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/Jcupitt-Vips-Introspect.html#method___construct#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h5>
     <dl class="phpdocumentor-tag-list">
                                     <dt class="phpdocumentor-tag-list__entry">
@@ -692,12 +750,10 @@ on demand once per operation and the results held in a cache.</p>
                                                             
                                              
                                     </dd>
-                        </dl>
+                                            </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
+    
+
     
 </article>
                     <article
@@ -709,6 +765,7 @@ on demand once per operation and the results held in a cache.</p>
     <h4 class="phpdocumentor-element__name" id="method___toString">
         __toString()
         <a href="classes/Jcupitt-Vips-Introspect.html#method___toString" class="headerlink"><i class="fas fa-link"></i></a>
+
     </h4>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/Introspect.php"><a href="files/src-introspect.html"><abbr title="src/Introspect.php">Introspect.php</abbr></a></abbr>
@@ -722,83 +779,160 @@ on demand once per operation and the results held in a cache.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">__toString</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
     
     
 
+    
+
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
             </section>
 
-        
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Introspect.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
     <script type="text/javascript">
-        function loadExternalCodeSnippets(line) {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach((pre) => {
-                var src = pre.getAttribute('data-src').replace( /\\/g, '/');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
 
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
 
-                pre.textContent = '';
+                    var xhr = new XMLHttpRequest();
 
-                pre.setAttribute('data-line', line)
-                code.textContent = 'Loading…';
+                    xhr.open('GET', src, true);
 
-                pre.appendChild(code);
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', src, true);
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
 
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
-
                             Prism.highlightElement(code);
+                            return;
                         }
-                        else if (xhr.status >= 400) {
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
                             code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
                         }
-                        else {
-                            code.textContent = '✖ Error: File does not exist, is empty or trying to view from localhost';
-                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
                     }
-                };
+                    modal.classList.add("phpdocumentor-modal__open");
 
-                xhr.send(null);
-            });
-        }
-
-        var modals = document.querySelectorAll("[data-modal]");
-
-        modals.forEach(function (trigger) {
-            trigger.addEventListener("click", function (event) {
-                //event.preventDefault();
-                const modal = document.getElementById(trigger.dataset.modal);
-                modal.classList.add("phpdocumentor-modal__open");
-                loadExternalCodeSnippets(trigger.dataset.line)
-                const exits = modal.querySelectorAll("[data-exit-button]");
-                exits.forEach(function (exit) {
-                    exit.addEventListener("click", function (event) {
-                        event.preventDefault();
-                        modal.classList.remove("phpdocumentor-modal__open");
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
                     });
                 });
             });
-        });
+        })();
     </script>
 
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                            <li><a href="classes/Jcupitt-Vips-Introspect.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/Jcupitt-Vips-Introspect.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_arguments">$arguments</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_description">$description</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_flags">$flags</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_member_this">$member_this</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_method_args">$method_args</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_name">$name</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_optional_input">$optional_input</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_optional_output">$optional_output</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_required_input">$required_input</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#property_required_output">$required_output</a></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#method___construct">__construct()</a></li>
+                                            <li class=""><a href="classes/Jcupitt-Vips-Introspect.html#method___toString">__toString()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -809,7 +943,6 @@ on demand once per operation and the results held in a cache.</p>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/Jcupitt-Vips-Introspect.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
