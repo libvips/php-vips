@@ -147,8 +147,6 @@ namespace Jcupitt\Vips;
  * @method Image complexget(string $get, array $options = []) Get a component from a complex image.
  *     @see OperationComplexget for possible values for $get
  *     @throws Exception
- * @method static Image composite(Image[]|Image $in, integer[]|integer $mode, array $options = []) Blend an array of images with an array of blend modes.
- *     @throws Exception
  * @method Image composite2(Image $overlay, string $mode, array $options = []) Blend a pair of images with a blend mode.
  *     @see BlendMode for possible values for $mode
  *     @throws Exception
@@ -382,9 +380,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image logmat(float $sigma, float $min_ampl, array $options = []) Make a Laplacian of Gaussian image.
  *     @throws Exception
- * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick.
+ * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick7.
  *     @throws Exception
- * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick.
+ * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick7.
  *     @throws Exception
  * @method void magicksave(string $filename, array $options = []) Save file with ImageMagick.
  *     @throws Exception
@@ -503,7 +501,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image ppmload(string $filename, array $options = []) Load ppm from file.
  *     @throws Exception
- * @method static Image ppmload_source(Source $source, array $options = []) Load ppm base class.
+ * @method static Image ppmload_buffer(string $buffer, array $options = []) Load ppm from buffer.
+ *     @throws Exception
+ * @method static Image ppmload_source(Source $source, array $options = []) Load ppm from source.
  *     @throws Exception
  * @method void ppmsave(string $filename, array $options = []) Save image to ppm file.
  *     @throws Exception

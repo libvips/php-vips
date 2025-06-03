@@ -225,6 +225,7 @@ def generate_auto_doc(filename):
 
     # these have hand-written methods, don't autodoc them
     no_generate = [
+        'composite',
         'bandjoin',
         'bandrank',
         'ifthenelse',
@@ -286,6 +287,10 @@ def generate_enums():
         return ffi.NULL
 
     type_map(type_from_name('GEnum'), add_enum)
+
+    # Filter internal enums
+    blacklist = ['VipsDemandStyle']
+    all_enums = [name for name in all_enums if name not in blacklist]
 
     for name in all_enums:
         gtype = type_from_name(name)

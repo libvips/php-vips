@@ -4,6 +4,9 @@ All notable changes to `php-vips` will be documented in this file.
 
 ## master
 
+- suppress autodoc of `composite` and `DemandStyle` [jcupitt]
+- update docs for 8.17 [jcupitt]
+
 ## 2.5.0 - 2025-04-04
 
 - add addLibraryPath() to let users set their libvips location [kleisauke]
