@@ -75,9 +75,17 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image LabS2LabQ(array $options = []) Transform short Lab to LabQ coding.
  *     @throws Exception
+ * @method Image Oklab2Oklch(array $options = []) Transform Oklab to Oklch.
+ *     @throws Exception
+ * @method Image Oklab2XYZ(array $options = []) Transform Oklab to XYZ.
+ *     @throws Exception
+ * @method Image Oklch2Oklab(array $options = []) Transform Oklch to Oklab.
+ *     @throws Exception
  * @method Image XYZ2CMYK(array $options = []) Transform XYZ to CMYK.
  *     @throws Exception
  * @method Image XYZ2Lab(array $options = []) Transform XYZ to Lab.
+ *     @throws Exception
+ * @method Image XYZ2Oklab(array $options = []) Transform XYZ to Oklab.
  *     @throws Exception
  * @method Image XYZ2Yxy(array $options = []) Transform XYZ to Yxy.
  *     @throws Exception
@@ -182,6 +190,12 @@ namespace Jcupitt\Vips;
  * @method Image dE76(Image $right, array $options = []) Calculate dE76.
  *     @throws Exception
  * @method Image dECMC(Image $right, array $options = []) Calculate dECMC.
+ *     @throws Exception
+ * @method static Image dcrawload(string $filename, array $options = []) Load RAW camera files.
+ *     @throws Exception
+ * @method static Image dcrawload_buffer(string $buffer, array $options = []) Load RAW camera files.
+ *     @throws Exception
+ * @method static Image dcrawload_source(Source $source, array $options = []) Load RAW camera files.
  *     @throws Exception
  * @method float deviate(array $options = []) Find image standard deviation.
  *     @throws Exception
@@ -352,13 +366,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image jpegload_source(Source $source, array $options = []) Load image from jpeg source.
  *     @throws Exception
- * @method void jpegsave(string $filename, array $options = []) Save image to jpeg file.
+ * @method void jpegsave(string $filename, array $options = []) Save as jpeg.
  *     @throws Exception
- * @method string jpegsave_buffer(array $options = []) Save image to jpeg buffer.
+ * @method string jpegsave_buffer(array $options = []) Save as jpeg.
  *     @throws Exception
  * @method void jpegsave_mime(array $options = []) Save image to jpeg mime.
  *     @throws Exception
- * @method void jpegsave_target(Target $target, array $options = []) Save image to jpeg target.
+ * @method void jpegsave_target(Target $target, array $options = []) Save as jpeg.
  *     @throws Exception
  * @method static Image jxlload(string $filename, array $options = []) Load JPEG-XL image.
  *     @throws Exception
@@ -383,6 +397,8 @@ namespace Jcupitt\Vips;
  * @method static Image magickload(string $filename, array $options = []) Load file with ImageMagick7.
  *     @throws Exception
  * @method static Image magickload_buffer(string $buffer, array $options = []) Load buffer with ImageMagick7.
+ *     @throws Exception
+ * @method static Image magickload_source(Source $source, array $options = []) Load source with ImageMagick7.
  *     @throws Exception
  * @method void magicksave(string $filename, array $options = []) Save file with ImageMagick.
  *     @throws Exception
@@ -475,11 +491,11 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image openslideload_source(Source $source, array $options = []) Load source with OpenSlide.
  *     @throws Exception
- * @method static Image pdfload(string $filename, array $options = []) Load PDF from file.
+ * @method static Image pdfload(string $filename, array $options = []) Load PDF from file (poppler).
  *     @throws Exception
- * @method static Image pdfload_buffer(string $buffer, array $options = []) Load PDF from buffer.
+ * @method static Image pdfload_buffer(string $buffer, array $options = []) Load PDF from buffer (poppler).
  *     @throws Exception
- * @method static Image pdfload_source(Source $source, array $options = []) Load PDF from source.
+ * @method static Image pdfload_source(Source $source, array $options = []) Load PDF from source (poppler).
  *     @throws Exception
  * @method integer percent(float $percent, array $options = []) Find threshold for percent of pixels.
  *     @throws Exception
@@ -493,9 +509,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image pngload_source(Source $source, array $options = []) Load png from source.
  *     @throws Exception
- * @method void pngsave(string $filename, array $options = []) Save image to file as PNG.
+ * @method void pngsave(string $filename, array $options = []) Save image to file as png.
  *     @throws Exception
- * @method string pngsave_buffer(array $options = []) Save image to buffer as PNG.
+ * @method string pngsave_buffer(array $options = []) Save image to buffer as png.
  *     @throws Exception
  * @method void pngsave_target(Target $target, array $options = []) Save image to target as PNG.
  *     @throws Exception
@@ -671,6 +687,20 @@ namespace Jcupitt\Vips;
  * @method static Image tonelut(array $options = []) Build a look-up table.
  *     @throws Exception
  * @method Image transpose3d(array $options = []) Transpose3d an image.
+ *     @throws Exception
+ * @method Image uhdr2scRGB(array $options = []) Transform uhdr to scRGB.
+ *     @throws Exception
+ * @method static Image uhdrload(string $filename, array $options = []) Load a UHDR image.
+ *     @throws Exception
+ * @method static Image uhdrload_buffer(string $buffer, array $options = []) Load a UHDR image.
+ *     @throws Exception
+ * @method static Image uhdrload_source(Source $source, array $options = []) Load a UHDR image.
+ *     @throws Exception
+ * @method void uhdrsave(string $filename, array $options = []) Save image in UltraHDR format.
+ *     @throws Exception
+ * @method string uhdrsave_buffer(array $options = []) Save image in UltraHDR format.
+ *     @throws Exception
+ * @method void uhdrsave_target(Target $target, array $options = []) Save image in UltraHDR format.
  *     @throws Exception
  * @method Image unpremultiply(array $options = []) Unpremultiply image alpha.
  *     @throws Exception

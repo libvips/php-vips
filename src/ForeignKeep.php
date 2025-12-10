@@ -55,5 +55,6 @@ abstract class ForeignKeep
     const IPTC = 4;
     const ICC = 8;
     const OTHER = 16;
-    const ALL = 31;
+    const GAINMAP = 32;
+    const ALL = 63;
 }

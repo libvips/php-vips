@@ -39,7 +39,7 @@
 namespace Jcupitt\Vips;
 
 /**
- * The Interpretation enum.
+ * The ForeignPdfPageBox enum.
  * @category  Images
  * @package   Jcupitt\Vips
  * @author    John Cupitt <jcupitt@gmail.com>
@@ -47,28 +47,11 @@ namespace Jcupitt\Vips;
  * @license   https://opensource.org/licenses/MIT MIT
  * @link      https://github.com/jcupitt/php-vips
  */
-abstract class Interpretation
+abstract class ForeignPdfPageBox
 {
-    const ERROR = 'error';
-    const MULTIBAND = 'multiband';
-    const B_W = 'b-w';
-    const HISTOGRAM = 'histogram';
-    const XYZ = 'xyz';
-    const LAB = 'lab';
-    const CMYK = 'cmyk';
-    const LABQ = 'labq';
-    const RGB = 'rgb';
-    const CMC = 'cmc';
-    const LCH = 'lch';
-    const LABS = 'labs';
-    const SRGB = 'srgb';
-    const YXY = 'yxy';
-    const FOURIER = 'fourier';
-    const RGB16 = 'rgb16';
-    const GREY16 = 'grey16';
-    const MATRIX = 'matrix';
-    const SCRGB = 'scrgb';
-    const HSV = 'hsv';
-    const OKLAB = 'oklab';
-    const OKLCH = 'oklch';
+    const MEDIA = 'media';
+    const CROP = 'crop';
+    const TRIM = 'trim';
+    const BLEED = 'bleed';
+    const ART = 'art';
 }
