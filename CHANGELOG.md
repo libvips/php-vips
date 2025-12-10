@@ -2,7 +2,7 @@
 
 All notable changes to `php-vips` will be documented in this file.
 
-## 2.6.0 - 2025-12-10
+## 2.6.1 - 2025-12-10
 
 - suppress autodoc of `composite` and `DemandStyle` [jcupitt]
 - update docs for 8.17 [jcupitt]
