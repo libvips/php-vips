@@ -114,8 +114,8 @@
 
             <p class="phpdocumentor-summary">Vips is a php binding for the vips image processing library</p>
 
-
-    <section class="phpdocumentor-description"><p>PHP version 7</p>
+        
+            <section class="phpdocumentor-description"><p>PHP version 7</p>
 <p>LICENSE:</p>
 <p>Copyright (c) 2016 John Cupitt</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining
@@ -136,7 +136,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </section>
 
-
+        
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
         <a href="files/src-interpolate.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
@@ -189,9 +189,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
                         </dl>
 
 
-
-
-
+        
 <h3 id="toc">
     Table of Contents
     <a href="files/src-interpolate.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -210,7 +208,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
                     <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Interpolate.html"><abbr title="\Jcupitt\Vips\Interpolate">Interpolate</abbr></a></dt><dd>This class holds a pointer to a VipsInterpolate (the libvips
 base class for interpolators) and manages argument introspection and
 operation call.</dd>    </dl>
-
 
 
 
@@ -259,6 +256,8 @@ operation call.</dd>    </dl>
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 

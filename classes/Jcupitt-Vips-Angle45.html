@@ -197,10 +197,8 @@
                                     </dd>
                                             </dl>
 
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
     <a href="classes/Jcupitt-Vips-Angle45.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -309,9 +307,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_D135">
         D135
@@ -340,9 +337,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_D180">
         D180
@@ -371,9 +367,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_D225">
         D225
@@ -402,9 +397,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_D270">
         D270
@@ -433,9 +427,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_D315">
         D315
@@ -464,9 +457,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_D45">
         D45
@@ -495,9 +487,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_D90">
         D90
@@ -526,9 +517,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
             </section>
 
         
@@ -570,6 +560,8 @@
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 

@@ -114,8 +114,8 @@
 
             <p class="phpdocumentor-summary">Vips is a php binding for the vips image processing library</p>
 
-
-    <section class="phpdocumentor-description"><p>PHP version 7</p>
+        
+            <section class="phpdocumentor-description"><p>PHP version 7</p>
 <p>LICENSE:</p>
 <p>Copyright (c) 2016 John Cupitt</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining
@@ -136,7 +136,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </section>
 
-
+        
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
         Tags
         <a href="files/src-introspect.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
@@ -189,9 +189,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
                         </dl>
 
 
-
-
-
+        
 <h3 id="toc">
     Table of Contents
     <a href="files/src-introspect.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -209,7 +207,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
     <dl class="phpdocumentor-table-of-contents">
                     <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-Introspect.html"><abbr title="\Jcupitt\Vips\Introspect">Introspect</abbr></a></dt><dd>Introspect a VipsOperation and discover everything we can. This is called
 on demand once per operation and the results held in a cache.</dd>    </dl>
-
 
 
 
@@ -258,6 +255,8 @@ on demand once per operation and the results held in a cache.</dd>    </dl>
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 

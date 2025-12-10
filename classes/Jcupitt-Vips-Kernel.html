@@ -197,10 +197,8 @@
                                     </dd>
                                             </dl>
 
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
     <a href="classes/Jcupitt-Vips-Kernel.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -309,9 +307,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_LANCZOS2">
         LANCZOS2
@@ -340,9 +337,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_LANCZOS3">
         LANCZOS3
@@ -371,9 +367,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_LINEAR">
         LINEAR
@@ -402,9 +397,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_MITCHELL">
         MITCHELL
@@ -433,9 +427,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_MKS2013">
         MKS2013
@@ -464,9 +457,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_MKS2021">
         MKS2021
@@ -495,9 +487,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_NEAREST">
         NEAREST
@@ -526,9 +517,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
             </section>
 
         
@@ -570,6 +560,8 @@
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 

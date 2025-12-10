@@ -197,10 +197,8 @@
                                     </dd>
                                             </dl>
 
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
     <a href="classes/Jcupitt-Vips-ForeignKeep.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -222,13 +220,19 @@
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/Jcupitt-Vips-ForeignKeep.html#constant_ALL">ALL</a>
     <span>
-        &nbsp;= 31                            </span>
+        &nbsp;= 63                            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/Jcupitt-Vips-ForeignKeep.html#constant_EXIF">EXIF</a>
     <span>
         &nbsp;= 1                            </span>
+</dt>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a class="" href="classes/Jcupitt-Vips-ForeignKeep.html#constant_GAINMAP">GAINMAP</a>
+    <span>
+        &nbsp;= 32                            </span>
 </dt>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
@@ -285,7 +289,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/ForeignKeep.php"><a href="files/src-foreignkeep.html"><abbr title="src/ForeignKeep.php">ForeignKeep.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">58</span>
+    <span class="phpdocumentor-element-found-in__line">59</span>
 
     </aside>
 
@@ -295,7 +299,7 @@
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">mixed</span>
     <span class="phpdocumentor-signature__name">ALL</span>
-    = <span class="phpdocumentor-signature__default-value">31</span>
+    = <span class="phpdocumentor-signature__default-value">63</span>
 </code>
 
 
@@ -303,9 +307,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_EXIF">
         EXIF
@@ -334,9 +337,38 @@
     
     
 
+        
+    </article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_GAINMAP">
+        GAINMAP
+        <a href="classes/Jcupitt-Vips-ForeignKeep.html#constant_GAINMAP" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/ForeignKeep.php"><a href="files/src-foreignkeep.html"><abbr title="src/ForeignKeep.php">ForeignKeep.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">58</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">GAINMAP</span>
+    = <span class="phpdocumentor-signature__default-value">32</span>
+</code>
+
+
+    
+    
     
 
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_ICC">
         ICC
@@ -365,9 +397,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_IPTC">
         IPTC
@@ -396,9 +427,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_NONE">
         NONE
@@ -427,9 +457,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_OTHER">
         OTHER
@@ -458,9 +487,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_XMP">
         XMP
@@ -489,9 +517,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
             </section>
 
         
@@ -533,6 +560,8 @@
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 
@@ -608,6 +637,7 @@
                     <ul class="phpdocumentor-list -clean">
                                                     <li class=""><a href="classes/Jcupitt-Vips-ForeignKeep.html#constant_ALL">ALL</a></li>
                                                     <li class=""><a href="classes/Jcupitt-Vips-ForeignKeep.html#constant_EXIF">EXIF</a></li>
+                                                    <li class=""><a href="classes/Jcupitt-Vips-ForeignKeep.html#constant_GAINMAP">GAINMAP</a></li>
                                                     <li class=""><a href="classes/Jcupitt-Vips-ForeignKeep.html#constant_ICC">ICC</a></li>
                                                     <li class=""><a href="classes/Jcupitt-Vips-ForeignKeep.html#constant_IPTC">IPTC</a></li>
                                                     <li class=""><a href="classes/Jcupitt-Vips-ForeignKeep.html#constant_NONE">NONE</a></li>

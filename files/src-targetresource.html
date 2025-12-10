@@ -113,14 +113,12 @@
         <h2 class="phpdocumentor-content__title">TargetResource.php</h2>
 
         
+        
+        
+        
 
 
-
-
-
-
-
-
+        
 <h3 id="toc">
     Table of Contents
     <a href="files/src-targetresource.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -138,7 +136,6 @@
     <dl class="phpdocumentor-table-of-contents">
                     <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/Jcupitt-Vips-TargetResource.html"><abbr title="\Jcupitt\Vips\TargetResource">TargetResource</abbr></a></dt><dd>This class holds a pointer to a VipsObject (the libvips base class) and
 manages properties.</dd>    </dl>
-
 
 
 
@@ -187,6 +184,8 @@ manages properties.</dd>    </dl>
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 

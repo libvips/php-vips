@@ -881,10 +881,45 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_OTHER"
         },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AGAINMAP",
+            "name": "GAINMAP",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_GAINMAP"
+        },                {
             "fqsen": "\\Jcupitt\\Vips\\ForeignKeep\u003A\u003AALL",
             "name": "ALL",
             "summary": "",
             "url": "classes/Jcupitt-Vips-ForeignKeep.html#constant_ALL"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPdfPageBox",
+            "name": "ForeignPdfPageBox",
+            "summary": "The\u0020ForeignPdfPageBox\u0020enum.",
+            "url": "classes/Jcupitt-Vips-ForeignPdfPageBox.html"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPdfPageBox\u003A\u003AMEDIA",
+            "name": "MEDIA",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPdfPageBox.html#constant_MEDIA"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPdfPageBox\u003A\u003ACROP",
+            "name": "CROP",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPdfPageBox.html#constant_CROP"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPdfPageBox\u003A\u003ATRIM",
+            "name": "TRIM",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPdfPageBox.html#constant_TRIM"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPdfPageBox\u003A\u003ABLEED",
+            "name": "BLEED",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPdfPageBox.html#constant_BLEED"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\ForeignPdfPageBox\u003A\u003AART",
+            "name": "ART",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-ForeignPdfPageBox.html#constant_ART"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\ForeignPngFilter",
             "name": "ForeignPngFilter",
@@ -1305,6 +1340,11 @@ Search.appendIndex(
             "name": "getFields",
             "summary": "Get\u0020the\u0020field\u0020names\u0020available\u0020for\u0020an\u0020image.",
             "url": "classes/Jcupitt-Vips-Image.html#method_getFields"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003AgetGainmap\u0028\u0029",
+            "name": "getGainmap",
+            "summary": "Get\u0020the\u0020gainmap\u0020attached\u0020to\u0020an\u0020image,\u0020or\u0020null\u0020for\u0020no\u0020gainmap.",
+            "url": "classes/Jcupitt-Vips-Image.html#method_getGainmap"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Image\u003A\u003Aset\u0028\u0029",
             "name": "set",
@@ -1845,6 +1885,16 @@ Search.appendIndex(
             "name": "HSV",
             "summary": "",
             "url": "classes/Jcupitt-Vips-Interpretation.html#constant_HSV"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Interpretation\u003A\u003AOKLAB",
+            "name": "OKLAB",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Interpretation.html#constant_OKLAB"
+        },                {
+            "fqsen": "\\Jcupitt\\Vips\\Interpretation\u003A\u003AOKLCH",
+            "name": "OKLCH",
+            "summary": "",
+            "url": "classes/Jcupitt-Vips-Interpretation.html#constant_OKLCH"
         },                {
             "fqsen": "\\Jcupitt\\Vips\\Introspect",
             "name": "Introspect",

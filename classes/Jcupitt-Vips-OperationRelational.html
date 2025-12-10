@@ -197,10 +197,8 @@
                                     </dd>
                                             </dl>
 
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
     <a href="classes/Jcupitt-Vips-OperationRelational.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -297,9 +295,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_LESS">
         LESS
@@ -328,9 +325,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_LESSEQ">
         LESSEQ
@@ -359,9 +355,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_MORE">
         MORE
@@ -390,9 +385,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_MOREEQ">
         MOREEQ
@@ -421,9 +415,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
                     <article class="phpdocumentor-element -constant -public ">
     <h4 class="phpdocumentor-element__name" id="constant_NOTEQ">
         NOTEQ
@@ -452,9 +445,8 @@
     
     
 
-    
-
-</article>
+        
+    </article>
             </section>
 
         
@@ -496,6 +488,8 @@
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 
