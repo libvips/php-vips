@@ -22,8 +22,8 @@ class GainmapTest extends TestCase
     {
         parent::setUp();
 
-        if (!Vips\FFI::atLeast(8, 18)) {
-            $this->markTestSkipped('libvips too old for gainmap test');
+        if (Vips\FFI::vips()->vips_type_find('VipsOperation', 'uhdrload') == 0) {
+            $this->markTestSkipped('requires libvips built with Ultra HDR support');
         }
 
         $filename = __DIR__ . '/images/ultra-hdr.jpg';
