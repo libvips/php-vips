@@ -792,6 +792,12 @@ const char* vips_foreign_find_save_target (const char* suffix);
 CPP;
         }
 
+        if (self::atLeast(8, 18)) {
+            $vips_decls = $vips_decls . <<<'CPP'
+VipsImage* vips_image_get_gainmap(const VipsImage* image);
+CPP;
+        }
+
         Utils::debugLog("init", ["binding ..."]);
 
         /**

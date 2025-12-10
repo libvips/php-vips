@@ -1268,6 +1268,37 @@ class Image extends ImageAutodoc implements \ArrayAccess
     }
 
     /**
+     * Get the gainmap attached to an image, or null for no gainmap.
+     *
+     * After modifying the gainmap, you'll need to use Image::set() to
+     * write it back to the image again under the name "gainmap", for example:
+     *
+     * ```php
+     * $gainmap = $image->getGainmap();
+     * if ($gainmap != null) {
+     *     $new_gainmap = $gainmap->crop(0, 0, 10, 10);
+     *     $image = $image->copy();
+     *     $image->set("gainmap", $new_gainmap);
+     * }
+     * ```
+     *
+     * @return ?Image
+     */
+    public function getGainmap(): ?Image
+    {
+        if (FFI::atLeast(8, 18)) {
+            $pointer = FFI::vips()->vips_image_get_gainmap($this->pointer);
+            if ($pointer == null) {
+                return null;
+            } else {
+                return new Image($pointer);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Set any property on the underlying image.
      *
      * This is handy for fields whose name
