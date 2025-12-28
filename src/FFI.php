@@ -315,6 +315,9 @@ class FFI
             }
             $msg .= ". Make sure that you've installed libvips and that '$vips_libname'";
             $msg .= " is on your system's library search path.";
+            if ('preload' === ini_get('ffi.enable')) {
+                $msg .= "FFI is not enabled globally; this will prevent PHP from locating '$vips_libname'.";
+            }
             throw new Exception($msg);
         }
 

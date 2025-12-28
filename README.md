@@ -36,22 +36,20 @@ Or macOS:
 brew install vips
 ```
 
-You'll need to [enable FFI in your
-PHP](https://www.php.net/manual/en/ffi.configuration.php), then add vips
-to your `composer.json`:
+php-vips does not yet support FFI preloading, so you need to enable FFI globally by setting `ffi.enable` to `true`. This has some security implications, since anyone who can run php on your server can use it to call any native library they have access to.
+
+Of course if attackers are running their own PHP code on your webserver you
+are probably already toast, unfortunately.
+
+For more information see the [FFI Runtime Configuration](https://www.php.net/manual/en/ffi.configuration.php).
+
+Then add vips to your `composer.json`:
 
 ```
 "require": {
     "jcupitt/vips" : "2.4.0"
 }
 ```
-
-php-vips does not yet support preloading, so you need to enable FFI globally.
-This has some security implications, since anyone who can run php on your
-server can use it to call any native library they have access to.
-
-Of course if attackers are running their own PHP code on your webserver you
-are probably already toast, unfortunately.
 
 Finally, on php 8.3 and later you need to disable stack overflow
 tests. php-vips executes FFI callbacks off the main thread and this confuses
