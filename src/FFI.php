@@ -282,7 +282,8 @@ class FFI
             throw new Exception("FFI extension not loaded");
         }
         $enable = ini_get("ffi.enable");
-        if ($enable != "true") {
+        if ($enable != "true" &&
+            $enable != "1") {
             throw new Exception("ffi.enable set to '$enable', not 'true'");
         }
 
