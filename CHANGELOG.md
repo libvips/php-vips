@@ -2,6 +2,10 @@
 
 All notable changes to `php-vips` will be documented in this file.
 
+## master
+
+- better ffi startup diagnostics [ping-localhost]
+
 ## 2.6.1 - 2025-12-10
 
 - suppress autodoc of `composite` and `DemandStyle` [jcupitt]
