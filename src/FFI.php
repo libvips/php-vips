@@ -278,11 +278,12 @@ class FFI
         }
 
         // detect the most common installation problems
-        if (!extension_loaded('ffi')) {
-            throw new Exception('FFI extension not loaded');
+        if (!extension_loaded("ffi")) {
+            throw new Exception("FFI extension not loaded");
         }
-        if (ini_get('ffi.enable') != 'true') {
-            throw new Exception("ffi.enable not set to 'true'");
+        $enable = ini_get("ffi.enable");
+        if ($enable != "true") {
+            throw new Exception("ffi.enable set to '$enable', not 'true'");
         }
 
         $vips_libname = self::libraryName("libvips", 42);
