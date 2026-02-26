@@ -281,7 +281,7 @@ class FFI
         if (!extension_loaded('ffi')) {
             throw new Exception('FFI extension not loaded');
         }
-        if (!ini_get('ffi.enable')) {
+        if (ini_get('ffi.enable') != 'true') {
             throw new Exception("ffi.enable not set to 'true'");
         }
 
