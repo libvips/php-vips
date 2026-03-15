@@ -21,13 +21,16 @@ class SourceResource extends SourceCustom
         parent::__construct();
 
         $this->onRead(static function (int $length) use (&$resource): ?string {
-            return fread($resource, $length) ?: null;
+            return (($read = fread($resource, $length)) !== '') ?
+                $read :
+                null;
         });
 
         if (stream_get_meta_data($resource)['seekable']) {
             $this->onSeek(static function (int $offset, int $whence) use (&$resource): int {
-                fseek($resource, $offset, $whence);
-                return ftell($resource);
+                return fseek($resource, $offset, $whence) === 0 ?
+                    ftell($resource) :
+                    -1;
             });
         }
     }
