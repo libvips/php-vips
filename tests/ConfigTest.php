@@ -43,7 +43,7 @@ class ConfigTest extends TestCase
 0 0 0 
 ";
 
-        if (Vips\Utils::typeFromName("VipsForeignLoadPpm") != 0) {
+        if (Vips\Utils::typeFromName("VipsForeignLoadPpmBuffer") != 0) {
             // the PPM loader is built in and should be available in most 
             // libvips binaries
             $image = Vips\Image::ppmload_buffer($ppm);
@@ -60,7 +60,7 @@ class ConfigTest extends TestCase
 ";
 
         if (Vips\FFI::atLeast(8, 13) &&
-            Vips\Utils::typeFromName("VipsForeignLoadPpm") != 0) {
+            Vips\Utils::typeFromName("VipsForeignLoadPpmBuffer") != 0) {
             Vips\Config::setBlockUntrusted(true);
 
             // should fail
@@ -79,7 +79,7 @@ class ConfigTest extends TestCase
 ";
 
         if (Vips\FFI::atLeast(8, 13) &&
-            Vips\Utils::typeFromName("VipsForeignLoadPpm") != 0) {
+            Vips\Utils::typeFromName("VipsForeignLoadPpmBuffer") != 0) {
             Vips\Config::setBlockUntrusted(true);
             Vips\Config::setBlock("VipsForeignLoadPpm", false);
 
