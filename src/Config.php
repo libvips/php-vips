@@ -139,6 +139,53 @@ class Config
     }
 
     /**
+     * Set the block state on all operations in the libvips class hierarchy at
+     * name and below.
+     *
+     * For example:
+     *
+     * ```php
+     * Vips\Config::setBlockUntrusted(true);
+     * Vips\Config::setBlock("VipsForeignLoadSvg", false);
+     * ```
+     *
+     * Will block all untrusted loaders, but allow SVG.
+     *
+     * @param string $name The name of the class to block.
+     * @param bool $state The block state to set.
+     *
+     * @return void
+     */
+    public static function setBlock(string $name, bool $state): void
+    {
+        if (FFI::atLeast(8, 13)) {
+            FFI::vips()->vips_operation_block_set($name, $state);
+        }
+    }
+
+    /**
+     * Set the block state on all untrusted operations.
+     *
+     * For example:
+     *
+     * ```php
+     * Vips\Config::setBlockUntrusted(true);
+     * ```
+     *
+     * Will prevent all untrusted loaders from running.
+     *
+     * @param bool $state The block state to set.
+     *
+     * @return void
+     */
+    public static function setBlockUntrusted(bool $state): void
+    {
+        if (FFI::atLeast(8, 13)) {
+            FFI::vips()->vips_block_untrusted_set($state);
+        }
+    }
+
+    /**
      * Gets the libvips version number as a string of the form
      * MAJOR.MINOR.MICRO, for example "8.6.1".
      *

@@ -794,6 +794,14 @@ const char* vips_foreign_find_save_target (const char* suffix);
 CPP;
         }
 
+        if (self::atLeast(8, 13)) {
+            $vips_decls = $vips_decls . <<<'CPP'
+void vips_block_untrusted_set(int state);
+void vips_operation_block_set(const char *name, int state);
+
+CPP;
+        }
+
         if (self::atLeast(8, 18)) {
             $vips_decls = $vips_decls . <<<'CPP'
 VipsImage* vips_image_get_gainmap(const VipsImage* image);
