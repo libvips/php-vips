@@ -40,11 +40,11 @@ class ConfigTest extends TestCase
         $ppm = "P3
 1 1
 255
-0 0 0 
+0 0 0
 ";
 
         if (Vips\Utils::typeFromName("VipsForeignLoadPpmBuffer") != 0) {
-            // the PPM loader is built in and should be available in most 
+            // the PPM loader is built in and should be available in most
             // libvips binaries
             $image = Vips\Image::ppmload_buffer($ppm);
             $this->assertTrue($image->width == 1);
@@ -56,7 +56,7 @@ class ConfigTest extends TestCase
         $ppm = "P3
 1 1
 255
-0 0 0 
+0 0 0
 ";
 
         if (Vips\FFI::atLeast(8, 13) &&
@@ -75,7 +75,7 @@ class ConfigTest extends TestCase
         $ppm = "P3
 1 1
 255
-0 0 0 
+0 0 0
 ";
 
         if (Vips\FFI::atLeast(8, 13) &&
