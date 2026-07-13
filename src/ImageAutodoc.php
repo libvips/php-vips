@@ -118,7 +118,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image bandunfold(array $options = []) Unfold image bands into x axis.
  *     @throws Exception
- * @method static Image black(integer $width, integer $height, array $options = []) Make a black image.
+ * @method static Image black(int $width, int $height, array $options = []) Make a black image.
  *     @throws Exception
  * @method Image boolean(Image $right, string $boolean, array $options = []) Boolean operation on two images.
  *     @see OperationBoolean for possible values for $boolean
@@ -175,7 +175,7 @@ namespace Jcupitt\Vips;
  * @method float countlines(string $direction, array $options = []) Count lines in an image.
  *     @see Direction for possible values for $direction
  *     @throws Exception
- * @method Image crop(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
+ * @method Image crop(int $left, int $top, int $width, int $height, array $options = []) Extract an area from an image.
  *     @throws Exception
  * @method static Image csvload(string $filename, array $options = []) Load csv.
  *     @throws Exception
@@ -199,19 +199,19 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method float deviate(array $options = []) Find image standard deviation.
  *     @throws Exception
- * @method Image draw_circle(float[]|float $ink, integer $cx, integer $cy, integer $radius, array $options = []) Draw a circle on an image.
+ * @method Image draw_circle(float[]|float $ink, int $cx, int $cy, int $radius, array $options = []) Draw a circle on an image.
  *     @throws Exception
- * @method Image draw_flood(float[]|float $ink, integer $x, integer $y, array $options = []) Flood-fill an area.
+ * @method Image draw_flood(float[]|float $ink, int $x, int $y, array $options = []) Flood-fill an area.
  *     @throws Exception
- * @method Image draw_image(Image $sub, integer $x, integer $y, array $options = []) Paint an image into another image.
+ * @method Image draw_image(Image $sub, int $x, int $y, array $options = []) Paint an image into another image.
  *     @throws Exception
- * @method Image draw_line(float[]|float $ink, integer $x1, integer $y1, integer $x2, integer $y2, array $options = []) Draw a line on an image.
+ * @method Image draw_line(float[]|float $ink, int $x1, int $y1, int $x2, int $y2, array $options = []) Draw a line on an image.
  *     @throws Exception
- * @method Image draw_mask(float[]|float $ink, Image $mask, integer $x, integer $y, array $options = []) Draw a mask on an image.
+ * @method Image draw_mask(float[]|float $ink, Image $mask, int $x, int $y, array $options = []) Draw a mask on an image.
  *     @throws Exception
- * @method Image draw_rect(float[]|float $ink, integer $left, integer $top, integer $width, integer $height, array $options = []) Paint a rectangle on an image.
+ * @method Image draw_rect(float[]|float $ink, int $left, int $top, int $width, int $height, array $options = []) Paint a rectangle on an image.
  *     @throws Exception
- * @method Image draw_smudge(integer $left, integer $top, integer $width, integer $height, array $options = []) Blur a rectangle on an image.
+ * @method Image draw_smudge(int $left, int $top, int $width, int $height, array $options = []) Blur a rectangle on an image.
  *     @throws Exception
  * @method void dzsave(string $filename, array $options = []) Save image to deepzoom file.
  *     @throws Exception
@@ -219,13 +219,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void dzsave_target(Target $target, array $options = []) Save image to deepzoom target.
  *     @throws Exception
- * @method Image embed(integer $x, integer $y, integer $width, integer $height, array $options = []) Embed an image in a larger image.
+ * @method Image embed(int $x, int $y, int $width, int $height, array $options = []) Embed an image in a larger image.
  *     @throws Exception
- * @method Image extract_area(integer $left, integer $top, integer $width, integer $height, array $options = []) Extract an area from an image.
+ * @method Image extract_area(int $left, int $top, int $width, int $height, array $options = []) Extract an area from an image.
  *     @throws Exception
- * @method Image extract_band(integer $band, array $options = []) Extract band from an image.
+ * @method Image extract_band(int $band, array $options = []) Extract band from an image.
  *     @throws Exception
- * @method static Image eye(integer $width, integer $height, array $options = []) Make an image showing the eye's spatial response.
+ * @method static Image eye(int $width, int $height, array $options = []) Make an image showing the eye's spatial response.
  *     @throws Exception
  * @method Image falsecolour(array $options = []) False-color an image.
  *     @throws Exception
@@ -254,7 +254,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image float2rad(array $options = []) Transform float RGB to Radiance coding.
  *     @throws Exception
- * @method static Image fractsurf(integer $width, integer $height, float $fractal_dimension, array $options = []) Make a fractal surface.
+ * @method static Image fractsurf(int $width, int $height, float $fractal_dimension, array $options = []) Make a fractal surface.
  *     @throws Exception
  * @method Image freqmult(Image $mask, array $options = []) Frequency-domain filtering.
  *     @throws Exception
@@ -266,9 +266,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image gaussmat(float $sigma, float $min_ampl, array $options = []) Make a gaussian image.
  *     @throws Exception
- * @method static Image gaussnoise(integer $width, integer $height, array $options = []) Make a gaussnoise image.
+ * @method static Image gaussnoise(int $width, int $height, array $options = []) Make a gaussnoise image.
  *     @throws Exception
- * @method array getpoint(integer $x, integer $y, array $options = []) Read a point from an image.
+ * @method array getpoint(int $x, int $y, array $options = []) Read a point from an image.
  *     @throws Exception
  * @method static Image gifload(string $filename, array $options = []) Load GIF with libnsgif.
  *     @throws Exception
@@ -284,12 +284,12 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image globalbalance(array $options = []) Global balance an image mosaic.
  *     @throws Exception
- * @method Image gravity(string $direction, integer $width, integer $height, array $options = []) Place an image within a larger image with a certain gravity.
+ * @method Image gravity(string $direction, int $width, int $height, array $options = []) Place an image within a larger image with a certain gravity.
  *     @see CompassDirection for possible values for $direction
  *     @throws Exception
- * @method static Image grey(integer $width, integer $height, array $options = []) Make a grey ramp image.
+ * @method static Image grey(int $width, int $height, array $options = []) Make a grey ramp image.
  *     @throws Exception
- * @method Image grid(integer $tile_height, integer $across, integer $down, array $options = []) Grid an image.
+ * @method Image grid(int $tile_height, int $across, int $down, array $options = []) Grid an image.
  *     @throws Exception
  * @method static Image heifload(string $filename, array $options = []) Load a HEIF image.
  *     @throws Exception
@@ -317,7 +317,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method bool hist_ismonotonic(array $options = []) Test for monotonicity.
  *     @throws Exception
- * @method Image hist_local(integer $width, integer $height, array $options = []) Local histogram equalisation.
+ * @method Image hist_local(int $width, int $height, array $options = []) Local histogram equalisation.
  *     @throws Exception
  * @method Image hist_match(Image $ref, array $options = []) Match two histograms.
  *     @throws Exception
@@ -337,7 +337,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image identity(array $options = []) Make a 1D image where pixel values are indexes.
  *     @throws Exception
- * @method Image insert(Image $sub, integer $x, integer $y, array $options = []) Insert image @sub into @main at @x, @y.
+ * @method Image insert(Image $sub, int $x, int $y, array $options = []) Insert image @sub into @main at @x, @y.
  *     @throws Exception
  * @method Image invert(array $options = []) Invert an image.
  *     @throws Exception
@@ -408,27 +408,27 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image maplut(Image $lut, array $options = []) Map an image though a lut.
  *     @throws Exception
- * @method static Image mask_butterworth(integer $width, integer $height, float $order, float $frequency_cutoff, float $amplitude_cutoff, array $options = []) Make a butterworth filter.
+ * @method static Image mask_butterworth(int $width, int $height, float $order, float $frequency_cutoff, float $amplitude_cutoff, array $options = []) Make a butterworth filter.
  *     @throws Exception
- * @method static Image mask_butterworth_band(integer $width, integer $height, float $order, float $frequency_cutoff_x, float $frequency_cutoff_y, float $radius, float $amplitude_cutoff, array $options = []) Make a butterworth_band filter.
+ * @method static Image mask_butterworth_band(int $width, int $height, float $order, float $frequency_cutoff_x, float $frequency_cutoff_y, float $radius, float $amplitude_cutoff, array $options = []) Make a butterworth_band filter.
  *     @throws Exception
- * @method static Image mask_butterworth_ring(integer $width, integer $height, float $order, float $frequency_cutoff, float $amplitude_cutoff, float $ringwidth, array $options = []) Make a butterworth ring filter.
+ * @method static Image mask_butterworth_ring(int $width, int $height, float $order, float $frequency_cutoff, float $amplitude_cutoff, float $ringwidth, array $options = []) Make a butterworth ring filter.
  *     @throws Exception
- * @method static Image mask_fractal(integer $width, integer $height, float $fractal_dimension, array $options = []) Make fractal filter.
+ * @method static Image mask_fractal(int $width, int $height, float $fractal_dimension, array $options = []) Make fractal filter.
  *     @throws Exception
- * @method static Image mask_gaussian(integer $width, integer $height, float $frequency_cutoff, float $amplitude_cutoff, array $options = []) Make a gaussian filter.
+ * @method static Image mask_gaussian(int $width, int $height, float $frequency_cutoff, float $amplitude_cutoff, array $options = []) Make a gaussian filter.
  *     @throws Exception
- * @method static Image mask_gaussian_band(integer $width, integer $height, float $frequency_cutoff_x, float $frequency_cutoff_y, float $radius, float $amplitude_cutoff, array $options = []) Make a gaussian filter.
+ * @method static Image mask_gaussian_band(int $width, int $height, float $frequency_cutoff_x, float $frequency_cutoff_y, float $radius, float $amplitude_cutoff, array $options = []) Make a gaussian filter.
  *     @throws Exception
- * @method static Image mask_gaussian_ring(integer $width, integer $height, float $frequency_cutoff, float $amplitude_cutoff, float $ringwidth, array $options = []) Make a gaussian ring filter.
+ * @method static Image mask_gaussian_ring(int $width, int $height, float $frequency_cutoff, float $amplitude_cutoff, float $ringwidth, array $options = []) Make a gaussian ring filter.
  *     @throws Exception
- * @method static Image mask_ideal(integer $width, integer $height, float $frequency_cutoff, array $options = []) Make an ideal filter.
+ * @method static Image mask_ideal(int $width, int $height, float $frequency_cutoff, array $options = []) Make an ideal filter.
  *     @throws Exception
- * @method static Image mask_ideal_band(integer $width, integer $height, float $frequency_cutoff_x, float $frequency_cutoff_y, float $radius, array $options = []) Make an ideal band filter.
+ * @method static Image mask_ideal_band(int $width, int $height, float $frequency_cutoff_x, float $frequency_cutoff_y, float $radius, array $options = []) Make an ideal band filter.
  *     @throws Exception
- * @method static Image mask_ideal_ring(integer $width, integer $height, float $frequency_cutoff, float $ringwidth, array $options = []) Make an ideal ring filter.
+ * @method static Image mask_ideal_ring(int $width, int $height, float $frequency_cutoff, float $ringwidth, array $options = []) Make an ideal ring filter.
  *     @throws Exception
- * @method Image match(Image $sec, integer $xr1, integer $yr1, integer $xs1, integer $ys1, integer $xr2, integer $yr2, integer $xs2, integer $ys2, array $options = []) First-order match of two images.
+ * @method Image match(Image $sec, int $xr1, int $yr1, int $xs1, int $ys1, int $xr2, int $yr2, int $xs2, int $ys2, array $options = []) First-order match of two images.
  *     @throws Exception
  * @method Image math(string $math, array $options = []) Apply a math operation to an image.
  *     @see OperationMath for possible values for $math
@@ -459,9 +459,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image maxpair(Image $right, array $options = []) Maximum of a pair of images.
  *     @throws Exception
- * @method Image measure(integer $h, integer $v, array $options = []) Measure a set of patches on a color chart.
+ * @method Image measure(int $h, int $v, array $options = []) Measure a set of patches on a color chart.
  *     @throws Exception
- * @method Image merge(Image $sec, string $direction, integer $dx, integer $dy, array $options = []) Merge two images.
+ * @method Image merge(Image $sec, string $direction, int $dx, int $dy, array $options = []) Merge two images.
  *     @see Direction for possible values for $direction
  *     @throws Exception
  * @method float min(array $options = []) Find image minimum.
@@ -471,10 +471,10 @@ namespace Jcupitt\Vips;
  * @method Image morph(Image $mask, string $morph, array $options = []) Morphology operation.
  *     @see OperationMorphology for possible values for $morph
  *     @throws Exception
- * @method Image mosaic(Image $sec, string $direction, integer $xref, integer $yref, integer $xsec, integer $ysec, array $options = []) Mosaic two images.
+ * @method Image mosaic(Image $sec, string $direction, int $xref, int $yref, int $xsec, int $ysec, array $options = []) Mosaic two images.
  *     @see Direction for possible values for $direction
  *     @throws Exception
- * @method Image mosaic1(Image $sec, string $direction, integer $xr1, integer $yr1, integer $xs1, integer $ys1, integer $xr2, integer $yr2, integer $xs2, integer $ys2, array $options = []) First-order mosaic of two images.
+ * @method Image mosaic1(Image $sec, string $direction, int $xr1, int $yr1, int $xs1, int $ys1, int $xr2, int $yr2, int $xs2, int $ys2, array $options = []) First-order mosaic of two images.
  *     @see Direction for possible values for $direction
  *     @throws Exception
  * @method Image msb(array $options = []) Pick most-significant byte from an image.
@@ -499,7 +499,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method integer percent(float $percent, array $options = []) Find threshold for percent of pixels.
  *     @throws Exception
- * @method static Image perlin(integer $width, integer $height, array $options = []) Make a perlin noise image.
+ * @method static Image perlin(int $width, int $height, array $options = []) Make a perlin noise image.
  *     @throws Exception
  * @method Image phasecor(Image $in2, array $options = []) Calculate phase correlation.
  *     @throws Exception
@@ -559,9 +559,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void radsave_target(Target $target, array $options = []) Save image to Radiance target.
  *     @throws Exception
- * @method Image rank(integer $width, integer $height, integer $index, array $options = []) Rank filter.
+ * @method Image rank(int $width, int $height, int $index, array $options = []) Rank filter.
  *     @throws Exception
- * @method static Image rawload(string $filename, integer $width, integer $height, integer $bands, array $options = []) Load raw data from a file.
+ * @method static Image rawload(string $filename, int $width, int $height, int $bands, array $options = []) Load raw data from a file.
  *     @throws Exception
  * @method void rawsave(string $filename, array $options = []) Save image to raw file.
  *     @throws Exception
@@ -587,7 +587,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image remosaic(string $old_str, string $new_str, array $options = []) Rebuild an mosaiced image.
  *     @throws Exception
- * @method Image replicate(integer $across, integer $down, array $options = []) Replicate an image.
+ * @method Image replicate(int $across, int $down, array $options = []) Replicate an image.
  *     @throws Exception
  * @method Image resize(float $scale, array $options = []) Resize an image.
  *     @throws Exception
@@ -615,7 +615,7 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image scharr(array $options = []) Scharr edge detector.
  *     @throws Exception
- * @method static Image sdf(integer $width, integer $height, string $shape, array $options = []) Create an SDF image.
+ * @method static Image sdf(int $width, int $height, string $shape, array $options = []) Create an SDF image.
  *     @see SdfShape for possible values for $shape
  *     @throws Exception
  * @method Image sequential(array $options = []) Check sequential access.
@@ -624,17 +624,17 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image shrink(float $hshrink, float $vshrink, array $options = []) Shrink an image.
  *     @throws Exception
- * @method Image shrinkh(integer $hshrink, array $options = []) Shrink an image horizontally.
+ * @method Image shrinkh(int $hshrink, array $options = []) Shrink an image horizontally.
  *     @throws Exception
- * @method Image shrinkv(integer $vshrink, array $options = []) Shrink an image vertically.
+ * @method Image shrinkv(int $vshrink, array $options = []) Shrink an image vertically.
  *     @throws Exception
  * @method Image sign(array $options = []) Unit vector of pixel.
  *     @throws Exception
  * @method Image similarity(array $options = []) Similarity transform of an image.
  *     @throws Exception
- * @method static Image sines(integer $width, integer $height, array $options = []) Make a 2D sine wave.
+ * @method static Image sines(int $width, int $height, array $options = []) Make a 2D sine wave.
  *     @throws Exception
- * @method Image smartcrop(integer $width, integer $height, array $options = []) Extract an area from an image.
+ * @method Image smartcrop(int $width, int $height, array $options = []) Extract an area from an image.
  *     @throws Exception
  * @method Image sobel(array $options = []) Sobel edge detector.
  *     @throws Exception
@@ -644,9 +644,9 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method Image stats(array $options = []) Find many image stats.
  *     @throws Exception
- * @method Image stdif(integer $width, integer $height, array $options = []) Statistical difference.
+ * @method Image stdif(int $width, int $height, array $options = []) Statistical difference.
  *     @throws Exception
- * @method Image subsample(integer $xfac, integer $yfac, array $options = []) Subsample an image.
+ * @method Image subsample(int $xfac, int $yfac, array $options = []) Subsample an image.
  *     @throws Exception
  * @method static Image sum(Image[]|Image $in, array $options = []) Sum an array of images.
  *     @throws Exception
@@ -662,13 +662,13 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method static Image text(string $text, array $options = []) Make a text image.
  *     @throws Exception
- * @method static Image thumbnail(string $filename, integer $width, array $options = []) Generate thumbnail from file.
+ * @method static Image thumbnail(string $filename, int $width, array $options = []) Generate thumbnail from file.
  *     @throws Exception
- * @method static Image thumbnail_buffer(string $buffer, integer $width, array $options = []) Generate thumbnail from buffer.
+ * @method static Image thumbnail_buffer(string $buffer, int $width, array $options = []) Generate thumbnail from buffer.
  *     @throws Exception
- * @method Image thumbnail_image(integer $width, array $options = []) Generate thumbnail from image.
+ * @method Image thumbnail_image(int $width, array $options = []) Generate thumbnail from image.
  *     @throws Exception
- * @method static Image thumbnail_source(Source $source, integer $width, array $options = []) Generate thumbnail from source.
+ * @method static Image thumbnail_source(Source $source, int $width, array $options = []) Generate thumbnail from source.
  *     @throws Exception
  * @method static Image tiffload(string $filename, array $options = []) Load tiff from file.
  *     @throws Exception
@@ -726,28 +726,28 @@ namespace Jcupitt\Vips;
  *     @throws Exception
  * @method void webpsave_target(Target $target, array $options = []) Save as WebP.
  *     @throws Exception
- * @method static Image worley(integer $width, integer $height, array $options = []) Make a worley noise image.
+ * @method static Image worley(int $width, int $height, array $options = []) Make a worley noise image.
  *     @throws Exception
  * @method Image wrap(array $options = []) Wrap image origin.
  *     @throws Exception
- * @method static Image xyz(integer $width, integer $height, array $options = []) Make an image where pixel values are coordinates.
+ * @method static Image xyz(int $width, int $height, array $options = []) Make an image where pixel values are coordinates.
  *     @throws Exception
- * @method static Image zone(integer $width, integer $height, array $options = []) Make a zone plate.
+ * @method static Image zone(int $width, int $height, array $options = []) Make a zone plate.
  *     @throws Exception
- * @method Image zoom(integer $xfac, integer $yfac, array $options = []) Zoom an image.
+ * @method Image zoom(int $xfac, int $yfac, array $options = []) Zoom an image.
  *     @throws Exception
  *
- * @property integer $width Image width in pixels
- * @property integer $height Image height in pixels
- * @property integer $bands Number of bands in image
+ * @property int $width Image width in pixels
+ * @property int $height Image height in pixels
+ * @property int $bands Number of bands in image
  * @property string $format Pixel format in image
  *     @see BandFormat for possible values
  * @property string $coding Pixel coding
  *     @see Coding for possible values
  * @property string $interpretation Pixel interpretation
  *     @see Interpretation for possible values
- * @property integer $xoffset Horizontal offset of origin
- * @property integer $yoffset Vertical offset of origin
+ * @property int $xoffset Horizontal offset of origin
+ * @property int $yoffset Vertical offset of origin
  * @property float $xres Horizontal resolution in pixels/mm
  * @property float $yres Vertical resolution in pixels/mm
  * @property string $filename Image filename

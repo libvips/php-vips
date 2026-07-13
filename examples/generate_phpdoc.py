@@ -20,15 +20,15 @@ from pyvips import Image, Introspect, GValue, Error, \
 # map a Python gtype to PHP argument type names
 gtype_to_php_arg = {
     GValue.gbool_type: 'bool',
-    GValue.gint_type: 'integer',
+    GValue.gint_type: 'int',
     GValue.gdouble_type: 'float',
     GValue.gstr_type: 'string',
     GValue.refstr_type: 'string',
     GValue.genum_type: 'string',
-    GValue.gflags_type: 'integer',
+    GValue.gflags_type: 'int',
     GValue.gobject_type: 'string',
     GValue.image_type: 'Image',
-    GValue.array_int_type: 'integer[]|integer',
+    GValue.array_int_type: 'int[]|int',
     GValue.array_double_type: 'float[]|float',
     GValue.array_image_type: 'Image[]|Image',
     GValue.blob_type: 'string',
@@ -39,12 +39,12 @@ gtype_to_php_arg = {
 # php result type names are different, annoyingly, and very restricted
 gtype_to_php_result = {
     GValue.gbool_type: 'bool',
-    GValue.gint_type: 'integer',
+    GValue.gint_type: 'int',
     GValue.gdouble_type: 'float',
     GValue.gstr_type: 'string',
     GValue.refstr_type: 'string',
     GValue.genum_type: 'string',
-    GValue.gflags_type: 'integer',
+    GValue.gflags_type: 'int',
     GValue.gobject_type: 'string',
     GValue.image_type: 'Image',
     GValue.array_int_type: 'array',
