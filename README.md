@@ -46,12 +46,39 @@ to your `composer.json`:
 }
 ```
 
-php-vips does not yet support preloading, so you need to enable FFI globally.
-This has some security implications, since anyone who can run php on your
-server can use it to call any native library they have access to.
+The simplest thing is `ffi.enable=true`, but that lets any PHP code on your
+server call any native library it has access to. You can avoid that with
+`ffi.enable=preload`, which is PHP's default: FFI is then only usable from code
+that PHP loaded at startup via `opcache.preload`, so php-vips can use it but
+the rest of your application cannot.
 
-Of course if attackers are running their own PHP code on your webserver you
-are probably already toast, unfortunately.
+To run php-vips that way, write a preload script:
+
+```php
+<?php
+// preload.php
+require __DIR__ . '/vendor/autoload.php';
+Jcupitt\Vips\FFI::preload();
+```
+
+And point `php.ini` at it:
+
+```
+ffi.enable = preload
+opcache.preload = /path/to/your/app/preload.php
+```
+
+`preload()` compiles all of php-vips into the opcache. PHP checks the function
+an FFI call is made from, not the library as a whole, so php-vips has to be
+preloaded as a whole too. The autoloader has to come first, or PHP will refuse
+to start.
+
+php.ini has room for only one preload script, so if your application already
+has one (Symfony generates `config/preload.php`, for example), add the
+`preload()` call to that rather than making a second script.
+
+Preloading is not supported on Windows, and you need to restart PHP after
+changing the preload script.
 
 Finally, on php 8.3 and later you need to disable stack overflow
 tests. php-vips executes FFI callbacks off the main thread and this confuses

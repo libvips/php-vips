@@ -89,6 +89,15 @@ class FFI
     ];
 
     /**
+     * The message from the last failed library load, if any. FFI itself can
+     * refuse to run (eg. ffi.enable=preload and php-vips is not preloaded),
+     * and then this is much more useful than any guess we could make.
+     *
+     * @internal
+     */
+    private static string $libraryLoadError = "";
+
+    /**
      * Look up these once.
      *
      * @internal
@@ -212,6 +221,40 @@ class FFI
     }
 
     /**
+     * Compile php-vips into the opcache during startup.
+     *
+     * With `ffi.enable=preload`, PHP will only let code that was compiled
+     * during `opcache.preload` use FFI, so php-vips has to be preloaded as a
+     * whole. Call this from the script named by `opcache.preload`, after
+     * requiring the composer autoloader.
+     *
+     * This compiles php-vips' own PHP sources. It is not related to
+     * \FFI::load() or to the `ffi.preload` php.ini setting.
+     *
+     * @return void
+     */
+    public static function preload(): void
+    {
+        static $done = false;
+        if ($done) {
+            return;
+        }
+        $done = true;
+
+        // opcache links each class as it compiles it, so DebugLogger's
+        // psr/log dependencies have to be in memory first
+        interface_exists(\Psr\Log\LoggerInterface::class);
+        trait_exists(\Psr\Log\LoggerTrait::class);
+
+        // scandir(), since glob() finds nothing inside a phar
+        foreach (scandir(__DIR__) ?: [] as $file) {
+            if (substr($file, -4) === ".php" && $file !== basename(__FILE__)) {
+                opcache_compile_file(__DIR__ . "/" . $file);
+            }
+        }
+    }
+
+    /**
      * Shut down libvips. Call this just before process exit.
      *
      * @return void
@@ -254,6 +297,7 @@ class FFI
         string $interface
     ): ?\FFI {
         Utils::debugLog("trying to open", ["libraryName" => $libraryName]);
+        self::$libraryLoadError = "";
         foreach (self::$libraryPaths as $path) {
             Utils::debugLog("trying path", ["path" => $path]);
             try {
@@ -261,6 +305,7 @@ class FFI
                 Utils::debugLog("success", []);
                 return $library;
             } catch (\FFI\Exception $e) {
+                self::$libraryLoadError = $e->getMessage();
                 Utils::debugLog("init", [
                     "msg" => "library load failed",
                     "exception" => $e->getMessage()
@@ -280,11 +325,6 @@ class FFI
         // detect the most common installation problems
         if (!extension_loaded("ffi")) {
             throw new Exception("FFI extension not loaded");
-        }
-        $enable = ini_get("ffi.enable");
-        if ($enable != "true" &&
-            $enable != "1") {
-            throw new Exception("ffi.enable set to '$enable', not 'true'");
         }
 
         $vips_libname = self::libraryName("libvips", 42);
@@ -315,8 +355,12 @@ class FFI
             if (!empty(self::$libraryPaths)) {
                 $msg .= " in any of ['" . implode("', '", self::$libraryPaths) . "']";
             }
-            $msg .= ". Make sure that you've installed libvips and that '$vips_libname'";
-            $msg .= " is on your system's library search path.";
+            if (self::$libraryLoadError !== "") {
+                $msg .= ". The error was: " . self::$libraryLoadError;
+            }
+            $msg .= ". Check that libvips is installed, that '$vips_libname' is on";
+            $msg .= " your system's library search path, and that FFI is usable";
+            $msg .= " (see the ffi.enable notes in the php-vips README).";
             throw new Exception($msg);
         }
 

@@ -4,6 +4,8 @@ All notable changes to `php-vips` will be documented in this file.
 
 ## master
 
+- report the real reason when FFI startup fails, and support
+  `ffi.enable=preload` with a new `FFI::preload()` [wadakatu]
 - better ffi startup diagnostics [ping-localhost]
 - add setBlock() and setBlockUntrusted() to control operation blocking [jcupitt]
 
