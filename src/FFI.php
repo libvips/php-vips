@@ -106,6 +106,13 @@ class FFI
     private static int $library_minor;
     private static int $library_micro;
 
+    /**
+     * The last exception that FFI extension throws after loading library.
+     *
+     * @internal
+     */
+    private static ?\FFI\Exception $ffi_last_exception = null;
+
     public static function glib(): \FFI
     {
         self::init();
@@ -254,6 +261,7 @@ class FFI
         string $interface
     ): ?\FFI {
         Utils::debugLog("trying to open", ["libraryName" => $libraryName]);
+        self::$ffi_last_exception = null;
         foreach (self::$libraryPaths as $path) {
             Utils::debugLog("trying path", ["path" => $path]);
             try {
@@ -265,6 +273,7 @@ class FFI
                     "msg" => "library load failed",
                     "exception" => $e->getMessage()
                 ]);
+                self::$ffi_last_exception = $e;
             }
         }
         return null;
@@ -280,11 +289,6 @@ class FFI
         // detect the most common installation problems
         if (!extension_loaded("ffi")) {
             throw new Exception("FFI extension not loaded");
-        }
-        $enable = ini_get("ffi.enable");
-        if ($enable != "true" &&
-            $enable != "1") {
-            throw new Exception("ffi.enable set to '$enable', not 'true'");
         }
 
         $vips_libname = self::libraryName("libvips", 42);
@@ -317,7 +321,10 @@ class FFI
             }
             $msg .= ". Make sure that you've installed libvips and that '$vips_libname'";
             $msg .= " is on your system's library search path.";
-            throw new Exception($msg);
+            if (self::$ffi_last_exception instanceof \FFI\Exception) {
+                $msg .= " FFI extension error: ". self::$ffi_last_exception->getMessage();
+            }
+            throw new Exception($msg, 0, self::$ffi_last_exception);
         }
 
         $result = $vips->vips_init("");

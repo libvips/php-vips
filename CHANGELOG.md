@@ -6,6 +6,8 @@ All notable changes to `php-vips` will be documented in this file.
 
 - better ffi startup diagnostics [ping-localhost]
 - add setBlock() and setBlockUntrusted() to control operation blocking [jcupitt]
+- fix startup with the default `ffi.enable=preload` [wadakatu]
+- include the FFI error in the startup exception [wadakatu]
 
 ## 2.6.1 - 2025-12-10
 
