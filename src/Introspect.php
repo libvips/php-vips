@@ -165,14 +165,14 @@ class Introspect
                 !($flags & ArgumentFlags::DEPRECATED)) {
                 $this->required_output[] = $name;
             }
- 
+
             # we let deprecated optional args through, but warn about them
             # if they get used, see below
             if (($flags & ArgumentFlags::INPUT) &&
                 !($flags & ArgumentFlags::REQUIRED)) {
                 $this->optional_input[] = $name;
             }
- 
+
             if (($flags & ArgumentFlags::OUTPUT) &&
                 !($flags & ArgumentFlags::REQUIRED)) {
                 $this->optional_output[] = $name;

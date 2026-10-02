@@ -217,11 +217,6 @@ class VipsOperation extends VipsObject
         ?Image $instance,
         array $arguments
     ) {
-        Utils::debugLog($operation_name, [
-            'instance' => $instance,
-            'arguments' => $arguments
-        ]);
-
         $operation = self::newFromName($operation_name);
         $operation->introspect = self::introspect($operation_name);
         $introspect = $operation->introspect;
@@ -338,10 +333,6 @@ class VipsOperation extends VipsObject
         $operation->unrefOutputs();
 
         $result = self::wrapResult($result);
-
-        Utils::debugLog($operation_name, [
-            'result' => var_export($result, true)
-        ]);
 
         return $result;
     }
