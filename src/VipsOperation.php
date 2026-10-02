@@ -339,9 +339,12 @@ class VipsOperation extends VipsObject
 
         $result = self::wrapResult($result);
 
-        Utils::debugLog($operation_name, [
-            'result' => var_export($result, true)
-        ]);
+        // var_export() is costly, only run it when the message is logged
+        if (Config::getLogger() !== null) {
+            Utils::debugLog($operation_name, [
+                'result' => var_export($result, true)
+            ]);
+        }
 
         return $result;
     }

@@ -197,7 +197,9 @@ class Introspect
             array_splice($this->method_args, $index);
         }
 
-        Utils::debugLog($operation_name, ['introspect' => strval($this)]);
+        if (Config::getLogger() !== null) {
+            Utils::debugLog($operation_name, ['introspect' => strval($this)]);
+        }
     }
 
     public function __toString(): string
