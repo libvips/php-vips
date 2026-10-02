@@ -50,7 +50,6 @@ namespace Jcupitt\Vips;
  */
 class FFI
 {
-
     /**
      * The FFI handle we use for the glib binary.
      *

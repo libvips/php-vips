@@ -52,7 +52,6 @@ use Psr\Log\LoggerInterface;
  */
 class Config
 {
-
     /**
      * The logger instance.
      */
