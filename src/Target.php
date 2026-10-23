@@ -48,6 +48,8 @@ class Target extends Connection
      *
      * You can pass this target to (for example) @see Image::writeToTarget()
      * @throws Exception
+     *
+     * @psalm-taint-sink file $filename
      */
     public static function newToFile(string $filename): self
     {

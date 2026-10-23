@@ -692,6 +692,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param string $filename The file to test.
      *
      * @return string|null The name of the load operation, or null.
+     *
+     * @psalm-taint-sink file $filename
      */
     public static function findLoad(string $filename): ?string
     {

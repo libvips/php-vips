@@ -49,6 +49,8 @@ class Source extends Connection
      *
      * You can pass this source to (for example) @see Image::newFromSource()
      * @throws Exception
+     *
+     * @psalm-taint-sink file $filename
      */
     public static function newFromFile(string $filename): self
     {
