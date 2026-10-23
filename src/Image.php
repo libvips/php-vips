@@ -711,6 +711,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @throws Exception
      *
      * @return Image A new Image.
+     *
+     * @psalm-taint-sink file $name
      */
     public static function newFromFile(
         string $name,
@@ -955,6 +957,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @throws Exception
      *
      * @return void
+     *
+     * @psalm-taint-sink file $name
      */
     public function writeToFile(string $name, array $options = []): void
     {
