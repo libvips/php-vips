@@ -692,6 +692,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @param string $filename The file to test.
      *
      * @return string|null The name of the load operation, or null.
+     *
+     * @psalm-taint-sink file $filename
      */
     public static function findLoad(string $filename): ?string
     {
@@ -711,6 +713,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @throws Exception
      *
      * @return Image A new Image.
+     *
+     * @psalm-taint-sink file $name
      */
     public static function newFromFile(
         string $name,
@@ -955,6 +959,8 @@ class Image extends ImageAutodoc implements \ArrayAccess
      * @throws Exception
      *
      * @return void
+     *
+     * @psalm-taint-sink file $name
      */
     public function writeToFile(string $name, array $options = []): void
     {
